@@ -29,38 +29,40 @@ public class PacketListener implements Listener {
             @Override
             public void channelRead(ChannelHandlerContext context, Object packet) throws Exception {
                 super.channelRead(context, packet);
-                if(packet instanceof PacketPlayInFlying) {
-                    Bukkit.getScheduler().runTask(AntiMoveHack.getAntiMoveHack(), () -> Bukkit.getPluginManager().callEvent(
-                            new FlyingEvent(player, false)));
+                if(AntiMoveHack.getAntiMoveHack().isEnabled()) {
+                    if (packet instanceof PacketPlayInFlying) {
+                        Bukkit.getScheduler().runTask(AntiMoveHack.getAntiMoveHack(), () -> Bukkit.getPluginManager().callEvent(
+                                new FlyingEvent(player, false)));
+                    }
                 }
             }
 
             @Override
             public void write(ChannelHandlerContext context, Object packet, ChannelPromise channelPromise) throws Exception {
                 super.write(context, packet, channelPromise);
-
-                if(packet instanceof PacketPlayOutPosition) {
-                    Bukkit.getScheduler().runTask(AntiMoveHack.getAntiMoveHack(), () -> Bukkit.getPluginManager().callEvent(
-                            new ServerTeleportEvent(player, false)));
-                }
-
-                if(packet instanceof PacketPlayOutEntityVelocity) {
-                    PacketDataSerializer serializer = new PacketDataSerializer(Unpooled.buffer(0));
-                    ((PacketPlayOutEntityVelocity) packet).b(serializer);
-                    int id = serializer.readInt();
-                    if(id != player.getEntityId()) {
-                        return;
+                if(AntiMoveHack.getAntiMoveHack().isEnabled()) {
+                    if (packet instanceof PacketPlayOutPosition) {
+                        Bukkit.getScheduler().runTask(AntiMoveHack.getAntiMoveHack(), () -> Bukkit.getPluginManager().callEvent(
+                                new ServerTeleportEvent(player, false)));
                     }
 
-                    double x = serializer.readShort() / 8000D;
-                    double y = serializer.readShort() / 8000D;
-                    double z = serializer.readShort() / 8000D;
-                    Vector velocity = new Vector(x, y, z);
+                    if (packet instanceof PacketPlayOutEntityVelocity) {
+                        PacketDataSerializer serializer = new PacketDataSerializer(Unpooled.buffer(0));
+                        ((PacketPlayOutEntityVelocity) packet).b(serializer);
+                        int id = serializer.readInt();
+                        if (id != player.getEntityId()) {
+                            return;
+                        }
 
-                    Bukkit.getScheduler().runTask(AntiMoveHack.getAntiMoveHack(), () -> Bukkit.getPluginManager().callEvent(
-                            new ServerVelocityEvent(player, false, velocity)));
+                        double x = serializer.readShort() / 8000D;
+                        double y = serializer.readShort() / 8000D;
+                        double z = serializer.readShort() / 8000D;
+                        Vector velocity = new Vector(x, y, z);
+
+                        Bukkit.getScheduler().runTask(AntiMoveHack.getAntiMoveHack(), () -> Bukkit.getPluginManager().callEvent(
+                                new ServerVelocityEvent(player, false, velocity)));
+                    }
                 }
-
             }
         };
 

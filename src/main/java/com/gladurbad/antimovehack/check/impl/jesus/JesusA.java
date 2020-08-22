@@ -1,6 +1,7 @@
-package com.gladurbad.antimovehack.listeners.cheatlisteners;
+package com.gladurbad.antimovehack.check.impl.jesus;
 
 import com.gladurbad.antimovehack.AntiMoveHack;
+import com.gladurbad.antimovehack.check.Check;
 import com.gladurbad.antimovehack.playerdata.PlayerData;
 import com.gladurbad.antimovehack.util.AlertUtils;
 import com.gladurbad.antimovehack.util.CollisionUtils;
@@ -11,15 +12,18 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerMoveEvent;
 
-public class JesusListener implements Listener {
+public class JesusA extends Check {
+
+    public JesusA(PlayerData data) {
+        super(data);
+    }
 
     @EventHandler
     public void onMove(PlayerMoveEvent event) {
         final Player player = event.getPlayer();
-        final PlayerData playerData = AntiMoveHack.getPlayerData(player);
 
-        checkA(event, player, playerData);
-        checkB(event, player, playerData);
+        checkA(event, player, data);
+        checkB(event, player, data);
     }
 
     public void checkA(PlayerMoveEvent event, Player player, PlayerData playerData) {
@@ -28,7 +32,7 @@ public class JesusListener implements Listener {
 
         if(invalid) {
             playerData.jesusThreshold = Math.min(200, playerData.jesusThreshold + 1);
-            if(playerData.jesusThreshold > 10) {
+            if(playerData.jesusThreshold > 5) {
                 AlertUtils.handleViolation(playerData, "Jesus (A)", playerData.jesusViolationLevel++, playerData.jesusLastLegitLocation);
                 playerData.jesusThreshold = 0;
             }
@@ -46,7 +50,7 @@ public class JesusListener implements Listener {
 
         if(invalid) {
             playerData.jesusBThreshold = Math.min(200, playerData.jesusBThreshold + 1);
-            if(playerData.jesusBThreshold > 10) {
+            if(playerData.jesusBThreshold > 5) {
                 AlertUtils.handleViolation(playerData, "Jesus (B)", playerData.jesusBViolationLevel++, playerData.jesusBLastLegitLocation);
                 playerData.jesusBThreshold = 0;
             }
