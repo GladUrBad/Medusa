@@ -1,4 +1,4 @@
-# AntiMoveHacc
+# AntiMoveHack
 The worst anticheat of your dreams.
 
 This anticheat is a big meme. I was bored and made this in a few hours. If you want to contribute, it would be appreciated, but don't take this anticheat seriously.
