@@ -1,20 +1,23 @@
 package com.gladurbad.antimovehack.playerdata;
 
+import com.gladurbad.antimovehack.AntiMoveHack;
 import com.gladurbad.antimovehack.check.Check;
-import com.gladurbad.antimovehack.managers.CheckManager;
-import com.google.common.collect.Lists;
+import com.gladurbad.antimovehack.manager.CheckManager;
+
 import lombok.Getter;
-import lombok.Setter;
+
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
+import org.bukkit.event.player.PlayerMoveEvent;
 
-import java.util.ArrayList;
-import java.util.Deque;
 import java.util.List;
 import java.util.UUID;
 
 
-public class PlayerData {
+public class PlayerData implements Listener {
 
     @Getter
     private final Player player;
@@ -27,42 +30,52 @@ public class PlayerData {
         this.playerUUID = playerUUID;
         this.player = player;
         this.checks = CheckManager.loadChecks(this);
+        Bukkit.getServer().getPluginManager().registerEvents(this, AntiMoveHack.getAntiMoveHack());
     }
 
-    //Cheat listener thresholds.
-    public int flightThreshold;
-    public int speedThreshold;
-    public int fastClimbThreshold;
-    public int jesusThreshold;
-    public int jesusBThreshold;
+    //Movement data.
+    public double deltaX, deltaY, deltaZ, deltaXZ, lastDeltaX, lastDeltaY, lastDeltaZ, lastDeltaXZ;
+    public Location lastLocation, location;
 
-    //Movement info per check, I don't care, I'm lazy.
-    public double flightLastDeltaY;
-    public double speedLastDeltaXZ;
-    public long timerLastTime;
-    public double motionCLastDeltaY;
+    //Teleportation & setback data.
+    public long lastSetbackTime;
 
-    //Legit location storing;
-    public Location flightLastLegitLocation;
-    public Location speedLastLegitLocation;
-    public Location fastClimbLastLegitLocation;
-    public Location jesusLastLegitLocation;
-    public Location jesusBLastLegitLocation;
+    @EventHandler
+    public void handle(PlayerMoveEvent event) {
+        if(event.getPlayer().getEntityId() == this.getPlayer().getEntityId()) {
+            this.lastLocation = event.getFrom();
+            this.location = event.getTo();
 
-    //Cheat listener violation levels.
-    public int flightViolationLevel;
-    public int speedViolationLevel;
-    public int fastClimbViolationLevel;
-    public int timerViolationLevel;
-    public int motionViolationLevel;
-    public int motionBViolationLevel;
-    public int motionCViolationLevel;
-    public int jesusViolationLevel;
-    public int jesusBViolationLevel;
+            double lastDeltaX = deltaX;
+            double deltaX = location.getX() - lastLocation.getX();
 
-    //Miscellanious data per check.
-    public Deque<Long> timerDifferences = Lists.newLinkedList();
-    public int timerTeleportTicks;
+            this.lastDeltaX = lastDeltaX;
+            this.deltaX = deltaX;
+
+            double lastDeltaY = deltaY;
+            double deltaY = location.getY() - lastLocation.getY();
+
+            this.lastDeltaY = lastDeltaY;
+            this.deltaY = deltaY;
+
+            double lastDeltaZ = deltaZ;
+            double deltaZ = location.getZ() - lastLocation.getZ();
+
+            this.lastDeltaZ = lastDeltaZ;
+            this.deltaZ = deltaZ;
+
+            double lastDeltaXZ = deltaXZ;
+            double deltaXZ = location.clone().toVector().setY(0.0).distance(lastLocation.clone().toVector().setY(0.0));
+
+            this.lastDeltaXZ = lastDeltaXZ;
+            this.deltaXZ = deltaXZ;
+
+            checks.forEach(check -> check.handle(event));
+
+
+
+        }
+    }
 
 
 }

@@ -1,46 +1,40 @@
 package com.gladurbad.antimovehack.check.impl.timer;
 
-import com.gladurbad.antimovehack.AntiMoveHack;
 import com.gladurbad.antimovehack.check.Check;
-import com.gladurbad.antimovehack.event.FlyingEvent;
-import com.gladurbad.antimovehack.event.ServerTeleportEvent;
+import com.gladurbad.antimovehack.check.CheckInfo;
 import com.gladurbad.antimovehack.playerdata.PlayerData;
-import com.gladurbad.antimovehack.util.AlertUtils;
 
-import org.bukkit.entity.Player;
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.Listener;
+import com.google.common.collect.Lists;
+import org.bukkit.event.player.PlayerMoveEvent;
 
+import java.util.Deque;
+
+@CheckInfo(name = "Timer", type = "A", dev = true)
 public class TimerA extends Check {
+
+    private long lastTime;
+    private Deque<Long> samples = Lists.newLinkedList();
 
     public TimerA(PlayerData data) {
         super(data);
     }
 
-    @EventHandler
-    public void onFlying(FlyingEvent event) {
-        final Player player = event.getPlayer();
+    @Override
+    public void handle(PlayerMoveEvent event) {
+        final long time = System.currentTimeMillis();
+        final long delay = time - lastTime;
 
-        if(++data.timerTeleportTicks > 20) {
-            final long time = System.currentTimeMillis();
-            final long delay = time - data.timerLastTime;
+        if(time - data.lastSetbackTime < 10000L) return;
 
-            data.timerDifferences.add(delay);
-            if (data.timerDifferences.size() >= 20) {
-                double timerAverage = data.timerDifferences.parallelStream().mapToDouble(value -> value).average().orElse(0.0D);
-                double timerSpeed = 50 / timerAverage;
-                if (Math.abs(timerSpeed - 1.0D) >= 0.1) {
-                    AlertUtils.handleViolation(data, "Timer (A)", data.timerViolationLevel++, null);
-                }
-                data.timerDifferences.clear();
-            }
-            data.timerLastTime = time;
+        samples.add(delay);
+        if (samples.size() >= 20) {
+            double timerAverage = samples.parallelStream().mapToDouble(value -> value).average().orElse(0.0D);
+            double timerSpeed = 50 / timerAverage;
+
+            if (Math.abs(timerSpeed - 1.0D) >= 0.1) fail();
+
+            samples.clear();
         }
-    }
-
-    @EventHandler
-    public void onTeleport(ServerTeleportEvent event) {
-        final Player player = event.getPlayer();
-        data.timerTeleportTicks = 0;
+        lastTime = time;
     }
 }

@@ -1,4 +1,4 @@
-package com.gladurbad.antimovehack.listeners.nettylisteners;
+package com.gladurbad.antimovehack.listener.nettylisteners;
 
 import com.gladurbad.antimovehack.AntiMoveHack;
 import com.gladurbad.antimovehack.event.FlyingEvent;

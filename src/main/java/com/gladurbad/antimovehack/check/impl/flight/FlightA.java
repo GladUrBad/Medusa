@@ -1,43 +1,34 @@
 package com.gladurbad.antimovehack.check.impl.flight;
 
 import com.gladurbad.antimovehack.check.Check;
+import com.gladurbad.antimovehack.check.CheckInfo;
 import com.gladurbad.antimovehack.playerdata.PlayerData;
-import com.gladurbad.antimovehack.util.AlertUtils;
-import com.gladurbad.antimovehack.util.CollisionUtils;
+import com.gladurbad.antimovehack.util.CollisionUtil;
 
-import org.bukkit.event.EventHandler;
 import org.bukkit.event.player.PlayerMoveEvent;
 
-
+@CheckInfo(name = "Flight", type = "A", dev = false)
 public class FlightA extends Check {
 
     public FlightA(PlayerData data) {
         super(data);
     }
 
-    @EventHandler
-    public void onMove(PlayerMoveEvent event) {
+    @Override
+    public void handle(PlayerMoveEvent event) {
+        final double prediction = (data.lastDeltaY * 0.9800000190734863) - 0.08;
+        final double difference = Math.abs(data.deltaY - prediction);
 
-        final double deltaY = event.getTo().getY() - event.getFrom().getY();
+        final double EPSILON = 0.02;
 
-        final double prediction = (data.flightLastDeltaY - 0.08D) * 0.98D;
-        final double difference = Math.abs(deltaY - prediction);
-
-        final double EPSILON = 0.05;
-
-        if (difference > EPSILON && !CollisionUtils.isOnGround(data.getPlayer()) && !CollisionUtils.isNearBoat(data.getPlayer())) {
-            data.flightThreshold = Math.min(100, data.flightThreshold + 1);
-            if (data.flightThreshold > 5) {
-                AlertUtils.handleViolation(data, "Flight (A)", data.flightViolationLevel++, data.flightLastLegitLocation);
-                data.getPlayer().teleport(data.flightLastLegitLocation);
-                data.flightThreshold = 0;
+        if (difference > EPSILON && !CollisionUtil.isOnGround(data.getPlayer()) && !CollisionUtil.isNearBoat(data.getPlayer())) {
+            increaseBuffer();
+            if (buffer > 5) {
+                failAndSetback();
             }
         } else {
-            data.flightThreshold = Math.max(data.flightThreshold - 1, 0);
-            data.flightLastLegitLocation = data.getPlayer().getLocation();
+            decreaseBuffer();
+            setLastLegitLocation(data.getPlayer().getLocation());
         }
-
-        data.flightLastDeltaY = deltaY;
     }
-
 }

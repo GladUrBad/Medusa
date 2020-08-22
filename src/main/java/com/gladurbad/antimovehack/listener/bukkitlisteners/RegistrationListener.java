@@ -1,7 +1,7 @@
-package com.gladurbad.antimovehack.listeners.bukkitlisteners;
+package com.gladurbad.antimovehack.listener.bukkitlisteners;
 
-import com.gladurbad.antimovehack.listeners.nettylisteners.PacketListener;
-import com.gladurbad.antimovehack.managers.PlayerDataManager;
+import com.gladurbad.antimovehack.listener.nettylisteners.PacketListener;
+import com.gladurbad.antimovehack.manager.PlayerDataManager;
 import com.gladurbad.antimovehack.playerdata.PlayerData;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;

@@ -1,15 +1,9 @@
 package com.gladurbad.antimovehack;
 
-import com.gladurbad.antimovehack.check.impl.fastclimb.FastClimbA;
-import com.gladurbad.antimovehack.check.impl.flight.FlightA;
-import com.gladurbad.antimovehack.check.impl.jesus.JesusA;
-import com.gladurbad.antimovehack.check.impl.motion.MotionA;
-import com.gladurbad.antimovehack.check.impl.speed.SpeedA;
-import com.gladurbad.antimovehack.check.impl.timer.TimerA;
-import com.gladurbad.antimovehack.listeners.bukkitlisteners.RegistrationListener;
-import com.gladurbad.antimovehack.listeners.nettylisteners.PacketListener;
-import com.gladurbad.antimovehack.managers.CheckManager;
-import com.gladurbad.antimovehack.managers.PlayerDataManager;
+import com.gladurbad.antimovehack.listener.bukkitlisteners.RegistrationListener;
+import com.gladurbad.antimovehack.listener.nettylisteners.PacketListener;
+import com.gladurbad.antimovehack.manager.CheckManager;
+import com.gladurbad.antimovehack.manager.PlayerDataManager;
 import com.gladurbad.antimovehack.playerdata.PlayerData;
 import lombok.Getter;
 import org.bukkit.Bukkit;
@@ -17,7 +11,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import java.util.HashMap;
 import java.util.UUID;
 
 public class AntiMoveHack extends JavaPlugin {

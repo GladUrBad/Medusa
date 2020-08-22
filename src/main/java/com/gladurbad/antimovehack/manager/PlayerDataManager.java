@@ -1,4 +1,4 @@
-package com.gladurbad.antimovehack.managers;
+package com.gladurbad.antimovehack.manager;
 
 import com.gladurbad.antimovehack.playerdata.PlayerData;
 import lombok.Getter;

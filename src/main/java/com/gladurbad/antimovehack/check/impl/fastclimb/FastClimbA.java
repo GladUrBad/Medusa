@@ -1,37 +1,31 @@
 package com.gladurbad.antimovehack.check.impl.fastclimb;
 
 import com.gladurbad.antimovehack.check.Check;
+import com.gladurbad.antimovehack.check.CheckInfo;
 import com.gladurbad.antimovehack.playerdata.PlayerData;
-import com.gladurbad.antimovehack.util.AlertUtils;
-import com.gladurbad.antimovehack.util.CollisionUtils;
+import com.gladurbad.antimovehack.util.CollisionUtil;
 
 
-import org.bukkit.event.EventHandler;
+import org.bukkit.Bukkit;
 import org.bukkit.event.player.PlayerMoveEvent;
 
+@CheckInfo(name = "FastClimb", type = "A", dev = false)
 public class FastClimbA extends Check {
 
     public FastClimbA(PlayerData data) {
         super(data);
     }
 
-    @EventHandler
-    public void onMove(PlayerMoveEvent event) {
-        final double deltaY = event.getTo().getY() - event.getFrom().getY();
-
-        if(CollisionUtils.isCollidingWithClimbable(data.getPlayer()) && deltaY > 0.1177) {
-            data.fastClimbThreshold = Math.min(100, data.fastClimbThreshold + 1);
-            if (data.fastClimbThreshold > 5) {
-                AlertUtils.handleViolation(data, "FastClimb (A)", data.fastClimbViolationLevel++, data.fastClimbLastLegitLocation);
-                data.getPlayer().teleport(data.fastClimbLastLegitLocation);
-                data.fastClimbThreshold = 0;
+    @Override
+    public void handle(PlayerMoveEvent event) {
+        if(CollisionUtil.isCollidingWithClimbable(data.getPlayer()) && data.deltaY > 0.1177) {
+            increaseBuffer();
+            if (buffer > 5) {
+                failAndSetback();
             }
         } else {
-            data.fastClimbThreshold = Math.max(data.fastClimbThreshold - 1, 0);
-            data.fastClimbLastLegitLocation = data.getPlayer().getLocation();
+            decreaseBuffer();
+            setLastLegitLocation(data.getPlayer().getLocation());
         }
-
-
-
     }
 }

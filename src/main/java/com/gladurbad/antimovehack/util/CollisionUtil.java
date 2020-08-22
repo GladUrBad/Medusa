@@ -1,6 +1,5 @@
 package com.gladurbad.antimovehack.util;
 
-import com.gladurbad.antimovehack.playerdata.PlayerData;
 import lombok.experimental.UtilityClass;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -10,7 +9,7 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 
 @UtilityClass
-public class CollisionUtils {
+public class CollisionUtil {
 
     public boolean isOnChosenBlock(Player player, double yLevel, Material... materials) {
         final double expand = 0.31;

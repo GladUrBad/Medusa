@@ -1,11 +1,15 @@
-package com.gladurbad.antimovehack.managers;
+package com.gladurbad.antimovehack.manager;
 
 import com.gladurbad.antimovehack.check.Check;
 import com.gladurbad.antimovehack.check.impl.fastclimb.FastClimbA;
 import com.gladurbad.antimovehack.check.impl.flight.FlightA;
 import com.gladurbad.antimovehack.check.impl.jesus.JesusA;
+import com.gladurbad.antimovehack.check.impl.jesus.JesusB;
 import com.gladurbad.antimovehack.check.impl.motion.MotionA;
+import com.gladurbad.antimovehack.check.impl.motion.MotionB;
+import com.gladurbad.antimovehack.check.impl.motion.MotionC;
 import com.gladurbad.antimovehack.check.impl.speed.SpeedA;
+import com.gladurbad.antimovehack.check.impl.speed.SpeedB;
 import com.gladurbad.antimovehack.check.impl.timer.TimerA;
 import com.gladurbad.antimovehack.playerdata.PlayerData;
 
@@ -20,8 +24,12 @@ public class CheckManager {
             FastClimbA.class,
             FlightA.class,
             JesusA.class,
+            JesusB.class,
             MotionA.class,
+            MotionB.class,
+            MotionC.class,
             SpeedA.class,
+            SpeedB.class,
             TimerA.class
     };
 

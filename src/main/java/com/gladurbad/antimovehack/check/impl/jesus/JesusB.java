@@ -1,16 +1,17 @@
-package com.gladurbad.antimovehack.check.impl.speed;
+package com.gladurbad.antimovehack.check.impl.jesus;
 
 import com.gladurbad.antimovehack.check.Check;
 import com.gladurbad.antimovehack.check.CheckInfo;
 import com.gladurbad.antimovehack.playerdata.PlayerData;
 import com.gladurbad.antimovehack.util.CollisionUtil;
+import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerMoveEvent;
 
-@CheckInfo(name = "Speed", type = "A", dev = false)
-public class SpeedA extends Check {
+@CheckInfo(name = "Jesus", type = "B", dev = false)
+public class JesusB extends Check {
 
-    public SpeedA(PlayerData data) {
+    public JesusB(PlayerData data) {
         super(data);
     }
 
@@ -18,16 +19,12 @@ public class SpeedA extends Check {
     public void handle(PlayerMoveEvent event) {
         final Player player = data.getPlayer();
 
-        final double deltaXZ = Math.hypot(data.deltaX, data.deltaZ);
-        final double lastDeltaXZ = Math.hypot(data.lastDeltaX, data.lastDeltaZ);
+        final boolean invalid = CollisionUtil.isOnChosenBlock(player, 0.1, Material.WATER, Material.STATIONARY_WATER) &&
+                !CollisionUtil.isOnSolid(player) && data.deltaY == 0.0D;
 
-        final double EPSILON = 0.027;
-        final double prediction = lastDeltaXZ * 0.91F;
-        final double difference = Math.abs(prediction - deltaXZ);
-
-        if (difference > EPSILON && !CollisionUtil.isOnGround(player)) {
+        if(invalid) {
             increaseBuffer();
-            if (buffer > 5) {
+            if(buffer > 5) {
                 failAndSetback();
             }
         } else {
