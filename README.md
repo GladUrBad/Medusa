@@ -1,13 +1,7 @@
-# AntiMoveHack
-The worst anticheat of your dreams.
+# Medusa Anticheat
+This anticheat (formerly known as AntiMoveHack) started because I got bored. 
+Now, I've decided to make it a free anticheat on Spigot.
+Medusa is very young, I started it late August 2020. As such, it will have lots of mistakes and lots of code for you to cringe at, just because I wanted to get something working for fun.
 
-This anticheat is a big meme. I was bored and made this in a few hours. If you want to contribute, it would be appreciated, but don't take this anticheat seriously.
-If you're going to make a pull request, it must only be optimizations, bug fixes, or movement checks. I will not accept any other form of checks except for movement.
+I will be adding some combat checks soon, and some better movement checks, as the current ones are quite lacking.
 
-To-do list:
-
--LARGELY improved base.
-
--Switching over to a packet based system
-
--Better collision utilities.
