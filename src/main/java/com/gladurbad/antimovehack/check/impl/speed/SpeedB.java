@@ -12,30 +12,35 @@ import org.bukkit.event.player.PlayerMoveEvent;
 @CheckInfo(name = "Speed", type = "B", dev = true)
 public class SpeedB extends Check {
 
+    private int iceSlimeTicks, underBlockTicks;
+
     public SpeedB(PlayerData data) {
         super(data);
     }
 
     @Override
     public void handle(PlayerMoveEvent event) {
-        double limit = PlayerUtil.getBaseSpeed(data.getPlayer()) + handleLimit(event);
+        double limit = PlayerUtil.getBaseSpeed(data.getPlayer());
+
+        final boolean iceSlime = CollisionUtil.isOnChosenBlock(data.getPlayer(), -0.5001, Material.ICE, Material.PACKED_ICE, Material.SLIME_BLOCK);
+        final boolean underBlock = CollisionUtil.blockNearHead(event.getTo());
+
+        if(iceSlime) iceSlimeTicks = 0;
+        if(underBlock) underBlockTicks = 0;
+
+        if(++iceSlimeTicks < 40) limit += 0.34;
+        if(++underBlockTicks < 40) limit += 0.7;
 
         final boolean invalid = !data.getPlayer().isFlying() && data.deltaXZ > limit;
 
         if(invalid) {
             increaseBuffer();
-            if(buffer > 7) {
+            if(buffer >= 7) {
                 failAndSetback();
             }
         } else {
-            decreaseBuffer();
+            buffer = 0;
             setLastLegitLocation(data.getPlayer().getLocation());
         }
-    }
-
-    public double handleLimit(PlayerMoveEvent event) {
-        if(CollisionUtil.isOnChosenBlock(data.getPlayer(), -0.5001, Material.ICE, Material.PACKED_ICE, Material.SLIME_BLOCK)) return 0.34;
-        if(CollisionUtil.blockNearHead(event.getTo())) return 0.7;
-        return 0.0;
     }
 }

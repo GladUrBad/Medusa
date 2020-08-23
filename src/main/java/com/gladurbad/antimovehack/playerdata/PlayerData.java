@@ -6,6 +6,7 @@ import com.gladurbad.antimovehack.manager.CheckManager;
 
 import lombok.Getter;
 
+import lombok.Setter;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
@@ -39,6 +40,11 @@ public class PlayerData implements Listener {
 
     //Teleportation & setback data.
     public long lastSetbackTime;
+
+    //Miscellanious data
+    @Getter
+    @Setter
+    public boolean alerts;
 
     @EventHandler
     public void handle(PlayerMoveEvent event) {

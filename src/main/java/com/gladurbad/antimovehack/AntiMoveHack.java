@@ -1,5 +1,6 @@
 package com.gladurbad.antimovehack;
 
+import com.gladurbad.antimovehack.command.AntiMoveHackCommands;
 import com.gladurbad.antimovehack.listener.bukkitlisteners.RegistrationListener;
 import com.gladurbad.antimovehack.listener.nettylisteners.PacketListener;
 import com.gladurbad.antimovehack.manager.CheckManager;
@@ -17,11 +18,13 @@ public class AntiMoveHack extends JavaPlugin {
 
     @Getter
     private static AntiMoveHack antiMoveHack;
+    private final AntiMoveHackCommands antiMoveHackCommands = new AntiMoveHackCommands(this);
 
     @Override
     public void onEnable() {
         CheckManager.registerChecks();
         antiMoveHack = this;
+        getCommand("antimovehack").setExecutor(antiMoveHackCommands);
         Bukkit.getLogger().info("AntiMoveHack by GladUrBad has been enabled.");
 
         //Register listeners.

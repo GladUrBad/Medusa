@@ -3,3 +3,8 @@ version: 1.0
 main: com.gladurbad.antimovehack.AntiMoveHack
 load: STARTUP
 authors: [ GladUrBad ]
+
+commands:
+  antimovehack:
+    description: AntiMoveHack Anticheat commands.
+    usage: /<command>

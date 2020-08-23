@@ -1,9 +1,11 @@
 C:\Users\rubik\Desktop\Programming\AntiMoveHack\src\main\java\com\gladurbad\antimovehack\check\Check.java
 C:\Users\rubik\Desktop\Programming\AntiMoveHack\src\main\java\com\gladurbad\antimovehack\check\impl\speed\SpeedB.java
+C:\Users\rubik\Desktop\Programming\AntiMoveHack\src\main\java\com\gladurbad\antimovehack\command\AlertsCommand.java
 C:\Users\rubik\Desktop\Programming\AntiMoveHack\src\main\java\com\gladurbad\antimovehack\util\ChatUtil.java
 C:\Users\rubik\Desktop\Programming\AntiMoveHack\src\main\java\com\gladurbad\antimovehack\check\impl\timer\TimerA.java
 C:\Users\rubik\Desktop\Programming\AntiMoveHack\src\main\java\com\gladurbad\antimovehack\playerdata\PlayerData.java
 C:\Users\rubik\Desktop\Programming\AntiMoveHack\src\main\java\com\gladurbad\antimovehack\check\impl\flight\FlightA.java
+C:\Users\rubik\Desktop\Programming\AntiMoveHack\src\main\java\com\gladurbad\antimovehack\command\AntiMoveHackCommands.java
 C:\Users\rubik\Desktop\Programming\AntiMoveHack\src\main\java\com\gladurbad\antimovehack\check\impl\motion\MotionC.java
 C:\Users\rubik\Desktop\Programming\AntiMoveHack\src\main\java\com\gladurbad\antimovehack\check\CheckInfo.java
 C:\Users\rubik\Desktop\Programming\AntiMoveHack\src\main\java\com\gladurbad\antimovehack\check\impl\jesus\JesusB.java
@@ -11,7 +13,9 @@ C:\Users\rubik\Desktop\Programming\AntiMoveHack\src\main\java\com\gladurbad\anti
 C:\Users\rubik\Desktop\Programming\AntiMoveHack\src\main\java\com\gladurbad\antimovehack\check\impl\motion\MotionB.java
 C:\Users\rubik\Desktop\Programming\AntiMoveHack\src\main\java\com\gladurbad\antimovehack\util\PlayerUtil.java
 C:\Users\rubik\Desktop\Programming\AntiMoveHack\src\main\java\com\gladurbad\antimovehack\check\impl\motion\MotionA.java
+C:\Users\rubik\Desktop\Programming\AntiMoveHack\src\main\java\com\gladurbad\antimovehack\command\LogsCommand.java
 C:\Users\rubik\Desktop\Programming\AntiMoveHack\src\main\java\com\gladurbad\antimovehack\event\ServerVelocityEvent.java
+C:\Users\rubik\Desktop\Programming\AntiMoveHack\src\main\java\com\gladurbad\antimovehack\command\AntiMoveHackArgument.java
 C:\Users\rubik\Desktop\Programming\AntiMoveHack\src\main\java\com\gladurbad\antimovehack\event\ServerTeleportEvent.java
 C:\Users\rubik\Desktop\Programming\AntiMoveHack\src\main\java\com\gladurbad\antimovehack\check\impl\fastclimb\FastClimbA.java
 C:\Users\rubik\Desktop\Programming\AntiMoveHack\src\main\java\com\gladurbad\antimovehack\listener\bukkitlisteners\RegistrationListener.java

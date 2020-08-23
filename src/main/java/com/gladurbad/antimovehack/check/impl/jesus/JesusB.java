@@ -24,7 +24,7 @@ public class JesusB extends Check {
 
         if(invalid) {
             increaseBuffer();
-            if(buffer > 5) {
+            if(buffer > 10) {
                 failAndSetback();
             }
         } else {

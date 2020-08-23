@@ -1,3 +1,4 @@
+com\gladurbad\antimovehack\command\AntiMoveHackArgument.class
 com\gladurbad\antimovehack\manager\CheckManager.class
 com\gladurbad\antimovehack\manager\AlertManager.class
 com\gladurbad\antimovehack\check\impl\flight\FlightA.class
@@ -10,17 +11,20 @@ com\gladurbad\antimovehack\check\impl\motion\MotionA.class
 com\gladurbad\antimovehack\check\impl\motion\MotionC.class
 com\gladurbad\antimovehack\check\impl\jesus\JesusA.class
 com\gladurbad\antimovehack\util\ChatUtil.class
+com\gladurbad\antimovehack\command\AlertsCommand.class
 com\gladurbad\antimovehack\event\FlyingEvent.class
 com\gladurbad\antimovehack\listener\nettylisteners\PacketListener$1.class
 com\gladurbad\antimovehack\playerdata\PlayerData.class
 com\gladurbad\antimovehack\util\CollisionUtil.class
 com\gladurbad\antimovehack\check\CheckInfo.class
 com\gladurbad\antimovehack\check\impl\fastclimb\FastClimbA.class
+com\gladurbad\antimovehack\command\LogsCommand.class
 com\gladurbad\antimovehack\event\ServerVelocityEvent.class
 com\gladurbad\antimovehack\check\impl\speed\SpeedA.class
 com\gladurbad\antimovehack\check\Check.class
 com\gladurbad\antimovehack\util\PlayerUtil.class
 com\gladurbad\antimovehack\check\impl\timer\TimerA.class
 com\gladurbad\antimovehack\check\impl\jesus\JesusB.class
+com\gladurbad\antimovehack\command\AntiMoveHackCommands.class
 com\gladurbad\antimovehack\AntiMoveHack.class
 com\gladurbad\antimovehack\check\impl\motion\MotionB.class
