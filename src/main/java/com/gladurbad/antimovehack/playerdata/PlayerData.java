@@ -1,87 +1,138 @@
 package com.gladurbad.antimovehack.playerdata;
 
-import com.gladurbad.antimovehack.AntiMoveHack;
 import com.gladurbad.antimovehack.check.Check;
 import com.gladurbad.antimovehack.manager.CheckManager;
+import com.gladurbad.antimovehack.network.Packet;
+
+import io.github.retrooper.packetevents.event.PacketListener;
+import io.github.retrooper.packetevents.packet.PacketType;
+import io.github.retrooper.packetevents.packetwrappers.in.flying.WrappedPacketInFlying;
 
 import lombok.Getter;
-
 import lombok.Setter;
+
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.World;
 import org.bukkit.entity.Player;
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.Listener;
-import org.bukkit.event.player.PlayerMoveEvent;
 
 import java.util.List;
 import java.util.UUID;
 
+@Getter
+@Setter
+public class PlayerData implements PacketListener {
 
-public class PlayerData implements Listener {
-
-    @Getter
     private final Player player;
-    @Getter
     private final UUID playerUUID;
-    @Getter
     private List<Check> checks;
 
     public PlayerData(UUID playerUUID, Player player) {
         this.playerUUID = playerUUID;
         this.player = player;
+        this.location = this.getPlayer().getLocation();
+        this.lastLocation = this.getPlayer().getLocation();
         this.checks = CheckManager.loadChecks(this);
-        Bukkit.getServer().getPluginManager().registerEvents(this, AntiMoveHack.getAntiMoveHack());
     }
 
     //Movement data.
-    public double deltaX, deltaY, deltaZ, deltaXZ, lastDeltaX, lastDeltaY, lastDeltaZ, lastDeltaXZ;
-    public Location lastLocation, location;
+    private double deltaX, deltaY, deltaZ, deltaXZ, lastDeltaX, lastDeltaY, lastDeltaZ, lastDeltaXZ;
+    private Location lastLocation, location;
 
     //Teleportation & setback data.
-    public long lastSetbackTime;
+    private long lastSetbackTime;
+
+    //Velocity ticks data.
+    private int ticksSinceVelocity;
 
     //Miscellanious data
-    @Getter
-    @Setter
-    public boolean alerts;
+    private boolean alerts;
 
-    @EventHandler
-    public void handle(PlayerMoveEvent event) {
-        if(event.getPlayer().getEntityId() == this.getPlayer().getEntityId()) {
-            this.lastLocation = event.getFrom();
-            this.location = event.getTo();
+    public void processPacket(final Packet packet) {
+        //Handle checks.
+        checks.forEach(check -> check.handle(packet));
+        //Process packet information.
+        this.processInput(packet);
 
-            double lastDeltaX = deltaX;
-            double deltaX = location.getX() - lastLocation.getX();
+    }
 
-            this.lastDeltaX = lastDeltaX;
-            this.deltaX = deltaX;
+    private void processInput(final Packet packet) {
+        if(packet.isReceiving()) {
+            if(packet.getPacketId() == PacketType.Client.POSITION || packet.getPacketId() == PacketType.Client.POSITION_LOOK) {
+                WrappedPacketInFlying wrappedPacketInFlying = new WrappedPacketInFlying(packet.getRawPacket());
 
-            double lastDeltaY = deltaY;
-            double deltaY = location.getY() - lastLocation.getY();
+                final World world = this.getLocation().getWorld();
+                final double x = wrappedPacketInFlying.getX();
+                final double y = wrappedPacketInFlying.getY();
+                final double z = wrappedPacketInFlying.getZ();
+                final float yaw = wrappedPacketInFlying.getYaw();
+                final float pitch = wrappedPacketInFlying.getPitch();
 
-            this.lastDeltaY = lastDeltaY;
-            this.deltaY = deltaY;
+                Location location = new Location(world, x, y, z, yaw, pitch);
+                Location lastLocation = this.getLocation() != null ? this.getLocation() : location;
 
-            double lastDeltaZ = deltaZ;
-            double deltaZ = location.getZ() - lastLocation.getZ();
+                this.processLocation(location, lastLocation);
+            } else if(packet.getPacketId() == PacketType.Client.LOOK) {
+                WrappedPacketInFlying wrappedPacketInFlying = new WrappedPacketInFlying(packet.getRawPacket());
 
-            this.lastDeltaZ = lastDeltaZ;
-            this.deltaZ = deltaZ;
+                final World world = this.getLocation().getWorld();
+                final double x = this.getLocation().getX();
+                final double y = this.getLocation().getY();
+                final double z = this.getLocation().getZ();
+                final float yaw = wrappedPacketInFlying.getYaw();
+                final float pitch = wrappedPacketInFlying.getPitch();
 
-            double lastDeltaXZ = deltaXZ;
-            double deltaXZ = location.clone().toVector().setY(0.0).distance(lastLocation.clone().toVector().setY(0.0));
+                Location location = new Location(world, x, y, z, yaw, pitch);
+                Location lastLocation = this.getLocation() != null ? this.getLocation() : location;
 
-            this.lastDeltaXZ = lastDeltaXZ;
-            this.deltaXZ = deltaXZ;
+                this.processLocation(location, lastLocation);
+            } else if(packet.getPacketId() == PacketType.Client.FLYING) {
+                final World world = this.getLocation().getWorld();
+                final double x = this.getLocation().getX();
+                final double y = this.getLocation().getY();
+                final double z = this.getLocation().getZ();
+                final float yaw = this.getLocation().getYaw();
+                final float pitch = this.getLocation().getPitch();
 
-            checks.forEach(check -> check.handle(event));
+                Location location = new Location(world, x, y, z, yaw, pitch);
+                Location lastLocation = this.getLocation() != null ? this.getLocation() : location;
 
-
-
+                this.processLocation(location, lastLocation);
+            }
+        } else if(packet.isSending()) {
+            if(packet.getPacketId() == PacketType.Server.ENTITY_VELOCITY) {
+                this.ticksSinceVelocity = 0;
+            }
         }
     }
 
+    private void processLocation(Location location, Location lastLocation) {
+        this.lastLocation = lastLocation;
+        this.location = location;
+        //Bukkit.broadcastMessage(this.lastLocation.getX() + "");
 
+        double lastDeltaX = deltaX;
+        double deltaX = location.getX() - lastLocation.getX();
+
+        this.lastDeltaX = lastDeltaX;
+        this.deltaX = deltaX;
+
+        double lastDeltaY = deltaY;
+        double deltaY = location.getY() - lastLocation.getY();
+
+        this.lastDeltaY = lastDeltaY;
+        this.deltaY = deltaY;
+
+        double lastDeltaZ = deltaZ;
+        double deltaZ = location.getZ() - lastLocation.getZ();
+
+        this.lastDeltaZ = lastDeltaZ;
+        this.deltaZ = deltaZ;
+
+        double lastDeltaXZ = deltaXZ;
+        double deltaXZ = location.clone().toVector().setY(0.0).distance(lastLocation.clone().toVector().setY(0.0));
+
+        this.lastDeltaXZ = lastDeltaXZ;
+        this.deltaXZ = deltaXZ;
+    }
 }
