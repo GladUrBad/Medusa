@@ -1,0 +1,10 @@
+TODO for Medusa Anticheat:
+
+-Replace CheckInfo annotations with fields in constructor. r: better performance (since no caching), and I can't forget so that means no more NPEs cause I forgot an annotation.
+
+-Make a better way to verify packets, no more having to write "packet.getPacketId() == PacketType.Client.USE_ENTITY" for example.
+Possibly I can make this it's own class, PacketUtil? Then I can do "PacketUtil.isFlyingPacket(packet);" or I can do "this.getPacketUtil.isFlyingPacket(packet); in the Check itself.
+The first one makes more sense IMO. If you have any suggestions let me know.
+
+-Make movement checks more stable so there is no need for a large buffer. I still need to have a buffer for setback purposes, but I can find another way.
+
