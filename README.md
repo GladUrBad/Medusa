@@ -8,6 +8,7 @@ I will be adding some combat checks soon, and some better movement checks, as th
 Contributors: 
 
 Frep & Tecnio (took some things from our private ac)
+
 Elevated (Killaura D)
 
 
