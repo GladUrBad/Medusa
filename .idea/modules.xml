@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/AntiMoveHack.iml" filepath="$PROJECT_DIR$/AntiMoveHack.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Medusa.iml" filepath="$PROJECT_DIR$/Medusa.iml" />
     </modules>
   </component>
 </project>

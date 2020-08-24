@@ -6,11 +6,11 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
-        <module name="AntiMoveHack" />
+        <module name="Medusa" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
-      <module name="AntiMoveHack" target="8" />
+      <module name="Medusa" target="8" />
     </bytecodeTargetLevel>
   </component>
 </project>

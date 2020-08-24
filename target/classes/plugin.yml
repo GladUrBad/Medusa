@@ -1,10 +1,10 @@
-name: AntiMoveHack
+name: Medusa
 version: 1.0
-main: com.gladurbad.antimovehack.AntiMoveHack
+main: com.gladurbad.medusa.Medusa
 load: STARTUP
 authors: [ GladUrBad ]
 
 commands:
-  antimovehack:
-    description: AntiMoveHack Anticheat commands.
+  medusa:
+    description: Medusa Anticheat commands.
     usage: /<command>
