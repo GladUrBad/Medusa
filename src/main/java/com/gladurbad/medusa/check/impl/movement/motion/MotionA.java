@@ -38,7 +38,7 @@ public class MotionA extends Check {
             final boolean valid = ++slimeTicks > 20 && jumped;
 
             if (data.getDeltaY() > expectedJumpMotion && valid) {
-                failAndSetback();
+                fail();
             } else {
                 setLastLegitLocation(data.getPlayer().getLocation());
             }

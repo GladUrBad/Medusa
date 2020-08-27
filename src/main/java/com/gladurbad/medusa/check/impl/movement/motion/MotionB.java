@@ -36,7 +36,7 @@ public class MotionB extends Check {
             }
 
             if(data.getDeltaY() < expectedJumpMotion && valid) {
-                failAndSetback();
+                fail();
             } else {
                 setLastLegitLocation(data.getPlayer().getLocation());
             }

@@ -23,11 +23,11 @@ public class MotionC extends Check {
             if(invalid) {
                 increaseBuffer();
                 if(buffer > 3) {
-                    failAndSetback();
+                    fail();
                 }
             } else {
                 decreaseBuffer();
-                this.setLastLegitLocation(data.getPlayer().getLocation());
+                setLastLegitLocation(data.getPlayer().getLocation());
             }
         }
     }

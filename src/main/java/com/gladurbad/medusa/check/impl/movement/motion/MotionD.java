@@ -4,6 +4,7 @@ import com.gladurbad.medusa.check.Check;
 import com.gladurbad.medusa.check.CheckInfo;
 import com.gladurbad.medusa.network.Packet;
 import com.gladurbad.medusa.playerdata.PlayerData;
+import com.gladurbad.medusa.util.MathUtil;
 
 @CheckInfo(name = "Motion", type = "D", dev = false)
 public class MotionD extends Check {
@@ -18,8 +19,10 @@ public class MotionD extends Check {
             final double deltaY = data.getDeltaY();
             final double lastDeltaY = data.getLastDeltaY();
 
-            if(Double.toString(deltaY).contains("E") && Double.toString(lastDeltaY).contains("E")) {
+            if(MathUtil.isScientificNotation(deltaY) && MathUtil.isScientificNotation(lastDeltaY)) {
                 fail();
+            } else {
+                setLastLegitLocation(data.getPlayer().getLocation());
             }
         }
     }

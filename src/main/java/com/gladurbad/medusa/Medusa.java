@@ -1,7 +1,7 @@
 package com.gladurbad.medusa;
 
 import com.gladurbad.medusa.command.MedusaCommands;
-import com.gladurbad.medusa.listener.PacketListener;
+import com.gladurbad.medusa.network.PacketProcessor;
 import com.gladurbad.medusa.listener.RegistrationListener;
 import com.gladurbad.medusa.manager.CheckManager;
 import com.gladurbad.medusa.manager.PlayerDataManager;
@@ -27,16 +27,21 @@ public class Medusa extends JavaPlugin {
 
     @Override
     public void onEnable() {
-        CheckManager.registerChecks();
         medusa = this;
-        medusa.setEnabled(true);
+
+        this.saveDefaultConfig();
+        Config.updateConfig();
+
+        CheckManager.registerChecks();
+
         getCommand("medusa").setExecutor(medusaCommands);
 
         //Register listeners.
         PacketEvents.getSettings().setIdentifier("medusa_handler");
         PacketEvents.start(this);
-        PacketEvents.getAPI().getEventManager().registerListener(new PacketListener());
+        PacketEvents.getAPI().getEventManager().registerListener(new PacketProcessor());
         PacketEvents.getAPI().getEventManager().registerListener(new RegistrationListener());
+
 
         //Register online players into the system.
         for(final Player player : Bukkit.getOnlinePlayers()) {
@@ -47,6 +52,7 @@ public class Medusa extends JavaPlugin {
         }
 
         Bukkit.getLogger().info("Medusa by GladUrBad has been enabled.");
+        medusa.setEnabled(true);
     }
 
     @Override

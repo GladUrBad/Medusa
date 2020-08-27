@@ -24,7 +24,7 @@ public class FlightA extends Check {
             if (difference > EPSILON && !CollisionUtil.isOnGround(data.getPlayer()) && !CollisionUtil.isNearBoat(data.getPlayer())) {
                 increaseBuffer();
                 if (buffer > 5) {
-                    failAndSetback();
+                    fail();
                 }
             } else {
                 decreaseBuffer();

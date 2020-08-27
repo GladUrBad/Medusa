@@ -21,9 +21,12 @@ public class NofallA extends Check {
 
             if(serverOnGround && !clientOnGround) {
                 increaseBuffer();
-                if(buffer > 1) fail();
+                if(buffer > 3) {
+                    fail();
+                }
             } else {
                 decreaseBuffer();
+                setLastLegitLocation(data.getPlayer().getLocation());
             }
         }
     }

@@ -10,12 +10,14 @@ import io.github.retrooper.packetevents.packet.PacketType;
 import io.github.retrooper.packetevents.packetwrappers.in.entityaction.WrappedPacketInEntityAction;
 import io.github.retrooper.packetevents.packetwrappers.in.flying.WrappedPacketInFlying;
 
+import io.github.retrooper.packetevents.packetwrappers.out.entityvelocity.WrappedPacketOutEntityVelocity;
 import lombok.Getter;
 import lombok.Setter;
 
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
+import org.bukkit.util.Vector;
 
 import java.util.List;
 import java.util.UUID;
@@ -41,6 +43,7 @@ public class PlayerData implements PacketListener {
     private float deltaYaw, deltaPitch, lastDeltaYaw, lastDeltaPitch;
     private Location lastLocation, location;
     private boolean isSprinting, isSneaking;
+    private Vector lastVelocity = new Vector(0, 0 , 0);
 
     //Teleportation & setback data.
     private long lastSetbackTime;
@@ -121,12 +124,21 @@ public class PlayerData implements PacketListener {
             }
         } else if(packet.isSending()) {
             if(packet.getPacketId() == PacketType.Server.ENTITY_VELOCITY) {
+                WrappedPacketOutEntityVelocity wrappedPacketOutEntityVelocity = new WrappedPacketOutEntityVelocity(packet.getRawPacket());
                 this.ticksSinceVelocity = 0;
+
+                final double velocityX = wrappedPacketOutEntityVelocity.getVelocityX();
+                final double velocityY = wrappedPacketOutEntityVelocity.getVelocityY();
+                final double velocityZ = wrappedPacketOutEntityVelocity.getVelocityZ();
+
+                this.lastVelocity = new Vector(velocityX, velocityY, velocityZ);
             }
         }
     }
 
     private void processLocation(Location location, Location lastLocation) {
+        ++this.ticksSinceVelocity;
+
         this.lastLocation = lastLocation;
         this.location = location;
         //Bukkit.broadcastMessage(this.lastLocation.getX() + "");

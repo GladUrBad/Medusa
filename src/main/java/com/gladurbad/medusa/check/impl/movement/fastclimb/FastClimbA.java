@@ -6,7 +6,6 @@ import com.gladurbad.medusa.network.Packet;
 import com.gladurbad.medusa.playerdata.PlayerData;
 import com.gladurbad.medusa.util.CollisionUtil;
 
-
 @CheckInfo(name = "FastClimb", type = "A", dev = false)
 public class FastClimbA extends Check {
 
@@ -20,7 +19,7 @@ public class FastClimbA extends Check {
             if(CollisionUtil.isCollidingWithClimbable(data.getPlayer()) && data.getDeltaY() > 0.1177) {
                 increaseBuffer();
                 if (buffer > 5) {
-                    failAndSetback();
+                    fail();
                 }
             } else {
                 decreaseBuffer();

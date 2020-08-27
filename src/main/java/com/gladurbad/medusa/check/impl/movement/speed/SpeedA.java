@@ -29,7 +29,7 @@ public class SpeedA extends Check {
             if (difference > EPSILON && !CollisionUtil.isOnGround(player)) {
                 increaseBuffer();
                 if (buffer > 5) {
-                    failAndSetback();
+                    fail();
                 }
             } else {
                 decreaseBuffer();

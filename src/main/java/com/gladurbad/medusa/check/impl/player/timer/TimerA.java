@@ -1,4 +1,4 @@
-package com.gladurbad.medusa.check.impl.movement.timer;
+package com.gladurbad.medusa.check.impl.player.timer;
 
 import com.gladurbad.medusa.check.Check;
 import com.gladurbad.medusa.check.CheckInfo;
@@ -25,7 +25,7 @@ public class TimerA extends Check {
             final long time = System.currentTimeMillis();
             final long delay = time - lastTime;
 
-            if(time - data.getLastSetbackTime()< 10000L) return;
+            if(time - data.getLastSetbackTime() < 10000L) return;
 
             samples.add(delay);
             if (samples.size() >= 20) {

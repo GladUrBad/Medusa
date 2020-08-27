@@ -1,0 +1,140 @@
+##############################
+#    Medusa Configuration    #
+##############################
+# This is the configuration file for Medusa Anticheat.
+
+# Anticheat testing mode.
+# If enabled, no punishments will occur and alerts will enable automatically on join.
+testmode: false
+
+# Anticheat response configuration.
+# If you want to change how the anticheat looks/responds, you can do it here.
+response:
+  general:
+    prefix: '&8[&2Medusa&8]'
+    no-permission: '&cNo permission.'
+  violations:
+    minimum-vl: 5
+    alert-format: '%prefix% &a%player% &2- &a%check% (Type %type%) %dev% &8[&cVL: %vl%&8]'
+
+
+# Check configuration
+checks:
+  combat:
+    max-cps: 20
+    max-reach: 3.5
+    autoclicker:
+      a:
+        enabled: true
+        max-violations: 50
+        punish-command: 'ban %player% %prefix% Unfair Advantage'
+    killaura:
+      a:
+        enabled: true
+        max-violations: 50
+        punish-command: 'ban %player% %prefix% Unfair Advantage'
+      b:
+        enabled: true
+        max-violations: 50
+        punish-command: 'ban %player% %prefix% Unfair Advantage'
+      c:
+        enabled: true
+        max-violations: 50
+        punish-command: 'ban %player% %prefix% Unfair Advantage'
+      d:
+        enabled: true
+        max-violations: 50
+        punish-command: 'ban %player% %prefix% Unfair Advantage'
+      e:
+        enabled: true
+        max-violations: 50
+        punish-command: 'ban %player% %prefix% Unfair Advantage'
+  movement:
+    fastclimb:
+      a:
+        enabled: true
+        setback: true
+        max-violations: 50
+        punish-command: 'ban %player% %prefix% Unfair Advantage'
+    flight:
+      a:
+        enabled: true
+        setback: true
+        max-violations: 50
+        punish-command: 'ban %player% %prefix% Unfair Advantage'
+      b:
+        enabled: true
+        setback: true
+        max-violations: 50
+        punish-command: 'ban %player% %prefix% Unfair Advantage'
+    jesus:
+      a:
+        enabled: true
+        setback: true
+        max-violations: 50
+        punish-command: 'ban %player% %prefix% Unfair Advantage'
+      b:
+        enabled: true
+        setback: true
+        max-violations: 50
+        punish-command: 'ban %player% %prefix% Unfair Advantage'
+      c:
+        enabled: true
+        setback: true
+        max-violations: 50
+        punish-command: 'ban %player% %prefix% Unfair Advantage'
+    motion:
+      a:
+        enabled: true
+        setback: true
+        max-violations: 50
+        punish-command: 'ban %player% %prefix% Unfair Advantage'
+      b:
+        enabled: true
+        setback: true
+        max-violations: 50
+        punish-command: 'ban %player% %prefix% Unfair Advantage'
+      c:
+        enabled: true
+        setback: true
+        max-violations: 50
+        punish-command: 'ban %player% %prefix% Unfair Advantage'
+      d:
+        enabled: true
+        setback: true
+        max-violations: 50
+        punish-command: 'ban %player% %prefix% Unfair Advantage'
+    nofall:
+      a:
+        enabled: true
+        setback: true
+        max-violations: 50
+        punish-command: 'ban %player% %prefix% Unfair Advantage'
+      b:
+        enabled: true
+        setback: true
+        max-violations: 50
+        punish-command: 'ban %player% %prefix% Unfair Advantage'
+    speed:
+      a:
+        enabled: true
+        setback: true
+        max-violations: 50
+        punish-command: 'ban %player% %prefix% Unfair Advantage'
+      b:
+        enabled: true
+        setback: true
+        max-violations: 50
+        punish-command: 'ban %player% %prefix% Unfair Advantage'
+  player:
+    badpackets:
+      a:
+        enabled: true
+        setback: true
+        max-violations: 50
+        punish-command: 'ban %player% %prefix% Unfair Advantage'
+    timer:
+      a:
+        enabled: true
+        max-violations: 50
+        punish-command: 'ban %player% %prefix% Unfair Advantage'

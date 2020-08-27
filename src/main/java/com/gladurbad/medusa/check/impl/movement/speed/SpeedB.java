@@ -1,4 +1,4 @@
-package com.gladurbad.medusa.check.impl.movement.timer;
+package com.gladurbad.medusa.check.impl.movement.speed;
 
 import com.gladurbad.medusa.check.Check;
 import com.gladurbad.medusa.check.CheckInfo;
@@ -32,12 +32,18 @@ public class SpeedB extends Check {
             if(++iceSlimeTicks < 40) limit += 0.34;
             if(++underBlockTicks < 40) limit += 0.7;
 
+            if(data.getTicksSinceVelocity() < 10) {
+                limit += Math.hypot(data.getLastVelocity().getX(), data.getLastVelocity().getZ());
+            }
+
             final boolean invalid = !data.getPlayer().isFlying() && data.getDeltaXZ() > limit;
+
+
 
             if(invalid) {
                 increaseBuffer();
                 if(buffer >= 7) {
-                    failAndSetback();
+                    fail();
                 }
             } else {
                 buffer = 0;

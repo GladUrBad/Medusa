@@ -28,8 +28,8 @@ public class FlightB extends Check {
             if(!CollisionUtil.isOnGround(data.getPlayer())) {
                 airTicks = Math.min(200, airTicks + 1);
                 if(airTicks > 10) {
-                    if(accel > 0.0 && lastAccel <= 0.0) {
-                        failAndSetback();
+                    if(accel > 0.0 && lastAccel <= 0.0 && data.getTicksSinceVelocity() > 10) {
+                        fail();
                     }
                 }
             } else {

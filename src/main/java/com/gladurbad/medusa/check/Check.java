@@ -1,5 +1,6 @@
 package com.gladurbad.medusa.check;
 
+import com.gladurbad.medusa.Config;
 import com.gladurbad.medusa.Medusa;
 import com.gladurbad.medusa.manager.AlertManager;
 import com.gladurbad.medusa.network.Packet;
@@ -23,8 +24,22 @@ public abstract class Check implements Listener {
     @Setter
     protected Location lastLegitLocation;
 
+    //Check data from config.
+    @Getter
+    private boolean enabled;
+    @Getter
+    private int maxVL;
+    @Getter
+    private boolean setback;
+    @Getter
+    private String punishCommand;
+
     public Check(PlayerData data) {
         this.data = data;
+        this.enabled = Config.ENABLED_CHECKS.contains(getCheckInfo().name() + getCheckInfo().type());
+        this.maxVL = Config.MAX_VIOLATIONS.get(getCheckInfo().name() + getCheckInfo().type());
+        this.setback = Config.SETBACK_CHECKS.contains(getCheckInfo().name() + getCheckInfo().type());
+        this.punishCommand = Config.PUNISH_COMMANDS.get(getCheckInfo().name() + getCheckInfo().type());
         Bukkit.getServer().getPluginManager().registerEvents(this, Medusa.getMedusa());
     }
 
@@ -37,14 +52,12 @@ public abstract class Check implements Listener {
     protected void fail() {
         ++vl;
         AlertManager.verbose(data, this);
-    }
-
-    protected void failAndSetback() {
-        ++vl;
-        AlertManager.verbose(data, this);
-        data.getPlayer().teleport(lastLegitLocation);
-        data.setLastSetbackTime(System.currentTimeMillis());
-        buffer = 0;
+        if(setback) {
+            final Location setBackLocation = lastLegitLocation == null ? data.getLastLocation() : lastLegitLocation;
+            Bukkit.getScheduler().runTask(Medusa.getMedusa(), () -> data.getPlayer().teleport(setBackLocation));
+            data.setLastSetbackTime(now());
+            buffer = 0;
+        }
     }
 
     protected void increaseBuffer() {
@@ -55,11 +68,11 @@ public abstract class Check implements Listener {
         buffer = Math.max(0, buffer - 1);
     }
 
-    protected void increaseBufferBy(int amount) {
+    protected void increaseBufferBy(double amount) {
         buffer = Math.min(100, buffer + amount);
     }
 
-    protected void decreaseBufferBy(int amount) {
+    protected void decreaseBufferBy(double amount) {
         buffer = Math.max(0, buffer - amount);
     }
 
