@@ -5,3 +5,10 @@ Medusa is very young, I started it late August 2020. As such, it will have lots 
 
 I will be adding some combat checks soon, and some better movement checks, as the current ones are quite lacking.
 
+Contributors: 
+
+Frep & Tecnio (took some things from our private ac)
+
+Elevated (Killaura D)
+
+
