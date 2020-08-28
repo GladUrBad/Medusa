@@ -19,6 +19,8 @@ public class Config {
 
     public static int MAX_CPS;
     public static double MAX_REACH;
+    public static int REACH_SENSITIVITY;
+    public static long REACH_MAXLATENCY;
 
     public static List<String> ENABLED_CHECKS = new ArrayList<>();
     public static List<String> SETBACK_CHECKS = new ArrayList<>();
@@ -37,6 +39,8 @@ public class Config {
 
             MAX_CPS = getIntegerFromConfig("checks.combat.max-cps");
             MAX_REACH = getDoubleFromConfig("checks.combat.max-reach");
+            REACH_SENSITIVITY = getIntegerFromConfig("checks.combat.reach-sensitivity");
+            REACH_MAXLATENCY = (long) getLongFromConfig("checks.combat.reach-maxlatency");
 
             for(Class check : CheckManager.CHECKS) {
                 final CheckInfo checkInfo = (CheckInfo) check.getAnnotation(CheckInfo.class);
@@ -87,5 +91,9 @@ public class Config {
 
     private static double getDoubleFromConfig(String string) {
         return Medusa.getMedusa().getConfig().getDouble(string);
+    }
+
+    private static double getLongFromConfig(String string) {
+        return Medusa.getMedusa().getConfig().getLong(string);
     }
 }

@@ -21,10 +21,12 @@ com\gladurbad\medusa\manager\AlertManager.class
 com\gladurbad\medusa\check\CheckInfo.class
 com\gladurbad\medusa\command\MedusaArgument.class
 com\gladurbad\medusa\playerdata\PlayerData$1.class
+com\gladurbad\medusa\check\impl\combat\reach\ReachA.class
 com\gladurbad\medusa\check\impl\combat\killaura\KillauraB.class
 com\gladurbad\medusa\check\impl\movement\flight\FlightB.class
 com\gladurbad\medusa\check\impl\movement\jesus\JesusB.class
 com\gladurbad\medusa\check\impl\movement\motion\MotionB.class
+com\gladurbad\medusa\util\customtype\EvictingList.class
 com\gladurbad\medusa\command\MedusaCommands.class
 com\gladurbad\medusa\check\impl\movement\motion\MotionD.class
 com\gladurbad\medusa\check\impl\combat\killaura\KillauraD.class
@@ -34,6 +36,7 @@ com\gladurbad\medusa\util\ChatUtil.class
 com\gladurbad\medusa\check\impl\movement\speed\SpeedB.class
 com\gladurbad\medusa\network\Packet.class
 com\gladurbad\medusa\check\impl\movement\speed\SpeedA.class
+com\gladurbad\medusa\util\customtype\Pair.class
 com\gladurbad\medusa\check\impl\movement\flight\FlightA.class
 com\gladurbad\medusa\util\PlayerUtil.class
 com\gladurbad\medusa\check\impl\movement\nofall\NofallB.class
