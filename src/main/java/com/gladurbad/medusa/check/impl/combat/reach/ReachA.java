@@ -12,8 +12,6 @@ import io.github.retrooper.packetevents.PacketEvents;
 import io.github.retrooper.packetevents.packet.PacketType;
 import io.github.retrooper.packetevents.packetwrappers.in.useentity.WrappedPacketInUseEntity;
 
-import net.minecraft.server.v1_8_R3.MathHelper;
-
 import org.bukkit.Location;
 import org.bukkit.entity.Entity;
 
