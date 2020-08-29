@@ -7,7 +7,11 @@ I will be adding some combat checks soon, and some better movement checks, as th
 
 Contributors: 
 
-Frep & Tecnio (took some things from our private ac)
+Frep & Tecnio (took some things from our private ac) and Keepsprint check from Frep
+
+Pirro - some random fixes
+
+Toon - helped me understand some things I can do better
 
 Elevated (Killaura D)
 
