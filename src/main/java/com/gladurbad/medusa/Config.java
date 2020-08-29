@@ -1,5 +1,5 @@
 package com.gladurbad.medusa;
-;
+
 import com.gladurbad.medusa.check.CheckInfo;
 import com.gladurbad.medusa.manager.CheckManager;
 
