@@ -40,7 +40,7 @@ public abstract class Check implements Listener {
         this.maxVL = Config.MAX_VIOLATIONS.get(getCheckInfo().name() + getCheckInfo().type());
         this.setback = Config.SETBACK_CHECKS.contains(getCheckInfo().name() + getCheckInfo().type());
         this.punishCommand = Config.PUNISH_COMMANDS.get(getCheckInfo().name() + getCheckInfo().type());
-        Bukkit.getServer().getPluginManager().registerEvents(this, Medusa.getMedusa());
+        Bukkit.getServer().getPluginManager().registerEvents(this, Medusa.getInstance());
     }
 
     public abstract void handle(final Packet packet);
@@ -52,9 +52,9 @@ public abstract class Check implements Listener {
     protected void fail() {
         ++vl;
         AlertManager.verbose(data, this);
-        if(setback) {
+        if(setback && vl > Config.VL_TO_ALERT) {
             final Location setBackLocation = lastLegitLocation == null ? data.getLastLocation() : lastLegitLocation;
-            Bukkit.getScheduler().runTask(Medusa.getMedusa(), () -> data.getPlayer().teleport(setBackLocation));
+            Bukkit.getScheduler().runTask(Medusa.getInstance(), () -> data.getPlayer().teleport(setBackLocation));
             data.setLastSetbackTime(now());
             buffer = 0;
         }

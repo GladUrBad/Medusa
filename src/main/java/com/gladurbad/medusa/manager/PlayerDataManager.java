@@ -8,17 +8,31 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
+@Getter
 public class PlayerDataManager {
 
-    @Getter
-    private static Map<UUID, PlayerData> playerData = new HashMap<>();
+    private static final PlayerDataManager INSTANCE = new PlayerDataManager();
 
-    public static boolean containsPlayer(Player player) {
+    private final Map<UUID, PlayerData> playerData = new HashMap<>();
+
+    public boolean containsPlayer(Player player) {
         return containsPlayer(player.getUniqueId());
     }
 
-    public static boolean containsPlayer(UUID playerUUID) {
-        return playerData.containsKey(playerUUID);
+    public boolean containsPlayer(UUID playerUUID) {
+        return getInstance().getPlayerData().containsKey(playerUUID);
+    }
+
+    public PlayerData getPlayerData(Player player) {
+        return getInstance().playerData.get(player.getUniqueId());
+    }
+
+    public PlayerData getPlayerData(UUID playerUUID) {
+        return getInstance().playerData.get(playerUUID);
+    }
+
+    public static PlayerDataManager getInstance() {
+        return INSTANCE;
     }
 
 }

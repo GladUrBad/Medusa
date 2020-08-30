@@ -20,8 +20,8 @@ public class JesusB extends Check {
 		if (packet.isReceiving() && isFlyingPacket(packet)) {
 			final Player player = data.getPlayer();
 
-			final boolean invalid = CollisionUtil.isOnChosenBlock(player, 0.1, Material.WATER,
-					Material.STATIONARY_WATER) && !CollisionUtil.isOnSolid(player) && data.getDeltaY() == 0.0D;
+			final boolean invalid = CollisionUtil.isOnChosenBlock(player, 0.1, Material.WATER, Material.STATIONARY_WATER) &&
+					!CollisionUtil.isOnSolid(player) && data.getDeltaY() == 0.0D;
 
 			if (invalid) {
 				increaseBuffer();

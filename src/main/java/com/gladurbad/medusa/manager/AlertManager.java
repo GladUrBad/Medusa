@@ -1,6 +1,7 @@
 package com.gladurbad.medusa.manager;
 
 import com.gladurbad.medusa.Config;
+import com.gladurbad.medusa.Medusa;
 import com.gladurbad.medusa.check.Check;
 import com.gladurbad.medusa.playerdata.PlayerData;
 import com.gladurbad.medusa.util.ChatUtil;
@@ -12,8 +13,9 @@ import org.bukkit.Bukkit;
 
 public class AlertManager {
 
-    public static boolean verbose(PlayerData data, Check check) {
-        TextComponent alertMessage = new TextComponent(ChatUtil.color("&8[&2Medusa&8] &a%player% &2- &a%check% (Type %type%) %dev% &8[&cVL: %vl%&8]")
+    public static void verbose(PlayerData data, Check check) {
+        TextComponent alertMessage = new TextComponent(ChatUtil.color(Config.ALERT_FORMAT)
+                .replace("%prefix%", Config.PREFIX)
                 .replace("%player%", data.getPlayer().getName())
                 .replace("%check%", check.getCheckInfo().name())
                 .replace("%type%", check.getCheckInfo().type())
@@ -28,12 +30,12 @@ public class AlertManager {
 
         if(check.getVl() > check.getMaxVL() && !Config.TESTMODE && data.getPlayer().isOnline()) {
             if(!check.getPunishCommand().isEmpty()) {
-                Bukkit.getServer().dispatchCommand(Bukkit.getServer().getConsoleSender(), check.getPunishCommand()
+                Bukkit.getScheduler().runTask(Medusa.getInstance(), () ->
+                        Bukkit.getServer().dispatchCommand(Bukkit.getServer().getConsoleSender(), check.getPunishCommand()
                         .replace("%player%", data.getPlayer().getName())
-                        .replace("%prefix%", Config.PREFIX));
+                        .replace("%prefix%", Config.PREFIX)));
             }
         } //broken rn.
 
-        return true;
     }
 }

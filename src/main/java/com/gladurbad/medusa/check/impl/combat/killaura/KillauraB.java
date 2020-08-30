@@ -6,9 +6,9 @@ import com.gladurbad.medusa.network.Packet;
 import com.gladurbad.medusa.playerdata.PlayerData;
 
 import com.google.common.collect.Lists;
+import io.github.retrooper.packetevents.enums.minecraft.EntityUseAction;
 import io.github.retrooper.packetevents.packet.PacketType;
 import io.github.retrooper.packetevents.packetwrappers.in.useentity.WrappedPacketInUseEntity;
-import io.github.retrooper.packetevents.packetwrappers.in.useentity.WrappedPacketInUseEntity.EntityUseAction;
 
 import org.bukkit.entity.EntityType;
 

@@ -11,12 +11,12 @@ public class RegistrationListener implements PacketListener {
 
     @PacketHandler
     public void onInject(PlayerInjectEvent event) {
-        PlayerDataManager.getPlayerData().put(event.getPlayer().getUniqueId(), new PlayerData(event.getPlayer().getUniqueId(), event.getPlayer()));
+        PlayerDataManager.getInstance().getPlayerData().put(event.getPlayer().getUniqueId(), new PlayerData(event.getPlayer().getUniqueId(), event.getPlayer()));
     }
 
     @PacketHandler
     public void onUninject(PlayerUninjectEvent event) {
-        PlayerDataManager.getPlayerData().remove(event.getPlayer().getUniqueId());
+        PlayerDataManager.getInstance().getPlayerData().remove(event.getPlayer().getUniqueId());
     }
 
 }

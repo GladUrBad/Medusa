@@ -11,16 +11,16 @@ public class PacketProcessor implements PacketListener {
 
     @PacketHandler
     public void onPacketReceive(PacketReceiveEvent event) {
-        if(PlayerDataManager.containsPlayer(event.getPlayer())) {
-            final PlayerData playerData = PlayerDataManager.getPlayerData().get(event.getPlayer().getUniqueId());
+        if(PlayerDataManager.getInstance().containsPlayer(event.getPlayer())) {
+            final PlayerData playerData = PlayerDataManager.getInstance().getPlayerData(event.getPlayer());
             playerData.processPacket(new Packet(Packet.Direction.RECEIVE, event.getNMSPacket(), event.getPacketId()));
         }
     }
 
     @PacketHandler
     public void onPacketSend(PacketSendEvent event) {
-        if(PlayerDataManager.containsPlayer(event.getPlayer())) {
-            final PlayerData playerData = PlayerDataManager.getPlayerData().get(event.getPlayer().getUniqueId());
+        if(PlayerDataManager.getInstance().containsPlayer(event.getPlayer())) {
+            final PlayerData playerData = PlayerDataManager.getInstance().getPlayerData(event.getPlayer());
             playerData.processPacket(new Packet(Packet.Direction.SEND, event.getNMSPacket(), event.getPacketId()));
         }
     }

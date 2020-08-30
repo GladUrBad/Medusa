@@ -16,14 +16,14 @@ public class AlertsCommand extends MedusaArgument {
     @Override
     protected boolean handle(CommandSender sender, Command command, String label, String[] args) {
         if (sender instanceof Player) {
-            PlayerData playerData = PlayerDataManager.getPlayerData().get(((Player) sender).getUniqueId());
+            PlayerData playerData = PlayerDataManager.getInstance().getPlayerData((Player) sender);
             if (playerData.isAlerts()) {
                 playerData.setAlerts(false);
-                sender.sendMessage(MedusaArgument.responsePrefix + "Simple alerts toggled off.");
+                sender.sendMessage(MedusaArgument.responsePrefix + "Alerts toggled off.");
                 return true;
             } else {
                 playerData.setAlerts(true);
-                sender.sendMessage(MedusaArgument.responsePrefix + "Simple alerts toggled on.");
+                sender.sendMessage(MedusaArgument.responsePrefix + "Alerts toggled on.");
                 return true;
             }
         } else {

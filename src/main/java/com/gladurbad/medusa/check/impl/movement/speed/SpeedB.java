@@ -12,7 +12,7 @@ import org.bukkit.Material;
 @CheckInfo(name = "Speed", type = "B", dev = true)
 public class SpeedB extends Check {
 
-    private int iceSlimeTicks, underBlockTicks;
+    private int iceSlimeTicks, underBlockTicks, flyingTicks;
 
     public SpeedB(PlayerData data) {
         super(data);
@@ -25,6 +25,13 @@ public class SpeedB extends Check {
 
             final boolean iceSlime = CollisionUtil.isOnChosenBlock(data.getPlayer(), -0.5001, Material.ICE, Material.PACKED_ICE, Material.SLIME_BLOCK);
             final boolean underBlock = CollisionUtil.blockNearHead(data.getLocation());
+            final boolean flying = data.getPlayer().isFlying();
+
+            if(flying) {
+                flyingTicks = 0;
+            } else {
+                flyingTicks++;
+            }
 
             if(iceSlime) iceSlimeTicks = 0;
             if(underBlock) underBlockTicks = 0;
@@ -36,9 +43,7 @@ public class SpeedB extends Check {
                 limit += Math.hypot(data.getLastVelocity().getX(), data.getLastVelocity().getZ());
             }
 
-            final boolean invalid = !data.getPlayer().isFlying() && data.getDeltaXZ() > limit;
-
-
+            final boolean invalid = !data.getPlayer().isFlying() && data.getDeltaXZ() > limit && flyingTicks > 40;
 
             if(invalid) {
                 increaseBuffer();

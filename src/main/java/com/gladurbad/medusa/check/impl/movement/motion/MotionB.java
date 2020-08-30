@@ -27,9 +27,13 @@ public class MotionB extends Check {
             final boolean slime = CollisionUtil.isOnChosenBlock(data.getPlayer(), -0.5001, Material.ICE, Material.PACKED_ICE, Material.SLIME_BLOCK);
             if(slime) slimeTicks = 0;
 
-            final boolean jumped = CollisionUtil.isOnGround(data.getLastLocation(), -0.00001) && !CollisionUtil.isOnGround(data.getLocation(), -0.00001) && data.getDeltaY() > 0;
+            final boolean jumped = CollisionUtil.isOnGround(data.getLastLocation(), -0.00001) &&
+                    !CollisionUtil.isOnGround(data.getLocation(), -0.00001) &&
+                    data.getDeltaY() > 0;
 
-            final boolean valid = jumped && !CollisionUtil.isCollidingWithClimbable(player) && data.getLastLocation().getY() % 1 == 0 && !CollisionUtil.blockNearHead(data.getLocation()) && ++slimeTicks > 20;
+            final boolean valid = jumped && !CollisionUtil.isCollidingWithClimbable(player) &&
+                    data.getLastLocation().getY() % 1 == 0 &&
+                    !CollisionUtil.blockNearHead(data.getLocation()) && ++slimeTicks > 20;
 
             if(PlayerUtil.getPotionLevel(player, PotionEffectType.JUMP) > 0) {
                 expectedJumpMotion += PlayerUtil.getPotionLevel(player, PotionEffectType.JUMP) * 0.1F;

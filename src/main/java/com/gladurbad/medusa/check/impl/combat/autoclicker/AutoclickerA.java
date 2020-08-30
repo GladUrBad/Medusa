@@ -5,16 +5,16 @@ import com.gladurbad.medusa.check.Check;
 import com.gladurbad.medusa.check.CheckInfo;
 import com.gladurbad.medusa.network.Packet;
 import com.gladurbad.medusa.playerdata.PlayerData;
-import com.google.common.collect.Lists;
+
 import io.github.retrooper.packetevents.packet.PacketType;
 
-import java.util.Deque;
+import java.util.ArrayDeque;
 
 @CheckInfo(name = "Autoclicker", type = "A", dev = false)
 public class AutoclickerA extends Check {
 
     private long lastClickTime;
-    private Deque<Long> samples = Lists.newLinkedList();
+    private ArrayDeque<Long> samples = new ArrayDeque<>();
 
     public AutoclickerA(PlayerData data) {
         super(data);

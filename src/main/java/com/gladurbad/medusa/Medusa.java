@@ -17,8 +17,7 @@ import java.util.UUID;
 public class Medusa extends JavaPlugin {
 
     @Getter
-    private static Medusa medusa;
-    private final MedusaCommands medusaCommands = new MedusaCommands(this);
+    private static Medusa instance;
 
     @Override
     public void onLoad() {
@@ -27,10 +26,12 @@ public class Medusa extends JavaPlugin {
 
     @Override
     public void onEnable() {
-        medusa = this;
+        instance = this;
 
         this.saveDefaultConfig();
         Config.updateConfig();
+
+        MedusaCommands medusaCommands = new MedusaCommands(this);
 
         CheckManager.registerChecks();
 
@@ -46,13 +47,13 @@ public class Medusa extends JavaPlugin {
         //Register online players into the system.
         for(final Player player : Bukkit.getOnlinePlayers()) {
             UUID playerUUID = player.getUniqueId();
-            if(!PlayerDataManager.getPlayerData().containsKey(playerUUID)) {
-                PlayerDataManager.getPlayerData().put(playerUUID, new PlayerData(playerUUID, player));
+            if(!PlayerDataManager.getInstance().containsPlayer(playerUUID)) {
+                PlayerDataManager.getInstance().getPlayerData().put(playerUUID, new PlayerData(playerUUID, player));
             }
         }
 
         Bukkit.getLogger().info("Medusa by GladUrBad has been enabled.");
-        medusa.setEnabled(true);
+        instance.setEnabled(true);
     }
 
     @Override

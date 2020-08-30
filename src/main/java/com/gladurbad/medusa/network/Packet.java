@@ -5,9 +5,9 @@ import lombok.Getter;
 @Getter
 public class Packet {
 
-    private Direction direction;
-    private Object rawPacket;
-    private byte packetId;
+    private final Direction direction;
+    private final Object rawPacket;
+    private final byte packetId;
 
     public Packet(Direction direction, Object rawPacket, byte packetId) {
         this.direction = direction;

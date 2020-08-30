@@ -16,6 +16,9 @@ response:
   violations:
     minimum-vl: 5
     alert-format: '%prefix% &a%player% &2- &a%check% (Type %type%) %dev% &8[&cVL: %vl%&8]'
+  command:
+    prefix: '&8[&2Medusa&8]&c'
+    name: 'medusa'
 
 
 # Check configuration

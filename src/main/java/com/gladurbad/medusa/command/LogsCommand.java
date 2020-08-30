@@ -22,7 +22,7 @@ public class LogsCommand extends MedusaArgument {
             if(!Bukkit.getOnlinePlayers().contains(Bukkit.getPlayer(args[1]))) return false;
             final UUID targetPlayerUUID = Bukkit.getPlayer(args[1]).getUniqueId();
             if(targetPlayerUUID != null) {
-                PlayerData playerData = PlayerDataManager.getPlayerData().get(targetPlayerUUID);
+                PlayerData playerData = PlayerDataManager.getInstance().getPlayerData(targetPlayerUUID);
                 sender.sendMessage(responsePrefix + medusaSeparator);
                 for (Check check : playerData.getChecks()) {
                     if(check.getVl() > 0) {

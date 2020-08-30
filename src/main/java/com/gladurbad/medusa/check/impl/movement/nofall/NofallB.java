@@ -5,7 +5,6 @@ import com.gladurbad.medusa.check.CheckInfo;
 import com.gladurbad.medusa.network.Packet;
 import com.gladurbad.medusa.playerdata.PlayerData;
 import com.gladurbad.medusa.util.CollisionUtil;
-
 import io.github.retrooper.packetevents.packetwrappers.in.flying.WrappedPacketInFlying;
 
 @CheckInfo(name = "Nofall", type = "B", dev = true)
@@ -20,7 +19,7 @@ public class NofallB extends Check {
         if(packet.isReceiving() && isFlyingPacket(packet)) {
             WrappedPacketInFlying wrappedPacketInFlying = new WrappedPacketInFlying(packet.getRawPacket());
 
-            if(!wrappedPacketInFlying.isOnGround() && !CollisionUtil.isInLiquid(data.getPlayer())) {
+            if(!wrappedPacketInFlying.isOnGround() && !CollisionUtil.isCollidingWithClimbable(data.getPlayer()) && !data.getPlayer().isInsideVehicle()) {
                 final double accel = data.getDeltaY() - data.getLastDeltaY();
 
                 if(accel == 0.0D) {
