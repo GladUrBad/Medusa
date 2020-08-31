@@ -1,8 +1,7 @@
 package com.gladurbad.medusa.check.impl.combat.reach;
 
 import com.gladurbad.medusa.Config;
-import com.gladurbad.medusa.check.Check;
-import com.gladurbad.medusa.check.CheckInfo;
+import com.gladurbad.medusa.check.*;
 import com.gladurbad.medusa.network.Packet;
 import com.gladurbad.medusa.playerdata.PlayerData;
 import com.gladurbad.medusa.util.customtype.EvictingList;
@@ -19,13 +18,21 @@ import org.bukkit.entity.Entity;
 @CheckInfo(name = "Reach", type = "A", dev = true)
 public class ReachA extends Check {
 
-    private final int REACH_BUFFER = (5 - Config.REACH_SENSITIVITY) * 2;
+    //private final int REACH_BUFFER = (5 - Config.REACH_SENSITIVITY) * 2;
+
+    // sorry, I'm evil... :) also canadian
+    final private static ConfigValue reachMaxLatency = new ConfigValue(ConfigValue.ValueType.INTEGER, "reach-maxlatency");
+    private static final ConfigValue reachSensitivity = new ConfigValue(ConfigValue.ValueType.INTEGER, "reach-sensitivity");
+    static final private ConfigValue maxReach = new ConfigValue(ConfigValue.ValueType.INTEGER, "max-reach");
+    private static int REACH_BUFFER = -1;
 
     private Entity attacked, lastAttacked;
     private final EvictingList<Pair<Long, Location>> historyLocations = new EvictingList<>(20);
 
     public ReachA(PlayerData data) {
         super(data);
+        // lazy ok pls dont kill me. this can 100% be better
+        if (REACH_BUFFER == -1) REACH_BUFFER = (5 - reachSensitivity.getInt()) * 2;
     }
 
     @Override
@@ -35,7 +42,7 @@ public class ReachA extends Check {
             attacked = wrappedPacketInUseEntity.getEntity();
             if(historyLocations.size() == 20) {
                 final long ping = PacketEvents.getAPI().getPlayerUtils().getPing(data.getPlayer());
-                if(ping < Config.REACH_MAXLATENCY) {
+                if(ping < reachMaxLatency.getLong()) {
                     final double distance = this.historyLocations.stream()
                             .filter(pair -> Math.abs(now() - pair.getX()) < (Math.max(ping, 150L)))
                             .mapToDouble(pair -> {
@@ -45,7 +52,7 @@ public class ReachA extends Check {
                                 return playerLoc.toVector().setY(0).distance(victimLoc.toVector().setY(0)) - 0.4D;
                             }).min().orElse(0.0);
 
-                    if (distance > Config.MAX_REACH) {
+                    if (distance > maxReach.getDouble()) {
                         increaseBuffer();
                         if (buffer > REACH_BUFFER) fail();
                     } else {

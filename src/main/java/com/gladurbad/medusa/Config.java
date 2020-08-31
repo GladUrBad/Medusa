@@ -1,11 +1,12 @@
 package com.gladurbad.medusa;
 
-import com.gladurbad.medusa.check.CheckInfo;
+import com.gladurbad.medusa.check.*;
 import com.gladurbad.medusa.manager.CheckManager;
 
 import com.gladurbad.medusa.util.ChatUtil;
 import org.bukkit.Bukkit;
 
+import java.lang.reflect.*;
 import java.util.*;
 
 public class Config {
@@ -20,10 +21,10 @@ public class Config {
     public static String ALERT_FORMAT;
     public static String COMMAND_NAME;
 
-    public static int MAX_CPS;
-    public static double MAX_REACH;
-    public static int REACH_SENSITIVITY;
-    public static long REACH_MAXLATENCY;
+    //public static int MAX_CPS;
+    //public static double MAX_REACH;
+    //public static int REACH_SENSITIVITY;
+    //public static long REACH_MAXLATENCY;
 
     public static List<String> ENABLED_CHECKS = new ArrayList<>();
     public static List<String> SETBACK_CHECKS = new ArrayList<>();
@@ -42,13 +43,13 @@ public class Config {
             VL_TO_ALERT = getIntegerFromConfig("response.violations.minimum-vl");
             ALERT_FORMAT = getStringFromConfig("response.violations.alert-format");
 
-            MAX_CPS = getIntegerFromConfig("checks.combat.max-cps");
-            MAX_REACH = getDoubleFromConfig("checks.combat.max-reach");
-            REACH_SENSITIVITY = getIntegerFromConfig("checks.combat.reach-sensitivity");
-            REACH_MAXLATENCY = (long) getLongFromConfig("checks.combat.reach-maxlatency");
+            //MAX_CPS = getIntegerFromConfig("checks.combat.max-cps");
+            //MAX_REACH = getDoubleFromConfig("checks.combat.max-reach");
+            //REACH_SENSITIVITY = getIntegerFromConfig("checks.combat.reach-sensitivity");
+            //REACH_MAXLATENCY = (long) getLongFromConfig("checks.combat.reach-maxlatency");
 
-            for(Class check : CheckManager.CHECKS) {
-                final CheckInfo checkInfo = (CheckInfo) check.getAnnotation(CheckInfo.class);
+            for(Class<? extends Check> check : CheckManager.CHECKS) {
+                final CheckInfo checkInfo = check.getAnnotation(CheckInfo.class);
                 String checkType = "";
                 if(check.getName().contains("combat")) {
                     checkType = "combat";
@@ -56,6 +57,30 @@ public class Config {
                     checkType = "movement";
                 } else if(check.getName().contains("player")) {
                     checkType = "player";
+                }
+
+                for (Field field : check.getDeclaredFields()) {
+                    if (field.getType().equals(ConfigValue.class)) {
+                        boolean accessible = field.isAccessible();
+                        field.setAccessible(true);
+                        String name = ((ConfigValue) field.get(null)).getName();
+                        ConfigValue.ValueType type = ((ConfigValue) field.get(null)).getType();
+                        switch (type) {
+                            case BOOLEAN:
+                                field.set(null, getBooleanFromConfig("checks." + checkType + "." + checkInfo.name().toLowerCase() + "." + checkInfo.type().toLowerCase() + "." + name));
+                                break;
+                            case INTEGER:
+                                field.set(null, getIntegerFromConfig("checks." + checkType + "." + checkInfo.name().toLowerCase() + "." + checkInfo.type().toLowerCase() + "." + name));
+                                break;
+                            case DOUBLE:
+                                field.set(null, getDoubleFromConfig("checks." + checkType + "." + checkInfo.name().toLowerCase() + "." + checkInfo.type().toLowerCase() + "." + name));
+                                break;
+                            case STRING:
+                                field.set(null, getStringFromConfig("checks." + checkType + "." + checkInfo.name().toLowerCase() + "." + checkInfo.type().toLowerCase() + "." + name));
+                                break;
+                        }
+                        field.setAccessible(accessible);
+                    }
                 }
 
                 final boolean enabled = getBooleanFromConfig("checks." + checkType + "." + checkInfo.name().toLowerCase() + "." + checkInfo.type().toLowerCase() + ".enabled");
