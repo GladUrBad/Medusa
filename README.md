@@ -15,4 +15,5 @@ Toon - helped me understand some things I can do better
 
 Elevated (Killaura D)
 
+Sms_Gamer (Multiple fixes, Killaura F, new config system)
 
