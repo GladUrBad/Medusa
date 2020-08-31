@@ -13,6 +13,9 @@ import org.bukkit.entity.EntityType;
 @CheckInfo(name = "Killaura", type = "F", dev = true)
 public class KillauraF extends Check {
 
+    private static ConfigValue swings = new ConfigValue(ConfigValue.ValueType.INTEGER, "swings");
+    private static ConfigValue minFlag = new ConfigValue(ConfigValue.ValueType.INTEGER, "min-flag");
+
     private int misses, potential;
 
     public KillauraF(PlayerData data) {
@@ -26,8 +29,8 @@ public class KillauraF extends Check {
                 ++misses;
                 if (RaycastUtils.getLookingEntity(data.getPlayer()) != null)
                     ++potential;
-                if(misses >= 100) {
-                    if(potential > 45) fail();
+                if(misses >= swings.getInt()) {
+                    if(potential > minFlag.getInt()) fail();
                     misses = 0;
                     potential = 0;
                 }

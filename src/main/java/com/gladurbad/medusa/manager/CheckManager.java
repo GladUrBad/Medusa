@@ -33,7 +33,7 @@ import java.util.List;
 
 public class CheckManager {
 
-    public static final Class[] CHECKS = new Class[] {
+    public static final Class<? extends Check>[] CHECKS = new Class[] {
             AutoclickerA.class,
             KillauraA.class,
             KillauraB.class,
