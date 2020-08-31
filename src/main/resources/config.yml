@@ -58,6 +58,10 @@ checks:
         enabled: true
         max-violations: 50
         punish-command: 'ban %player% %prefix% Unfair Advantage'
+      f: #VERY INACCURATE - Make the RayCasting more accurate for it to be usable.
+        enabled: false
+        max-violations: 50
+        punish-command: 'ban %player% %prefix% Unfair Advantage'
     reach:
       a:
         enabled: true
