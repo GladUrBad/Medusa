@@ -40,6 +40,7 @@ public class CheckManager {
             KillauraC.class,
             KillauraD.class,
             KillauraE.class,
+            KillauraF.class,
             ReachA.class,
             BadPacketsA.class,
             FastClimbA.class,
