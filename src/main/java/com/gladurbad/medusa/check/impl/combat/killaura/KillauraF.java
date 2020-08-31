@@ -13,8 +13,8 @@ import org.bukkit.entity.EntityType;
 @CheckInfo(name = "Killaura", type = "F", dev = true)
 public class KillauraF extends Check {
 
-    private static ConfigValue swings = new ConfigValue(ConfigValue.ValueType.INTEGER, "swings");
-    private static ConfigValue minFlag = new ConfigValue(ConfigValue.ValueType.INTEGER, "min-flag");
+    private final static ConfigValue swings = new ConfigValue(ConfigValue.ValueType.INTEGER, "swings");
+    private static final ConfigValue minFlag = new ConfigValue(ConfigValue.ValueType.INTEGER, "min-flag");
 
     private int misses, potential;
 

@@ -14,8 +14,8 @@ import org.bukkit.entity.EntityType;
 @CheckInfo(name = "Killaura", type = "E", dev = true)
 public class KillauraE extends Check {
 
-    private static ConfigValue minSwings = new ConfigValue(ConfigValue.ValueType.INTEGER, "swings");
-    private static ConfigValue minFlag = new ConfigValue(ConfigValue.ValueType.INTEGER, "min-flag");
+    private static final ConfigValue minSwings = new ConfigValue(ConfigValue.ValueType.INTEGER, "swings");
+    private final static ConfigValue minFlag = new ConfigValue(ConfigValue.ValueType.INTEGER, "min-flag");
 
     private int swings, hits;
 
