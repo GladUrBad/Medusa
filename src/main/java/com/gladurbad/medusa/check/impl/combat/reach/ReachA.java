@@ -21,13 +21,13 @@ public class ReachA extends Check {
     //private final int REACH_BUFFER = (5 - Config.REACH_SENSITIVITY) * 2;
 
     // sorry, I'm evil... :) also canadian
-    private static final ConfigValue reachMaxLatency = new ConfigValue(ConfigValue.ValueType.INTEGER, "reach-maxlatency");
+    private static final ConfigValue reachMaxLatency = new ConfigValue(ConfigValue.ValueType.LONG, "reach-maxlatency");
     private static final ConfigValue reachSensitivity = new ConfigValue(ConfigValue.ValueType.INTEGER, "reach-sensitivity");
-    private static final ConfigValue maxReach = new ConfigValue(ConfigValue.ValueType.INTEGER, "max-reach");
+    private static final ConfigValue maxReach = new ConfigValue(ConfigValue.ValueType.DOUBLE, "max-reach");
     private static int REACH_BUFFER = -1;
 
     private Entity attacked, lastAttacked;
-    private final EvictingList<Pair<Long, Location>> historyLocations = new EvictingList<>(20);
+    private final EvictingList<Pair<Long, Location>> historyLocations = new EvictingList<>(20 );
 
     public ReachA(PlayerData data) {
         super(data);
