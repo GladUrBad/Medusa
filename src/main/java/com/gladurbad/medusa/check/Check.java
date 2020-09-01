@@ -66,9 +66,11 @@ public abstract class Check implements Listener {
     public int getVl() {
         if (failed) {
             failed = false;
-            return Math.min(vl, Math.max(0, vl -= (((now() - lastFail) / 50) - vlDelay) / vlDecay));
+            lastFail = now();
+            return vl = (int) Math.min(vl, Math.max(0, vl - (((now() - lastFail) / 50) - vlDelay) / vlDecay));
         }
-        return Math.min(vl, Math.max(0, vl -= (((now() - lastFail) / 50)) / vlDecay));
+        lastFail = now();
+        return vl = (int) Math.min(vl, Math.max(0, vl - (((now() - lastFail) / 50)) / vlDecay));
     }
 
     protected void fail() {
