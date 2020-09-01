@@ -21,7 +21,6 @@ import com.gladurbad.medusa.check.impl.player.timer.TimerA;
 import com.gladurbad.medusa.config.Config;
 import com.gladurbad.medusa.playerdata.PlayerData;
 
-import org.bukkit.Bukkit;
 
 import java.lang.reflect.Constructor;
 import java.util.ArrayList;
@@ -62,22 +61,20 @@ public class CheckManager {
     private static final List<Constructor<?>> CONSTRUCTORS = new ArrayList<>();
 
     public static void registerChecks() {
-        for(Class clazz : CHECKS) {
-            if(Config.ENABLED_CHECKS.contains(clazz.getSimpleName())) {
+        for (Class clazz : CHECKS) {
+            if (Config.ENABLED_CHECKS.contains(clazz.getSimpleName())) {
                 try {
                     CONSTRUCTORS.add(clazz.getConstructor(PlayerData.class));
                 } catch (NoSuchMethodException exception) {
                     exception.printStackTrace();
                 }
-            } else {
-                Bukkit.broadcastMessage(clazz.getSimpleName() + " is disabled!");
             }
         }
     }
 
     public static List<Check> loadChecks(PlayerData data) {
         final List<Check> checkList = new ArrayList<>();
-        for(Constructor<?> constructor : CONSTRUCTORS) {
+        for (Constructor<?> constructor : CONSTRUCTORS) {
             try {
                 checkList.add((Check) constructor.newInstance(data));
             } catch (Exception e) {

@@ -21,13 +21,13 @@ public class ReachA extends Check {
     //private final int REACH_BUFFER = (5 - Config.REACH_SENSITIVITY) * 2;
 
     // sorry, I'm evil... :) also canadian
-    private static final ConfigValue reachMaxLatency = new ConfigValue(ConfigValue.ValueType.INTEGER, "reach-maxlatency");
+    private static final ConfigValue reachMaxLatency = new ConfigValue(ConfigValue.ValueType.LONG, "reach-maxlatency");
     private static final ConfigValue reachSensitivity = new ConfigValue(ConfigValue.ValueType.INTEGER, "reach-sensitivity");
-    private static final ConfigValue maxReach = new ConfigValue(ConfigValue.ValueType.INTEGER, "max-reach");
+    private static final ConfigValue maxReach = new ConfigValue(ConfigValue.ValueType.DOUBLE, "max-reach");
     private static int REACH_BUFFER = -1;
 
     private Entity attacked, lastAttacked;
-    private final EvictingList<Pair<Long, Location>> historyLocations = new EvictingList<>(20);
+    private final EvictingList<Pair<Long, Location>> historyLocations = new EvictingList<>(20 );
 
     public ReachA(PlayerData data) {
         super(data);
@@ -44,13 +44,13 @@ public class ReachA extends Check {
                 final long ping = PacketEvents.getAPI().getPlayerUtils().getPing(data.getPlayer());
                 if(ping < reachMaxLatency.getLong()) {
                     final double distance = this.historyLocations.stream()
-                            .filter(pair -> Math.abs(now() - pair.getX()) < (Math.max(ping, 150L)))
-                            .mapToDouble(pair -> {
-                                Location victimLoc = pair.getY();
-                                Location playerLoc = data.getLocation();
+                      .filter(pair -> Math.abs(now() - pair.getX()) < (Math.max(ping, 150L)))
+                      .mapToDouble(pair -> {
+                          Location victimLoc = pair.getY();
+                          Location playerLoc = data.getLocation();
 
-                                return playerLoc.toVector().setY(0).distance(victimLoc.toVector().setY(0)) - 0.4D;
-                            }).min().orElse(0.0);
+                          return playerLoc.toVector().setY(0).distance(victimLoc.toVector().setY(0)) - 0.4D;
+                      }).min().orElse(0.0);
 
                     if (distance > maxReach.getDouble()) {
                         increaseBuffer();

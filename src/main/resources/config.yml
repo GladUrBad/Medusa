@@ -22,25 +22,6 @@ response:
 
 
 # Check configuration
-#
-# enabled: Whether or not this check is being used.
-# max-vl: The maximum amount of vl the check can have.
-# vl-add: Amount of vl to add to the checks overall vl.
-# vl-decay: Amount of time between each vl decrement (in ticks).
-# vl-delay: Amount of time between last fail to start decrementing vl (in ticks).
-#
-# Violation works by each check having their own VL (Violation Level) which is
-# incremented by one every time the player fails the check. Its VL adds to the
-# "global" VL (for example KillAuraA's VL will add to the total of KillAura's VL)
-# which will determin what commands will be taken (if any).
-#
-# Example:
-#
-# KillAuraA has a total of 5 VL and its vl-add is set to 2.0. This means that
-# KillAura's VL is 10 because 5*2.0=10.
-# KillAuraB has a total of 10 VL and its vl-add is set to 0.5. This means that
-# KillAura's VL is now 15 because 10+10*0.5=5. (10 from KillAuraA's VL)
-#
 checks:
   combat:
     autoclicker:
@@ -48,59 +29,41 @@ checks:
         enabled: true
         # max-cps: Maximum clicks per seconds the player can click.
         max-cps: 20
-        max-vl: 30
-        vl-add: 1.0
-        vl-decay: 20
-        vl-delay: 1000
-      commands:
-        '50': ['ban %player% %prefix% Unfair Advantage']
+        max-violations: 30
+        punish-command: 'ban %player% %prefix% Unfair Advantage'
     killaura:
       a:
         enabled: true
-        max-vl: 30
-        vl-add: 1.0
-        vl-decay: 20
-        vl-delay: 1000
+        max-violations: 30
+        punish-command: 'ban %player% %prefix% Unfair Advantage'
       b:
         enabled: true
-        max-vl: 30
-        vl-add: 1.0
-        vl-decay: 20
-        vl-delay: 1000
+        max-violations: 30
+        punish-command: 'ban %player% %prefix% Unfair Advantage'
       c:
         enabled: true
-        max-vl: 30
-        vl-add: 1.0
-        vl-decay: 20
-        vl-delay: 1000
+        max-violations: 30
+        punish-command: 'ban %player% %prefix% Unfair Advantage'
       d:
         enabled: true
-        max-vl: 30
-        vl-add: 1.0
-        vl-decay: 20
-        vl-delay: 1000
+        max-violations: 30
+        punish-command: 'ban %player% %prefix% Unfair Advantage'
       e:
         enabled: true
         # swings: Minimum amount of swings to check the detection.
         swings: 100
         # min-flag: Minimum amount of hits to flag.
         min-flag: 75
-        max-vl: 30
-        vl-add: 1.0
-        vl-decay: 20
-        vl-delay: 1000
+        max-violations: 50
+        punish-command: 'ban %player% %prefix% Unfair Advantage'
       f: #VERY INACCURATE - Make the RayCasting more accurate for it to be usable.
         enabled: false
         # swings: Minimum amount of swings to check the detection.
         swings: 100
         # min-flag: Minimum amount of potential hits that haven't been landed to flag.
         min-flag: 45
-        max-vl: 30
-        vl-add: 1.0
-        vl-decay: 20
-        vl-delay: 1000
-      commands:
-        '50': ['ban %player% %prefix% Unfair Advantage']
+        max-violations: 50
+        punish-command: 'ban %player% %prefix% Unfair Advantage'
     reach:
       a:
         enabled: true
@@ -112,160 +75,104 @@ checks:
         # reach-maxlatency: In milliseconds, the maximum ping a player can have before the reach check is disabled.
         # If you are having false positives with lag increase this.
         reach-maxlatency: 200
-        max-vl: 30
-        vl-add: 1.0
-        vl-decay: 20
-        vl-delay: 1000
-      commands:
-        '50': ['ban %player% %prefix% Unfair Advantage']
+        max-violations: 50
+        punish-command: 'ban %player% %prefix% Unfair Advantage'
   movement:
     fastclimb:
       a:
         enabled: true
         setback: true
-        max-vl: 30
-        vl-add: 1.0
-        vl-decay: 20
-        vl-delay: 1000
-      commands:
-        '50': ['ban %player% %prefix% Unfair Advantage']
+        max-violations: 20
+        punish-command: 'ban %player% %prefix% Unfair Advantage'
     flight:
       a:
         enabled: true
         setback: true
-        max-vl: 30
-        vl-add: 1.0
-        vl-decay: 20
-        vl-delay: 1000
+        max-violations: 20
+        punish-command: 'ban %player% %prefix% Unfair Advantage'
       b:
         enabled: true
         setback: true
-        max-vl: 30
-        vl-add: 1.0
-        vl-decay: 20
-        vl-delay: 1000
-      commands:
-        '50': ['ban %player% %prefix% Unfair Advantage']
+        max-violations: 20
+        punish-command: 'ban %player% %prefix% Unfair Advantage'
     jesus:
       a:
         enabled: true
         setback: true
-        max-vl: 30
-        vl-add: 1.0
-        vl-decay: 20
-        vl-delay: 1000
+        max-violations: 20
+        punish-command: 'ban %player% %prefix% Unfair Advantage'
       b:
         enabled: true
         setback: true
-        max-vl: 30
-        vl-add: 1.0
-        vl-decay: 20
-        vl-delay: 1000
+        max-violations: 20
+        punish-command: 'ban %player% %prefix% Unfair Advantage'
       c:
         enabled: true
         setback: true
-        max-vl: 30
-        vl-add: 1.0
-        vl-decay: 20
-        vl-delay: 1000
-      commands:
-        '50': ['ban %player% %prefix% Unfair Advantage']
+        max-violations: 20
+        punish-command: 'ban %player% %prefix% Unfair Advantage'
     motion:
       a:
         enabled: true
         setback: true
-        max-vl: 30
-        vl-add: 1.0
-        vl-decay: 20
-        vl-delay: 1000
+        max-violations: 20
+        punish-command: 'ban %player% %prefix% Unfair Advantage'
       b:
         enabled: true
         setback: true
-        max-vl: 30
-        vl-add: 1.0
-        vl-decay: 20
-        vl-delay: 1000
+        max-violations: 20
+        punish-command: 'ban %player% %prefix% Unfair Advantage'
       c:
         enabled: true
         setback: true
-        max-vl: 30
-        vl-add: 1.0
-        vl-decay: 20
-        vl-delay: 1000
+        max-violations: 20
+        punish-command: 'ban %player% %prefix% Unfair Advantage'
       d:
         enabled: true
         setback: true
-        max-vl: 30
-        vl-add: 1.0
-        vl-decay: 20
-        vl-delay: 1000
+        max-violations: 20
+        punish-command: 'ban %player% %prefix% Unfair Advantage'
       e:
         enabled: true
         setback: true
-        max-vl: 30
-        vl-add: 1.0
-        vl-decay: 20
-        vl-delay: 1000
-      commands:
-        '50': ['ban %player% %prefix% Unfair Advantage']
+        max-violations: 20
+        punish-command: 'ban %player% %prefix% Unfair Advantage'
     nofall:
       a:
         enabled: true
         setback: true
-        max-vl: 30
-        vl-add: 1.0
-        vl-decay: 20
-        vl-delay: 1000
-      commands:
-        '50': ['ban %player% %prefix% Unfair Advantage']
+        max-violations: 20
+        punish-command: 'ban %player% %prefix% Unfair Advantage'
     speed:
       a:
         enabled: true
         setback: true
-        max-vl: 30
-        vl-add: 1.0
-        vl-decay: 20
-        vl-delay: 1000
+        max-violations: 20
+        punish-command: 'ban %player% %prefix% Unfair Advantage'
       b:
         enabled: true
         setback: true
-        max-vl: 30
-        vl-add: 1.0
-        vl-decay: 20
-        vl-delay: 1000
-      commands:
-        '50': ['ban %player% %prefix% Unfair Advantage']
+        max-violations: 20
+        punish-command: 'ban %player% %prefix% Unfair Advantage'
   player:
     badpackets:
       a:
         enabled: true
         setback: true
-        max-vl: 30
-        vl-add: 1.0
-        vl-decay: 20
-        vl-delay: 1000
+        max-violations: 20
+        punish-command: 'ban %player% %prefix% Unfair Advantage'
       b:
         enabled: true
         setback: true
-        max-vl: 30
-        vl-add: 1.0
-        vl-decay: 20
-        vl-delay: 1000
+        max-violations: 20
+        punish-command: 'ban %player% %prefix% Unfair Advantage'
       c:
         enabled: true
         setback: true
-        max-vl: 30
-        vl-add: 1.0
-        vl-decay: 20
-        vl-delay: 1000
-      commands:
-        '50': ['ban %player% %prefix% Unfair Advantage']
+        max-violations: 20
+        punish-command: 'ban %player% %prefix% Unfair Advantage'
     timer:
       a:
         enabled: true
-        max-vl: 30
-        vl-add: 1.0
-        vl-decay: 20
-        vl-delay: 1000
-      commands:
-        '50': ['ban %player% %prefix% Unfair Advantage']
+        max-violations: 20
+        punish-command: 'ban %player% %prefix% Unfair Advantage'
