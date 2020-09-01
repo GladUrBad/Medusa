@@ -59,16 +59,17 @@ public class Config {
             //REACH_MAXLATENCY = (long) getLongFromConfig("checks.combat.reach-maxlatency");
             FileConfiguration config = Medusa.getInstance().getConfig();
             for (String s : config.getConfigurationSection("checks").getKeys(false)) {
-                ConfigurationSection section = config.getConfigurationSection("checks." + s);
-                List<List<String>> commands = new ArrayList<>();
-                PUNISH_COMMANDS.put(s, commands);
-                for (String part : section.getConfigurationSection("commands").getKeys(false)) {
-                    Object o = section.get("commands." + part);
-                    int i = Integer.parseInt(part);
-                    if (o instanceof List)
-                        commands.add((List<String>) o);
-                    else
-                        commands.add(Collections.singletonList((String) o));
+                for (String s1 : config.getConfigurationSection("checks." + s).getKeys(false)) {
+                    List<List<String>> commands = new ArrayList<>();
+                    PUNISH_COMMANDS.put(s, commands);
+                    for (String part : config.getConfigurationSection("checks." + s + "." + s1 + ".commands").getKeys(false)) {
+                        Object o = config.get("checks." + s + "." + s1 + ".commands." + part);
+                        int i = Integer.parseInt(part);
+                        if (o instanceof List)
+                            commands.add((List<String>) o);
+                        else
+                            commands.add(Collections.singletonList((String) o));
+                    }
                 }
             }
 
