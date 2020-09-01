@@ -7,6 +7,7 @@ import com.gladurbad.medusa.listener.RegistrationListener;
 import com.gladurbad.medusa.manager.CheckManager;
 import com.gladurbad.medusa.manager.PlayerDataManager;
 import com.gladurbad.medusa.playerdata.PlayerData;
+import com.gladurbad.medusa.util.ChatUtil;
 import io.github.retrooper.packetevents.PacketEvents;
 import lombok.Getter;
 import org.bukkit.Bukkit;
@@ -42,6 +43,8 @@ public class Medusa extends JavaPlugin {
         PacketEvents.start(this);
         PacketEvents.getAPI().getEventManager().registerListener(new PacketProcessor());
         PacketEvents.getAPI().getEventManager().registerListener(new RegistrationListener());
+
+        ChatUtil.papi = Bukkit.getPluginManager().getPlugin("PlaceholderAPI") != null;
 
 
         //Register online players into the system.

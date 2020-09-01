@@ -55,6 +55,10 @@
             <id>funkemunky-releases</id>
             <url>https://nexus.funkemunky.cc/content/repositories/releases/</url>
         </repository>
+        <repository>
+            <id>placeholderapi</id>
+            <url>https://repo.extendedclip.com/content/repositories/placeholderapi/</url>
+        </repository>
     </repositories>
     <dependencies>
         <dependency>
@@ -85,6 +89,12 @@
             <groupId>com.github.retrooper</groupId>
             <artifactId>packetevents</artifactId>
             <version>1.6.2</version>
+        </dependency>
+        <dependency>
+            <groupId>me.clip</groupId>
+            <artifactId>placeholderapi</artifactId>
+            <version>2.10.9</version>
+            <scope>provided</scope>
         </dependency>
     </dependencies>
 </project>
