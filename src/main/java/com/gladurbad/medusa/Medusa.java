@@ -35,10 +35,9 @@ public class Medusa extends JavaPlugin {
 
         CheckManager.registerChecks();
 
-        getCommand("medusa").setExecutor(medusaCommands);
+        getCommand(Config.COMMAND_NAME).setExecutor(medusaCommands);
 
         //Register listeners.
-        PacketEvents.getSettings().setIdentifier("medusa_handler");
         PacketEvents.start(this);
         PacketEvents.getAPI().getEventManager().registerListener(new PacketProcessor());
         PacketEvents.getAPI().getEventManager().registerListener(new RegistrationListener());

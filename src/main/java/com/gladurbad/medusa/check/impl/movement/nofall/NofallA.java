@@ -4,11 +4,13 @@ import com.gladurbad.medusa.check.Check;
 import com.gladurbad.medusa.check.CheckInfo;
 import com.gladurbad.medusa.network.Packet;
 import com.gladurbad.medusa.playerdata.PlayerData;
+import com.gladurbad.medusa.util.CollisionUtil;
 
 
 @CheckInfo(name = "Nofall", type = "A", dev = true)
 public class NofallA extends Check {
 
+    private int ticksSinceInVehicle;
     public NofallA(PlayerData data) {
         super(data);
     }
@@ -17,15 +19,20 @@ public class NofallA extends Check {
     public void handle(Packet packet) {
         if(packet.isReceiving() && this.isFlyingPacket(packet)) {
             final boolean serverOnGround = data.getPlayer().isOnGround();
-            final boolean clientOnGround = data.getLocation().getY() % (1D/64) == 0;
+            final boolean clientOnGround = data.getLocation().getY() % (1D/64) == 0.0 && data.getLastLocation().getY() % (1D/64) == 0.0;
 
-            if(serverOnGround && !clientOnGround) {
+            final boolean invalid = CollisionUtil.isInLiquid(data.getPlayer()) && CollisionUtil.isCollidingWithClimbable(data.getPlayer());
+
+            if(data.getPlayer().isInsideVehicle()) ticksSinceInVehicle = 0;
+            else ++ticksSinceInVehicle;
+
+            if(!invalid && serverOnGround != clientOnGround && ticksSinceInVehicle > 10) {
                 increaseBuffer();
                 if(buffer > 3) {
                     fail();
                 }
             } else {
-                decreaseBuffer();
+                buffer = 0;
                 setLastLegitLocation(data.getPlayer().getLocation());
             }
         }

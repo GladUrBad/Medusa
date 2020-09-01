@@ -52,7 +52,7 @@ public abstract class Check implements Listener {
     protected void fail() {
         ++vl;
         AlertManager.verbose(data, this);
-        if(setback && vl > Config.VL_TO_ALERT) {
+        if (setback && vl > Config.VL_TO_ALERT) {
             final Location setBackLocation = lastLegitLocation == null ? data.getLastLocation() : lastLegitLocation;
             Bukkit.getScheduler().runTask(Medusa.getInstance(), () -> data.getPlayer().teleport(setBackLocation));
             data.setLastSetbackTime(now());
@@ -89,10 +89,24 @@ public abstract class Check implements Listener {
     }
 
 
-    protected void debug(String info){ Bukkit.broadcastMessage(ChatColor.AQUA + "Debug: " + ChatColor.RESET + info); }
-    protected void debug(double info){ Bukkit.broadcastMessage(ChatColor.AQUA + "Debug: " + ChatColor.RESET + info); }
-    protected void debug(long info){ Bukkit.broadcastMessage(ChatColor.AQUA + "Debug: " + ChatColor.RESET + info); }
-    protected void debug(boolean info){ Bukkit.broadcastMessage(ChatColor.AQUA + "Debug: " + ChatColor.RESET + info); }
-    protected void debugPerPlayer(String info) { data.getPlayer().sendMessage(ChatColor.AQUA + "Debug: " + ChatColor.RESET + info);}
+    protected void debug(String info) {
+        Bukkit.broadcastMessage(ChatColor.AQUA + "Debug: " + ChatColor.RESET + info);
+    }
+
+    protected void debug(double info) {
+        Bukkit.broadcastMessage(ChatColor.AQUA + "Debug: " + ChatColor.RESET + info);
+    }
+
+    protected void debug(long info) {
+        Bukkit.broadcastMessage(ChatColor.AQUA + "Debug: " + ChatColor.RESET + info);
+    }
+
+    protected void debug(boolean info) {
+        Bukkit.broadcastMessage(ChatColor.AQUA + "Debug: " + ChatColor.RESET + info);
+    }
+
+    protected void debugPerPlayer(String info) {
+        data.getPlayer().sendMessage(ChatColor.AQUA + "Debug: " + ChatColor.RESET + info);
+    }
 
 }

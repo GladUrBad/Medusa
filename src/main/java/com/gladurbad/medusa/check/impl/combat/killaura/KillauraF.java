@@ -6,15 +6,9 @@ import com.gladurbad.medusa.playerdata.PlayerData;
 import com.gladurbad.medusa.util.RaycastUtils;
 import io.github.retrooper.packetevents.packet.PacketType;
 import io.github.retrooper.packetevents.packetwrappers.in.useentity.WrappedPacketInUseEntity;
-import org.bukkit.Bukkit;
-import org.bukkit.entity.EntityType;
-
 
 @CheckInfo(name = "Killaura", type = "F", dev = true)
 public class KillauraF extends Check {
-
-    private final static ConfigValue swings = new ConfigValue(ConfigValue.ValueType.INTEGER, "swings");
-    private static final ConfigValue minFlag = new ConfigValue(ConfigValue.ValueType.INTEGER, "min-flag");
 
     private int misses, potential;
 
@@ -29,8 +23,8 @@ public class KillauraF extends Check {
                 ++misses;
                 if (RaycastUtils.getLookingEntity(data.getPlayer()) != null)
                     ++potential;
-                if(misses >= swings.getInt()) {
-                    if(potential > minFlag.getInt()) fail();
+                if(misses >= 50) {
+                    if(potential > 35) fail();
                     misses = 0;
                     potential = 0;
                 }
