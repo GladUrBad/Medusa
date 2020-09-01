@@ -38,12 +38,12 @@ public class PlayerData implements PacketListener {
         this.player = player;
         this.location = this.getPlayer().getLocation();
         this.lastLocation = this.getPlayer().getLocation();
+        this.checks = CheckManager.loadChecks(this);
         for(Check check : checks){
             types.putIfAbsent(check.getCheckInfo().name(), new ArrayList<>());
             types.get(check.getCheckInfo().name()).add(check);
             prevVL.putIfAbsent(check.getCheckInfo().name(), 0);
         }
-        this.checks = CheckManager.loadChecks(this);
     }
 
     //Movement data.
