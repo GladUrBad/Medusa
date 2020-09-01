@@ -1,6 +1,7 @@
 package com.gladurbad.medusa;
 
 import com.gladurbad.medusa.command.MedusaCommands;
+import com.gladurbad.medusa.config.Config;
 import com.gladurbad.medusa.network.PacketProcessor;
 import com.gladurbad.medusa.listener.RegistrationListener;
 import com.gladurbad.medusa.manager.CheckManager;
@@ -38,7 +39,6 @@ public class Medusa extends JavaPlugin {
         getCommand("medusa").setExecutor(medusaCommands);
 
         //Register listeners.
-        PacketEvents.getSettings().setIdentifier("medusa_handler");
         PacketEvents.start(this);
         PacketEvents.getAPI().getEventManager().registerListener(new PacketProcessor());
         PacketEvents.getAPI().getEventManager().registerListener(new RegistrationListener());

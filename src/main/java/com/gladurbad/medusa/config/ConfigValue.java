@@ -1,4 +1,4 @@
-package com.gladurbad.medusa.check;
+package com.gladurbad.medusa.config;
 
 import lombok.*;
 

@@ -1,6 +1,6 @@
 package com.gladurbad.medusa.manager;
 
-import com.gladurbad.medusa.Config;
+import com.gladurbad.medusa.config.Config;
 import com.gladurbad.medusa.Medusa;
 import com.gladurbad.medusa.check.Check;
 import com.gladurbad.medusa.playerdata.PlayerData;

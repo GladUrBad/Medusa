@@ -1,6 +1,7 @@
 package com.gladurbad.medusa.check.impl.combat.autoclicker;
 
 import com.gladurbad.medusa.check.*;
+import com.gladurbad.medusa.config.ConfigValue;
 import com.gladurbad.medusa.network.Packet;
 import com.gladurbad.medusa.playerdata.PlayerData;
 import io.github.retrooper.packetevents.packet.PacketType;
@@ -10,7 +11,7 @@ import java.util.ArrayDeque;
 @CheckInfo(name = "Autoclicker", type = "A", dev = false)
 public class AutoclickerA extends Check {
 
-    static private final ConfigValue maxCPS = new ConfigValue(ConfigValue.ValueType.INTEGER, "max-cps");
+    private static final ConfigValue maxCPS = new ConfigValue(ConfigValue.ValueType.INTEGER, "max-cps");
 
     private long lastClickTime;
     private ArrayDeque<Long> samples = new ArrayDeque<>();
@@ -21,7 +22,7 @@ public class AutoclickerA extends Check {
 
     @Override
     public void handle(Packet packet) {
-        if (packet.isReceiving() && packet.getPacketId() == PacketType.Client.ARM_ANIMATION) {
+        if (packet.isReceiving() && packet.getPacketId() == PacketType.Client.ARM_ANIMATION && !data.isDigging()) {
             final long clickTime = now();
             final long clickDelay = clickTime - lastClickTime;
             samples.add(clickDelay);

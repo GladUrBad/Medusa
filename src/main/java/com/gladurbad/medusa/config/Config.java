@@ -1,5 +1,6 @@
-package com.gladurbad.medusa;
+package com.gladurbad.medusa.config;
 
+import com.gladurbad.medusa.Medusa;
 import com.gladurbad.medusa.check.*;
 import com.gladurbad.medusa.manager.CheckManager;
 

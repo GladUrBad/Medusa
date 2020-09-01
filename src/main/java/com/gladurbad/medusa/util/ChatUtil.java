@@ -1,6 +1,6 @@
 package com.gladurbad.medusa.util;
 
-import com.gladurbad.medusa.Config;
+import com.gladurbad.medusa.config.Config;
 import com.gladurbad.medusa.manager.PlayerDataManager;
 import com.gladurbad.medusa.playerdata.PlayerData;
 import net.md_5.bungee.api.chat.TextComponent;

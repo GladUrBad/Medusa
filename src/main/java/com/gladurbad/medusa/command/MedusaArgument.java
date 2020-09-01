@@ -1,12 +1,10 @@
 package com.gladurbad.medusa.command;
 
-import com.gladurbad.medusa.Config;
+import com.gladurbad.medusa.config.Config;
 import com.gladurbad.medusa.Medusa;
-import com.gladurbad.medusa.util.ChatUtil;
 import lombok.Getter;
 
 import lombok.RequiredArgsConstructor;
-import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 

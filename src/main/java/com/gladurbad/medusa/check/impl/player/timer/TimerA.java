@@ -5,9 +5,11 @@ import com.gladurbad.medusa.check.CheckInfo;
 import com.gladurbad.medusa.network.Packet;
 import com.gladurbad.medusa.playerdata.PlayerData;
 
+import com.google.common.collect.Lists;
 import io.github.retrooper.packetevents.packet.PacketType;
 
 import java.util.ArrayDeque;
+import java.util.Deque;
 
 @CheckInfo(name = "Timer", type = "A", dev = true)
 public class TimerA extends Check {
@@ -32,14 +34,19 @@ public class TimerA extends Check {
                 double timerAverage = samples.parallelStream().mapToDouble(value -> value).average().orElse(0.0D);
                 double timerSpeed = 50 / timerAverage;
 
-                if(timerSpeed > 1.05 || timerSpeed < 0.95) fail();
+                if(timerSpeed > 1.05 || timerSpeed < 0.95) {
+                    increaseBuffer();
+                    if (buffer > 1) fail();
+                } else {
+                    decreaseBuffer();
+                }
 
                 samples.clear();
             }
             lastTime = time;
         } else if(packet.isSending() && packet.getPacketId() == PacketType.Server.ENTITY_TELEPORT) {
             samples.clear();
-        } else if(packet.isSending() && packet.getPacketId() == PacketType.Client.STEER_VEHICLE) {
+        } else if(packet.isReceiving() && packet.getPacketId() == PacketType.Client.STEER_VEHICLE) {
             samples.clear();
         }
     }

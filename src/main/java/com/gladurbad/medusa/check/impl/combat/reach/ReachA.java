@@ -1,7 +1,7 @@
 package com.gladurbad.medusa.check.impl.combat.reach;
 
-import com.gladurbad.medusa.Config;
 import com.gladurbad.medusa.check.*;
+import com.gladurbad.medusa.config.ConfigValue;
 import com.gladurbad.medusa.network.Packet;
 import com.gladurbad.medusa.playerdata.PlayerData;
 import com.gladurbad.medusa.util.customtype.EvictingList;

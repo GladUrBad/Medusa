@@ -132,13 +132,13 @@ checks:
         setback: true
         max-violations: 50
         punish-command: 'ban %player% %prefix% Unfair Advantage'
-    nofall:
-      a:
+      e:
         enabled: true
         setback: true
         max-violations: 50
         punish-command: 'ban %player% %prefix% Unfair Advantage'
-      b:
+    nofall:
+      a:
         enabled: true
         setback: true
         max-violations: 50
@@ -157,6 +157,16 @@ checks:
   player:
     badpackets:
       a:
+        enabled: true
+        setback: true
+        max-violations: 50
+        punish-command: 'ban %player% %prefix% Unfair Advantage'
+      b:
+        enabled: true
+        setback: true
+        max-violations: 50
+        punish-command: 'ban %player% %prefix% Unfair Advantage'
+      c:
         enabled: true
         setback: true
         max-violations: 50

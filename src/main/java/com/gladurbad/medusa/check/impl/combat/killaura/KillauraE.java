@@ -1,13 +1,13 @@
 package com.gladurbad.medusa.check.impl.combat.killaura;
 
 import com.gladurbad.medusa.check.*;
+import com.gladurbad.medusa.config.ConfigValue;
 import com.gladurbad.medusa.network.Packet;
 import com.gladurbad.medusa.playerdata.PlayerData;
 
 import io.github.retrooper.packetevents.packet.PacketType;
 import io.github.retrooper.packetevents.packetwrappers.in.useentity.WrappedPacketInUseEntity;
 
-import org.bukkit.Bukkit;
 import org.bukkit.entity.EntityType;
 
 

@@ -1,6 +1,6 @@
 package com.gladurbad.medusa.check;
 
-import com.gladurbad.medusa.Config;
+import com.gladurbad.medusa.config.Config;
 import com.gladurbad.medusa.Medusa;
 import com.gladurbad.medusa.manager.AlertManager;
 import com.gladurbad.medusa.network.Packet;
@@ -89,10 +89,10 @@ public abstract class Check implements Listener {
     }
 
 
-    protected void debug(String info){ Bukkit.broadcastMessage(ChatColor.AQUA + "Debug: " + ChatColor.RESET + info); }
-    protected void debug(double info){ Bukkit.broadcastMessage(ChatColor.AQUA + "Debug: " + ChatColor.RESET + info); }
-    protected void debug(long info){ Bukkit.broadcastMessage(ChatColor.AQUA + "Debug: " + ChatColor.RESET + info); }
-    protected void debug(boolean info){ Bukkit.broadcastMessage(ChatColor.AQUA + "Debug: " + ChatColor.RESET + info); }
+    protected void debug(String info) { Bukkit.broadcastMessage(ChatColor.AQUA + "Debug: " + ChatColor.RESET + info); }
+    protected void debug(double info) { Bukkit.broadcastMessage(ChatColor.AQUA + "Debug: " + ChatColor.RESET + info); }
+    protected void debug(long info) { Bukkit.broadcastMessage(ChatColor.AQUA + "Debug: " + ChatColor.RESET + info); }
+    protected void debug(boolean info) { Bukkit.broadcastMessage(ChatColor.AQUA + "Debug: " + ChatColor.RESET + info); }
     protected void debugPerPlayer(String info) { data.getPlayer().sendMessage(ChatColor.AQUA + "Debug: " + ChatColor.RESET + info);}
 
 }
