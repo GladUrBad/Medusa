@@ -53,7 +53,8 @@ public abstract class Check implements Listener {
     }
 
     protected void fail() {
-        ++vl;
+        if (vl < maxVL)
+            ++vl;
         AlertManager.verbose(data, this);
         if(setback && vl > Config.VL_TO_ALERT) {
             final Location setBackLocation = lastLegitLocation == null ? data.getLastLocation() : lastLegitLocation;

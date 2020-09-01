@@ -51,6 +51,7 @@ public class AlertManager {
                         .replace("%dev%", check.getCheckInfo().dev() ? ChatUtil.color("&c(Dev)&r") : "")
                         .replace("%vl%", "" + check.getVl())));
             }
+            data.getPrevVL().put(check.getCheckInfo().name(), vl.get());
         }
         /*if(check.getVl() > check.getMaxVL() && !Config.TESTMODE && data.getPlayer().isOnline()) {
             if(!check.getPunishCommand().isEmpty()) {
