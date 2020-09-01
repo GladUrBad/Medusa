@@ -39,6 +39,7 @@ public class ConfigValue {
         INTEGER,
         DOUBLE,
         BOOLEAN,
-        STRING
+        STRING,
+        LONG
     }
 }

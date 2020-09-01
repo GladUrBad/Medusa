@@ -78,7 +78,10 @@ public class Config {
                                 value.setValue(getDoubleFromConfig("checks." + checkType + "." + checkInfo.name().toLowerCase() + "." + checkInfo.type().toLowerCase() + "." + name));
                                 break;
                             case STRING:
-                                value.setValue( getStringFromConfig("checks." + checkType + "." + checkInfo.name().toLowerCase() + "." + checkInfo.type().toLowerCase() + "." + name));
+                                value.setValue(getStringFromConfig("checks." + checkType + "." + checkInfo.name().toLowerCase() + "." + checkInfo.type().toLowerCase() + "." + name));
+                                break;
+                            case LONG:
+                                value.setValue(getLongFromConfig("checks." + checkType + "." + checkInfo.name().toLowerCase() + "." + checkInfo.type().toLowerCase() + "." + name));
                                 break;
                         }
                         field.setAccessible(accessible);
@@ -125,7 +128,7 @@ public class Config {
         return Medusa.getInstance().getConfig().getDouble(string);
     }
 
-    private static double getLongFromConfig(String string) {
+    private static long getLongFromConfig(String string) {
         return Medusa.getInstance().getConfig().getLong(string);
     }
 }

@@ -14,11 +14,11 @@ response:
     prefix: '&8[&2Medusa&8]'
     no-permission: '&cNo permission.'
   violations:
-    minimum-vl: 5
+    minimum-vl: 3
     alert-format: '%prefix% &a%player% &2- &a%check% (Type %type%) %dev% &8[&cVL: %vl%&8]'
   command:
     prefix: '&8[&2Medusa&8]&c'
-    name: 'medusa'
+    name: 'medusa' # Broken for now, this does not affect anything
 
 
 # Check configuration
@@ -29,24 +29,24 @@ checks:
         enabled: true
         # max-cps: Maximum clicks per seconds the player can click.
         max-cps: 20
-        max-violations: 50
+        max-violations: 30
         punish-command: 'ban %player% %prefix% Unfair Advantage'
     killaura:
       a:
         enabled: true
-        max-violations: 50
+        max-violations: 30
         punish-command: 'ban %player% %prefix% Unfair Advantage'
       b:
         enabled: true
-        max-violations: 50
+        max-violations: 30
         punish-command: 'ban %player% %prefix% Unfair Advantage'
       c:
         enabled: true
-        max-violations: 50
+        max-violations: 30
         punish-command: 'ban %player% %prefix% Unfair Advantage'
       d:
         enabled: true
-        max-violations: 50
+        max-violations: 30
         punish-command: 'ban %player% %prefix% Unfair Advantage'
       e:
         enabled: true
@@ -82,97 +82,97 @@ checks:
       a:
         enabled: true
         setback: true
-        max-violations: 50
+        max-violations: 20
         punish-command: 'ban %player% %prefix% Unfair Advantage'
     flight:
       a:
         enabled: true
         setback: true
-        max-violations: 50
+        max-violations: 20
         punish-command: 'ban %player% %prefix% Unfair Advantage'
       b:
         enabled: true
         setback: true
-        max-violations: 50
+        max-violations: 20
         punish-command: 'ban %player% %prefix% Unfair Advantage'
     jesus:
       a:
         enabled: true
         setback: true
-        max-violations: 50
+        max-violations: 20
         punish-command: 'ban %player% %prefix% Unfair Advantage'
       b:
         enabled: true
         setback: true
-        max-violations: 50
+        max-violations: 20
         punish-command: 'ban %player% %prefix% Unfair Advantage'
       c:
         enabled: true
         setback: true
-        max-violations: 50
+        max-violations: 20
         punish-command: 'ban %player% %prefix% Unfair Advantage'
     motion:
       a:
         enabled: true
         setback: true
-        max-violations: 50
+        max-violations: 20
         punish-command: 'ban %player% %prefix% Unfair Advantage'
       b:
         enabled: true
         setback: true
-        max-violations: 50
+        max-violations: 20
         punish-command: 'ban %player% %prefix% Unfair Advantage'
       c:
         enabled: true
         setback: true
-        max-violations: 50
+        max-violations: 20
         punish-command: 'ban %player% %prefix% Unfair Advantage'
       d:
         enabled: true
         setback: true
-        max-violations: 50
+        max-violations: 20
         punish-command: 'ban %player% %prefix% Unfair Advantage'
       e:
         enabled: true
         setback: true
-        max-violations: 50
+        max-violations: 20
         punish-command: 'ban %player% %prefix% Unfair Advantage'
     nofall:
       a:
         enabled: true
         setback: true
-        max-violations: 50
+        max-violations: 20
         punish-command: 'ban %player% %prefix% Unfair Advantage'
     speed:
       a:
         enabled: true
         setback: true
-        max-violations: 50
+        max-violations: 20
         punish-command: 'ban %player% %prefix% Unfair Advantage'
       b:
         enabled: true
         setback: true
-        max-violations: 50
+        max-violations: 20
         punish-command: 'ban %player% %prefix% Unfair Advantage'
   player:
     badpackets:
       a:
         enabled: true
         setback: true
-        max-violations: 50
+        max-violations: 20
         punish-command: 'ban %player% %prefix% Unfair Advantage'
       b:
         enabled: true
         setback: true
-        max-violations: 50
+        max-violations: 20
         punish-command: 'ban %player% %prefix% Unfair Advantage'
       c:
         enabled: true
         setback: true
-        max-violations: 50
+        max-violations: 20
         punish-command: 'ban %player% %prefix% Unfair Advantage'
     timer:
       a:
         enabled: true
-        max-violations: 50
+        max-violations: 20
         punish-command: 'ban %player% %prefix% Unfair Advantage'
