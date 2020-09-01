@@ -1,6 +1,6 @@
 package com.gladurbad.medusa.check;
 
-import com.gladurbad.medusa.config.Config;
+import com.gladurbad.medusa.config.*;
 import com.gladurbad.medusa.Medusa;
 import com.gladurbad.medusa.manager.AlertManager;
 import com.gladurbad.medusa.network.Packet;
@@ -24,6 +24,9 @@ public abstract class Check implements Listener {
     @Setter
     protected Location lastLegitLocation;
 
+    @Getter
+    private ConfigValue vlAdd = new ConfigValue(ConfigValue.ValueType.DOUBLE, "vl-add");
+
     //Check data from config.
     @Getter
     private boolean enabled;
@@ -31,15 +34,15 @@ public abstract class Check implements Listener {
     private int maxVL;
     @Getter
     private boolean setback;
-    @Getter
-    private String punishCommand;
+//    @Getter
+//    private String punishCommand;
 
     public Check(PlayerData data) {
         this.data = data;
         this.enabled = Config.ENABLED_CHECKS.contains(getCheckInfo().name() + getCheckInfo().type());
         this.maxVL = Config.MAX_VIOLATIONS.get(getCheckInfo().name() + getCheckInfo().type());
         this.setback = Config.SETBACK_CHECKS.contains(getCheckInfo().name() + getCheckInfo().type());
-        this.punishCommand = Config.PUNISH_COMMANDS.get(getCheckInfo().name() + getCheckInfo().type());
+        //this.punishCommand = Config.PUNISH_COMMANDS.get(getCheckInfo().name() + getCheckInfo().type());
         Bukkit.getServer().getPluginManager().registerEvents(this, Medusa.getInstance());
     }
 

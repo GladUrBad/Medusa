@@ -37,6 +37,7 @@ public class ConfigValue {
 
     public enum ValueType {
         INTEGER,
+        LONG,
         DOUBLE,
         BOOLEAN,
         STRING

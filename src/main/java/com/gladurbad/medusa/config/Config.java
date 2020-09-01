@@ -3,11 +3,12 @@ package com.gladurbad.medusa.config;
 import com.gladurbad.medusa.Medusa;
 import com.gladurbad.medusa.check.*;
 import com.gladurbad.medusa.manager.CheckManager;
-
 import com.gladurbad.medusa.util.ChatUtil;
 import org.bukkit.Bukkit;
+import org.bukkit.configuration.ConfigurationSection;
+import org.bukkit.configuration.file.*;
 
-import java.lang.reflect.*;
+import java.lang.reflect.Field;
 import java.util.*;
 
 public class Config {
@@ -30,7 +31,12 @@ public class Config {
     public static List<String> ENABLED_CHECKS = new ArrayList<>();
     public static List<String> SETBACK_CHECKS = new ArrayList<>();
     public static Map<String, Integer> MAX_VIOLATIONS = new HashMap<>();
-    public static Map<String, String> PUNISH_COMMANDS = new HashMap<>();
+    public static Map<String, List<String>> PUNISH_COMMANDS = new HashMap<>();
+    private static Map<String, String> TYPES = new HashMap<>();
+
+    public static String getType(String s) {
+        return TYPES.get(s);
+    }
 
     public static void updateConfig() {
         try {
@@ -48,17 +54,31 @@ public class Config {
             //MAX_REACH = getDoubleFromConfig("checks.combat.max-reach");
             //REACH_SENSITIVITY = getIntegerFromConfig("checks.combat.reach-sensitivity");
             //REACH_MAXLATENCY = (long) getLongFromConfig("checks.combat.reach-maxlatency");
+            FileConfiguration config = Medusa.getInstance().getConfig();
+            for (String s : config.getConfigurationSection("checks").getKeys(false)) {
+                ConfigurationSection section = config.getConfigurationSection("checks." + s);
+                List<String> commands = new ArrayList<>();
+                PUNISH_COMMANDS.put(s, commands);
+                for (String part : section.getConfigurationSection("commands").getKeys(false)) {
+                    Object o = section.get("commands." + part);
+                    if (o instanceof List)
+                        commands.addAll((Collection<? extends String>) o);
+                    else
+                        commands.add((String) o);
+                }
+            }
 
-            for(Class<? extends Check> check : CheckManager.CHECKS) {
+            for (Class<? extends Check> check : CheckManager.CHECKS) {
                 final CheckInfo checkInfo = check.getAnnotation(CheckInfo.class);
                 String checkType = "";
-                if(check.getName().contains("combat")) {
+                if (check.getName().contains("combat")) {
                     checkType = "combat";
-                } else if(check.getName().contains("movement")) {
+                } else if (check.getName().contains("movement")) {
                     checkType = "movement";
-                } else if(check.getName().contains("player")) {
+                } else if (check.getName().contains("player")) {
                     checkType = "player";
                 }
+                TYPES.put(checkInfo.name(), checkType);
 
                 for (Field field : check.getDeclaredFields()) {
                     if (field.getType().equals(ConfigValue.class)) {
@@ -74,11 +94,14 @@ public class Config {
                             case INTEGER:
                                 value.setValue(getIntegerFromConfig("checks." + checkType + "." + checkInfo.name().toLowerCase() + "." + checkInfo.type().toLowerCase() + "." + name));
                                 break;
+                            case LONG:
+                                value.setValue(getLongFromConfig("checks." + checkType + "." + checkInfo.name().toLowerCase() + "." + checkInfo.type().toLowerCase() + "." + name));
+                                break;
                             case DOUBLE:
                                 value.setValue(getDoubleFromConfig("checks." + checkType + "." + checkInfo.name().toLowerCase() + "." + checkInfo.type().toLowerCase() + "." + name));
                                 break;
                             case STRING:
-                                value.setValue( getStringFromConfig("checks." + checkType + "." + checkInfo.name().toLowerCase() + "." + checkInfo.type().toLowerCase() + "." + name));
+                                value.setValue(getStringFromConfig("checks." + checkType + "." + checkInfo.name().toLowerCase() + "." + checkInfo.type().toLowerCase() + "." + name));
                                 break;
                         }
                         field.setAccessible(accessible);
@@ -87,20 +110,20 @@ public class Config {
 
                 final boolean enabled = getBooleanFromConfig("checks." + checkType + "." + checkInfo.name().toLowerCase() + "." + checkInfo.type().toLowerCase() + ".enabled");
                 final int maxViolations = getIntegerFromConfig("checks." + checkType + "." + checkInfo.name().toLowerCase() + "." + checkInfo.type().toLowerCase() + ".max-violations");
-                final String punishCommand = getStringFromConfig("checks." + checkType + "." + checkInfo.name().toLowerCase() + "." + checkInfo.type().toLowerCase() + ".punish-command");
+                //final String punishCommand = getStringFromConfig("checks." + checkType + "." + checkInfo.name().toLowerCase() + "." + checkInfo.type().toLowerCase() + ".punish-command");
 
-                if(checkType.equals("movement")) {
+                if (checkType.equals("movement")) {
                     final boolean setBack = getBooleanFromConfig("checks.movement." + checkInfo.name().toLowerCase() + "." + checkInfo.type().toLowerCase() + ".setback");
-                    if(setBack) {
+                    if (setBack) {
                         SETBACK_CHECKS.add(check.getSimpleName());
                     }
                 }
 
-                if(enabled) {
+                if (enabled) {
                     ENABLED_CHECKS.add(check.getSimpleName());
                 }
                 MAX_VIOLATIONS.put(check.getSimpleName(), maxViolations);
-                PUNISH_COMMANDS.put(check.getSimpleName(), punishCommand);
+                //PUNISH_COMMANDS.put(check.getSimpleName(), punishCommand);
             }
         } catch (Exception exception) {
             Bukkit.getLogger().severe("Could not properly load config.");
@@ -113,7 +136,7 @@ public class Config {
         return Medusa.getInstance().getConfig().getBoolean(string);
     }
 
-    private static String getStringFromConfig(String string) {
+    public static String getStringFromConfig(String string) {
         return Medusa.getInstance().getConfig().getString(string);
     }
 

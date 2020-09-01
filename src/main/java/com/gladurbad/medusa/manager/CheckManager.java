@@ -75,7 +75,6 @@ public class CheckManager {
         }
     }
 
-
     public static List<Check> loadChecks(PlayerData data) {
         final List<Check> checkList = new ArrayList<>();
         for(Constructor<?> constructor : CONSTRUCTORS) {
@@ -87,5 +86,4 @@ public class CheckManager {
         }
         return checkList;
     }
-
 }
