@@ -65,19 +65,20 @@ public class Config {
                         boolean accessible = field.isAccessible();
                         field.setAccessible(true);
                         String name = ((ConfigValue) field.get(null)).getName();
-                        ConfigValue.ValueType type = ((ConfigValue) field.get(null)).getType();
+                        ConfigValue value = ((ConfigValue) field.get(null));
+                        ConfigValue.ValueType type = value.getType();
                         switch (type) {
                             case BOOLEAN:
-                                field.set(null, getBooleanFromConfig("checks." + checkType + "." + checkInfo.name().toLowerCase() + "." + checkInfo.type().toLowerCase() + "." + name));
+                                value.setValue(getBooleanFromConfig("checks." + checkType + "." + checkInfo.name().toLowerCase() + "." + checkInfo.type().toLowerCase() + "." + name));
                                 break;
                             case INTEGER:
-                                field.set(null, getIntegerFromConfig("checks." + checkType + "." + checkInfo.name().toLowerCase() + "." + checkInfo.type().toLowerCase() + "." + name));
+                                value.setValue(getIntegerFromConfig("checks." + checkType + "." + checkInfo.name().toLowerCase() + "." + checkInfo.type().toLowerCase() + "." + name));
                                 break;
                             case DOUBLE:
-                                field.set(null, getDoubleFromConfig("checks." + checkType + "." + checkInfo.name().toLowerCase() + "." + checkInfo.type().toLowerCase() + "." + name));
+                                value.setValue(getDoubleFromConfig("checks." + checkType + "." + checkInfo.name().toLowerCase() + "." + checkInfo.type().toLowerCase() + "." + name));
                                 break;
                             case STRING:
-                                field.set(null, getStringFromConfig("checks." + checkType + "." + checkInfo.name().toLowerCase() + "." + checkInfo.type().toLowerCase() + "." + name));
+                                value.setValue( getStringFromConfig("checks." + checkType + "." + checkInfo.name().toLowerCase() + "." + checkInfo.type().toLowerCase() + "." + name));
                                 break;
                         }
                         field.setAccessible(accessible);
