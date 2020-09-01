@@ -44,13 +44,13 @@ public class ReachA extends Check {
                 final long ping = PacketEvents.getAPI().getPlayerUtils().getPing(data.getPlayer());
                 if(ping < reachMaxLatency.getLong()) {
                     final double distance = this.historyLocations.stream()
-                            .filter(pair -> Math.abs(now() - pair.getX()) < (Math.max(ping, 150L)))
-                            .mapToDouble(pair -> {
-                                Location victimLoc = pair.getY();
-                                Location playerLoc = data.getLocation();
+                      .filter(pair -> Math.abs(now() - pair.getX()) < (Math.max(ping, 150L)))
+                      .mapToDouble(pair -> {
+                          Location victimLoc = pair.getY();
+                          Location playerLoc = data.getLocation();
 
-                                return playerLoc.toVector().setY(0).distance(victimLoc.toVector().setY(0)) - 0.4D;
-                            }).min().orElse(0.0);
+                          return playerLoc.toVector().setY(0).distance(victimLoc.toVector().setY(0)) - 0.4D;
+                      }).min().orElse(0.0);
 
                     if (distance > maxReach.getDouble()) {
                         increaseBuffer();

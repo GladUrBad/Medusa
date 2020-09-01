@@ -1,6 +1,6 @@
 package com.gladurbad.medusa.check;
 
-import com.gladurbad.medusa.config.Config;
+import com.gladurbad.medusa.config.*;
 import com.gladurbad.medusa.Medusa;
 import com.gladurbad.medusa.manager.AlertManager;
 import com.gladurbad.medusa.network.Packet;
@@ -32,14 +32,23 @@ public abstract class Check implements Listener {
     @Getter
     private boolean setback;
     @Getter
-    private String punishCommand;
+    private double vlAdd;
+    @Getter
+    private int vlDecay;
+    @Getter
+    private int vlDelay;
+//    @Getter
+//    private String punishCommand;
 
     public Check(PlayerData data) {
         this.data = data;
         this.enabled = Config.ENABLED_CHECKS.contains(getCheckInfo().name() + getCheckInfo().type());
         this.maxVL = Config.MAX_VIOLATIONS.get(getCheckInfo().name() + getCheckInfo().type());
         this.setback = Config.SETBACK_CHECKS.contains(getCheckInfo().name() + getCheckInfo().type());
-        this.punishCommand = Config.PUNISH_COMMANDS.get(getCheckInfo().name() + getCheckInfo().type());
+        this.vlAdd = Config.VL_ADD.get(getCheckInfo().name() + getCheckInfo().type());
+        this.vlDecay = Config.VL_DECAY.get(getCheckInfo().name() + getCheckInfo().type());
+        this.vlDelay = Config.VL_DELAY.get(getCheckInfo().name() + getCheckInfo().type());
+        //this.punishCommand = Config.PUNISH_COMMANDS.get(getCheckInfo().name() + getCheckInfo().type());
         Bukkit.getServer().getPluginManager().registerEvents(this, Medusa.getInstance());
     }
 
@@ -49,8 +58,20 @@ public abstract class Check implements Listener {
         return this.getClass().getAnnotation(CheckInfo.class);
     }
 
+    private long lastFail;
+    private boolean failed;
+
+    public int getVl() {
+        if (failed) {
+            failed = false;
+            return Math.min(vl, Math.max(0, vl -= (((now() - lastFail) / 50) - vlDelay) / vlDecay));
+        }
+        return Math.min(vl, Math.max(0, vl -= (((now() - lastFail) / 50)) / vlDecay));
+    }
+
     protected void fail() {
-        ++vl;
+        if (getVl() < maxVL)
+            ++vl;
         AlertManager.verbose(data, this);
         if(setback && vl > Config.VL_TO_ALERT) {
             final Location setBackLocation = lastLegitLocation == null ? data.getLastLocation() : lastLegitLocation;
@@ -58,6 +79,8 @@ public abstract class Check implements Listener {
             data.setLastSetbackTime(now());
             buffer = 0;
         }
+        lastFail = now();
+        failed = true;
     }
 
     protected void increaseBuffer() {
