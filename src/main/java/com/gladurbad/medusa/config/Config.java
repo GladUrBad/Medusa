@@ -31,7 +31,10 @@ public class Config {
     public static List<String> ENABLED_CHECKS = new ArrayList<>();
     public static List<String> SETBACK_CHECKS = new ArrayList<>();
     public static Map<String, Integer> MAX_VIOLATIONS = new HashMap<>();
-    public static Map<String, List<String>> PUNISH_COMMANDS = new HashMap<>();
+    public static Map<String, Double> VL_ADD = new HashMap<>();
+    public static Map<String, Integer> VL_DECAY = new HashMap<>();
+    public static Map<String, Integer> VL_DELAY = new HashMap<>();
+    public static Map<String, List<List<String>>> PUNISH_COMMANDS = new HashMap<>();
     private static Map<String, String> TYPES = new HashMap<>();
 
     public static String getType(String s) {
@@ -57,14 +60,15 @@ public class Config {
             FileConfiguration config = Medusa.getInstance().getConfig();
             for (String s : config.getConfigurationSection("checks").getKeys(false)) {
                 ConfigurationSection section = config.getConfigurationSection("checks." + s);
-                List<String> commands = new ArrayList<>();
+                List<List<String>> commands = new ArrayList<>();
                 PUNISH_COMMANDS.put(s, commands);
                 for (String part : section.getConfigurationSection("commands").getKeys(false)) {
                     Object o = section.get("commands." + part);
+                    int i = Integer.parseInt(part);
                     if (o instanceof List)
-                        commands.addAll((Collection<? extends String>) o);
+                        commands.add((List<String>) o);
                     else
-                        commands.add((String) o);
+                        commands.add(Collections.singletonList((String) o));
                 }
             }
 
@@ -94,14 +98,14 @@ public class Config {
                             case INTEGER:
                                 value.setValue(getIntegerFromConfig("checks." + checkType + "." + checkInfo.name().toLowerCase() + "." + checkInfo.type().toLowerCase() + "." + name));
                                 break;
-                            case LONG:
-                                value.setValue(getLongFromConfig("checks." + checkType + "." + checkInfo.name().toLowerCase() + "." + checkInfo.type().toLowerCase() + "." + name));
-                                break;
                             case DOUBLE:
                                 value.setValue(getDoubleFromConfig("checks." + checkType + "." + checkInfo.name().toLowerCase() + "." + checkInfo.type().toLowerCase() + "." + name));
                                 break;
                             case STRING:
                                 value.setValue(getStringFromConfig("checks." + checkType + "." + checkInfo.name().toLowerCase() + "." + checkInfo.type().toLowerCase() + "." + name));
+                                break;
+                            case LONG:
+                                value.setValue(getLongFromConfig("checks." + checkType + "." + checkInfo.name().toLowerCase() + "." + checkInfo.type().toLowerCase() + "." + name));
                                 break;
                         }
                         field.setAccessible(accessible);
@@ -110,6 +114,9 @@ public class Config {
 
                 final boolean enabled = getBooleanFromConfig("checks." + checkType + "." + checkInfo.name().toLowerCase() + "." + checkInfo.type().toLowerCase() + ".enabled");
                 final int maxViolations = getIntegerFromConfig("checks." + checkType + "." + checkInfo.name().toLowerCase() + "." + checkInfo.type().toLowerCase() + ".max-vl");
+                final double vlAdd = getDoubleFromConfig("checks." + checkType + "." + checkInfo.name().toLowerCase() + "." + checkInfo.type().toLowerCase() + ".vl-add");
+                final int vlDecay = getIntegerFromConfig("checks." + checkType + "." + checkInfo.name().toLowerCase() + "." + checkInfo.type().toLowerCase() + ".vl-decay");
+                final int vlDelay = getIntegerFromConfig("checks." + checkType + "." + checkInfo.name().toLowerCase() + "." + checkInfo.type().toLowerCase() + ".vl-delay");
                 //final String punishCommand = getStringFromConfig("checks." + checkType + "." + checkInfo.name().toLowerCase() + "." + checkInfo.type().toLowerCase() + ".punish-command");
 
                 if (checkType.equals("movement")) {
@@ -123,6 +130,9 @@ public class Config {
                     ENABLED_CHECKS.add(check.getSimpleName());
                 }
                 MAX_VIOLATIONS.put(check.getSimpleName(), maxViolations);
+                VL_ADD.put(check.getSimpleName(), vlAdd);
+                VL_DECAY.put(check.getSimpleName(), vlDecay);
+                VL_DELAY.put(check.getSimpleName(), vlDelay);
                 //PUNISH_COMMANDS.put(check.getSimpleName(), punishCommand);
             }
         } catch (Exception exception) {
@@ -148,7 +158,7 @@ public class Config {
         return Medusa.getInstance().getConfig().getDouble(string);
     }
 
-    private static double getLongFromConfig(String string) {
+    private static long getLongFromConfig(String string) {
         return Medusa.getInstance().getConfig().getLong(string);
     }
 }

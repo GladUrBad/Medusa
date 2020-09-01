@@ -21,9 +21,9 @@ public class ReachA extends Check {
     //private final int REACH_BUFFER = (5 - Config.REACH_SENSITIVITY) * 2;
 
     // sorry, I'm evil... :) also canadian
-    final private static ConfigValue reachMaxLatency = new ConfigValue(ConfigValue.ValueType.INTEGER, "reach-maxlatency");
+    private static final ConfigValue reachMaxLatency = new ConfigValue(ConfigValue.ValueType.INTEGER, "reach-maxlatency");
     private static final ConfigValue reachSensitivity = new ConfigValue(ConfigValue.ValueType.INTEGER, "reach-sensitivity");
-    static final private ConfigValue maxReach = new ConfigValue(ConfigValue.ValueType.INTEGER, "max-reach");
+    private static final ConfigValue maxReach = new ConfigValue(ConfigValue.ValueType.INTEGER, "max-reach");
     private static int REACH_BUFFER = -1;
 
     private Entity attacked, lastAttacked;

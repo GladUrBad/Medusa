@@ -14,11 +14,11 @@ response:
     prefix: '&8[&2Medusa&8]'
     no-permission: '&cNo permission.'
   violations:
-    minimum-vl: 5
+    minimum-vl: 3
     alert-format: '%prefix% &a%player% &2- &a%check% (Type %type%) %dev% &8[&cVL: %vl%&8]'
   command:
     prefix: '&8[&2Medusa&8]&c'
-    name: 'medusa'
+    name: 'medusa' # Broken for now, this does not affect anything
 
 
 # Check configuration
@@ -48,7 +48,7 @@ checks:
         enabled: true
         # max-cps: Maximum clicks per seconds the player can click.
         max-cps: 20
-        max-vl: 50
+        max-vl: 30
         vl-add: 1.0
         vl-decay: 20
         vl-delay: 1000
@@ -57,25 +57,25 @@ checks:
     killaura:
       a:
         enabled: true
-        max-vl: 50
+        max-vl: 30
         vl-add: 1.0
         vl-decay: 20
         vl-delay: 1000
       b:
         enabled: true
-        max-vl: 50
+        max-vl: 30
         vl-add: 1.0
         vl-decay: 20
         vl-delay: 1000
       c:
         enabled: true
-        max-vl: 50
+        max-vl: 30
         vl-add: 1.0
         vl-decay: 20
         vl-delay: 1000
       d:
         enabled: true
-        max-vl: 50
+        max-vl: 30
         vl-add: 1.0
         vl-decay: 20
         vl-delay: 1000
@@ -85,7 +85,7 @@ checks:
         swings: 100
         # min-flag: Minimum amount of hits to flag.
         min-flag: 75
-        max-vl: 50
+        max-vl: 30
         vl-add: 1.0
         vl-decay: 20
         vl-delay: 1000
@@ -95,7 +95,7 @@ checks:
         swings: 100
         # min-flag: Minimum amount of potential hits that haven't been landed to flag.
         min-flag: 45
-        max-vl: 50
+        max-vl: 30
         vl-add: 1.0
         vl-decay: 20
         vl-delay: 1000
@@ -112,7 +112,7 @@ checks:
         # reach-maxlatency: In milliseconds, the maximum ping a player can have before the reach check is disabled.
         # If you are having false positives with lag increase this.
         reach-maxlatency: 200
-        max-vl: 50
+        max-vl: 30
         vl-add: 1.0
         vl-decay: 20
         vl-delay: 1000
@@ -123,7 +123,7 @@ checks:
       a:
         enabled: true
         setback: true
-        max-vl: 50
+        max-vl: 30
         vl-add: 1.0
         vl-decay: 20
         vl-delay: 1000
@@ -133,14 +133,14 @@ checks:
       a:
         enabled: true
         setback: true
-        max-vl: 50
+        max-vl: 30
         vl-add: 1.0
         vl-decay: 20
         vl-delay: 1000
       b:
         enabled: true
         setback: true
-        max-vl: 50
+        max-vl: 30
         vl-add: 1.0
         vl-decay: 20
         vl-delay: 1000
@@ -150,21 +150,21 @@ checks:
       a:
         enabled: true
         setback: true
-        max-vl: 50
+        max-vl: 30
         vl-add: 1.0
         vl-decay: 20
         vl-delay: 1000
       b:
         enabled: true
         setback: true
-        max-vl: 50
+        max-vl: 30
         vl-add: 1.0
         vl-decay: 20
         vl-delay: 1000
       c:
         enabled: true
         setback: true
-        max-vl: 50
+        max-vl: 30
         vl-add: 1.0
         vl-decay: 20
         vl-delay: 1000
@@ -174,35 +174,35 @@ checks:
       a:
         enabled: true
         setback: true
-        max-vl: 50
+        max-vl: 30
         vl-add: 1.0
         vl-decay: 20
         vl-delay: 1000
       b:
         enabled: true
         setback: true
-        max-vl: 50
+        max-vl: 30
         vl-add: 1.0
         vl-decay: 20
         vl-delay: 1000
       c:
         enabled: true
         setback: true
-        max-vl: 50
+        max-vl: 30
         vl-add: 1.0
         vl-decay: 20
         vl-delay: 1000
       d:
         enabled: true
         setback: true
-        max-vl: 50
+        max-vl: 30
         vl-add: 1.0
         vl-decay: 20
         vl-delay: 1000
       e:
         enabled: true
         setback: true
-        max-vl: 50
+        max-vl: 30
         vl-add: 1.0
         vl-decay: 20
         vl-delay: 1000
@@ -212,7 +212,7 @@ checks:
       a:
         enabled: true
         setback: true
-        max-vl: 50
+        max-vl: 30
         vl-add: 1.0
         vl-decay: 20
         vl-delay: 1000
@@ -222,14 +222,14 @@ checks:
       a:
         enabled: true
         setback: true
-        max-vl: 50
+        max-vl: 30
         vl-add: 1.0
         vl-decay: 20
         vl-delay: 1000
       b:
         enabled: true
         setback: true
-        max-vl: 50
+        max-vl: 30
         vl-add: 1.0
         vl-decay: 20
         vl-delay: 1000
@@ -240,21 +240,21 @@ checks:
       a:
         enabled: true
         setback: true
-        max-vl: 50
+        max-vl: 30
         vl-add: 1.0
         vl-decay: 20
         vl-delay: 1000
       b:
         enabled: true
         setback: true
-        max-vl: 50
+        max-vl: 30
         vl-add: 1.0
         vl-decay: 20
         vl-delay: 1000
       c:
         enabled: true
         setback: true
-        max-vl: 50
+        max-vl: 30
         vl-add: 1.0
         vl-decay: 20
         vl-delay: 1000
@@ -263,7 +263,7 @@ checks:
     timer:
       a:
         enabled: true
-        max-vl: 50
+        max-vl: 30
         vl-add: 1.0
         vl-decay: 20
         vl-delay: 1000
