@@ -85,14 +85,20 @@ checks:
         swings: 100
         # min-flag: Minimum amount of hits to flag.
         min-flag: 75
-        max-violations: 50
+        max-vl: 30
+        vl-add: 1.0
+        vl-decay: 20
+        vl-delay: 1000
       f: #VERY INACCURATE - Make the RayCasting more accurate for it to be usable.
         enabled: false
         # swings: Minimum amount of swings to check the detection.
         swings: 100
         # min-flag: Minimum amount of potential hits that haven't been landed to flag.
         min-flag: 45
-        max-violations: 50
+        max-vl: 30
+        vl-add: 1.0
+        vl-decay: 20
+        vl-delay: 1000
       commands:
         '30': ['ban %player% %prefix% Unfair Advantage']
     reach:
@@ -106,7 +112,10 @@ checks:
         # reach-maxlatency: In milliseconds, the maximum ping a player can have before the reach check is disabled.
         # If you are having false positives with lag increase this.
         reach-maxlatency: 200
-        max-violations: 50
+        max-vl: 30
+        vl-add: 1.0
+        vl-decay: 20
+        vl-delay: 1000
       commands:
         '30': ['ban %player% %prefix% Unfair Advantage']
   movement:
