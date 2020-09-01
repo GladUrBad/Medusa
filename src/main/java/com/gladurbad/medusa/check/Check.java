@@ -48,6 +48,8 @@ public abstract class Check implements Listener {
         this.vlAdd = Config.VL_ADD.get(getCheckInfo().name() + getCheckInfo().type());
         this.vlDecay = Config.VL_DECAY.get(getCheckInfo().name() + getCheckInfo().type());
         this.vlDelay = Config.VL_DELAY.get(getCheckInfo().name() + getCheckInfo().type());
+        if (this.vlDecay <= 0)
+            this.vlDecay = 1;
         //this.punishCommand = Config.PUNISH_COMMANDS.get(getCheckInfo().name() + getCheckInfo().type());
         Bukkit.getServer().getPluginManager().registerEvents(this, Medusa.getInstance());
     }
