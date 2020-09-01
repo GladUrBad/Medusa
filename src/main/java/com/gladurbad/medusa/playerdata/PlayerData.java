@@ -1,7 +1,6 @@
 package com.gladurbad.medusa.playerdata;
 
 import com.gladurbad.medusa.check.Check;
-import com.gladurbad.medusa.config.Config;
 import com.gladurbad.medusa.manager.CheckManager;
 import com.gladurbad.medusa.network.Packet;
 
@@ -21,7 +20,8 @@ import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.bukkit.util.Vector;
 
-import java.util.*;
+import java.util.List;
+import java.util.UUID;
 
 @Getter
 @Setter
@@ -30,8 +30,6 @@ public class PlayerData implements PacketListener {
     private final Player player;
     private final UUID playerUUID;
     private List<Check> checks;
-    private Map<String, Integer> prevVL = new HashMap<>();
-    private Map<String, List<Check>> types = new HashMap<>();
 
     public PlayerData(UUID playerUUID, Player player) {
         this.playerUUID = playerUUID;
@@ -39,11 +37,6 @@ public class PlayerData implements PacketListener {
         this.location = this.getPlayer().getLocation();
         this.lastLocation = this.getPlayer().getLocation();
         this.checks = CheckManager.loadChecks(this);
-        for(Check check : checks){
-            types.putIfAbsent(check.getCheckInfo().name(), new ArrayList<>());
-            types.get(check.getCheckInfo().name()).add(check);
-            prevVL.putIfAbsent(check.getCheckInfo().name(), 0);
-        }
     }
 
     //Movement data.
