@@ -6,7 +6,7 @@ import com.gladurbad.medusa.network.Packet;
 import com.gladurbad.medusa.playerdata.PlayerData;
 import io.github.retrooper.packetevents.packet.PacketType;
 
-@CheckInfo(name = "Killaura", type = "A", dev = false)
+@CheckInfo(name = "Killaura", type = "A", dev = true)
 public class KillauraA extends Check {
 
     private long flyingTime, hitTime;

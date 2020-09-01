@@ -7,7 +7,7 @@ import com.gladurbad.medusa.playerdata.PlayerData;
 import io.github.retrooper.packetevents.packet.PacketType;
 import io.github.retrooper.packetevents.packetwrappers.in.useentity.WrappedPacketInUseEntity;
 
-@CheckInfo(name = "Killaura", type = "C", dev = false)
+@CheckInfo(name = "Killaura", type = "C", dev = true)
 public class KillauraC extends Check {
 
     private int entitiesHit, lastEntityId, entityId;

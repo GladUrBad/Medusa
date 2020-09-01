@@ -7,7 +7,7 @@ import com.gladurbad.medusa.playerdata.PlayerData;
 import com.gladurbad.medusa.util.MathUtil;
 import io.github.retrooper.packetevents.packet.PacketType;
 
-@CheckInfo(name = "Killaura", type = "D", dev = false)
+@CheckInfo(name = "Killaura", type = "D", dev = true)
 public class KillauraD extends Check {
 
     private int hitTicks;

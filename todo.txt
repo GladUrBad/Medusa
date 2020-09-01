@@ -8,3 +8,4 @@ The first one makes more sense IMO. If you have any suggestions let me know.
 
 -Make movement checks more stable so there is no need for a large buffer. I still need to have a buffer for setback purposes, but I can find another way.
 
+-Make KillauraF's RaycastUtils more accurate (player ping etc...)

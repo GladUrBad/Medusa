@@ -7,7 +7,6 @@ import com.gladurbad.medusa.network.Packet;
 import com.gladurbad.medusa.util.MathUtil;
 import io.github.retrooper.packetevents.event.PacketListener;
 import io.github.retrooper.packetevents.packet.PacketType;
-import io.github.retrooper.packetevents.packetwrappers.in.blockdig.WrappedPacketInBlockDig;
 import io.github.retrooper.packetevents.packetwrappers.in.entityaction.WrappedPacketInEntityAction;
 import io.github.retrooper.packetevents.packetwrappers.in.flying.WrappedPacketInFlying;
 
@@ -44,8 +43,7 @@ public class PlayerData implements PacketListener {
     private float deltaYaw, deltaPitch, lastDeltaYaw, lastDeltaPitch;
     private Location lastLocation, location;
     private boolean isSprinting, isSneaking;
-    private Vector lastVelocity = new Vector(0, 0, 0);
-
+    private Vector lastVelocity = new Vector(0, 0 , 0);
 
     //Teleportation & setback data.
     private long lastSetbackTime;
@@ -55,7 +53,6 @@ public class PlayerData implements PacketListener {
 
     //Miscellanious data
     private boolean alerts;
-    private boolean digging;
 
     public void processPacket(final Packet packet) {
         //Handle checks.
@@ -66,8 +63,8 @@ public class PlayerData implements PacketListener {
     }
 
     private void processInput(final Packet packet) {
-        if (packet.isReceiving()) {
-            if (packet.getPacketId() == PacketType.Client.POSITION || packet.getPacketId() == PacketType.Client.POSITION_LOOK) {
+        if(packet.isReceiving()) {
+            if(packet.getPacketId() == PacketType.Client.POSITION || packet.getPacketId() == PacketType.Client.POSITION_LOOK) {
                 WrappedPacketInFlying wrappedPacketInFlying = new WrappedPacketInFlying(packet.getRawPacket());
 
                 final World world = this.getLocation().getWorld();
@@ -81,7 +78,7 @@ public class PlayerData implements PacketListener {
                 Location lastLocation = this.getLocation() != null ? this.getLocation() : location;
 
                 this.processLocation(location, lastLocation);
-            } else if (packet.getPacketId() == PacketType.Client.LOOK) {
+            } else if(packet.getPacketId() == PacketType.Client.LOOK) {
                 WrappedPacketInFlying wrappedPacketInFlying = new WrappedPacketInFlying(packet.getRawPacket());
 
                 final World world = this.getLocation().getWorld();
@@ -95,7 +92,7 @@ public class PlayerData implements PacketListener {
                 Location lastLocation = this.getLocation() != null ? this.getLocation() : location;
 
                 this.processLocation(location, lastLocation);
-            } else if (packet.getPacketId() == PacketType.Client.FLYING) {
+            } else if(packet.getPacketId() == PacketType.Client.FLYING) {
                 final World world = this.getLocation().getWorld();
                 final double x = this.getLocation().getX();
                 final double y = this.getLocation().getY();
@@ -107,7 +104,7 @@ public class PlayerData implements PacketListener {
                 Location lastLocation = this.getLocation() != null ? this.getLocation() : location;
 
                 this.processLocation(location, lastLocation);
-            } else if (packet.getPacketId() == PacketType.Client.ENTITY_ACTION) {
+            } else if(packet.getPacketId() == PacketType.Client.ENTITY_ACTION) {
                 WrappedPacketInEntityAction wrappedPacketInEntityAction = new WrappedPacketInEntityAction(packet.getRawPacket());
                 switch (wrappedPacketInEntityAction.getAction()) {
                     case START_SPRINTING:
@@ -124,21 +121,9 @@ public class PlayerData implements PacketListener {
                         break;
                 }
 
-            } else if (packet.getPacketId() == PacketType.Client.BLOCK_DIG) {
-                final WrappedPacketInBlockDig wrappedPacketInBlockDig = new WrappedPacketInBlockDig(packet.getRawPacket());
-
-                switch (wrappedPacketInBlockDig.getDigType()) {
-                    case START_DESTROY_BLOCK:
-                        this.digging = true;
-                        break;
-                    case STOP_DESTROY_BLOCK:
-                    case ABORT_DESTROY_BLOCK:
-                        this.digging = false;
-                        break;
-                }
             }
-        } else if (packet.isSending()) {
-            if (packet.getPacketId() == PacketType.Server.ENTITY_VELOCITY) {
+        } else if(packet.isSending()) {
+            if(packet.getPacketId() == PacketType.Server.ENTITY_VELOCITY) {
                 WrappedPacketOutEntityVelocity wrappedPacketOutEntityVelocity = new WrappedPacketOutEntityVelocity(packet.getRawPacket());
                 this.ticksSinceVelocity = 0;
 

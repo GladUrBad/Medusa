@@ -1,7 +1,6 @@
 package com.gladurbad.medusa.check.impl.combat.killaura;
 
-import com.gladurbad.medusa.check.Check;
-import com.gladurbad.medusa.check.CheckInfo;
+import com.gladurbad.medusa.check.*;
 import com.gladurbad.medusa.network.Packet;
 import com.gladurbad.medusa.playerdata.PlayerData;
 
@@ -15,7 +14,10 @@ import org.bukkit.entity.EntityType;
 @CheckInfo(name = "Killaura", type = "E", dev = true)
 public class KillauraE extends Check {
 
-    private int hits, swings;
+    private static final ConfigValue minSwings = new ConfigValue(ConfigValue.ValueType.INTEGER, "swings");
+    private final static ConfigValue minFlag = new ConfigValue(ConfigValue.ValueType.INTEGER, "min-flag");
+
+    private int swings, hits;
 
     public KillauraE(PlayerData data) {
         super(data);
@@ -26,13 +28,16 @@ public class KillauraE extends Check {
         if(packet.isReceiving()) {
             if(packet.getPacketId() == PacketType.Client.ARM_ANIMATION) {
                 ++swings;
-                if(swings >= 100) {
-                    if(hits > 70) fail();
+                if(swings >= minSwings.getInt()) {
+                    if(hits > minFlag.getInt()) fail();
                     swings = 0;
                     hits = 0;
                 }
             } else if(packet.getPacketId() == PacketType.Client.USE_ENTITY) {
-                ++hits;
+                WrappedPacketInUseEntity wrappedPacketInUseEntity = new WrappedPacketInUseEntity(packet.getRawPacket());
+                if(wrappedPacketInUseEntity.getEntity().getType() == EntityType.PLAYER) {
+                    ++hits;
+                }
             }
         }
     }

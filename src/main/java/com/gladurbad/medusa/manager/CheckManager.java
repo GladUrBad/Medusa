@@ -2,22 +2,25 @@ package com.gladurbad.medusa.manager;
 
 import com.gladurbad.medusa.Config;
 import com.gladurbad.medusa.check.Check;
+import com.gladurbad.medusa.check.CheckInfo;
 import com.gladurbad.medusa.check.impl.combat.autoclicker.AutoclickerA;
 import com.gladurbad.medusa.check.impl.combat.killaura.*;
 import com.gladurbad.medusa.check.impl.combat.reach.ReachA;
 import com.gladurbad.medusa.check.impl.movement.jesus.JesusC;
-import com.gladurbad.medusa.check.impl.movement.motion.*;
+import com.gladurbad.medusa.check.impl.movement.nofall.NofallB;
 import com.gladurbad.medusa.check.impl.player.badpackets.BadPacketsA;
 import com.gladurbad.medusa.check.impl.movement.fastclimb.FastClimbA;
 import com.gladurbad.medusa.check.impl.movement.flight.FlightA;
 import com.gladurbad.medusa.check.impl.movement.flight.FlightB;
 import com.gladurbad.medusa.check.impl.movement.jesus.JesusA;
 import com.gladurbad.medusa.check.impl.movement.jesus.JesusB;
+import com.gladurbad.medusa.check.impl.movement.motion.MotionA;
+import com.gladurbad.medusa.check.impl.movement.motion.MotionB;
+import com.gladurbad.medusa.check.impl.movement.motion.MotionC;
+import com.gladurbad.medusa.check.impl.movement.motion.MotionD;
 import com.gladurbad.medusa.check.impl.movement.nofall.NofallA;
 import com.gladurbad.medusa.check.impl.movement.speed.SpeedA;
 import com.gladurbad.medusa.check.impl.movement.speed.SpeedB;
-import com.gladurbad.medusa.check.impl.player.badpackets.BadPacketsB;
-import com.gladurbad.medusa.check.impl.player.badpackets.BadPacketsC;
 import com.gladurbad.medusa.check.impl.player.timer.TimerA;
 import com.gladurbad.medusa.playerdata.PlayerData;
 
@@ -30,7 +33,7 @@ import java.util.List;
 
 public class CheckManager {
 
-    public static final Class[] CHECKS = new Class[] {
+    public static final Class<? extends Check>[] CHECKS = new Class[] {
             AutoclickerA.class,
             KillauraA.class,
             KillauraB.class,
@@ -40,8 +43,6 @@ public class CheckManager {
             KillauraF.class,
             ReachA.class,
             BadPacketsA.class,
-            BadPacketsB.class,
-            BadPacketsC.class,
             FastClimbA.class,
             FlightA.class,
             FlightB.class,
@@ -52,8 +53,8 @@ public class CheckManager {
             MotionB.class,
             MotionC.class,
             MotionD.class,
-            MotionE.class,
             NofallA.class,
+            NofallB.class,
             SpeedA.class,
             SpeedB.class,
             TimerA.class
