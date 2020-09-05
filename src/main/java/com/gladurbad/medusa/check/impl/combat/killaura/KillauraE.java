@@ -14,8 +14,8 @@ import org.bukkit.entity.EntityType;
 @CheckInfo(name = "Killaura", type = "E", dev = true)
 public class KillauraE extends Check {
 
-    private static final ConfigValue minSwings = new ConfigValue(ConfigValue.ValueType.INTEGER, "swings");
-    private final static ConfigValue minFlag = new ConfigValue(ConfigValue.ValueType.INTEGER, "min-flag");
+    private static final ConfigValue sampleSize = new ConfigValue(ConfigValue.ValueType.INTEGER, "sample-size");
+    private final static ConfigValue maxAccuracy = new ConfigValue(ConfigValue.ValueType.INTEGER, "max-accuracy");
 
     private int swings, hits;
 
@@ -28,8 +28,8 @@ public class KillauraE extends Check {
         if(packet.isReceiving()) {
             if(packet.getPacketId() == PacketType.Client.ARM_ANIMATION) {
                 ++swings;
-                if(swings >= minSwings.getInt()) {
-                    if(hits > minFlag.getInt()) fail();
+                if(swings >= sampleSize.getInt()) {
+                    if(hits > maxAccuracy.getInt()) fail();
                     swings = 0;
                     hits = 0;
                 }

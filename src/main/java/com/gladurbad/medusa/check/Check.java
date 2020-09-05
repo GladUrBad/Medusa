@@ -14,44 +14,31 @@ import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.event.Listener;
 
-public abstract class Check implements Listener {
 
+@Getter
+@Setter
+public abstract class Check {
+
+    //Data for check.
     protected final PlayerData data;
-    @Getter
-    private int vl;
-    protected double buffer;
-    @Getter
-    @Setter
-    protected Location lastLegitLocation;
 
     //Check data from config.
-    @Getter
-    private boolean enabled;
-    @Getter
-    private int maxVL;
-    @Getter
-    private boolean setback;
-    @Getter
-    private double vlAdd;
-    @Getter
-    private int vlDecay;
-    @Getter
-    private int vlDelay;
-//    @Getter
-//    private String punishCommand;
+    private final boolean enabled;
+    private final int maxVl;
+    private final boolean setback;
+    private final String punishCommand;
+
+    //Check information.
+    private int vl;
+    protected double buffer;
+    protected Location lastLegitLocation;
 
     public Check(PlayerData data) {
         this.data = data;
         this.enabled = Config.ENABLED_CHECKS.contains(getCheckInfo().name() + getCheckInfo().type());
-        this.maxVL = Config.MAX_VIOLATIONS.get(getCheckInfo().name() + getCheckInfo().type());
+        this.maxVl = Config.MAX_VIOLATIONS.get(getCheckInfo().name() + getCheckInfo().type());
         this.setback = Config.SETBACK_CHECKS.contains(getCheckInfo().name() + getCheckInfo().type());
-        this.vlAdd = Config.VL_ADD.get(getCheckInfo().name() + getCheckInfo().type());
-        this.vlDecay = Config.VL_DECAY.get(getCheckInfo().name() + getCheckInfo().type());
-        this.vlDelay = Config.VL_DELAY.get(getCheckInfo().name() + getCheckInfo().type());
-        if (this.vlDecay <= 0)
-            this.vlDecay = 1;
-        //this.punishCommand = Config.PUNISH_COMMANDS.get(getCheckInfo().name() + getCheckInfo().type());
-        Bukkit.getServer().getPluginManager().registerEvents(this, Medusa.getInstance());
+        this.punishCommand = Config.PUNISH_COMMANDS.get(getCheckInfo().name() + getCheckInfo().type());
     }
 
     public abstract void handle(final Packet packet);
@@ -60,29 +47,18 @@ public abstract class Check implements Listener {
         return this.getClass().getAnnotation(CheckInfo.class);
     }
 
-    private long lastFail;
-    private boolean failed;
-
-    public int getVl() {
-        if (failed) {
-            failed = false;
-            return Math.min(vl, Math.max(0, vl -= (((now() - lastFail) / 50) - vlDelay) / vlDecay));
-        }
-        return Math.min(vl, Math.max(0, vl -= (((now() - lastFail) / 50)) / vlDecay));
-    }
-
     protected void fail() {
-        if (getVl() < maxVL)
-            ++vl;
-        AlertManager.verbose(data, this);
-        if(setback && vl > Config.VL_TO_ALERT) {
-            final Location setBackLocation = lastLegitLocation == null ? data.getLastLocation() : lastLegitLocation;
-            Bukkit.getScheduler().runTask(Medusa.getInstance(), () -> data.getPlayer().teleport(setBackLocation));
-            data.setLastSetbackTime(now());
-            buffer = 0;
+        ++vl;
+
+        if(vl > Config.VL_TO_ALERT) {
+            AlertManager.verbose(data, this);
+            if(setback) {
+                final Location setBackLocation = lastLegitLocation == null ? data.getLastLocation() : lastLegitLocation;
+                Bukkit.getScheduler().runTask(Medusa.getInstance(), () -> data.getPlayer().teleport(setBackLocation));
+                data.setLastSetbackTime(now());
+                buffer = 0;
+            }
         }
-        lastFail = now();
-        failed = true;
     }
 
     protected void increaseBuffer() {

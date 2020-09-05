@@ -8,57 +8,39 @@ import com.gladurbad.medusa.util.ChatUtil;
 import net.md_5.bungee.api.chat.*;
 import org.bukkit.Bukkit;
 
-import java.util.List;
-import java.util.concurrent.atomic.AtomicInteger;
 
 public class AlertManager {
 
-    public static void verbose(PlayerData data, Check check) {
-        if (check.getVl() > Config.VL_TO_ALERT) {
-            TextComponent alertMessage = new TextComponent(ChatUtil.papi(ChatUtil.color(Config.ALERT_FORMAT), data.getPlayer())
-              .replace("%prefix%", Config.PREFIX)
-              .replace("%player%", data.getPlayer().getName())
-              .replace("%check%", check.getCheckInfo().name())
-              .replace("%type%", check.getCheckInfo().type())
-              .replace("%dev%", check.getCheckInfo().dev() ? ChatUtil.color("&c(Dev)&r") : "")
-              .replace("%vl%", "" + check.getVl()));
-            alertMessage.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/tp " + data.getPlayer().getName()));
-            alertMessage.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder(ChatUtil.color("&cClick to teleport.")).create()));
-
-            ChatUtil.sendVerbose(alertMessage);
-        }
-
-        if (!Config.TESTMODE && data.getPlayer().isOnline()) {
-            String type = Config.getType(check.getCheckInfo().name());
-            List<Check> checks = data.getTypes().get(check.getCheckInfo().name());
-            AtomicInteger vl = new AtomicInteger();
-            checks.forEach(c -> vl.addAndGet((int) (c.getVl() * c.getVlAdd())));
-            int prevVl = data.getPrevVL().get(check.getCheckInfo().name());
-            List<List<String>> commands = Config.PUNISH_COMMANDS.get(type);
-            for (int i = vl.get() + 1; i <= prevVl; i++) {
-                List<String> cmds = commands.get(i);
-                if (cmds != null && !cmds.isEmpty())
-                    for (String cmd : cmds)
-                        if (cmd != null && !cmd.trim().isEmpty())
-                            Bukkit.getScheduler().runTask(Medusa.getInstance(), () ->
-                              Bukkit.getServer().dispatchCommand(Bukkit.getServer().getConsoleSender(),
-                                ChatUtil.papi(ChatUtil.color(cmd), data.getPlayer())
-                                .replace("%prefix%", Config.PREFIX)
-                                .replace("%player%", data.getPlayer().getName())
-                                .replace("%check%", check.getCheckInfo().name())
-                                .replace("%type%", check.getCheckInfo().type())
-                                .replace("%dev%", check.getCheckInfo().dev() ? ChatUtil.color("&c(Dev)&r") : "")
-                                .replace("%vl%", "" + check.getVl())));
+    static {
+        Bukkit.getServer().getScheduler().scheduleSyncRepeatingTask(Medusa.getInstance(), () -> {
+            for (PlayerData playerData : PlayerDataManager.getInstance().getPlayerData().values()) {
+                playerData.getChecks().forEach(check -> check.setVl(0));
+                if (playerData.getPlayer().hasPermission("medusa.alerts") && playerData.isAlerts()) {
+                    playerData.getPlayer().sendMessage(ChatUtil.color(Config.PREFIX + " &cViolations reset!"));
+                }
             }
-            data.getPrevVL().put(check.getCheckInfo().name(), vl.get());
-        }
-        /*if(check.getVl() > check.getMaxVL() && !Config.TESTMODE && data.getPlayer().isOnline()) {
-            if(!check.getPunishCommand().isEmpty()) {
+        }, 0, Config.CLEAR_VIOLATIONS_DELAY * 1200);
+    }
+    public static void verbose(PlayerData data, Check check) {
+        TextComponent alertMessage = new TextComponent(ChatUtil.color(Config.ALERT_FORMAT)
+            .replace("%prefix%", Config.PREFIX)
+            .replace("%player%", data.getPlayer().getName())
+            .replace("%check%", check.getCheckInfo().name())
+            .replace("%type%", check.getCheckInfo().type())
+            .replace("%dev%", check.getCheckInfo().dev() ? ChatUtil.color("&c(Dev)") : "")
+            .replace("%vl%", "" + check.getVl()));
+        alertMessage.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/tp " + data.getPlayer().getName()));
+        alertMessage.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder(ChatUtil.color("&cClick to teleport.")).create()));
+
+        ChatUtil.sendVerbose(alertMessage);
+
+        if (check.getVl() > check.getMaxVl() && !Config.TESTMODE && data.getPlayer().isOnline()) {
+            if (!check.getPunishCommand().isEmpty()) {
                 Bukkit.getScheduler().runTask(Medusa.getInstance(), () ->
                         Bukkit.getServer().dispatchCommand(Bukkit.getServer().getConsoleSender(), check.getPunishCommand()
                         .replace("%player%", data.getPlayer().getName())
                         .replace("%prefix%", Config.PREFIX)));
             }
-        } //broken rn.*/
+        }
     }
 }

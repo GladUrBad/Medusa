@@ -20,6 +20,7 @@ import com.gladurbad.medusa.check.impl.player.badpackets.BadPacketsC;
 import com.gladurbad.medusa.check.impl.player.timer.TimerA;
 import com.gladurbad.medusa.config.Config;
 import com.gladurbad.medusa.playerdata.PlayerData;
+import org.bukkit.Bukkit;
 
 
 import java.lang.reflect.Constructor;
@@ -65,9 +66,12 @@ public class CheckManager {
             if (Config.ENABLED_CHECKS.contains(clazz.getSimpleName())) {
                 try {
                     CONSTRUCTORS.add(clazz.getConstructor(PlayerData.class));
+                    Bukkit.getLogger().info(clazz.getSimpleName() + " is enabled!");
                 } catch (NoSuchMethodException exception) {
                     exception.printStackTrace();
                 }
+            } else {
+                Bukkit.getLogger().info(clazz.getSimpleName() + " is disabled!");
             }
         }
     }

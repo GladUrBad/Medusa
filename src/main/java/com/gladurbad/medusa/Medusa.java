@@ -44,8 +44,6 @@ public class Medusa extends JavaPlugin {
         PacketEvents.getAPI().getEventManager().registerListener(new PacketProcessor());
         PacketEvents.getAPI().getEventManager().registerListener(new RegistrationListener());
 
-        ChatUtil.papi = Bukkit.getPluginManager().getPlugin("PlaceholderAPI") != null;
-
 
         //Register online players into the system.
         for(final Player player : Bukkit.getOnlinePlayers()) {
@@ -57,6 +55,7 @@ public class Medusa extends JavaPlugin {
 
         Bukkit.getLogger().info("Medusa by GladUrBad has been enabled.");
         instance.setEnabled(true);
+
     }
 
     @Override

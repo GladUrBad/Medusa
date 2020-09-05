@@ -5,6 +5,7 @@ import com.gladurbad.medusa.check.CheckInfo;
 import com.gladurbad.medusa.network.Packet;
 import com.gladurbad.medusa.playerdata.PlayerData;
 import com.gladurbad.medusa.util.CollisionUtil;
+import io.github.retrooper.packetevents.packetwrappers.in.flying.WrappedPacketInFlying;
 
 
 @CheckInfo(name = "Nofall", type = "A", dev = true)
@@ -18,22 +19,26 @@ public class NofallA extends Check {
     @Override
     public void handle(Packet packet) {
         if(packet.isReceiving() && this.isFlyingPacket(packet)) {
-            final boolean serverOnGround = data.getPlayer().isOnGround();
-            final boolean clientOnGround = data.getLocation().getY() % (1D/64) == 0.0 && data.getLastLocation().getY() % (1D/64) == 0.0;
+            final WrappedPacketInFlying wrappedPacketInFlying = new WrappedPacketInFlying(packet.getRawPacket());
 
-            final boolean invalid = CollisionUtil.isInLiquid(data.getPlayer()) && CollisionUtil.isCollidingWithClimbable(data.getPlayer());
+            if (wrappedPacketInFlying.isPosition()) {
+                final boolean serverOnGround = wrappedPacketInFlying.isOnGround();
+                final boolean clientOnGround = data.getLocation().getY() % (1D / 64) == 0.0;
 
-            if(data.getPlayer().isInsideVehicle()) ticksSinceInVehicle = 0;
-            else ++ticksSinceInVehicle;
+                final boolean invalid = CollisionUtil.isInLiquid(data.getPlayer()) && CollisionUtil.isCollidingWithClimbable(data.getPlayer());
 
-            if(!invalid && serverOnGround != clientOnGround && ticksSinceInVehicle > 10) {
-                increaseBuffer();
-                if(buffer > 3) {
-                    fail();
+                if(data.getPlayer().isInsideVehicle()) ticksSinceInVehicle = 0;
+                else ++ticksSinceInVehicle;
+
+                if(!invalid && serverOnGround != clientOnGround && ticksSinceInVehicle > 10) {
+                    increaseBuffer();
+                    if(buffer > 5) {
+                        fail();
+                    }
+                } else {
+                    buffer = 0;
+                    setLastLegitLocation(data.getPlayer().getLocation());
                 }
-            } else {
-                buffer = 0;
-                setLastLegitLocation(data.getPlayer().getLocation());
             }
         }
     }

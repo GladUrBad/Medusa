@@ -26,7 +26,7 @@ public class LogsCommand extends MedusaArgument {
                 sender.sendMessage(responsePrefix + medusaSeparator);
                 for (Check check : playerData.getChecks()) {
                     if(check.getVl() > 0) {
-                        sender.sendMessage(responsePrefix + check.getCheckInfo().name() + "  (" + check.getCheckInfo().type() + ") VL: " + check.getVl() + "VL");
+                        sender.sendMessage(responsePrefix + check.getCheckInfo().name() + " (Type " + check.getCheckInfo().type() + ") x" + check.getVl());
                     }
                 }
                 sender.sendMessage(responsePrefix + medusaSeparator);

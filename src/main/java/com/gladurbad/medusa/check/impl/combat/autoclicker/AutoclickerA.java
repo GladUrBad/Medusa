@@ -13,6 +13,7 @@ public class AutoclickerA extends Check {
 
     private static final ConfigValue maxCPS = new ConfigValue(ConfigValue.ValueType.INTEGER, "max-cps");
 
+
     private long lastClickTime;
     private ArrayDeque<Long> samples = new ArrayDeque<>();
 
