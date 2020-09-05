@@ -1,18 +1,16 @@
 package com.gladurbad.medusa.check;
 
-import com.gladurbad.medusa.config.*;
 import com.gladurbad.medusa.Medusa;
+import com.gladurbad.medusa.config.Config;
 import com.gladurbad.medusa.manager.AlertManager;
 import com.gladurbad.medusa.network.Packet;
 import com.gladurbad.medusa.playerdata.PlayerData;
-
 import io.github.retrooper.packetevents.packet.PacketType;
 import lombok.Getter;
 import lombok.Setter;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
-import org.bukkit.event.Listener;
 
 
 @Getter
@@ -61,8 +59,9 @@ public abstract class Check {
         }
     }
 
-    protected void increaseBuffer() {
+    protected double increaseBuffer() {
         buffer = Math.min(100, buffer + 1);
+        return buffer;
     }
 
     protected void decreaseBuffer() {

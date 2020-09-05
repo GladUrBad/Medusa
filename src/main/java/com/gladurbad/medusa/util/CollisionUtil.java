@@ -65,6 +65,20 @@ public class CollisionUtil {
         return false;
     }
 
+    public boolean isOnLilyOrCarpet(Player player) {
+        Location loc = player.getLocation();
+        double expand = 0.3;
+        for (double x = -expand; x <= expand; x += expand) {
+            for (double z = -expand; z <= expand; z += expand) {
+                if (loc.clone().add(z, 0, x).getBlock().getType().toString().contains("LILY")
+                        || loc.clone().add(z, -0.001, x).getBlock().getType().toString().contains("CARPET")) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
 
     public boolean isOnGround(Location location, double dropDown) {
         final double expand = 0.31;

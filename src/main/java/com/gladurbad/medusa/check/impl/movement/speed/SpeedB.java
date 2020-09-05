@@ -39,15 +39,12 @@ public class SpeedB extends Check {
             if(++iceSlimeTicks < 40) limit += 0.34;
             if(++underBlockTicks < 40) limit += 0.7;
 
-            if(data.getTicksSinceVelocity() < 10) {
-                limit += Math.hypot(data.getLastVelocity().getX(), data.getLastVelocity().getZ());
-            }
+            if(data.isTakingKnockback()) limit += Math.hypot(data.getLastVelocity().getX(), data.getLastVelocity().getZ());
 
             final boolean invalid = !data.getPlayer().isFlying() && data.getDeltaXZ() > limit && flyingTicks > 40;
 
             if(invalid) {
-                increaseBuffer();
-                if(buffer >= 7) {
+                if(increaseBuffer() >= 7) {
                     fail();
                 }
             } else {

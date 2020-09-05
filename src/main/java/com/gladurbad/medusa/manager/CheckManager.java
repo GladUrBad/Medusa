@@ -4,24 +4,23 @@ import com.gladurbad.medusa.check.Check;
 import com.gladurbad.medusa.check.impl.combat.autoclicker.AutoclickerA;
 import com.gladurbad.medusa.check.impl.combat.killaura.*;
 import com.gladurbad.medusa.check.impl.combat.reach.ReachA;
-import com.gladurbad.medusa.check.impl.movement.jesus.JesusC;
-import com.gladurbad.medusa.check.impl.movement.motion.*;
-import com.gladurbad.medusa.check.impl.player.badpackets.BadPacketsA;
 import com.gladurbad.medusa.check.impl.movement.fastclimb.FastClimbA;
 import com.gladurbad.medusa.check.impl.movement.flight.FlightA;
 import com.gladurbad.medusa.check.impl.movement.flight.FlightB;
 import com.gladurbad.medusa.check.impl.movement.jesus.JesusA;
 import com.gladurbad.medusa.check.impl.movement.jesus.JesusB;
+import com.gladurbad.medusa.check.impl.movement.jesus.JesusC;
+import com.gladurbad.medusa.check.impl.movement.motion.*;
 import com.gladurbad.medusa.check.impl.movement.nofall.NofallA;
 import com.gladurbad.medusa.check.impl.movement.speed.SpeedA;
 import com.gladurbad.medusa.check.impl.movement.speed.SpeedB;
+import com.gladurbad.medusa.check.impl.player.badpackets.BadPacketsA;
 import com.gladurbad.medusa.check.impl.player.badpackets.BadPacketsB;
 import com.gladurbad.medusa.check.impl.player.badpackets.BadPacketsC;
 import com.gladurbad.medusa.check.impl.player.timer.TimerA;
 import com.gladurbad.medusa.config.Config;
 import com.gladurbad.medusa.playerdata.PlayerData;
 import org.bukkit.Bukkit;
-
 
 import java.lang.reflect.Constructor;
 import java.util.ArrayList;

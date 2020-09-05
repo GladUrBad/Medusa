@@ -92,6 +92,11 @@ checks:
         max-reach: 3.5
         reach-sensitivity: 3
         reach-maxlatency: 200
+    velocity:
+      a:
+        enabled: true
+        max-violations: 20
+        punish-command: 'ban %player% %prefix% Unfair Advantage'
   movement:
     fastclimb:
       a:

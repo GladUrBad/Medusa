@@ -22,9 +22,7 @@ public class Medusa extends JavaPlugin {
     private static Medusa instance;
 
     @Override
-    public void onLoad() {
-        PacketEvents.load();
-    }
+    public void onLoad() { PacketEvents.load(); }
 
     @Override
     public void onEnable() {
@@ -40,7 +38,10 @@ public class Medusa extends JavaPlugin {
         getCommand("medusa").setExecutor(medusaCommands);
 
         //Register listeners.
-        PacketEvents.start(this);
+        PacketEvents.getSettings().setInjectAsync(true);
+        PacketEvents.getSettings().setUninjectAsync(true);
+        PacketEvents.getSettings().setIdentifier("medusa_handler");
+        PacketEvents.init(this);
         PacketEvents.getAPI().getEventManager().registerListener(new PacketProcessor());
         PacketEvents.getAPI().getEventManager().registerListener(new RegistrationListener());
 
