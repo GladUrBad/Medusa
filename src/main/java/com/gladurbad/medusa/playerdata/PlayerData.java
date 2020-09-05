@@ -16,6 +16,7 @@ import io.github.retrooper.packetevents.packetwrappers.out.entityvelocity.Wrappe
 import lombok.Getter;
 import lombok.Setter;
 
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
@@ -116,6 +117,7 @@ public class PlayerData implements PacketListener {
                 this.processLocation(location, lastLocation);
             } else if (packet.getPacketId() == PacketType.Client.ENTITY_ACTION) {
                 WrappedPacketInEntityAction wrappedPacketInEntityAction = new WrappedPacketInEntityAction(packet.getRawPacket());
+
                 switch (wrappedPacketInEntityAction.getAction()) {
                     case START_SPRINTING:
                         this.isSprinting = true;

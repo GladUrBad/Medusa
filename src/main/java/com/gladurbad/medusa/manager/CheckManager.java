@@ -17,6 +17,9 @@ import com.gladurbad.medusa.check.impl.movement.speed.SpeedA;
 import com.gladurbad.medusa.check.impl.movement.speed.SpeedB;
 import com.gladurbad.medusa.check.impl.player.badpackets.BadPacketsB;
 import com.gladurbad.medusa.check.impl.player.badpackets.BadPacketsC;
+import com.gladurbad.medusa.check.impl.player.scaffold.ScaffoldA;
+import com.gladurbad.medusa.check.impl.player.scaffold.ScaffoldB;
+import com.gladurbad.medusa.check.impl.player.scaffold.ScaffoldC;
 import com.gladurbad.medusa.check.impl.player.timer.TimerA;
 import com.gladurbad.medusa.config.Config;
 import com.gladurbad.medusa.playerdata.PlayerData;
@@ -38,10 +41,8 @@ public class CheckManager {
             KillauraD.class,
             KillauraE.class,
             KillauraF.class,
+            KillauraG.class,
             ReachA.class,
-            BadPacketsA.class,
-            BadPacketsB.class,
-            BadPacketsC.class,
             FastClimbA.class,
             FlightA.class,
             FlightB.class,
@@ -53,9 +54,16 @@ public class CheckManager {
             MotionC.class,
             MotionD.class,
             MotionE.class,
+            MotionF.class,
             NofallA.class,
             SpeedA.class,
             SpeedB.class,
+            BadPacketsA.class,
+            BadPacketsB.class,
+            BadPacketsC.class,
+            ScaffoldA.class,
+            ScaffoldB.class,
+            ScaffoldC.class,
             TimerA.class
     };
 

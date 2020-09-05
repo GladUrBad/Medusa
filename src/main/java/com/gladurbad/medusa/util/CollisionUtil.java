@@ -11,13 +11,19 @@ import org.bukkit.entity.Player;
 @UtilityClass
 public class CollisionUtil {
 
+    private Block getBlockAsync(Location loc) {
+        if (loc.getWorld().isChunkLoaded(loc.getBlockX() >> 4, loc.getBlockZ() >> 4))
+            return loc.getBlock();
+        return null;
+    }
+
     public boolean isOnChosenBlock(Player player, double yLevel, Material... materials) {
         final double expand = 0.31;
         final Location location = player.getLocation();
         for(double x = -expand; x <= expand; x += expand) {
             for(double z = -expand; z <= expand; z+= expand) {
                 for(Material material : materials) {
-                    if (location.clone().add(x, yLevel, z).getBlock().getType() == material) {
+                    if (getBlockAsync(location.clone().add(x, yLevel, z)).getType() == material) {
                         return true;
                     }
                 }
@@ -31,7 +37,7 @@ public class CollisionUtil {
         final Location location = player.getLocation();
         for(double x = -expand; x <= expand; x += expand) {
             for(double z = -expand; z <= expand; z+= expand) {
-                if(location.clone().add(x, -0.5001, z).getBlock().getType() != Material.AIR) {
+                if(getBlockAsync(location.clone().add(x, -0.5001, z)).getType() != Material.AIR) {
                     return true;
                 }
             }
@@ -44,7 +50,7 @@ public class CollisionUtil {
         final Location location = player.getLocation();
         for(double x = -expand; x <= expand; x += expand) {
             for(double z = -expand; z <= expand; z+= expand) {
-                if(location.clone().add(x, -0.5001, z).getBlock().getType().isSolid()) {
+                if(getBlockAsync(location.clone().add(x, -0.5001, z)).getType().isSolid()) {
                     return true;
                 }
             }
@@ -57,7 +63,7 @@ public class CollisionUtil {
         final Location location = player.getLocation();
         for(double x = -expand; x <= expand; x += expand) {
             for(double z = -expand; z <= expand; z+= expand) {
-                if(location.clone().add(x, -0.5001, z).getBlock().isLiquid()) {
+                if(getBlockAsync(location.clone().add(x, -0.5001, z)).isLiquid()) {
                     return true;
                 }
             }
@@ -70,7 +76,7 @@ public class CollisionUtil {
         final double expand = 0.31;
         for(double x = -expand; x <= expand; x += expand) {
             for(double z = -expand; z <= expand; z+= expand) {
-                if(location.clone().add(x, dropDown, z).getBlock().getType() != Material.AIR) {
+                if(getBlockAsync(location.clone().add(x, dropDown, z)).getType() != Material.AIR) {
                     return true;
                 }
             }
@@ -82,7 +88,7 @@ public class CollisionUtil {
         final double expand = 0.31;
         for(double x = -expand; x <= expand; x += expand) {
             for(double z = -expand; z <= expand; z+= expand) {
-                if(location.clone().add(x, 2.0, z).getBlock().getType() != Material.AIR) {
+                if(getBlockAsync(location.clone().add(x, 2.0, z)).getType() != Material.AIR) {
                     return true;
                 }
             }

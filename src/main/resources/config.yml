@@ -80,6 +80,10 @@ checks:
         # min-flag: Minimum amount of potential hits that haven't been landed to flag.
         swings: 100
         min-flag: 45
+      g:
+        enabled: true
+        max-violations: 50
+        punish-command: 'ban %player% %prefix% Unfair Advantage'
     reach:
       a:
         enabled: true
@@ -152,6 +156,11 @@ checks:
         setback: true
         max-violations: 50
         punish-command: 'ban %player% %prefix% Unfair Advantage'
+      f:
+        enabled: true
+        setback: false
+        max-violations: 50
+        punish-command: 'ban %player% %prefix% Unfair Advantage'
     nofall:
       a:
         enabled: true
@@ -181,6 +190,19 @@ checks:
         punish-command: 'ban %player% %prefix% Unfair Advantage'
       c:
         enabled: true
+        max-violations: 50
+        punish-command: 'ban %player% %prefix% Unfair Advantage'
+    scaffold:
+      a:
+        enabled: true
+        max-violations: 50
+        punish-command: 'ban %player% %prefix% Unfair Advantage'
+      b:
+        enabled: true
+        max-violations: 50
+        punish-command: 'ban %player% %prefix% Unfair Advantage'
+      c:
+        enabled: false
         max-violations: 50
         punish-command: 'ban %player% %prefix% Unfair Advantage'
     timer:

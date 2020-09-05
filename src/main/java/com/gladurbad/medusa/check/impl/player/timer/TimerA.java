@@ -34,7 +34,7 @@ public class TimerA extends Check {
                 double timerAverage = samples.parallelStream().mapToDouble(value -> value).average().orElse(0.0D);
                 double timerSpeed = 50 / timerAverage;
 
-                if(timerSpeed > 1.05 || timerSpeed < 0.95) {
+                if(timerSpeed > 1.075 || timerSpeed < 0.925) {
                     increaseBuffer();
                     if (buffer > 1) fail();
                 } else {
