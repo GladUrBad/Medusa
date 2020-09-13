@@ -6,16 +6,11 @@ import com.gladurbad.medusa.network.Packet;
 import com.gladurbad.medusa.playerdata.PlayerData;
 import io.github.retrooper.packetevents.packet.PacketType;
 
-import java.util.ArrayDeque;
-
-@CheckInfo(name = "Autoclicker", type = "A", dev = false)
+@CheckInfo(name = "Autoclicker", type = "A")
 public class AutoclickerA extends Check {
 
+    private int ticks, cps;
     private static final ConfigValue maxCPS = new ConfigValue(ConfigValue.ValueType.INTEGER, "max-cps");
-
-
-    private long lastClickTime;
-    private ArrayDeque<Long> samples = new ArrayDeque<>();
 
     public AutoclickerA(PlayerData data) {
         super(data);
@@ -23,17 +18,19 @@ public class AutoclickerA extends Check {
 
     @Override
     public void handle(Packet packet) {
-        if (packet.isReceiving() && packet.getPacketId() == PacketType.Client.ARM_ANIMATION && !data.isDigging()) {
-            final long clickTime = now();
-            final long clickDelay = clickTime - lastClickTime;
-            samples.add(clickDelay);
-            if (samples.size() >= 20) {
-                double averageCps = 1000D / samples.parallelStream().mapToDouble(value -> value).average().orElse(0.0D);
+        if (packet.isReceiving() && !data.isDigging()) {
+            if (isFlyingPacket(packet)) {
+                if (++ticks >= 20) {
+                    if (cps > maxCPS.getInt()) {
+                        fail();
+                    }
 
-                if (averageCps > maxCPS.getInt()) fail();
-                samples.clear();
+                    ticks = 0;
+                    cps = 0;
+                }
+            } else if (packet.getPacketId() == PacketType.Client.ARM_ANIMATION) {
+                ++cps;
             }
-            lastClickTime = clickTime;
         }
     }
 }

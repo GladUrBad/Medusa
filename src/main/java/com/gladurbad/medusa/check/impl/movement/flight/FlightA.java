@@ -18,12 +18,12 @@ public class FlightA extends Check {
 
     @Override
     public void handle(Packet packet) {
-        if(packet.isReceiving() && isFlyingPacket(packet)) {
+        if (packet.isReceiving() && isFlyingPacket(packet)) {
             final double prediction = (data.getLastDeltaY() * 0.9800000190734863) - 0.08;
             final double difference = Math.abs(data.getDeltaY() - prediction);
 
             final boolean inVehicle = data.getPlayer().isInsideVehicle();
-            if(inVehicle) vehicleTicks = 0;
+            if (inVehicle) vehicleTicks = 0;
             else vehicleTicks++;
 
             final boolean invalid = difference > LIMIT &&

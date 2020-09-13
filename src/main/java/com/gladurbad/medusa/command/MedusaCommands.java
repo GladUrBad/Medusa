@@ -28,11 +28,11 @@ public class MedusaCommands implements CommandExecutor {
     public boolean onCommand(CommandSender commandSender, Command command, String s, String[] args) {
         if (commandSender instanceof Player){
             if (commandSender.hasPermission("medusa.commands") || commandSender.isOp()){
-                if(args.length > 0) {
+                if (args.length > 0) {
                     for(MedusaArgument medusaArgument : arguments) {
                         String argName = medusaArgument.getName();
-                        if(argName.equals(args[0])) {
-                            if(!medusaArgument.handle(commandSender, command, s, args)) {
+                        if (argName.equals(args[0])) {
+                            if (!medusaArgument.handle(commandSender, command, s, args)) {
                                 commandSender.sendMessage(MedusaArgument.responsePrefix + "Usage: /medusa " + medusaArgument.getName() + " " + medusaArgument.getSyntax());
                             }
                             return true;

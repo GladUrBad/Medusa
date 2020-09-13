@@ -24,7 +24,7 @@ violations:
   # minimum-vl: How much VL the check has to get in order to alert.
   # alert-format: Alert format for flagging.
   # clear-violations-delay: Clears violations for all checks every specified time (in minutes)
-  minimum-vl: 3
+  minimum-vl: 5
   alert-format: '%prefix% &a%player% &2- &a%check% (Type %type%) %dev% &8[&cVL: %vl%&8]'
   clear-violations-delay: 10
 
@@ -39,13 +39,38 @@ violations:
 #
 checks:
   combat:
-    autoclicker:
+    aim:
       a:
+        enabled: true
+        max-violations: 100
+        punish-command: 'ban %player% %prefix% Unfair Advantage'
+      b:
+        enabled: true
+        max-violations: 100
+        punish-command: 'ban %player% %prefix% Unfair Advantage'
+      c:
+        enabled: true
+        max-violations: 100
+        punish-command: 'ban %player% %prefix% Unfair Advantage'
+      d:
+        enabled: true
+        max-violations: 100
+        punish-command: 'ban %player% %prefix% Unfair Advantage'
+      e:
         enabled: true
         max-violations: 50
         punish-command: 'ban %player% %prefix% Unfair Advantage'
+    autoclicker:
+      a:
+        enabled: true
+        max-violations: 10
+        punish-command: 'ban %player% %prefix% Unfair Advantage'
         # max-cps: How fast one can click before getting flagged.
-        max-cps: 20
+        max-cps: 25
+      b:
+        enabled: true
+        max-violations: 100
+        punish-command: ''
     killaura:
       a:
         enabled: true
@@ -53,36 +78,23 @@ checks:
         punish-command: 'ban %player% %prefix% Unfair Advantage'
       b:
         enabled: true
-        max-violations: 50
+        max-violations: 200
         punish-command: 'ban %player% %prefix% Unfair Advantage'
       c:
         enabled: true
-        max-violations: 50
+        max-violations: 20
         punish-command: 'ban %player% %prefix% Unfair Advantage'
       d:
         enabled: true
-        max-violations: 50
-        punish-command: 'ban %player% %prefix% Unfair Advantage'
-      e:
-        enabled: true
-        max-violations: 50
+        max-violations: 25
         punish-command: 'ban %player% %prefix% Unfair Advantage'
         # sample-size: How much data for this check. Going higher means higher stability, but slower detection, vice versa for smaller sample size.
         # max-accuracy: How accurate the player can be. Set to as high as your sample-size. Higher limit means more stablility.
         sample-size: 100
-        max-accuracy: 75
-      f:
-        # I recommend leaving this disabled.
-        enabled: false
-        max-violations: 50
-        punish-command: 'ban %player% %prefix% Unfair Advantage'
-        # swings: Minimum amount of swings to check the detection.
-        # min-flag: Minimum amount of potential hits that haven't been landed to flag.
-        swings: 100
-        min-flag: 45
-      g:
+        max-accuracy: 85
+      e:
         enabled: true
-        max-violations: 50
+        max-violations: 20
         punish-command: 'ban %player% %prefix% Unfair Advantage'
     reach:
       a:
@@ -93,9 +105,15 @@ checks:
         # reach-sensitivity: (Scale of 1-5) 1-3 makes the check less prone to false flags. 4-5 increases detection rate.
         # reach-maxlatency: In milliseconds, the maximum ping a player can have before the reach check is disabled.
         # If you are having false positives with lag increase this.
-        max-reach: 3.5
-        reach-sensitivity: 3
-        reach-maxlatency: 200
+        max-reach: 3.3
+        reach-sensitivity: 4
+        reach-maxlatency: 150
+    velocity:
+      # Would recommend leaving this disabled, some falses occur.
+      a:
+        enabled: false
+        max-violations: 100
+        punish-command: 'ban %player% %prefix% Unfair Advantage'
   movement:
     fastclimb:
       a:
@@ -164,7 +182,7 @@ checks:
     nofall:
       a:
         enabled: true
-        setback: true
+        setback: false
         max-violations: 50
         punish-command: 'ban %player% %prefix% Unfair Advantage'
     speed:
@@ -182,24 +200,30 @@ checks:
     badpackets:
       a:
         enabled: true
-        max-violations: 50
-        punish-command: 'ban %player% %prefix% Unfair Advantage'
+        max-violations: 1
+        punish-command: 'kick %player% %prefix% Invalid rotation detected!'
       b:
         enabled: true
-        max-violations: 50
-        punish-command: 'ban %player% %prefix% Unfair Advantage'
+        max-violations: 20
+        punish-command: 'kick %player% %prefix% Invalid packets detected! Hacking?'
       c:
         enabled: true
-        max-violations: 50
+        max-violations: 25
         punish-command: 'ban %player% %prefix% Unfair Advantage'
+    inventory:
+      # Highly experimental, would recommend leaving this disabled.
+      a:
+        enabled: false
+        max-violations: 50
+        punish-command: 'ba %player% %prefix% Unfair Advantage'
     scaffold:
       a:
         enabled: true
-        max-violations: 50
+        max-violations: 25
         punish-command: 'ban %player% %prefix% Unfair Advantage'
       b:
         enabled: true
-        max-violations: 50
+        max-violations: 75
         punish-command: 'ban %player% %prefix% Unfair Advantage'
       c:
         enabled: false
@@ -207,6 +231,10 @@ checks:
         punish-command: 'ban %player% %prefix% Unfair Advantage'
     timer:
       a:
+        enabled: true
+        max-violations: 50
+        punish-command: 'ban %player% %prefix% Unfair Advantage'
+      b:
         enabled: true
         max-violations: 50
         punish-command: 'ban %player% %prefix% Unfair Advantage'

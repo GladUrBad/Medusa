@@ -9,7 +9,7 @@ import com.gladurbad.medusa.util.PlayerUtil;
 
 import org.bukkit.Material;
 
-@CheckInfo(name = "Speed", type = "B", dev = true)
+@CheckInfo(name = "Speed", type = "B")
 public class SpeedB extends Check {
 
     private int iceSlimeTicks, underBlockTicks, flyingTicks;
@@ -20,34 +20,34 @@ public class SpeedB extends Check {
 
     @Override
     public void handle(Packet packet) {
-        if(packet.isReceiving() && isFlyingPacket(packet)) {
+        if (packet.isReceiving() && isFlyingPacket(packet)) {
             double limit = PlayerUtil.getBaseSpeed(data.getPlayer());
 
             final boolean iceSlime = CollisionUtil.isOnChosenBlock(data.getPlayer(), -0.5001, Material.ICE, Material.PACKED_ICE, Material.SLIME_BLOCK);
             final boolean underBlock = CollisionUtil.blockNearHead(data.getLocation());
             final boolean flying = data.getPlayer().isFlying();
 
-            if(flying) {
+            if (flying) {
                 flyingTicks = 0;
             } else {
                 flyingTicks++;
             }
 
-            if(iceSlime) iceSlimeTicks = 0;
-            if(underBlock) underBlockTicks = 0;
+            if (iceSlime) iceSlimeTicks = 0;
+            if (underBlock) underBlockTicks = 0;
 
-            if(++iceSlimeTicks < 40) limit += 0.34;
-            if(++underBlockTicks < 40) limit += 0.7;
+            if (++iceSlimeTicks < 40) limit += 0.34;
+            if (++underBlockTicks < 40) limit += 0.7;
 
-            if(data.getTicksSinceVelocity() < 10) {
-                limit += Math.hypot(data.getLastVelocity().getX(), data.getLastVelocity().getZ());
+            if (data.getTicksSinceVelocity() < 15) {
+                limit += Math.hypot(Math.abs(data.getLastVelocity().getX()), Math.abs(data.getLastVelocity().getZ()));
             }
 
             final boolean invalid = !data.getPlayer().isFlying() && data.getDeltaXZ() > limit && flyingTicks > 40;
 
-            if(invalid) {
+            if (invalid) {
                 increaseBuffer();
-                if(buffer >= 7) {
+                if (buffer >= 7) {
                     fail();
                 }
             } else {

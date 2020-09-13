@@ -1,9 +1,12 @@
 package com.gladurbad.medusa.manager;
 
 import com.gladurbad.medusa.check.Check;
+import com.gladurbad.medusa.check.impl.combat.aim.*;
+import com.gladurbad.medusa.check.impl.combat.autoclicker.AutoClickerB;
 import com.gladurbad.medusa.check.impl.combat.autoclicker.AutoclickerA;
 import com.gladurbad.medusa.check.impl.combat.killaura.*;
 import com.gladurbad.medusa.check.impl.combat.reach.ReachA;
+import com.gladurbad.medusa.check.impl.combat.velocity.VelocityA;
 import com.gladurbad.medusa.check.impl.movement.jesus.JesusC;
 import com.gladurbad.medusa.check.impl.movement.motion.*;
 import com.gladurbad.medusa.check.impl.player.badpackets.BadPacketsA;
@@ -17,10 +20,12 @@ import com.gladurbad.medusa.check.impl.movement.speed.SpeedA;
 import com.gladurbad.medusa.check.impl.movement.speed.SpeedB;
 import com.gladurbad.medusa.check.impl.player.badpackets.BadPacketsB;
 import com.gladurbad.medusa.check.impl.player.badpackets.BadPacketsC;
+import com.gladurbad.medusa.check.impl.player.inventory.InventoryA;
 import com.gladurbad.medusa.check.impl.player.scaffold.ScaffoldA;
 import com.gladurbad.medusa.check.impl.player.scaffold.ScaffoldB;
 import com.gladurbad.medusa.check.impl.player.scaffold.ScaffoldC;
 import com.gladurbad.medusa.check.impl.player.timer.TimerA;
+import com.gladurbad.medusa.check.impl.player.timer.TimerB;
 import com.gladurbad.medusa.config.Config;
 import com.gladurbad.medusa.playerdata.PlayerData;
 import org.bukkit.Bukkit;
@@ -34,15 +39,20 @@ import java.util.List;
 public class CheckManager {
 
     public static final Class[] CHECKS = new Class[] {
+            AimA.class,
+            AimB.class,
+            AimC.class,
+            AimD.class,
+            AimE.class,
             AutoclickerA.class,
+            AutoClickerB.class,
             KillauraA.class,
             KillauraB.class,
             KillauraC.class,
             KillauraD.class,
             KillauraE.class,
-            KillauraF.class,
-            KillauraG.class,
             ReachA.class,
+            VelocityA.class,
             FastClimbA.class,
             FlightA.class,
             FlightB.class,
@@ -61,10 +71,12 @@ public class CheckManager {
             BadPacketsA.class,
             BadPacketsB.class,
             BadPacketsC.class,
+            InventoryA.class,
             ScaffoldA.class,
             ScaffoldB.class,
             ScaffoldC.class,
-            TimerA.class
+            TimerA.class,
+            TimerB.class
     };
 
     private static final List<Constructor<?>> CONSTRUCTORS = new ArrayList<>();

@@ -1,5 +1,6 @@
 package com.gladurbad.medusa.listener;
 
+import com.gladurbad.medusa.config.Config;
 import com.gladurbad.medusa.manager.PlayerDataManager;
 import com.gladurbad.medusa.playerdata.PlayerData;
 import io.github.retrooper.packetevents.annotations.PacketHandler;
@@ -11,7 +12,12 @@ public class RegistrationListener implements PacketListener {
 
     @PacketHandler
     public void onInject(PlayerInjectEvent event) {
-        PlayerDataManager.getInstance().getPlayerData().put(event.getPlayer().getUniqueId(), new PlayerData(event.getPlayer().getUniqueId(), event.getPlayer()));
+        final PlayerData playerData = new PlayerData(event.getPlayer().getUniqueId(), event.getPlayer());
+        if (Config.TESTMODE) {
+            playerData.setAlerts(true);
+        }
+        PlayerDataManager.getInstance().getPlayerData().put(event.getPlayer().getUniqueId(), playerData);
+
     }
 
     @PacketHandler

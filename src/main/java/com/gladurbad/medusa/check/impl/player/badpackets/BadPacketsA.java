@@ -15,9 +15,9 @@ public class BadPacketsA extends Check {
 
     @Override
     public void handle(Packet packet) {
-        if(packet.isReceiving() && this.isFlyingPacket(packet)) {
+        if (packet.isReceiving() && this.isFlyingPacket(packet)) {
             WrappedPacketInFlying wrappedPacketInFlying = new WrappedPacketInFlying(packet.getRawPacket());
-            if(Math.abs(wrappedPacketInFlying.getPitch()) > 90.0F) fail();
+            if (Math.abs(wrappedPacketInFlying.getPitch()) > 90.0F) fail();
         }
     }
 }

@@ -21,11 +21,13 @@ public class ScaffoldA extends Check {
             if (isFlyingPacket(packet)) {
                 flyingTime = now();
             } else if (packet.getPacketId() == PacketType.Client.BLOCK_PLACE) {
+                if (!data.getPlayer().getItemInHand().getType().isBlock()) return;
+
                 placementTime = now();
 
                 final long timeDifference = placementTime - flyingTime;
 
-                if(timeDifference == 0) {
+                if (timeDifference == 0) {
                     fail();
                 }
             }

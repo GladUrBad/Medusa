@@ -15,11 +15,11 @@ public class MotionD extends Check {
 
     @Override
     public void handle(Packet packet) {
-        if(packet.isReceiving() && this.isFlyingPacket(packet)) {
+        if (packet.isReceiving() && this.isFlyingPacket(packet)) {
             final double deltaY = data.getDeltaY();
             final double lastDeltaY = data.getLastDeltaY();
 
-            if(MathUtil.isScientificNotation(deltaY) && MathUtil.isScientificNotation(lastDeltaY)) {
+            if (MathUtil.isScientificNotation(deltaY) && MathUtil.isScientificNotation(lastDeltaY)) {
                 fail();
             } else {
                 setLastLegitLocation(data.getPlayer().getLocation());

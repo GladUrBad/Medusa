@@ -6,7 +6,7 @@ import com.gladurbad.medusa.network.Packet;
 import com.gladurbad.medusa.playerdata.PlayerData;
 import com.gladurbad.medusa.util.CollisionUtil;
 
-@CheckInfo(name = "Flight", type = "B", dev = true)
+@CheckInfo(name = "Flight", type = "B")
 public class FlightB extends Check {
 
     private double lastLastDeltaY;
@@ -18,17 +18,17 @@ public class FlightB extends Check {
 
     @Override
     public void handle(Packet packet) {
-        if(packet.isReceiving() && this.isFlyingPacket(packet)) {
+        if (packet.isReceiving() && this.isFlyingPacket(packet)) {
             final double deltaY = data.getDeltaY();
             final double lastDeltaY = data.getLastDeltaY();
 
             final double accel = deltaY - lastDeltaY;
             final double lastAccel = lastDeltaY - lastLastDeltaY;
 
-            if(!CollisionUtil.isOnGround(data.getPlayer()) && !data.getPlayer().isFlying()) {
+            if (!CollisionUtil.isOnGround(data.getPlayer()) && !data.getPlayer().isFlying()) {
                 airTicks = Math.min(200, airTicks + 1);
-                if(airTicks > 10) {
-                    if(accel > 0.0 && lastAccel <= 0.0 && data.getTicksSinceVelocity() > 10) {
+                if (airTicks > 10) {
+                    if (accel > 0.0 && lastAccel <= 0.0 && data.getTicksSinceVelocity() > 10) {
                         fail();
                     }
                 }

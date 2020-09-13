@@ -25,15 +25,15 @@ public class KillauraB extends Check {
 
     @Override
     public void handle(Packet packet) {
-        if(packet.isReceiving()) {
-            if(packet.getPacketId() == PacketType.Client.POSITION_LOOK) {
-                if(++this.hitTicks < 2 && data.isSprinting()) {
-                    final double accel = Math.abs(data.getDeltaXZ() - data.getLastDeltaXZ());
+        if (packet.isReceiving()) {
+            if (packet.getPacketId() == PacketType.Client.POSITION_LOOK) {
+                if (++this.hitTicks < 2 && data.isSprinting()) {
+                    final double acceleration = Math.abs(data.getDeltaXZ() - data.getLastDeltaXZ());
 
-                    if(cps < 15) {
-                        if(accel < 0.015) {
+                    if (cps < 15 && cps > 4) {
+                        if (acceleration < 0.0125) {
                             increaseBuffer();
-                            if (buffer > 5) {
+                            if (buffer > 7) {
                                 fail();
                             }
                         } else {
@@ -41,23 +41,21 @@ public class KillauraB extends Check {
                         }
                     }
                 }
-            } else if(packet.getPacketId() == PacketType.Client.USE_ENTITY) {
-                WrappedPacketInUseEntity wrappedPacketInUseEntity = new WrappedPacketInUseEntity(packet.getRawPacket());
-                if(wrappedPacketInUseEntity.getAction()
-                        == WrappedPacketInUseEntity.EntityUseAction.ATTACK
-                        && wrappedPacketInUseEntity.getEntity().getType() == EntityType.PLAYER) {
-                    this.hitTicks = 0;
-                }
-            } else if(packet.getPacketId() == PacketType.Client.ARM_ANIMATION) {
+            } else if (packet.getPacketId() == PacketType.Client.USE_ENTITY) {
+               final WrappedPacketInUseEntity wrappedPacketInUseEntity = new WrappedPacketInUseEntity(packet.getRawPacket());
+               if (wrappedPacketInUseEntity.getAction()
+                       == WrappedPacketInUseEntity.EntityUseAction.ATTACK
+                       && wrappedPacketInUseEntity.getEntity().getType() == EntityType.PLAYER) {
+                   this.hitTicks = 0;
+               }
+            } else if (packet.getPacketId() == PacketType.Client.ARM_ANIMATION) {
                 final long clickTime = now();
                 final long clickDelay = clickTime - lastClickTime;
 
                 clickDelays.add(clickDelay);
 
                 if (clickDelays.size() >= 20) {
-                    final double average
-                            = clickDelays.parallelStream().mapToDouble(value -> value).average().orElse(0.0);
-
+                    final double average = clickDelays.parallelStream().mapToDouble(value -> value).average().orElse(0.0);
                     cps = 1000L / average;
                 }
 

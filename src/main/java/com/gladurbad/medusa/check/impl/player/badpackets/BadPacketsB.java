@@ -31,7 +31,7 @@ public class BadPacketsB extends Check {
                     decreaseBuffer();
                 }
 
-                if(ticksSinceSetting < lastTicksSinceSetting) {
+                if (ticksSinceSetting < lastTicksSinceSetting) {
                     if (lastTicksSinceReset == ticksSinceReset) {
                         increaseBuffer();
                         if (buffer > 1) fail();

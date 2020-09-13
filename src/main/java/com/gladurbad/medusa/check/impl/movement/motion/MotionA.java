@@ -11,7 +11,7 @@ import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffectType;
 
-@CheckInfo(name = "Motion", type = "A", dev = true)
+@CheckInfo(name = "Motion", type = "A")
 public class MotionA extends Check {
 
     private int slimeTicks, inVehicleTicks;
@@ -28,7 +28,7 @@ public class MotionA extends Check {
             float expectedJumpMotion = 0.6F;
 
             final boolean slime = CollisionUtil.isOnChosenBlock(data.getPlayer(), -0.5001, Material.SLIME_BLOCK);
-            if(slime) slimeTicks = 0;
+            if (slime) slimeTicks = 0;
 
             final boolean jumped = CollisionUtil.isOnGround(data.getLastLocation(), -0.00001) &&
                     !CollisionUtil.isOnGround(data.getLocation(), -0.00001) &&
@@ -36,7 +36,7 @@ public class MotionA extends Check {
 
             final boolean inVehicle = data.getPlayer().isInsideVehicle();
 
-            if(inVehicle) inVehicleTicks = 0;
+            if (inVehicle) inVehicleTicks = 0;
             else inVehicleTicks++;
 
             if (PlayerUtil.getPotionLevel(player, PotionEffectType.JUMP) > 0) {

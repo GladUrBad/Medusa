@@ -8,7 +8,7 @@ import com.gladurbad.medusa.playerdata.PlayerData;
 import io.github.retrooper.packetevents.packet.PacketType;
 import io.github.retrooper.packetevents.packetwrappers.in.helditemslot.WrappedPacketInHeldItemSlot;
 
-@CheckInfo(name = "BadPackets", type = "C", dev = true)
+@CheckInfo(name = "BadPackets", type = "C")
 public class BadPacketsC extends Check {
 
     private int lastHeldItemSlot;
@@ -25,7 +25,7 @@ public class BadPacketsC extends Check {
 
                 final int heldItemSlot = wrappedPacketInHeldItemSlot.getItemInHandIndex();
 
-                if(heldItemSlot == lastHeldItemSlot) fail();
+                if (heldItemSlot == lastHeldItemSlot) fail();
 
                 lastHeldItemSlot = heldItemSlot;
             }

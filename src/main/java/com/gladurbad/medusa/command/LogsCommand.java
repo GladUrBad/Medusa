@@ -19,13 +19,13 @@ public class LogsCommand extends MedusaArgument {
     @Override
     protected boolean handle(CommandSender sender, Command command, String label, String[] args) {
         if (sender instanceof Player && args.length > 1) {
-            if(!Bukkit.getOnlinePlayers().contains(Bukkit.getPlayer(args[1]))) return false;
+            if (!Bukkit.getOnlinePlayers().contains(Bukkit.getPlayer(args[1]))) return false;
             final UUID targetPlayerUUID = Bukkit.getPlayer(args[1]).getUniqueId();
-            if(targetPlayerUUID != null) {
+            if (targetPlayerUUID != null) {
                 PlayerData playerData = PlayerDataManager.getInstance().getPlayerData(targetPlayerUUID);
                 sender.sendMessage(responsePrefix + medusaSeparator);
                 for (Check check : playerData.getChecks()) {
-                    if(check.getVl() > 0) {
+                    if (check.getVl() > 0) {
                         sender.sendMessage(responsePrefix + check.getCheckInfo().name() + " (Type " + check.getCheckInfo().type() + ") x" + check.getVl());
                     }
                 }

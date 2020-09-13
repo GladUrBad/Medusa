@@ -6,7 +6,7 @@ import com.gladurbad.medusa.network.Packet;
 import com.gladurbad.medusa.playerdata.PlayerData;
 import com.gladurbad.medusa.util.CollisionUtil;
 
-@CheckInfo(name = "Motion", type = "C", dev = true)
+@CheckInfo(name = "Motion", type = "C")
 public class MotionC extends Check {
 
     public MotionC(PlayerData data) {
@@ -15,15 +15,15 @@ public class MotionC extends Check {
 
     @Override
     public void handle(Packet packet) {
-        if(packet.isReceiving() && isFlyingPacket(packet)) {
+        if (packet.isReceiving() && isFlyingPacket(packet)) {
             final double deltaY = Math.abs(data.getDeltaY());
             final double lastDeltaY = Math.abs(data.getLastDeltaY());
 
             final boolean invalid = deltaY == lastDeltaY && deltaY != 0.0D && deltaY != -3.92 && !CollisionUtil.isCollidingWithClimbable(data.getPlayer());
 
-            if(invalid) {
+            if (invalid) {
                 increaseBuffer();
-                if(buffer > 3) {
+                if (buffer > 3) {
                     fail();
                 }
             } else {

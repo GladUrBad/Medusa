@@ -11,7 +11,7 @@ import org.bukkit.Bukkit;
 
 public class AlertManager {
 
-    static {
+    public static void setup() {
         Bukkit.getServer().getScheduler().scheduleSyncRepeatingTask(Medusa.getInstance(), () -> {
             for (PlayerData playerData : PlayerDataManager.getInstance().getPlayerData().values()) {
                 playerData.getChecks().forEach(check -> check.setVl(0));
@@ -21,6 +21,7 @@ public class AlertManager {
             }
         }, 0, Config.CLEAR_VIOLATIONS_DELAY * 1200);
     }
+
     public static void verbose(PlayerData data, Check check) {
         TextComponent alertMessage = new TextComponent(ChatUtil.color(Config.ALERT_FORMAT)
             .replace("%prefix%", Config.PREFIX)
@@ -28,6 +29,7 @@ public class AlertManager {
             .replace("%check%", check.getCheckInfo().name())
             .replace("%type%", check.getCheckInfo().type())
             .replace("%dev%", check.getCheckInfo().dev() ? ChatUtil.color("&c(Dev)") : "")
+            .replace("  ", " ")
             .replace("%vl%", "" + check.getVl()));
         alertMessage.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/tp " + data.getPlayer().getName()));
         alertMessage.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder(ChatUtil.color("&cClick to teleport.")).create()));

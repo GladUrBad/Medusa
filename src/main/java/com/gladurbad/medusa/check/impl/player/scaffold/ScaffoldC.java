@@ -19,6 +19,7 @@ public class ScaffoldC extends Check {
     public void handle(Packet packet) {
         if (packet.isReceiving()) {
             if (packet.getPacketId() == PacketType.Client.BLOCK_PLACE) {
+                if (!data.getPlayer().getItemInHand().getType().isBlock()) return;
                 final double deltaY = data.getDeltaY();
                 final double acceleration = Math.abs(deltaY - lastDeltaY);
 

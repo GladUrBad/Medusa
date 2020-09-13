@@ -7,5 +7,5 @@ import java.lang.annotation.RetentionPolicy;
 public @interface CheckInfo {
     String name();
     String type();
-    boolean dev();
+    boolean dev() default false;
 }

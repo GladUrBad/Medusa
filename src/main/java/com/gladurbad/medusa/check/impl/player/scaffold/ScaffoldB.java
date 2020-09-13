@@ -35,7 +35,9 @@ public class ScaffoldB extends Check {
                     placedBlock = false;
                 }
             } else if (packet.getPacketId() == PacketType.Client.BLOCK_PLACE) {
-                placedBlock = true;
+                if (data.getPlayer().getItemInHand().getType().isBlock()) {
+                    placedBlock = true;
+                }
             }
         }
     }

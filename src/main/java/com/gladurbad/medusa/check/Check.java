@@ -50,9 +50,9 @@ public abstract class Check {
     protected void fail() {
         ++vl;
 
-        if(vl > Config.VL_TO_ALERT) {
+        if (vl >= Config.VL_TO_ALERT) {
             AlertManager.verbose(data, this);
-            if(setback) {
+            if (setback) {
                 final Location setBackLocation = lastLegitLocation == null ? data.getLastLocation() : lastLegitLocation;
                 Bukkit.getScheduler().runTask(Medusa.getInstance(), () -> data.getPlayer().teleport(setBackLocation));
                 data.setLastSetbackTime(now());
@@ -83,6 +83,10 @@ public abstract class Check {
 
     protected boolean isFlyingPacket(Packet packet) {
         return PacketType.Client.Util.isInstanceOfFlying(packet.getPacketId());
+    }
+
+    protected boolean isRotationPacket(Packet packet) {
+        return packet.getPacketId() == PacketType.Client.LOOK || packet.getPacketId() == PacketType.Client.POSITION_LOOK;
     }
 
     protected long now() {

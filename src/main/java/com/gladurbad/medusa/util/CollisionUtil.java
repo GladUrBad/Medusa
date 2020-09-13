@@ -37,7 +37,7 @@ public class CollisionUtil {
         final Location location = player.getLocation();
         for(double x = -expand; x <= expand; x += expand) {
             for(double z = -expand; z <= expand; z+= expand) {
-                if(getBlockAsync(location.clone().add(x, -0.5001, z)).getType() != Material.AIR) {
+                if (getBlockAsync(location.clone().add(x, -0.5001, z)).getType() != Material.AIR) {
                     return true;
                 }
             }
@@ -50,7 +50,7 @@ public class CollisionUtil {
         final Location location = player.getLocation();
         for(double x = -expand; x <= expand; x += expand) {
             for(double z = -expand; z <= expand; z+= expand) {
-                if(getBlockAsync(location.clone().add(x, -0.5001, z)).getType().isSolid()) {
+                if (getBlockAsync(location.clone().add(x, -0.5001, z)).getType().isSolid()) {
                     return true;
                 }
             }
@@ -63,7 +63,7 @@ public class CollisionUtil {
         final Location location = player.getLocation();
         for(double x = -expand; x <= expand; x += expand) {
             for(double z = -expand; z <= expand; z+= expand) {
-                if(getBlockAsync(location.clone().add(x, -0.5001, z)).isLiquid()) {
+                if (getBlockAsync(location.clone().add(x, -0.5001, z)).isLiquid()) {
                     return true;
                 }
             }
@@ -76,7 +76,7 @@ public class CollisionUtil {
         final double expand = 0.31;
         for(double x = -expand; x <= expand; x += expand) {
             for(double z = -expand; z <= expand; z+= expand) {
-                if(getBlockAsync(location.clone().add(x, dropDown, z)).getType() != Material.AIR) {
+                if (getBlockAsync(location.clone().add(x, dropDown, z)).getType() != Material.AIR) {
                     return true;
                 }
             }
@@ -88,7 +88,7 @@ public class CollisionUtil {
         final double expand = 0.31;
         for(double x = -expand; x <= expand; x += expand) {
             for(double z = -expand; z <= expand; z+= expand) {
-                if(getBlockAsync(location.clone().add(x, 2.0, z)).getType() != Material.AIR) {
+                if (getBlockAsync(location.clone().add(x, 2.0, z)).getType() != Material.AIR) {
                     return true;
                 }
             }
@@ -98,7 +98,7 @@ public class CollisionUtil {
 
     public boolean isNearBoat(Player player) {
         for(Entity entity : player.getNearbyEntities(3, 3, 3)) {
-            if(entity instanceof Boat) return true;
+            if (entity instanceof Boat) return true;
         }
         return false;
     }

@@ -7,7 +7,7 @@ import com.gladurbad.medusa.playerdata.PlayerData;
 import com.gladurbad.medusa.util.CollisionUtil;
 import io.github.retrooper.packetevents.packet.PacketType;
 
-@CheckInfo(name = "Motion", type = "E", dev = true)
+@CheckInfo(name = "Motion", type = "E")
 public class MotionE extends Check {
 
     private final double STEP_HEIGHT = 0.6F;

@@ -10,7 +10,7 @@ import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffectType;
 
-@CheckInfo(name = "Motion", type = "B", dev = true)
+@CheckInfo(name = "Motion", type = "B")
 public class MotionB extends Check {
 
     private int slimeTicks;
@@ -35,7 +35,7 @@ public class MotionB extends Check {
                     data.getLastLocation().getY() % 1 == 0 &&
                     !CollisionUtil.blockNearHead(data.getLocation()) && ++slimeTicks > 20 && data.getTicksSinceVelocity() > 10;
 
-            if(PlayerUtil.getPotionLevel(player, PotionEffectType.JUMP) > 0) {
+            if (PlayerUtil.getPotionLevel(player, PotionEffectType.JUMP) > 0) {
                 expectedJumpMotion += PlayerUtil.getPotionLevel(player, PotionEffectType.JUMP) * 0.1F;
             }
 

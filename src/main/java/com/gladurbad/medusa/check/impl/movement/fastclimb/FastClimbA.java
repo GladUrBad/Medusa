@@ -15,8 +15,8 @@ public class FastClimbA extends Check {
 
     @Override
     public void handle(Packet packet) {
-        if(packet.isReceiving() && isFlyingPacket(packet)) {
-            if(CollisionUtil.isCollidingWithClimbable(data.getPlayer()) && data.getDeltaY() > 0.1177) {
+        if (packet.isReceiving() && isFlyingPacket(packet)) {
+            if (CollisionUtil.isCollidingWithClimbable(data.getPlayer()) && data.getDeltaY() > 0.1177) {
                 increaseBuffer();
                 if (buffer > 5) {
                     fail();

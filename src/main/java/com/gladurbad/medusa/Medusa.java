@@ -2,6 +2,7 @@ package com.gladurbad.medusa;
 
 import com.gladurbad.medusa.command.MedusaCommands;
 import com.gladurbad.medusa.config.Config;
+import com.gladurbad.medusa.manager.AlertManager;
 import com.gladurbad.medusa.network.PacketProcessor;
 import com.gladurbad.medusa.listener.RegistrationListener;
 import com.gladurbad.medusa.manager.CheckManager;
@@ -48,14 +49,21 @@ public class Medusa extends JavaPlugin {
         //Register online players into the system.
         for(final Player player : Bukkit.getOnlinePlayers()) {
             UUID playerUUID = player.getUniqueId();
-            if(!PlayerDataManager.getInstance().containsPlayer(playerUUID)) {
-                PlayerDataManager.getInstance().getPlayerData().put(playerUUID, new PlayerData(playerUUID, player));
+            if (!PlayerDataManager.getInstance().containsPlayer(playerUUID)) {
+                final PlayerData playerData = new PlayerData(playerUUID, player);
+
+                if(Config.TESTMODE) {
+                    playerData.setAlerts(true);
+                }
+
+                PlayerDataManager.getInstance().getPlayerData().put(playerUUID, playerData);
             }
         }
 
         Bukkit.getLogger().info("Medusa by GladUrBad has been enabled.");
         instance.setEnabled(true);
 
+        AlertManager.setup();
     }
 
     @Override

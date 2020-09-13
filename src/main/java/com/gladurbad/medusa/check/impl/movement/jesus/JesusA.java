@@ -17,16 +17,16 @@ public class JesusA extends Check {
 
     @Override
     public void handle(Packet packet) {
-        if(packet.isReceiving() && isFlyingPacket(packet)) {
+        if (packet.isReceiving() && isFlyingPacket(packet)) {
             final Player player = data.getPlayer();
 
             final boolean invalid = CollisionUtil.isOnChosenBlock(player, -0.1, Material.WATER, Material.STATIONARY_WATER) &&
                     CollisionUtil.isOnChosenBlock(player, 0.1, Material.AIR) &&
                     !CollisionUtil.isOnSolid(player);
 
-            if(invalid) {
+            if (invalid) {
                 increaseBuffer();
-                if(buffer > 10) {
+                if (buffer > 10) {
                     fail();
                 }
             } else {
