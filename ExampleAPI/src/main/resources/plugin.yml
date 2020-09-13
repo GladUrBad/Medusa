@@ -1,0 +1,5 @@
+name: Medample
+main: dev.funkemunky.medample.ExamplePlugin
+version: "?"
+softdepend: [Medusa]
+authors: [funkemunky, GladUrBad]
