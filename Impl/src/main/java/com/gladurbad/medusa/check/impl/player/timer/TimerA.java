@@ -23,7 +23,7 @@ public class TimerA extends Check {
 
     @Override
     public void handle(Packet packet) {
-        if (packet.isReceiving() && isFlyingPacket(packet)) {
+        if (packet.isFlying()) {
             final long time = now();
             final long delay = time - lastTime;
 

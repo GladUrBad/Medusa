@@ -9,7 +9,7 @@ public class ExampleListener implements Listener {
 
     @EventHandler
     public void onEvent(MedusaAlertEvent event) {
-        Bukkit.broadcastMessage("I work plz die");
+        Bukkit.broadcastMessage(event.getCheck().getCheckInfo().name() + " " + event.getCheck().getCheckInfo().type() + " " + event.getCheck().getVl());
     }
 
 }

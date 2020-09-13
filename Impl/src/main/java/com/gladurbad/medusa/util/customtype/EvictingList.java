@@ -4,7 +4,7 @@ import java.util.Collection;
 import java.util.LinkedList;
 
 public class EvictingList<T> extends LinkedList<T> {
-    private int maxSize;
+    private final int maxSize;
 
     public EvictingList(int maxSize) {
         this.maxSize = maxSize;

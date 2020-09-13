@@ -6,7 +6,7 @@ import com.gladurbad.medusa.network.Packet;
 import com.gladurbad.medusa.playerdata.PlayerData;
 import com.gladurbad.medusa.util.CollisionUtil;
 
-@CheckInfo(name = "Flight", type = "A", dev = false)
+@CheckInfo(name = "Flight", type = "A")
 public class FlightA extends Check {
 
     private int vehicleTicks;
@@ -18,13 +18,17 @@ public class FlightA extends Check {
 
     @Override
     public void handle(Packet packet) {
-        if (packet.isReceiving() && isFlyingPacket(packet)) {
+        if (packet.isFlying()) {
             final double prediction = (data.getLastDeltaY() * 0.9800000190734863) - 0.08;
             final double difference = Math.abs(data.getDeltaY() - prediction);
 
             final boolean inVehicle = data.getPlayer().isInsideVehicle();
-            if (inVehicle) vehicleTicks = 0;
-            else vehicleTicks++;
+
+            if (inVehicle) {
+                vehicleTicks = 0;
+            } else {
+                vehicleTicks++;
+            }
 
             final boolean invalid = difference > LIMIT &&
                     !CollisionUtil.isOnGround(data.getPlayer()) &&

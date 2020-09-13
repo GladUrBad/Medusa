@@ -17,34 +17,34 @@ public class BadPacketsB extends Check {
 
     @Override
     public void handle(Packet packet) {
-        if (packet.isReceiving()) {
-            if (packet.getPacketId() == PacketType.Client.SETTINGS) {
-                ticksSinceSetting = 0;
-            } else if (isFlyingPacket(packet)) {
-                ++ticksSinceSetting;
-                ++ticksSinceReset;
+        if (packet.isReceiving() && packet.getPacketId() == PacketType.Client.SETTINGS) {
+            ticksSinceSetting = 0;
+        } else if (packet.isFlying()) {
+            ++ticksSinceSetting;
+            ++ticksSinceReset;
 
-                if (ticksSinceSetting < 2) {
+            if (ticksSinceSetting < 2) {
+                increaseBuffer();
+                if (buffer > 2) fail();
+            } else {
+                decreaseBuffer();
+            }
+
+            if (ticksSinceSetting < lastTicksSinceSetting) {
+                if (lastTicksSinceReset == ticksSinceReset) {
                     increaseBuffer();
-                    if (buffer > 2) fail();
+                    if (buffer > 1) {
+                        fail();
+                    }
                 } else {
                     decreaseBuffer();
                 }
 
-                if (ticksSinceSetting < lastTicksSinceSetting) {
-                    if (lastTicksSinceReset == ticksSinceReset) {
-                        increaseBuffer();
-                        if (buffer > 1) fail();
-                    } else {
-                        decreaseBuffer();
-                    }
-
-                    lastTicksSinceReset = ticksSinceReset;
-                    ticksSinceReset = 0;
-                }
-
-                lastTicksSinceSetting = ticksSinceSetting;
+                lastTicksSinceReset = ticksSinceReset;
+                ticksSinceReset = 0;
             }
-        }
+
+            lastTicksSinceSetting = ticksSinceSetting;
+            }
     }
 }

@@ -22,8 +22,7 @@ public class VelocityA extends Check {
 
     @Override
     public void handle(Packet packet) {
-        if (packet.isReceiving() && isFlyingPacket(packet)) {
-
+        if (packet.isFlying()) {
             if (++velocityTicks < 6) {
                 samples.add(data.getDeltaY());
             } else {
@@ -33,7 +32,7 @@ public class VelocityA extends Check {
 
                     if (max < min) {
                         increaseBuffer();
-                        if (buffer > 2) {
+                        if (buffer > 1) {
                             fail();
                         }
                     } else {
@@ -42,7 +41,6 @@ public class VelocityA extends Check {
                     samples.clear();
                 }
             }
-
         } else if (packet.isSending() && packet.getPacketId() == PacketType.Server.ENTITY_VELOCITY) {
             final WrappedPacketOutEntityVelocity velocity = new WrappedPacketOutEntityVelocity(packet.getRawPacket());
 

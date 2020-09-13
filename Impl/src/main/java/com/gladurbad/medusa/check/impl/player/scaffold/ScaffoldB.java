@@ -18,7 +18,7 @@ public class ScaffoldB extends Check {
     @Override
     public void handle(Packet packet) {
         if (packet.isReceiving()) {
-            if (isFlyingPacket(packet)) {
+            if (packet.isFlying()) {
                 if (placedBlock) {
                     final double accel = data.getDeltaXZ() - data.getLastDeltaXZ();
 

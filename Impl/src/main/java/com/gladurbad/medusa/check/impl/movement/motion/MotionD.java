@@ -6,7 +6,7 @@ import com.gladurbad.medusa.network.Packet;
 import com.gladurbad.medusa.playerdata.PlayerData;
 import com.gladurbad.medusa.util.MathUtil;
 
-@CheckInfo(name = "Motion", type = "D", dev = false)
+@CheckInfo(name = "Motion", type = "D")
 public class MotionD extends Check {
 
     public MotionD(PlayerData data) {
@@ -15,13 +15,14 @@ public class MotionD extends Check {
 
     @Override
     public void handle(Packet packet) {
-        if (packet.isReceiving() && this.isFlyingPacket(packet)) {
-            final double deltaY = data.getDeltaY();
-            final double lastDeltaY = data.getLastDeltaY();
-
-            if (MathUtil.isScientificNotation(deltaY) && MathUtil.isScientificNotation(lastDeltaY)) {
-                fail();
+        if (packet.isFlying()) {
+            if (MathUtil.isScientificNotation(Math.abs(data.getDeltaY()))) {
+                increaseBuffer();
+                if (buffer > 3) {
+                    fail();
+                }
             } else {
+                decreaseBuffer();
                 setLastLegitLocation(data.getPlayer().getLocation());
             }
         }

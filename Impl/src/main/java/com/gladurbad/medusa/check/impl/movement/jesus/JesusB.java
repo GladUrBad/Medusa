@@ -17,7 +17,7 @@ public class JesusB extends Check {
 
 	@Override
 	public void handle(Packet packet) {
-		if (packet.isReceiving() && isFlyingPacket(packet)) {
+		if (packet.isFlying()) {
 			final Player player = data.getPlayer();
 
 			final boolean invalid = CollisionUtil.isOnChosenBlock(player, 0.1, Material.WATER, Material.STATIONARY_WATER) &&

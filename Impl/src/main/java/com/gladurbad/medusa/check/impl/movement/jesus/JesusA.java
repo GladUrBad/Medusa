@@ -8,7 +8,7 @@ import com.gladurbad.medusa.util.CollisionUtil;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 
-@CheckInfo(name = "Jesus", type = "A", dev = false)
+@CheckInfo(name = "Jesus", type = "A")
 public class JesusA extends Check {
 
     public JesusA(PlayerData data) {
@@ -17,7 +17,7 @@ public class JesusA extends Check {
 
     @Override
     public void handle(Packet packet) {
-        if (packet.isReceiving() && isFlyingPacket(packet)) {
+        if (packet.isFlying()) {
             final Player player = data.getPlayer();
 
             final boolean invalid = CollisionUtil.isOnChosenBlock(player, -0.1, Material.WATER, Material.STATIONARY_WATER) &&

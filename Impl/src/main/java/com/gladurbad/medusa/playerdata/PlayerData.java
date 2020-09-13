@@ -1,7 +1,6 @@
 package com.gladurbad.medusa.playerdata;
 
 import com.gladurbad.medusa.check.Check;
-import com.gladurbad.medusa.config.Config;
 import com.gladurbad.medusa.manager.CheckManager;
 import com.gladurbad.medusa.network.Packet;
 
@@ -164,7 +163,6 @@ public class PlayerData implements PacketListener {
 
         this.lastLocation = lastLocation;
         this.location = location;
-        //Bukkit.broadcastMessage(this.lastLocation.getX() + "");
 
         double lastDeltaX = deltaX;
         double deltaX = location.getX() - lastLocation.getX();

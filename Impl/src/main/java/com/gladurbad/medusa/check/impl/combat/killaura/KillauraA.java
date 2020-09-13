@@ -17,13 +17,11 @@ public class KillauraA extends Check {
 
     @Override
     public void handle(Packet packet) {
-        if (packet.isReceiving()) {
-            if (isFlyingPacket(packet)) {
-                flyingTime = now();
-            } else if (packet.getPacketId() == PacketType.Client.USE_ENTITY) {
-                final long delay = now() - flyingTime;
-                if (delay <= 0) fail();
-            }
+        if (packet.isFlying()) {
+            flyingTime = now();
+        } else if (packet.isUseEntity()) {
+            final long delay = now() - flyingTime;
+            if (delay <= 0) fail();
         }
     }
 }

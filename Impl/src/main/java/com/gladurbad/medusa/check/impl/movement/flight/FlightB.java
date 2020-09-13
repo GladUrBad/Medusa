@@ -18,17 +18,16 @@ public class FlightB extends Check {
 
     @Override
     public void handle(Packet packet) {
-        if (packet.isReceiving() && this.isFlyingPacket(packet)) {
+        if (packet.isFlying()) {
             final double deltaY = data.getDeltaY();
             final double lastDeltaY = data.getLastDeltaY();
 
-            final double accel = deltaY - lastDeltaY;
-            final double lastAccel = lastDeltaY - lastLastDeltaY;
+            final double acceleration = deltaY - lastDeltaY;
+            final double lastAcceleration = lastDeltaY - lastLastDeltaY;
 
             if (!CollisionUtil.isOnGround(data.getPlayer()) && !data.getPlayer().isFlying()) {
-                airTicks = Math.min(200, airTicks + 1);
-                if (airTicks > 10) {
-                    if (accel > 0.0 && lastAccel <= 0.0 && data.getTicksSinceVelocity() > 10) {
+                if (++airTicks > 10) {
+                    if (acceleration > 0.0 && lastAcceleration <= 0.0 && data.getTicksSinceVelocity() > 10) {
                         fail();
                     }
                 }

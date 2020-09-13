@@ -17,17 +17,15 @@ public class KillauraE extends Check {
 
     @Override
     public void handle(Packet packet) {
-        if (packet.isReceiving()) {
-            if (packet.getPacketId() == PacketType.Client.USE_ENTITY) {
-                final WrappedPacketInUseEntity useEntity = new WrappedPacketInUseEntity(packet.getRawPacket());
-                if (useEntity.getAction() == WrappedPacketInUseEntity.EntityUseAction.ATTACK) {
-                    if (++hits > 2) {
-                        fail();
-                    }
+        if (packet.isUseEntity()) {
+            final WrappedPacketInUseEntity useEntity = new WrappedPacketInUseEntity(packet.getRawPacket());
+            if (useEntity.getAction() == WrappedPacketInUseEntity.EntityUseAction.ATTACK) {
+                if (++hits > 2) {
+                    fail();
                 }
-            } else if (packet.getPacketId() == PacketType.Client.ARM_ANIMATION) {
-                hits = 0;
             }
+        } else if (packet.isSwing()) {
+            hits = 0;
         }
     }
 }

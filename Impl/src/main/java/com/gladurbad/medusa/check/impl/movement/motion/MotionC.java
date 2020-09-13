@@ -15,11 +15,16 @@ public class MotionC extends Check {
 
     @Override
     public void handle(Packet packet) {
-        if (packet.isReceiving() && isFlyingPacket(packet)) {
-            final double deltaY = Math.abs(data.getDeltaY());
-            final double lastDeltaY = Math.abs(data.getLastDeltaY());
+        if (packet.isFlying()) {
+            final double acceleration = Math.abs(data.getDeltaY() - data.getLastDeltaY());
 
-            final boolean invalid = deltaY == lastDeltaY && deltaY != 0.0D && deltaY != -3.92 && !CollisionUtil.isCollidingWithClimbable(data.getPlayer());
+            final boolean invalid =
+                    acceleration == 0
+                    && data.getDeltaY() != 0.0D
+                    && data.getDeltaY() != 3.92
+                    && !data.getPlayer().isFlying()
+                    && !CollisionUtil.isCollidingWithClimbable(data.getPlayer())
+                    && !CollisionUtil.isInLiquid(data.getPlayer());
 
             if (invalid) {
                 increaseBuffer();

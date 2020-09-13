@@ -9,4 +9,6 @@ public interface MedusaCheck {
     boolean isEnabled();
 
     int getMaxVl();
+
+    int getVl();
 }

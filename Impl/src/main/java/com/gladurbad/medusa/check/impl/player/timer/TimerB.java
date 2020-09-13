@@ -18,7 +18,7 @@ public class TimerB extends Check {
 
     @Override
     public void handle(Packet packet) {
-        if (packet.isReceiving() && isFlyingPacket(packet)) {
+        if (packet.isFlying()) {
             final long flyingTime = now();
             final long flyingTimeDelta = flyingTime - lastFlyingTime;
 
@@ -40,6 +40,7 @@ public class TimerB extends Check {
                 packets = 0;
                 total = 0;
             }
+
             lastFlyingTime = flyingTime;
         } else if (packet.isSending() && packet.getPacketId() == PacketType.Server.POSITION) {
             packets--;

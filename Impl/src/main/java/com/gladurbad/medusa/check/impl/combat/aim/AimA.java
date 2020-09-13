@@ -15,7 +15,7 @@ public class AimA extends Check {
 
     @Override
     public void handle(Packet packet) {
-        if (packet.isReceiving() && isRotationPacket(packet)) {
+        if (packet.isRotation()) {
             if (MathUtil.isScientificNotation(data.getDeltaPitch()) && MathUtil.isScientificNotation(data.getLastDeltaPitch()) && data.getDeltaYaw() > .5) {
                 increaseBuffer();
                 if (buffer > 5) {

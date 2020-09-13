@@ -20,12 +20,14 @@ public class MotionB extends Check {
 
     @Override
     public void handle(Packet packet) {
-        if (packet.isReceiving() && isFlyingPacket(packet)) {
+        if (packet.isFlying()) {
             final Player player = data.getPlayer();
             float expectedJumpMotion = 0.42F;
 
             final boolean slime = CollisionUtil.isOnChosenBlock(data.getPlayer(), -0.5001, Material.ICE, Material.PACKED_ICE, Material.SLIME_BLOCK);
-            if (slime) slimeTicks = 0;
+            if (slime) {
+                slimeTicks = 0;
+            }
 
             final boolean jumped = CollisionUtil.isOnGround(data.getLastLocation(), -0.00001) &&
                     !CollisionUtil.isOnGround(data.getLocation(), -0.00001) &&
@@ -39,7 +41,7 @@ public class MotionB extends Check {
                 expectedJumpMotion += PlayerUtil.getPotionLevel(player, PotionEffectType.JUMP) * 0.1F;
             }
 
-            if (data.getDeltaY() < expectedJumpMotion && valid ) {
+            if (data.getDeltaY() < expectedJumpMotion && valid) {
                 fail();
             } else {
                 setLastLegitLocation(data.getPlayer().getLocation());

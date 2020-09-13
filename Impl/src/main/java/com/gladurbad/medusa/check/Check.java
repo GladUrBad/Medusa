@@ -24,7 +24,7 @@ public abstract class Check implements MedusaCheck {
     //Data for check.
     protected final PlayerData data;
 
-    //Check data from com.gladurbad.medusa.config.
+    //Check data from config.
     private final boolean enabled;
     private final int maxVl;
     private final boolean setback;
@@ -50,12 +50,13 @@ public abstract class Check implements MedusaCheck {
     }
 
     protected void fail() {
+        ++vl;
 
         MedusaAlertEvent event = new MedusaAlertEvent(this, setback);
         Bukkit.getPluginManager().callEvent(event);
 
         if(!event.isCancelled()) {
-            if (++vl >= Config.VL_TO_ALERT) {
+            if (vl >= Config.VL_TO_ALERT) {
                 AlertManager.verbose(data, this);
                 if (event.isSetback()) {
                     final Location setBackLocation = lastLegitLocation == null ? data.getLastLocation() : lastLegitLocation;
@@ -68,7 +69,7 @@ public abstract class Check implements MedusaCheck {
     }
 
     protected void increaseBuffer() {
-        buffer = Math.min(100, buffer + 1);
+        buffer = Math.min(10000, buffer + 1);
     }
 
     protected void decreaseBuffer() {
@@ -87,23 +88,15 @@ public abstract class Check implements MedusaCheck {
         buffer *= multiplier;
     }
 
-    protected boolean isFlyingPacket(Packet packet) {
-        return PacketType.Client.Util.isInstanceOfFlying(packet.getPacketId());
-    }
-
-    protected boolean isRotationPacket(Packet packet) {
-        return packet.getPacketId() == PacketType.Client.LOOK || packet.getPacketId() == PacketType.Client.POSITION_LOOK;
-    }
-
     protected long now() {
         return System.currentTimeMillis();
     }
 
 
-    protected void debug(String info) { Bukkit.broadcastMessage(ChatColor.AQUA + "Debug: " + ChatColor.RESET + info); }
-    protected void debug(double info) { Bukkit.broadcastMessage(ChatColor.AQUA + "Debug: " + ChatColor.RESET + info); }
-    protected void debug(long info) { Bukkit.broadcastMessage(ChatColor.AQUA + "Debug: " + ChatColor.RESET + info); }
-    protected void debug(boolean info) { Bukkit.broadcastMessage(ChatColor.AQUA + "Debug: " + ChatColor.RESET + info); }
-    protected void debugPerPlayer(String info) { data.getPlayer().sendMessage(ChatColor.AQUA + "Debug: " + ChatColor.RESET + info);}
+    protected void debug(Object info) {
+        Bukkit.broadcastMessage(ChatColor.AQUA + "Debug: " + ChatColor.RESET + info);
+    }
+
+    protected void debugPerPlayer(Object info) { data.getPlayer().sendMessage(ChatColor.AQUA + "Debug: " + ChatColor.RESET + info);}
 
 }

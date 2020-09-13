@@ -7,7 +7,7 @@ import com.gladurbad.medusa.playerdata.PlayerData;
 import io.github.retrooper.packetevents.packet.PacketType;
 import io.github.retrooper.packetevents.packetwrappers.in.useentity.WrappedPacketInUseEntity;
 
-@CheckInfo(name = "Killaura", type = "C", dev = false)
+@CheckInfo(name = "Killaura", type = "C")
 public class KillauraC extends Check {
 
     private int entitiesHit;
@@ -19,21 +19,19 @@ public class KillauraC extends Check {
 
     @Override
     public void handle(Packet packet) {
-        if (packet.isReceiving()) {
-            if (this.isFlyingPacket(packet)) {
-                entitiesHit = 0;
-            } else if (packet.getPacketId() == PacketType.Client.USE_ENTITY) {
-                final WrappedPacketInUseEntity wrappedPacketInUseEntity = new WrappedPacketInUseEntity(packet.getRawPacket());
-                final int entityId = wrappedPacketInUseEntity.getEntityId();
+        if (packet.isFlying()) {
+            entitiesHit = 0;
+        } else if (packet.isUseEntity()) {
+            final WrappedPacketInUseEntity wrappedPacketInUseEntity = new WrappedPacketInUseEntity(packet.getRawPacket());
+            final int entityId = wrappedPacketInUseEntity.getEntityId();
 
-                if (entityId != lastEntityId) {
-                    if (++entitiesHit > 1) {
-                        fail();
-                    }
+            if (entityId != lastEntityId) {
+                if (++entitiesHit > 1) {
+                    fail();
                 }
-
-                lastEntityId = entityId;
             }
+
+            lastEntityId = entityId;
         }
     }
 }

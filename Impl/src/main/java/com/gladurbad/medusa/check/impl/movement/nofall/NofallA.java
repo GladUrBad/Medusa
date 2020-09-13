@@ -7,7 +7,6 @@ import com.gladurbad.medusa.playerdata.PlayerData;
 import com.gladurbad.medusa.util.CollisionUtil;
 import io.github.retrooper.packetevents.packetwrappers.in.flying.WrappedPacketInFlying;
 
-
 @CheckInfo(name = "Nofall", type = "A")
 public class NofallA extends Check {
 
@@ -18,17 +17,21 @@ public class NofallA extends Check {
 
     @Override
     public void handle(Packet packet) {
-        if (packet.isReceiving() && this.isFlyingPacket(packet)) {
-            final WrappedPacketInFlying wrappedPacketInFlying = new WrappedPacketInFlying(packet.getRawPacket());
+        if (packet.isFlying()) {
+            final WrappedPacketInFlying flying = new WrappedPacketInFlying(packet.getRawPacket());
 
-            if (wrappedPacketInFlying.isPosition()) {
-                final boolean serverOnGround = wrappedPacketInFlying.isOnGround();
-                final boolean clientOnGround = data.getLocation().getY() % (1D / 64) == 0.0;
+            if (flying.isPosition()) {
+                final boolean serverOnGround = flying.isOnGround();
+                final boolean clientOnGround = data.getLocation().getY() % 0.015625 == 0.0;
 
-                final boolean invalid = CollisionUtil.isInLiquid(data.getPlayer()) && CollisionUtil.isCollidingWithClimbable(data.getPlayer());
+                final boolean invalid = CollisionUtil.isInLiquid(data.getPlayer())
+                        && CollisionUtil.isCollidingWithClimbable(data.getPlayer());
 
-                if (data.getPlayer().isInsideVehicle()) ticksSinceInVehicle = 0;
-                else ++ticksSinceInVehicle;
+                if (data.getPlayer().isInsideVehicle()) {
+                    ticksSinceInVehicle = 0;
+                } else {
+                    ++ticksSinceInVehicle;
+                }
 
                 if (!invalid && serverOnGround != clientOnGround && ticksSinceInVehicle > 10) {
                     increaseBuffer();

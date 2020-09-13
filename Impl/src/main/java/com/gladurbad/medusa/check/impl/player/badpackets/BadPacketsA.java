@@ -6,7 +6,7 @@ import com.gladurbad.medusa.network.Packet;
 import com.gladurbad.medusa.playerdata.PlayerData;
 import io.github.retrooper.packetevents.packetwrappers.in.flying.WrappedPacketInFlying;
 
-@CheckInfo(name = "BadPackets", type = "A", dev = false)
+@CheckInfo(name = "BadPackets", type = "A")
 public class BadPacketsA extends Check {
 
     public BadPacketsA(PlayerData data) {
@@ -15,9 +15,11 @@ public class BadPacketsA extends Check {
 
     @Override
     public void handle(Packet packet) {
-        if (packet.isReceiving() && this.isFlyingPacket(packet)) {
-            WrappedPacketInFlying wrappedPacketInFlying = new WrappedPacketInFlying(packet.getRawPacket());
-            if (Math.abs(wrappedPacketInFlying.getPitch()) > 90.0F) fail();
+        if (packet.isFlying()) {
+            WrappedPacketInFlying inFlying = new WrappedPacketInFlying(packet.getRawPacket());
+            if (Math.abs(inFlying.getPitch()) > 90.0F) {
+                fail();
+            }
         }
     }
 }

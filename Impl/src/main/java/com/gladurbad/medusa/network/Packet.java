@@ -1,5 +1,6 @@
 package com.gladurbad.medusa.network;
 
+import io.github.retrooper.packetevents.packet.PacketType;
 import lombok.Getter;
 
 @Getter
@@ -15,9 +16,28 @@ public class Packet {
         this.packetId = packetId;
     }
 
+    //Direction checking.
     public boolean isReceiving() { return direction == Direction.RECEIVE; }
 
     public boolean isSending() { return direction == Direction.SEND; }
+
+    //Convenient methods to use to check packets I use a lot.
+    public boolean isFlying() {
+        return isReceiving() && PacketType.Client.Util.isInstanceOfFlying(packetId);
+    }
+
+    public boolean isUseEntity() {
+        return isReceiving() && packetId == PacketType.Client.USE_ENTITY;
+    }
+
+    public boolean isRotation() {
+        return isReceiving() && (packetId == PacketType.Client.LOOK || packetId == PacketType.Client.POSITION_LOOK);
+    }
+
+    public boolean isSwing() {
+        return isReceiving() && packetId == PacketType.Client.ARM_ANIMATION;
+    }
+
 
     public enum Direction { SEND, RECEIVE }
 }

@@ -18,7 +18,7 @@ public class ScaffoldA extends Check {
     @Override
     public void handle(Packet packet) {
         if (packet.isReceiving()) {
-            if (isFlyingPacket(packet)) {
+            if (packet.isFlying()) {
                 flyingTime = now();
             } else if (packet.getPacketId() == PacketType.Client.BLOCK_PLACE) {
                 if (!data.getPlayer().getItemInHand().getType().isBlock()) return;

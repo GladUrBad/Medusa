@@ -33,7 +33,7 @@ public class InventoryA extends Check {
 
             lastClickTicks = clickTicks;
             clickTicks = 0;
-        } else if (packet.isReceiving() && isFlyingPacket(packet)) {
+        } else if (packet.isReceiving() && packet.isFlying()) {
             ++clickTicks;
         }
     }

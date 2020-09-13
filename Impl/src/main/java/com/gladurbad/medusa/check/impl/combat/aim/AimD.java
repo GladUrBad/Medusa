@@ -14,7 +14,7 @@ public class AimD extends Check {
 
     @Override
     public void handle(Packet packet) {
-        if (packet.isReceiving() && isRotationPacket(packet)) {
+        if (packet.isRotation()) {
             if (data.getDeltaYaw() != 0 && data.getLastDeltaYaw() != 0) {
                 if (data.getDeltaYaw() > 3 && data.getLastDeltaYaw() > 3 && data.getDeltaPitch() == 0) {
                     increaseBuffer();

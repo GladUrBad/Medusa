@@ -7,10 +7,10 @@ import com.gladurbad.medusa.playerdata.PlayerData;
 import com.gladurbad.medusa.util.CollisionUtil;
 import org.bukkit.entity.Player;
 
-@CheckInfo(name = "Speed", type = "A", dev = false)
+@CheckInfo(name = "Speed", type = "A")
 public class SpeedA extends Check {
 
-    private final static double LIMIT = 0.027;
+    private static final double LIMIT = 0.027;
 
     public SpeedA(PlayerData data) {
         super(data);
@@ -18,7 +18,7 @@ public class SpeedA extends Check {
 
     @Override
     public void handle(Packet packet) {
-        if (packet.isReceiving() && isFlyingPacket(packet)) {
+        if (packet.isFlying()) {
             final Player player = data.getPlayer();
 
             final double deltaXZ = data.getDeltaXZ();

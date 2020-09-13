@@ -15,7 +15,7 @@ public class AutoClickerB extends Check {
 
     private int ticks;
     private ArrayDeque<Double> delays = new ArrayDeque<>();
-    private EvictingList<Double> kurtosi = new EvictingList<>(10);
+    private EvictingList<Double> kurtosises = new EvictingList<>(10);
 
     public AutoClickerB(PlayerData data) {
         super(data);
@@ -23,30 +23,28 @@ public class AutoClickerB extends Check {
 
     @Override
     public void handle(Packet packet) {
-        if (packet.isReceiving()) {
-            if (packet.getPacketId() == PacketType.Client.ARM_ANIMATION && !data.isDigging()) {
-                if (ticks < 10) {
-                    delays.add((double) ticks);
+        if (packet.isSwing() && !data.isDigging()) {
+            if (ticks < 10) {
+                delays.add((double) ticks);
 
-                    if (delays.size() >= 20) {
-                        final double kurtosis = MathUtil.getKurtosis(delays);
-                        kurtosi.add(kurtosis);
-                        delays.clear();
-                    }
+                if (delays.size() >= 20) {
+                    final double kurtosis = MathUtil.getKurtosis(delays);
+                    kurtosises.add(kurtosis);
+                    delays.clear();
+                }
 
-                    if (kurtosi.size() == 10) {
-                        final int duplicates = (int) (kurtosi.size() - kurtosi.parallelStream().mapToDouble(value -> value).distinct().count());
+                if (kurtosises.size() == 10) {
+                    final int duplicates = (int) (kurtosises.size() - kurtosises.parallelStream().mapToDouble(value -> value).distinct().count());
 
-                        if (duplicates > 1) {
-                            kurtosi.clear();
-                            fail();
-                        }
+                    if (duplicates > 1) {
+                        kurtosises.clear();
+                        fail();
                     }
                 }
-                ticks = 0;
-            } else if (isFlyingPacket(packet)) {
-                ++ticks;
             }
+            ticks = 0;
+        } else if (packet.isFlying()) {
+            ++ticks;
         }
     }
 }

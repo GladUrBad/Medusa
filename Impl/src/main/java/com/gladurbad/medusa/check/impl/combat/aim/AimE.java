@@ -21,7 +21,7 @@ public class AimE extends Check {
     public void handle(Packet packet) {
         //Thanks to Elevated for making this check. https://github.com/ElevatedDev/Frequency/blob/master/src/main/java/xyz/elevated/frequency/check/impl/aimassist/AimAssistE.java
         //He said he doesn't care if people use things in Frequency, as long as credit is given, so don't get on my ass about "un-rightfully skidding" this check.
-        if (packet.isReceiving() && (packet.getPacketId() == PacketType.Client.LOOK || packet.getPacketId() == PacketType.Client.POSITION_LOOK)) {
+        if (packet.isRotation()) {
             if (++hitTicks < 3) {
                 final float deltaYaw = data.getDeltaYaw();
                 final float deltaPitch = data.getDeltaPitch();

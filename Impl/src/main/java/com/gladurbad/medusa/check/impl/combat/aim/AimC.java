@@ -18,9 +18,8 @@ public class AimC extends Check {
 
     @Override
     public void handle(Packet packet) {
-        if (packet.isReceiving() && isRotationPacket(packet)) {
+        if (packet.isRotation()) {
             final boolean goodToCheck = data.getDeltaYaw() != 0 && data.getLastDeltaYaw() != 0 && ++teleportTicks > 0;
-
             final float yawAcceleration = Math.abs(data.getDeltaYaw() - data.getLastDeltaYaw());
 
             if (goodToCheck) {

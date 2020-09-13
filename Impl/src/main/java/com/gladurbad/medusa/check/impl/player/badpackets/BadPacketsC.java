@@ -11,7 +11,7 @@ import io.github.retrooper.packetevents.packetwrappers.in.helditemslot.WrappedPa
 @CheckInfo(name = "BadPackets", type = "C")
 public class BadPacketsC extends Check {
 
-    private int lastHeldItemSlot;
+    private int lastSlot;
 
     public BadPacketsC(PlayerData data) {
         super(data);
@@ -19,16 +19,14 @@ public class BadPacketsC extends Check {
 
     @Override
     public void handle(Packet packet) {
-        if (packet.isReceiving()) {
-            if (packet.getPacketId() == PacketType.Client.HELD_ITEM_SLOT) {
-                final WrappedPacketInHeldItemSlot wrappedPacketInHeldItemSlot = new WrappedPacketInHeldItemSlot(packet.getRawPacket());
+        if (packet.isReceiving() && packet.getPacketId() == PacketType.Client.HELD_ITEM_SLOT) {
+            final WrappedPacketInHeldItemSlot heldItemSlot = new WrappedPacketInHeldItemSlot(packet.getRawPacket());
+            final int slot = heldItemSlot.getItemInHandIndex();
 
-                final int heldItemSlot = wrappedPacketInHeldItemSlot.getItemInHandIndex();
-
-                if (heldItemSlot == lastHeldItemSlot) fail();
-
-                lastHeldItemSlot = heldItemSlot;
+            if (slot == lastSlot) {
+                fail();
             }
+            lastSlot = slot;
         }
     }
 }

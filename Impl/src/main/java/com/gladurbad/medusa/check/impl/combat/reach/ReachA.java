@@ -9,7 +9,6 @@ import com.gladurbad.medusa.util.customtype.EvictingList;
 
 import com.gladurbad.medusa.util.customtype.Pair;
 import io.github.retrooper.packetevents.PacketEvents;
-import io.github.retrooper.packetevents.packet.PacketType;
 import io.github.retrooper.packetevents.packetwrappers.in.useentity.WrappedPacketInUseEntity;
 
 import org.bukkit.Location;
@@ -29,16 +28,20 @@ public class ReachA extends Check {
 
     public ReachA(PlayerData data) {
         super(data);
-        if (REACH_BUFFER == -1) REACH_BUFFER = (5 - reachSensitivity.getInt()) * 2;
+        if (REACH_BUFFER == -1) {
+            REACH_BUFFER = (5 - reachSensitivity.getInt()) * 2;
+        }
     }
 
     @Override
     public void handle(Packet packet) {
-        if (packet.getPacketId() == PacketType.Client.USE_ENTITY) {
-            final WrappedPacketInUseEntity wrappedPacketInUseEntity = new WrappedPacketInUseEntity(packet.getRawPacket());
-            attacked = wrappedPacketInUseEntity.getEntity();
+        if (packet.isUseEntity()) {
+            final WrappedPacketInUseEntity useEntity = new WrappedPacketInUseEntity(packet.getRawPacket());
+            attacked = useEntity.getEntity();
+
             if (historyLocations.size() == 20) {
                 final long ping = PacketEvents.getAPI().getPlayerUtils().getPing(data.getPlayer());
+
                 if (ping < reachMaxLatency.getLong()) {
                     final double distance = this.historyLocations.stream()
                       .filter(pair -> Math.abs(now() - pair.getX()) < Math.max(ping, 150L))
@@ -58,10 +61,9 @@ public class ReachA extends Check {
                 }
             }
             lastAttacked = attacked;
-
-        } else if (isFlyingPacket(packet)) {
+        } else if (packet.isFlying()) {
             if (attacked != null && lastAttacked != null) {
-                historyLocations.add(new com.gladurbad.medusa.util.customtype.Pair<>(now(), attacked.getLocation()));
+                historyLocations.add(new Pair<>(now(), attacked.getLocation()));
             }
         }
     }
