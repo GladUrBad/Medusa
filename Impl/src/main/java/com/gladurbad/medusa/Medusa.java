@@ -10,7 +10,6 @@ import com.gladurbad.medusa.manager.PlayerDataManager;
 import com.gladurbad.medusa.playerdata.PlayerData;
 import com.gladurbad.medusa.util.ChatUtil;
 import io.github.retrooper.packetevents.PacketEvents;
-import io.github.retrooper.packetevents.event.PacketEvent;
 import lombok.Getter;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -42,11 +41,10 @@ public class Medusa extends JavaPlugin {
         getCommand("medusa").setExecutor(medusaCommands);
 
         //Register listeners.
-        PacketEvents.getSettings().setUninjectAsync(true);
-        PacketEvents.getSettings().setInjectAsync(true);
-        PacketEvents.init(this);
+        PacketEvents.start(this);
+        PacketEvents.getAPI().getEventManager().registerListener(new PacketProcessor());
+        PacketEvents.getAPI().getEventManager().registerListener(new RegistrationListener());
 
-        PacketEvents.getAPI().getEventManager().registerListeners(new PacketProcessor(), new RegistrationListener());
 
         //Register online players into the system.
         for(final Player player : Bukkit.getOnlinePlayers()) {

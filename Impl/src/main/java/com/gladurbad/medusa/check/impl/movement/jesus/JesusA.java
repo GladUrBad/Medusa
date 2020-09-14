@@ -22,8 +22,7 @@ public class JesusA extends Check {
 
             final boolean invalid = CollisionUtil.isOnChosenBlock(player, -0.1, Material.WATER, Material.STATIONARY_WATER) &&
                     CollisionUtil.isOnChosenBlock(player, 0.1, Material.AIR) &&
-                    !CollisionUtil.isOnSolid(player) &&
-                    !CollisionUtil.isOnLilyOrCarpet(player);
+                    !CollisionUtil.isOnSolid(player);
 
             if (invalid) {
                 increaseBuffer();
