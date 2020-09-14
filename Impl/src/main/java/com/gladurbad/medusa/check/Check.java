@@ -68,20 +68,24 @@ public abstract class Check implements MedusaCheck {
         }
     }
 
-    protected void increaseBuffer() {
+    protected double increaseBuffer() {
         buffer = Math.min(10000, buffer + 1);
+        return buffer;
     }
 
-    protected void decreaseBuffer() {
+    protected double decreaseBuffer() {
         buffer = Math.max(0, buffer - 1);
+        return buffer;
     }
 
-    protected void increaseBufferBy(double amount) {
+    protected double increaseBufferBy(double amount) {
         buffer = Math.min(100, buffer + amount);
+        return buffer;
     }
 
-    protected void decreaseBufferBy(double amount) {
+    protected double decreaseBufferBy(double amount) {
         buffer = Math.max(0, buffer - amount);
+        return buffer;
     }
 
     protected void multiplyBuffer(double multiplier) {

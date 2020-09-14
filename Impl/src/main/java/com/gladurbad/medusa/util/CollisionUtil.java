@@ -1,12 +1,16 @@
 package com.gladurbad.medusa.util;
 
+import com.gladurbad.medusa.Medusa;
 import lombok.experimental.UtilityClass;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Boat;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
+
+import java.util.concurrent.atomic.AtomicReference;
 
 @UtilityClass
 public class CollisionUtil {
@@ -16,6 +20,8 @@ public class CollisionUtil {
             return loc.getBlock();
         return null;
     }
+
+
 
     public boolean isOnChosenBlock(Player player, double yLevel, Material... materials) {
         final double expand = 0.31;
@@ -37,7 +43,7 @@ public class CollisionUtil {
         final Location location = player.getLocation();
         for(double x = -expand; x <= expand; x += expand) {
             for(double z = -expand; z <= expand; z+= expand) {
-                if (getBlockAsync(location.clone().add(x, -0.5001, z)).getType() != Material.AIR) {
+                if (getBlockAsync(location.clone().add(x, -0.5001, z)).getType() != Material.AIR || isOnLilyOrCarpet(player)) {
                     return true;
                 }
             }
@@ -71,6 +77,19 @@ public class CollisionUtil {
         return false;
     }
 
+    public boolean isOnLilyOrCarpet(Player player) {
+        Location loc = player.getLocation();
+        double expand = 0.3;
+        for (double x = -expand; x <= expand; x += expand) {
+            for (double z = -expand; z <= expand; z += expand) {
+                if (loc.clone().add(z, 0, x).getBlock().getType().toString().contains("LILY")
+                        || loc.clone().add(z, -0.001, x).getBlock().getType().toString().contains("CARPET")) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
 
     public boolean isOnGround(Location location, double dropDown) {
         final double expand = 0.31;
