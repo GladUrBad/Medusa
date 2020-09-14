@@ -10,11 +10,11 @@ import org.bukkit.entity.Player;
 @CheckInfo(name = "Speed", type = "A")
 public class SpeedA extends Check {
 
-    private static final double LIMIT = 0.027;
-
     public SpeedA(PlayerData data) {
         super(data);
     }
+
+    private boolean lastOnGround;
 
     @Override
     public void handle(Packet packet) {
@@ -24,18 +24,18 @@ public class SpeedA extends Check {
             final double deltaXZ = data.getDeltaXZ();
             final double lastDeltaXZ = data.getLastDeltaXZ();
 
-            final double prediction = lastDeltaXZ * 0.91F;
-            final double difference = Math.abs(prediction - deltaXZ);
+            final double prediction = lastDeltaXZ * 0.91F + (data.isSprinting() ? 0.0263 : 0.02);
+            final double difference = deltaXZ - prediction;
 
-            if (difference > LIMIT && !CollisionUtil.isOnGround(player) && !data.getPlayer().isFlying()) {
-                increaseBuffer();
-                if (buffer > 5) {
+            if (difference > 1E-12 && !CollisionUtil.isOnGround(player) && !lastOnGround && !data.getPlayer().isFlying()) {
+                if (increaseBuffer() > 1) {
                     fail();
                 }
             } else {
                 decreaseBuffer();
                 setLastLegitLocation(player.getLocation());
             }
+            lastOnGround = CollisionUtil.isOnGround(player);
         }
     }
 }
