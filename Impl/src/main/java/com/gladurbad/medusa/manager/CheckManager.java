@@ -21,6 +21,7 @@ import com.gladurbad.medusa.check.impl.movement.speed.SpeedB;
 import com.gladurbad.medusa.check.impl.player.badpackets.BadPacketsB;
 import com.gladurbad.medusa.check.impl.player.badpackets.BadPacketsC;
 import com.gladurbad.medusa.check.impl.player.inventory.InventoryA;
+import com.gladurbad.medusa.check.impl.player.inventory.InventoryB;
 import com.gladurbad.medusa.check.impl.player.scaffold.ScaffoldA;
 import com.gladurbad.medusa.check.impl.player.scaffold.ScaffoldB;
 import com.gladurbad.medusa.check.impl.player.scaffold.ScaffoldC;
@@ -72,6 +73,7 @@ public class CheckManager {
             BadPacketsB.class,
             BadPacketsC.class,
             InventoryA.class,
+            InventoryB.class,
             ScaffoldA.class,
             ScaffoldB.class,
             ScaffoldC.class,
