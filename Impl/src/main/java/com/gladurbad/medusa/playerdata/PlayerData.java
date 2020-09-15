@@ -9,6 +9,7 @@ import io.github.retrooper.packetevents.PacketEvents;
 import io.github.retrooper.packetevents.event.PacketListener;
 import io.github.retrooper.packetevents.packet.PacketType;
 import io.github.retrooper.packetevents.packetwrappers.in.blockdig.WrappedPacketInBlockDig;
+import io.github.retrooper.packetevents.packetwrappers.in.clientcommand.WrappedPacketInClientCommand;
 import io.github.retrooper.packetevents.packetwrappers.in.entityaction.WrappedPacketInEntityAction;
 import io.github.retrooper.packetevents.packetwrappers.in.flying.WrappedPacketInFlying;
 
@@ -52,12 +53,12 @@ public class PlayerData implements PacketListener {
     private double deltaX, deltaY, deltaZ, deltaXZ, lastDeltaX, lastDeltaY, lastDeltaZ, lastDeltaXZ;
     private float deltaYaw, deltaPitch, lastDeltaYaw, lastDeltaPitch;
     private Location lastLocation, location;
-    private boolean isSprinting, isSneaking;
+    private boolean isSprinting, isSneaking, isInInventory;
     private Vector lastVelocity = new Vector(0, 0, 0);
 
 
     //Teleportation & setback data.
-    private long lastSetbackTime;
+    private long lastSetbackTime, timeInInventory;
 
     //Velocity data.
     private int ticksSinceVelocity, maxVelocityTicks, velocityTicks;
@@ -159,6 +160,18 @@ public class PlayerData implements PacketListener {
 
                     this.velocityTicks = this.ticks;
                     this.maxVelocityTicks = (int) (((lastVelocity.getX() + lastVelocity.getZ()) / 2 + 2) * 15);
+                }
+            } else if (packet.getPacketId() == PacketType.Client.CLIENT_COMMAND) {
+                final WrappedPacketInClientCommand wrappedPacketInClientCommand = new WrappedPacketInClientCommand(packet.getRawPacket());
+
+                if (wrappedPacketInClientCommand.getClientCommand() == WrappedPacketInClientCommand.ClientCommand.OPEN_INVENTORY_ACHIEVEMENT) {
+                    this.isInInventory = true;
+                    this.timeInInventory = System.currentTimeMillis();
+                }
+            } else if (packet.getPacketId() == PacketType.Client.CLOSE_WINDOW) {
+                if (this.isInInventory) {
+                    this.isInInventory = false;
+                    this.timeInInventory = 0;
                 }
             }
         } else if (packet.isSending()) {
