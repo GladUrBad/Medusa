@@ -8,9 +8,9 @@ import com.gladurbad.medusa.playerdata.PlayerData;
 import com.gladurbad.medusa.util.customtype.EvictingList;
 
 import com.gladurbad.medusa.util.customtype.Pair;
-import io.github.retrooper.packetevents.PacketEvents;
 import io.github.retrooper.packetevents.packetwrappers.in.useentity.WrappedPacketInUseEntity;
 
+import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.entity.Entity;
 
@@ -39,15 +39,17 @@ public class ReachA extends Check {
             final WrappedPacketInUseEntity useEntity = new WrappedPacketInUseEntity(packet.getRawPacket());
             attacked = useEntity.getEntity();
 
+            if (data.getPlayer().getGameMode() == GameMode.CREATIVE) return;
+
             if (historyLocations.size() == 20) {
-                final long ping = PacketEvents.getAPI().getPlayerUtils().getPing(data.getPlayer());
+                final long ping = data.getTransactionPing();
 
                 if (ping < reachMaxLatency.getLong()) {
                     final double distance = this.historyLocations.stream()
                       .filter(pair -> Math.abs(now() - pair.getX()) < Math.max(ping, 150L))
                       .mapToDouble(pair -> {
                           Location victimLoc = pair.getY();
-                          Location playerLoc = data.getLocation();
+                          Location playerLoc = data.getBukkitLocation();
 
                           return playerLoc.toVector().setY(0).distance(victimLoc.toVector().setY(0)) - 0.57D;
                       }).min().orElse(0.0);

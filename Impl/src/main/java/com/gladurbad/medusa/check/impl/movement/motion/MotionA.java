@@ -6,15 +6,14 @@ import com.gladurbad.medusa.network.Packet;
 import com.gladurbad.medusa.playerdata.PlayerData;
 import com.gladurbad.medusa.util.CollisionUtil;
 import com.gladurbad.medusa.util.PlayerUtil;
-
+import io.github.retrooper.packetevents.packettype.PacketType;
 import org.bukkit.Material;
-import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffectType;
 
-@CheckInfo(name = "Motion", type = "A")
+@CheckInfo(name = "Motion", type = "A", dev = true)
 public class MotionA extends Check {
 
-    private int slimeTicks, inVehicleTicks;
+    private boolean teleported;
 
     public MotionA(PlayerData data) {
         super(data);
@@ -22,40 +21,28 @@ public class MotionA extends Check {
 
     @Override
     public void handle(Packet packet) {
-        if (packet.isFlying()) {
-            final Player player = data.getPlayer();
+        if (packet.isPosition()) {
+            if (!teleported) {
+                double expectedJumpMotion = 0.42F + (double) ((float) PlayerUtil.getPotionLevel(data.getPlayer(), PotionEffectType.JUMP) * 0.1F);
 
-            float expectedJumpMotion = 0.6F;
+                final boolean jumped = data.getLastLocation().isOnGround() &&
+                        !data.getLocation().isOnGround() && data.getDeltaY() > 0;
 
-            final boolean slime = CollisionUtil.isOnChosenBlock(data.getPlayer(), -0.5001, Material.SLIME_BLOCK);
+                final boolean notVelocity = data.getTicksSinceVelocity() > data.getMaxVelocityTicks();
+                final boolean slime = CollisionUtil.isOnChosenBlock(data.getPlayer(), -0.5, Material.SLIME_BLOCK);
 
-            if (slime) {
-                slimeTicks = 0;
+                final boolean invalid = jumped &&
+                        Math.abs(data.getDeltaY() - expectedJumpMotion) > 0.03 &&
+                        notVelocity &&
+                        !slime;
+
+                if (invalid) {
+                    fail();
+                }
             }
-
-            final boolean jumped = CollisionUtil.isOnGround(data.getLastLocation(), -0.00001) &&
-                    !CollisionUtil.isOnGround(data.getLocation(), -0.00001) &&
-                    data.getDeltaY() > 0;
-
-            final boolean inVehicle = data.getPlayer().isInsideVehicle();
-
-            if (inVehicle) {
-                inVehicleTicks = 0;
-            } else {
-                inVehicleTicks++;
-            }
-
-            if (PlayerUtil.getPotionLevel(player, PotionEffectType.JUMP) > 0) {
-                expectedJumpMotion += PlayerUtil.getPotionLevel(player, PotionEffectType.JUMP) * 0.1F;
-            }
-
-            final boolean valid = ++slimeTicks > 20 && jumped && inVehicleTicks > 20;
-
-            if (data.getDeltaY() > expectedJumpMotion && valid) {
-                fail();
-            } else {
-                setLastLegitLocation(data.getPlayer().getLocation());
-            }
+            teleported = false;
+        } else if (packet.isReceiving() && packet.getPacketId() == PacketType.Server.POSITION) {
+            teleported = true;
         }
     }
 }

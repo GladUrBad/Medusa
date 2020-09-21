@@ -5,7 +5,7 @@ import com.gladurbad.api.check.CheckInfo;
 import com.gladurbad.medusa.network.Packet;
 import com.gladurbad.medusa.playerdata.PlayerData;
 
-import io.github.retrooper.packetevents.packet.PacketType;
+import io.github.retrooper.packetevents.packettype.PacketType;
 import org.bukkit.util.Vector;
 
 @CheckInfo(name = "Motion", type = "F", dev = true)
@@ -30,16 +30,17 @@ public class MotionF extends Check {
                 final Vector positionDifference = new Vector(deltaX, 0, deltaZ);
                 final Vector direction = new Vector(directionX, 0, directionZ);
 
-                final double angle = positionDifference.distanceSquared(direction);
+                final double angle = positionDifference.angle(direction);
 
-                if (angle > 0.32) {
+                if (angle > 1.08) {
                     increaseBuffer();
-                    if (buffer > 10) {
+                    if (buffer >= 5) {
                         fail();
+                        setBuffer(0);
                     }
                 } else {
-                    decreaseBufferBy(2);
-                    setLastLegitLocation(data.getLocation());
+                    decreaseBufferBy(1);
+                    setLastLegitLocation(data.getBukkitLocation());
                 }
             }
         } else if (packet.isSending() && packet.getPacketId() == PacketType.Server.POSITION) {

@@ -17,17 +17,18 @@ public class AlertsCommand extends MedusaArgument {
     protected boolean handle(CommandSender sender, Command command, String label, String[] args) {
         if (sender instanceof Player) {
             PlayerData playerData = PlayerDataManager.getInstance().getPlayerData((Player) sender);
-            if (playerData.isAlerts()) {
-                playerData.setAlerts(false);
-                sender.sendMessage(MedusaArgument.responsePrefix + "Alerts toggled off.");
-                return true;
-            } else {
-                playerData.setAlerts(true);
-                sender.sendMessage(MedusaArgument.responsePrefix + "Alerts toggled on.");
+            if (playerData != null) {
+                if (playerData.isAlerts()) {
+                    playerData.setAlerts(false);
+                    sender.sendMessage(MedusaArgument.responsePrefix + "Alerts toggled off.");
+                } else {
+                    playerData.setAlerts(true);
+                    sender.sendMessage(MedusaArgument.responsePrefix + "Alerts toggled on.");
+                }
                 return true;
             }
         } else {
-            sender.sendMessage(ChatColor.RED + "Only players can execute this com.gladurbad.medusa.command.");
+            sender.sendMessage(ChatColor.RED + "Only players can execute this command.");
         }
         return false;
     }

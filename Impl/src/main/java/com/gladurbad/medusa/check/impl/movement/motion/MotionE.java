@@ -5,7 +5,7 @@ import com.gladurbad.api.check.CheckInfo;
 import com.gladurbad.medusa.network.Packet;
 import com.gladurbad.medusa.playerdata.PlayerData;
 import com.gladurbad.medusa.util.CollisionUtil;
-import io.github.retrooper.packetevents.packet.PacketType;
+import io.github.retrooper.packetevents.packettype.PacketType;
 
 @CheckInfo(name = "Motion", type = "E")
 public class MotionE extends Check {
@@ -21,14 +21,14 @@ public class MotionE extends Check {
     public void handle(Packet packet) {
         if (packet.isFlying()) {
             if (++teleportedTicks > 5) {
-                final boolean colliding = CollisionUtil.isOnGround(data.getLastLocation(), -0.5001)
-                        && CollisionUtil.isOnGround(data.getLocation(), -0.5001);
+                final boolean colliding = CollisionUtil.isOnGround(data.getLastBukkitLocation(), -0.5001)
+                        && CollisionUtil.isOnGround(data.getBukkitLocation(), -0.5001);
 
                 if (colliding) {
                     if (data.getDeltaY() > STEP_HEIGHT) {
                         fail();
                     } else {
-                        setLastLegitLocation(data.getLocation());
+                        setLastLegitLocation(data.getBukkitLocation());
                     }
                 }
             }

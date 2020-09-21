@@ -463,7 +463,7 @@ public class MathUtil {
     }
 
     public float getBaseGroundSpeed(Player player) {
-        return 0.26f + (PlayerUtil.getPotionLevel(player, PotionEffectType.SPEED) * 0.062f) + ((player.getWalkSpeed() - 0.2f) * 1.6f);
+        return 0.29f + (PlayerUtil.getPotionLevel(player, PotionEffectType.SPEED) * 0.062f) + ((player.getWalkSpeed() - 0.2f) * 1.6f);
     }
 
     public float getBaseSpeed(Player player, float limit) {
@@ -500,7 +500,7 @@ public class MathUtil {
         return Math.sqrt(deviation / length);
     }
 
-    public double getStandardDeviation(List<Double> numberArray) {
+    public double getStandardDeviation(Collection<Double> numberArray) {
         double sum = 0.0, deviation = 0.0;
         int length = numberArray.size();
         for (double num : numberArray)

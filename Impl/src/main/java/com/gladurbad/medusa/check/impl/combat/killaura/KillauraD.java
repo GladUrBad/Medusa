@@ -6,7 +6,7 @@ import com.gladurbad.medusa.config.ConfigValue;
 import com.gladurbad.medusa.network.Packet;
 import com.gladurbad.medusa.playerdata.PlayerData;
 
-import io.github.retrooper.packetevents.packet.PacketType;
+import io.github.retrooper.packetevents.packettype.PacketType;
 
 @CheckInfo(name = "Killaura", type = "D")
 public class KillauraD extends Check {

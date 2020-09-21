@@ -5,10 +5,11 @@ import com.gladurbad.medusa.check.impl.combat.aim.*;
 import com.gladurbad.medusa.check.impl.combat.autoclicker.AutoClickerB;
 import com.gladurbad.medusa.check.impl.combat.autoclicker.AutoClickerA;
 import com.gladurbad.medusa.check.impl.combat.killaura.*;
+import com.gladurbad.medusa.check.impl.movement.motion.*;
 import com.gladurbad.medusa.check.impl.combat.reach.ReachA;
 import com.gladurbad.medusa.check.impl.combat.velocity.VelocityA;
 import com.gladurbad.medusa.check.impl.movement.jesus.JesusC;
-import com.gladurbad.medusa.check.impl.movement.motion.*;
+import com.gladurbad.medusa.check.impl.movement.speed.SpeedC;
 import com.gladurbad.medusa.check.impl.player.badpackets.BadPacketsA;
 import com.gladurbad.medusa.check.impl.movement.fastclimb.FastClimbA;
 import com.gladurbad.medusa.check.impl.movement.flight.FlightA;
@@ -20,8 +21,10 @@ import com.gladurbad.medusa.check.impl.movement.speed.SpeedA;
 import com.gladurbad.medusa.check.impl.movement.speed.SpeedB;
 import com.gladurbad.medusa.check.impl.player.badpackets.BadPacketsB;
 import com.gladurbad.medusa.check.impl.player.badpackets.BadPacketsC;
+import com.gladurbad.medusa.check.impl.player.badpackets.BadPacketsD;
 import com.gladurbad.medusa.check.impl.player.inventory.InventoryA;
 import com.gladurbad.medusa.check.impl.player.inventory.InventoryB;
+import com.gladurbad.medusa.check.impl.player.pingspoof.PingSpoofA;
 import com.gladurbad.medusa.check.impl.player.scaffold.ScaffoldA;
 import com.gladurbad.medusa.check.impl.player.scaffold.ScaffoldB;
 import com.gladurbad.medusa.check.impl.player.scaffold.ScaffoldC;
@@ -69,11 +72,14 @@ public class CheckManager {
             NofallA.class,
             SpeedA.class,
             SpeedB.class,
+            SpeedC.class,
             BadPacketsA.class,
             BadPacketsB.class,
             BadPacketsC.class,
+            BadPacketsD.class,
             InventoryA.class,
             InventoryB.class,
+            PingSpoofA.class,
             ScaffoldA.class,
             ScaffoldB.class,
             ScaffoldC.class,

@@ -5,7 +5,7 @@ import com.gladurbad.api.check.CheckInfo;
 import com.gladurbad.medusa.network.Packet;
 import com.gladurbad.medusa.playerdata.PlayerData;
 
-import io.github.retrooper.packetevents.packet.PacketType;
+import io.github.retrooper.packetevents.packettype.PacketType;
 
 @CheckInfo(name = "Aim", type = "C")
 public class AimC extends Check {

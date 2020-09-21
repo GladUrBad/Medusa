@@ -1,6 +1,6 @@
 package com.gladurbad.medusa.network;
 
-import io.github.retrooper.packetevents.packet.PacketType;
+import io.github.retrooper.packetevents.packettype.PacketType;
 import lombok.Getter;
 
 @Getter
@@ -36,6 +36,10 @@ public class Packet {
 
     public boolean isSwing() {
         return isReceiving() && packetId == PacketType.Client.ARM_ANIMATION;
+    }
+
+    public boolean isPosition() {
+        return isReceiving() && (packetId == PacketType.Client.POSITION || packetId == PacketType.Client.POSITION_LOOK);
     }
 
 

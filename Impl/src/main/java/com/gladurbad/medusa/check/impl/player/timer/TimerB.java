@@ -2,15 +2,19 @@ package com.gladurbad.medusa.check.impl.player.timer;
 
 import com.gladurbad.medusa.check.Check;
 import com.gladurbad.api.check.CheckInfo;
+import com.gladurbad.medusa.config.Config;
+import com.gladurbad.medusa.config.ConfigValue;
 import com.gladurbad.medusa.network.Packet;
 import com.gladurbad.medusa.playerdata.PlayerData;
-import io.github.retrooper.packetevents.packet.PacketType;
+import io.github.retrooper.packetevents.packettype.PacketType;
 
 @CheckInfo(name = "Timer", type = "B")
 public class TimerB extends Check {
 
     private long lastFlyingTime, total;
     private int packets;
+    private static final ConfigValue maxPacketDiscrepancy = new ConfigValue(ConfigValue.ValueType.INTEGER, "max-packet-discrepancy");
+    private static final ConfigValue maxBuffer = new ConfigValue(ConfigValue.ValueType.INTEGER, "max-buffer");
 
     public TimerB(PlayerData data) {
         super(data);
@@ -28,9 +32,8 @@ public class TimerB extends Check {
             if (total > 1000L) {
                 final int packetDiscrepancy = Math.abs(packets - 20);
 
-                if (packetDiscrepancy >= 2) {
-                    increaseBuffer();
-                    if (buffer > 3) {
+                if (packetDiscrepancy >= maxPacketDiscrepancy.getInt()) {
+                    if (increaseBuffer() > maxBuffer.getInt()) {
                         fail();
                     }
                 } else {

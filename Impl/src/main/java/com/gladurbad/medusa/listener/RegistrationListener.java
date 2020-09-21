@@ -17,7 +17,6 @@ public class RegistrationListener implements PacketListener {
             playerData.setAlerts(true);
         }
         PlayerDataManager.getInstance().getPlayerData().put(event.getPlayer().getUniqueId(), playerData);
-
     }
 
     @PacketHandler

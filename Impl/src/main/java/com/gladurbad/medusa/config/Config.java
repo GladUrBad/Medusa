@@ -84,7 +84,7 @@ public class Config {
 
                 final boolean enabled = getBooleanFromConfig("checks." + checkType + "." + checkInfo.name().toLowerCase() + "." + checkInfo.type().toLowerCase() + ".enabled");
                 final int maxViolations = getIntegerFromConfig("checks." + checkType + "." + checkInfo.name().toLowerCase() + "." + checkInfo.type().toLowerCase() + ".max-violations");
-                final String punishCommand = getStringFromConfig("checks." + checkType + "." + checkInfo.name().toLowerCase() + "." + checkInfo.type().toLowerCase() + ".punish-com.gladurbad.medusa.command");
+                final String punishCommand = getStringFromConfig("checks." + checkType + "." + checkInfo.name().toLowerCase() + "." + checkInfo.type().toLowerCase() + ".punish-command");
 
                 if (checkType.equals("movement")) {
                     final boolean setBack = getBooleanFromConfig("checks.movement." + checkInfo.name().toLowerCase() + "." + checkInfo.type().toLowerCase() + ".setback");

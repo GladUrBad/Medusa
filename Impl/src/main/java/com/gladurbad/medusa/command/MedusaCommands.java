@@ -19,6 +19,8 @@ public class MedusaCommands implements CommandExecutor {
         //Register commands here--------
         arguments.add(new LogsCommand());
         arguments.add(new AlertsCommand());
+        arguments.add(new RegisteredPlayersCommand());
+        arguments.add(new ExemptCommand());
         //------------------------------
         Collections.sort(arguments);
         MedusaArgument.medusa = medusa;

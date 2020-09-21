@@ -5,9 +5,10 @@ import com.gladurbad.medusa.manager.CheckManager;
 import com.gladurbad.medusa.network.Packet;
 
 import com.gladurbad.medusa.util.MathUtil;
+import com.gladurbad.medusa.util.customtype.CustomLocation;
 import io.github.retrooper.packetevents.PacketEvents;
 import io.github.retrooper.packetevents.event.PacketListener;
-import io.github.retrooper.packetevents.packet.PacketType;
+import io.github.retrooper.packetevents.packettype.PacketType;
 import io.github.retrooper.packetevents.packetwrappers.in.blockdig.WrappedPacketInBlockDig;
 import io.github.retrooper.packetevents.packetwrappers.in.clientcommand.WrappedPacketInClientCommand;
 import io.github.retrooper.packetevents.packetwrappers.in.entityaction.WrappedPacketInEntityAction;
@@ -20,7 +21,6 @@ import lombok.Getter;
 import lombok.Setter;
 
 import org.bukkit.Location;
-import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.bukkit.util.Vector;
 
@@ -33,26 +33,24 @@ public class PlayerData implements PacketListener {
     private final Player player;
     private final UUID playerUUID;
     private List<Check> checks;
-    private Map<String, Integer> prevVL = new HashMap<>();
-    private Map<String, List<Check>> types = new HashMap<>();
 
     public PlayerData(UUID playerUUID, Player player) {
         this.playerUUID = playerUUID;
         this.player = player;
-        this.location = this.getPlayer().getLocation();
-        this.lastLocation = this.getPlayer().getLocation();
+        this.location = CustomLocation.fromBukkit(player.getLocation());
+        this.lastLocation = this.location;
         this.checks = CheckManager.loadChecks(this);
-        for(Check check : checks){
-            types.putIfAbsent(check.getCheckInfo().name(), new ArrayList<>());
-            types.get(check.getCheckInfo().name()).add(check);
-            prevVL.putIfAbsent(check.getCheckInfo().name(), 0);
-        }
+
+        //Transaction ping system initialization.
+        transactionID = (short) new Random().nextInt(32767);
+        PacketEvents.getAPI().getPlayerUtils().sendPacket(player, new WrappedPacketOutTransaction(0, transactionID, false));
+        transactionReply = System.currentTimeMillis();
     }
 
     //Movement data.
     private double deltaX, deltaY, deltaZ, deltaXZ, lastDeltaX, lastDeltaY, lastDeltaZ, lastDeltaXZ;
     private float deltaYaw, deltaPitch, lastDeltaYaw, lastDeltaPitch;
-    private Location lastLocation, location;
+    private CustomLocation lastLocation, location;
     private boolean isSprinting, isSneaking, isInInventory;
     private Vector lastVelocity = new Vector(0, 0, 0);
 
@@ -65,16 +63,25 @@ public class PlayerData implements PacketListener {
     private short velocityID;
     private boolean verifyingVelocity;
 
-    //Miscellanious data
+    //Teleport data.
+
+    //Miscellanious data.
     private boolean alerts;
     private boolean digging;
     private int ticks;
+    private boolean shouldCheck = true;
+
+    //Transaction pinging system data.
+    private long transactionReply, transactionPing;
+    private short transactionID;
 
     public boolean isTakingKnockback() { return Math.abs(this.ticks - this.velocityTicks) < this.maxVelocityTicks; }
 
     public void processPacket(final Packet packet) {
         //Handle checks.
-        checks.forEach(check -> check.handle(packet));
+        if (shouldCheck) {
+            checks.forEach(check -> check.handle(packet));
+        }
         //Process packet information.
         this.processInput(packet);
 
@@ -85,41 +92,43 @@ public class PlayerData implements PacketListener {
             if (packet.getPacketId() == PacketType.Client.POSITION || packet.getPacketId() == PacketType.Client.POSITION_LOOK) {
                 WrappedPacketInFlying wrappedPacketInFlying = new WrappedPacketInFlying(packet.getRawPacket());
 
-                final World world = this.getLocation().getWorld();
                 final double x = wrappedPacketInFlying.getX();
                 final double y = wrappedPacketInFlying.getY();
                 final double z = wrappedPacketInFlying.getZ();
                 final float yaw = wrappedPacketInFlying.getYaw();
                 final float pitch = wrappedPacketInFlying.getPitch();
+                final boolean onGround = wrappedPacketInFlying.isOnGround();
 
-                Location location = new Location(world, x, y, z, yaw, pitch);
-                Location lastLocation = this.getLocation() != null ? this.getLocation() : location;
+                CustomLocation location = new CustomLocation(x, y, z, yaw, pitch, onGround);
+                CustomLocation lastLocation = getLocation() != null ? getLocation() : location;
 
-                this.processLocation(location, lastLocation);
+                processLocation(location, lastLocation);
             } else if (packet.getPacketId() == PacketType.Client.LOOK) {
                 WrappedPacketInFlying wrappedPacketInFlying = new WrappedPacketInFlying(packet.getRawPacket());
 
-                final World world = this.getLocation().getWorld();
                 final double x = this.getLocation().getX();
                 final double y = this.getLocation().getY();
                 final double z = this.getLocation().getZ();
                 final float yaw = wrappedPacketInFlying.getYaw();
                 final float pitch = wrappedPacketInFlying.getPitch();
+                final boolean onGround = wrappedPacketInFlying.isOnGround();
 
-                Location location = new Location(world, x, y, z, yaw, pitch);
-                Location lastLocation = this.getLocation() != null ? this.getLocation() : location;
+                CustomLocation location = new CustomLocation(x, y, z, yaw, pitch, onGround);
+                CustomLocation lastLocation = this.getLocation() != null ? this.getLocation() : location;
 
                 this.processLocation(location, lastLocation);
             } else if (packet.getPacketId() == PacketType.Client.FLYING) {
-                final World world = this.getLocation().getWorld();
+                final WrappedPacketInFlying wrappedPacketInFlying = new WrappedPacketInFlying(packet.getRawPacket());
+
                 final double x = this.getLocation().getX();
                 final double y = this.getLocation().getY();
                 final double z = this.getLocation().getZ();
                 final float yaw = this.getLocation().getYaw();
                 final float pitch = this.getLocation().getPitch();
+                final boolean onGround = wrappedPacketInFlying.isOnGround();
 
-                Location location = new Location(world, x, y, z, yaw, pitch);
-                Location lastLocation = this.getLocation() != null ? this.getLocation() : location;
+                CustomLocation location = new CustomLocation(x, y, z, yaw, pitch, onGround);
+                CustomLocation lastLocation = this.getLocation() != null ? this.getLocation() : location;
 
                 this.processLocation(location, lastLocation);
             } else if (packet.getPacketId() == PacketType.Client.ENTITY_ACTION) {
@@ -161,6 +170,14 @@ public class PlayerData implements PacketListener {
                     this.velocityTicks = this.ticks;
                     this.maxVelocityTicks = (int) (((lastVelocity.getX() + lastVelocity.getZ()) / 2 + 2) * 15);
                 }
+
+                if (wrappedPacketInTransaction.getActionNumber() == transactionID) {
+                    transactionPing = System.currentTimeMillis() - transactionReply;
+
+                    transactionID = (short) new Random().nextInt(32767);
+                    PacketEvents.getAPI().getPlayerUtils().sendPacket(player, new WrappedPacketOutTransaction(0, transactionID, false));
+                    transactionReply = System.currentTimeMillis();
+                }
             } else if (packet.getPacketId() == PacketType.Client.CLIENT_COMMAND) {
                 final WrappedPacketInClientCommand wrappedPacketInClientCommand = new WrappedPacketInClientCommand(packet.getRawPacket());
 
@@ -195,7 +212,7 @@ public class PlayerData implements PacketListener {
         }
     }
 
-    private void processLocation(Location location, Location lastLocation) {
+    private void processLocation(CustomLocation location, CustomLocation lastLocation) {
         ++this.ticksSinceVelocity;
         ++this.ticks;
 
@@ -237,5 +254,13 @@ public class PlayerData implements PacketListener {
 
         this.lastDeltaPitch = lastDeltaPitch;
         this.deltaPitch = deltaPitch;
+    }
+
+    public Location getLastBukkitLocation() {
+        return getLastLocation().toBukkit(getPlayer().getWorld());
+    }
+
+    public Location getBukkitLocation() {
+        return getLocation().toBukkit(getPlayer().getWorld());
     }
 }

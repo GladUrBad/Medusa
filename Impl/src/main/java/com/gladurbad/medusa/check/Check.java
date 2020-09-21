@@ -9,7 +9,6 @@ import com.gladurbad.medusa.manager.AlertManager;
 import com.gladurbad.medusa.network.Packet;
 import com.gladurbad.medusa.playerdata.PlayerData;
 
-import io.github.retrooper.packetevents.packet.PacketType;
 import lombok.Getter;
 import lombok.Setter;
 import org.bukkit.Bukkit;
@@ -59,7 +58,7 @@ public abstract class Check implements MedusaCheck {
             if (vl >= Config.VL_TO_ALERT) {
                 AlertManager.verbose(data, this);
                 if (event.isSetback()) {
-                    final Location setBackLocation = lastLegitLocation == null ? data.getLastLocation() : lastLegitLocation;
+                    final Location setBackLocation = lastLegitLocation == null ? data.getLastBukkitLocation() : lastLegitLocation;
                     Bukkit.getScheduler().runTask(Medusa.getInstance(), () -> data.getPlayer().teleport(setBackLocation));
                     data.setLastSetbackTime(now());
                     buffer = 0;
@@ -86,6 +85,10 @@ public abstract class Check implements MedusaCheck {
     protected double decreaseBufferBy(double amount) {
         buffer = Math.max(0, buffer - amount);
         return buffer;
+    }
+
+    protected void resetBuffer() {
+        buffer = 0;
     }
 
     protected void multiplyBuffer(double multiplier) {

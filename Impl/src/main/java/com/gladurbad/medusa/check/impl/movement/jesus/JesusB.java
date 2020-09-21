@@ -8,7 +8,7 @@ import com.gladurbad.medusa.util.CollisionUtil;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 
-@CheckInfo(name = "Jesus", type = "B", dev = false)
+@CheckInfo(name = "Jesus", type = "B")
 public class JesusB extends Check {
 
 	public JesusB(PlayerData data) {

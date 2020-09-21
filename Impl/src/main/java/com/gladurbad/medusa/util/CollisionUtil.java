@@ -130,4 +130,12 @@ public class CollisionUtil {
         final Block var4 = new Location(location.getWorld(), var1, var2, var3).getBlock();
         return var4.getType() == Material.LADDER || var4.getType() == Material.VINE;
     }
+
+    public boolean isCollidingWithSlime(Player player) {
+        final int x = MathUtil.floor(player.getLocation().getX());
+        final int y = MathUtil.floor(player.getLocation().getY() - 0.20000000298023224D - player.getEyeHeight());
+        final int z = MathUtil.floor(player.getLocation().getZ());
+        final Block block = new Location(player.getLocation().getWorld(), x, y, z).getBlock();
+        return block.getType() == Material.SLIME_BLOCK;
+    }
 }

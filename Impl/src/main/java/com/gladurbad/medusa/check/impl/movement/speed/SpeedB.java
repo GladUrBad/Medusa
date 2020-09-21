@@ -26,7 +26,7 @@ public class SpeedB extends Check {
             final boolean iceSlime = CollisionUtil.isOnChosenBlock(data.getPlayer(),
                     -0.5001, Material.ICE, Material.PACKED_ICE, Material.SLIME_BLOCK);
 
-            final boolean underBlock = CollisionUtil.blockNearHead(data.getLocation());
+            final boolean underBlock = CollisionUtil.blockNearHead(data.getBukkitLocation());
             final boolean flying = data.getPlayer().isFlying();
 
             if (flying) {
@@ -59,7 +59,7 @@ public class SpeedB extends Check {
 
             if (invalid) {
                 increaseBuffer();
-                if (buffer >= 7) {
+                if (buffer >= 8) {
                     fail();
                 }
             } else {

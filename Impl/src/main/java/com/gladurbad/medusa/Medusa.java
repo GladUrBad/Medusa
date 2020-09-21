@@ -35,26 +35,28 @@ public class Medusa extends JavaPlugin {
         this.saveDefaultConfig();
         Config.updateConfig();
 
-        MedusaCommands medusaCommands = new MedusaCommands(this);
-
         CheckManager.registerChecks();
 
+
+        MedusaCommands medusaCommands = new MedusaCommands(this);
         getCommand("medusa").setExecutor(medusaCommands);
 
         //Register listeners.
+        PacketEvents.getSettings().setIdentifier("medusa_identifier");
         PacketEvents.getSettings().setUninjectAsync(true);
         PacketEvents.getSettings().setInjectAsync(true);
         PacketEvents.init(this);
 
-        PacketEvents.getAPI().getEventManager().registerListeners(new PacketProcessor(), new RegistrationListener());
+        PacketEvents.getAPI().getEventManager().registerListener(new PacketProcessor());
+        PacketEvents.getAPI().getEventManager().registerListener(new RegistrationListener());
 
         //Register online players into the system.
-        for(final Player player : Bukkit.getOnlinePlayers()) {
+        for (final Player player : Bukkit.getOnlinePlayers()) {
             UUID playerUUID = player.getUniqueId();
             if (!PlayerDataManager.getInstance().containsPlayer(playerUUID)) {
                 final PlayerData playerData = new PlayerData(playerUUID, player);
 
-                if(Config.TESTMODE) {
+                if (Config.TESTMODE) {
                     playerData.setAlerts(true);
                 }
 
@@ -72,6 +74,7 @@ public class Medusa extends JavaPlugin {
     public void onDisable() {
         Bukkit.getLogger().info("Disabling Medusa by GladUrBad");
         PacketEvents.stop();
+        instance = null;
     }
 
 

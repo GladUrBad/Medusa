@@ -10,7 +10,7 @@ import com.gladurbad.medusa.util.CollisionUtil;
 public class FlightA extends Check {
 
     private int vehicleTicks;
-    private static final double LIMIT = 0.02;
+    private static final double LIMIT = 0.005;
 
     public FlightA(PlayerData data) {
         super(data);
@@ -19,7 +19,7 @@ public class FlightA extends Check {
     @Override
     public void handle(Packet packet) {
         if (packet.isFlying()) {
-            final double prediction = (data.getLastDeltaY() * 0.9800000190734863) - 0.08;
+            final double prediction = (data.getLastDeltaY() - 0.08) * 0.9800000190734863;
             final double difference = Math.abs(data.getDeltaY() - prediction);
 
             final boolean inVehicle = data.getPlayer().isInsideVehicle();
@@ -30,15 +30,15 @@ public class FlightA extends Check {
                 vehicleTicks++;
             }
 
-            final boolean invalid = difference > LIMIT &&
+            final boolean invalid =
+                    difference > LIMIT &&
                     !CollisionUtil.isOnGround(data.getPlayer()) &&
                     !CollisionUtil.isNearBoat(data.getPlayer()) &&
                     !data.getPlayer().isFlying() &&
                     vehicleTicks > 20;
 
             if (invalid) {
-                increaseBuffer();
-                if (buffer > 5) {
+                if (increaseBuffer() > 5) {
                     fail();
                 }
             } else {

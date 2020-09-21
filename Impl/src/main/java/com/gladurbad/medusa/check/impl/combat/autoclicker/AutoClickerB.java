@@ -6,16 +6,18 @@ import com.gladurbad.medusa.network.Packet;
 import com.gladurbad.medusa.playerdata.PlayerData;
 import com.gladurbad.medusa.util.MathUtil;
 import com.gladurbad.medusa.util.customtype.EvictingList;
-import io.github.retrooper.packetevents.packet.PacketType;
+import com.google.common.collect.Lists;
 
+import java.lang.reflect.Array;
 import java.util.ArrayDeque;
+import java.util.Arrays;
+import java.util.Deque;
 
 @CheckInfo(name = "AutoClicker", type = "B", dev = true)
 public class AutoClickerB extends Check {
 
     private int ticks;
-    private ArrayDeque<Double> delays = new ArrayDeque<>();
-    private EvictingList<Double> kurtosises = new EvictingList<>(10);
+    private ArrayDeque<Double> samples = new ArrayDeque<>();
 
     public AutoClickerB(PlayerData data) {
         super(data);
@@ -25,21 +27,12 @@ public class AutoClickerB extends Check {
     public void handle(Packet packet) {
         if (packet.isSwing() && !data.isDigging()) {
             if (ticks < 10) {
-                delays.add((double) ticks);
+                samples.add((double) ticks * 50);
 
-                if (delays.size() >= 20) {
-                    final double kurtosis = MathUtil.getKurtosis(delays);
-                    kurtosises.add(kurtosis);
-                    delays.clear();
-                }
-
-                if (kurtosises.size() == 10) {
-                    final int duplicates = (int) (kurtosises.size() - kurtosises.parallelStream().mapToDouble(value -> value).distinct().count());
-
-                    if (duplicates > 1) {
-                        kurtosises.clear();
-                        fail();
-                    }
+                if (samples.size() >= 100) {
+                    final double deviation = MathUtil.getStandardDeviation(samples);
+                    debug(deviation);
+                    samples.clear();
                 }
             }
             ticks = 0;

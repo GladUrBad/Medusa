@@ -105,9 +105,9 @@ checks:
         # reach-sensitivity: (Scale of 1-5) 1-3 makes the check less prone to false flags. 4-5 increases detection rate.
         # reach-maxlatency: In milliseconds, the maximum ping a player can have before the reach check is disabled.
         # If you are having false positives with lag increase this.
-        max-reach: 3.3
+        max-reach: 3.25
         reach-sensitivity: 4
-        reach-maxlatency: 150
+        reach-maxlatency: 200
     velocity:
       # Would recommend leaving this disabled, some falses occur.
       a:
@@ -196,6 +196,11 @@ checks:
         setback: true
         max-violations: 50
         punish-command: 'ban %player% %prefix% Unfair Advantage'
+      c:
+        enabled: true
+        setback: true
+        max-violations: 50
+        punish-command: 'ban %player% %prefix% Unfair Advantage'
   player:
     badpackets:
       a:
@@ -210,12 +215,29 @@ checks:
         enabled: true
         max-violations: 25
         punish-command: 'ban %player% %prefix% Unfair Advantage'
+      d:
+        enabled: true
+        max-violations: 50
+        punish-command: 'kick %player% %prefix% Invalid packets detected! Hacking?'
     inventory:
       # Highly experimental, would recommend leaving this disabled.
       a:
         enabled: false
         max-violations: 50
         punish-command: 'ba %player% %prefix% Unfair Advantage'
+      b:
+        enabled: false
+        max-violations: 50
+        punish-command: 'ba %player% %prefix% Unfair Advantage'
+    pingspoof:
+      a:
+        enabled: true
+        max-violations: 100
+        punish-command: 'kick %player% %prefix% Unfair Advantage'
+        # max-ping-difference: The maximum ping difference. Usually legit players hover between 50-100ms, PingSpoof users will be higher. Adjust at your risk.
+        # max-buffer: Making this higher reduces detection, but makes the check less prone to false positives. Lowering this value will do the opposite.
+        max-ping-difference: 500
+        max-buffer: 200
     scaffold:
       a:
         enabled: true
@@ -232,9 +254,19 @@ checks:
     timer:
       a:
         enabled: true
-        max-violations: 50
-        punish-command: 'ban %player% %prefix% Unfair Advantage'
+        max-violations: 10
+        punish-command: 'kick %player% %prefix% Invalid packet rate.'
+        # max-timer-speed: Maximum timer speed, make this higher if you have false positives.
+        # min-timer-speed: Minimum timer speed, make this lower if you have false positives.
+        # max-buffer: Make this higher to reduce falses, lower to increase detection.
+        max-timer-speed: 1.1
+        min-timer-speed: 0.9
+        max-buffer: 2
       b:
         enabled: true
-        max-violations: 50
-        punish-command: 'ban %player% %prefix% Unfair Advantage'
+        max-violations: 10
+        punish-command: 'kick %player% %prefix% Invalid packet rate.'
+        # max-packet-discrepancy: The leniency of the check, recommended to stay in the range of 2-7.
+        # max-buffer: Make this higher to reduce falses, lower to increase detection.
+        max-packet-discrepancy: 2
+        max-buffer: 2
