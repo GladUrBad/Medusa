@@ -5,6 +5,9 @@ import com.gladurbad.api.check.CheckInfo;
 import com.gladurbad.medusa.network.Packet;
 import com.gladurbad.medusa.playerdata.PlayerData;
 import com.gladurbad.medusa.util.CollisionUtil;
+import com.gladurbad.medusa.util.PlayerUtil;
+
+import static io.github.retrooper.packetevents.enums.ServerVersion.v_1_13;
 
 @CheckInfo(name = "Flight", type = "B")
 public class FlightB extends Check {
@@ -25,7 +28,7 @@ public class FlightB extends Check {
             final double acceleration = deltaY - lastDeltaY;
             final double lastAcceleration = lastDeltaY - lastLastDeltaY;
 
-            if (!CollisionUtil.isOnGround(data.getPlayer()) && !data.getPlayer().isFlying()) {
+            if (!CollisionUtil.isOnGround(data.getPlayer()) && !data.getPlayer().isFlying() && !data.isRiptiding() && !data.isGliding()) {
                 if (++airTicks > 10) {
                     if (acceleration > 0.0 && lastAcceleration <= 0.0 && data.getTicksSinceVelocity() > 10) {
                         fail();

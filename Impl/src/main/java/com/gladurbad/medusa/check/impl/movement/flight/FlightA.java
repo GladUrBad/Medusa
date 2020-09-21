@@ -32,10 +32,12 @@ public class FlightA extends Check {
 
             final boolean invalid =
                     difference > LIMIT &&
-                    !CollisionUtil.isOnGround(data.getPlayer()) &&
-                    !CollisionUtil.isNearBoat(data.getPlayer()) &&
-                    !data.getPlayer().isFlying() &&
-                    vehicleTicks > 20;
+                            !CollisionUtil.isOnGround(data.getPlayer()) &&
+                            !CollisionUtil.isNearBoat(data.getPlayer()) &&
+                            !data.getPlayer().isFlying() &&
+                            !data.isRiptiding() &&
+                            !data.isGliding() &&
+                            vehicleTicks > 20;
 
             if (invalid) {
                 if (increaseBuffer() > 5) {

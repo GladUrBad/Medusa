@@ -6,11 +6,12 @@ import com.gladurbad.medusa.config.ConfigValue;
 import com.gladurbad.medusa.network.Packet;
 import com.gladurbad.medusa.playerdata.PlayerData;
 
-import com.google.common.collect.Lists;
+import com.gladurbad.medusa.util.PlayerUtil;
+import io.github.retrooper.packetevents.enums.ServerVersion;
 import io.github.retrooper.packetevents.packettype.PacketType;
 
 import java.util.ArrayDeque;
-import java.util.Deque;
+
 
 @CheckInfo(name = "Timer", type = "A")
 public class TimerA extends Check {
@@ -18,8 +19,8 @@ public class TimerA extends Check {
     private long lastTime;
     private final ArrayDeque<Long> samples = new ArrayDeque<>();
 
-    private static final ConfigValue maxTimerSpeed = new ConfigValue(ConfigValue.ValueType.DOUBLE, "max-speed");
-    private static final ConfigValue minTimerSpeed = new ConfigValue(ConfigValue.ValueType.DOUBLE, "min-speed");
+    private static final ConfigValue maxTimerSpeed = new ConfigValue(ConfigValue.ValueType.DOUBLE, "max-timer-speed");
+    private static final ConfigValue minTimerSpeed = new ConfigValue(ConfigValue.ValueType.DOUBLE, "min-timer-speed");
     private static final ConfigValue customBuffer = new ConfigValue(ConfigValue.ValueType.INTEGER, "max-buffer");
 
     public TimerA(PlayerData data) {
@@ -39,8 +40,8 @@ public class TimerA extends Check {
                 double timerAverage = samples.parallelStream().mapToDouble(value -> value).average().orElse(0.0D);
                 double timerSpeed = 50 / timerAverage;
 
-                if (timerSpeed > maxTimerSpeed.getDouble() || timerSpeed < minTimerSpeed.getDouble()) {
-                    if (increaseBuffer() > customBuffer.getInt()) {
+                if (timerSpeed > maxTimerSpeed.getDouble() || (timerSpeed < minTimerSpeed.getDouble() && PlayerUtil.getServerVersion().isLowerThan(ServerVersion.v_1_9))) {
+                   if (increaseBuffer() > customBuffer.getInt()) {
                         fail();
                     }
                 } else {

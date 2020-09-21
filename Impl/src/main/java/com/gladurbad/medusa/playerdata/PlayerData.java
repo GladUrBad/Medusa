@@ -5,8 +5,10 @@ import com.gladurbad.medusa.manager.CheckManager;
 import com.gladurbad.medusa.network.Packet;
 
 import com.gladurbad.medusa.util.MathUtil;
+import com.gladurbad.medusa.util.PlayerUtil;
 import com.gladurbad.medusa.util.customtype.CustomLocation;
 import io.github.retrooper.packetevents.PacketEvents;
+import io.github.retrooper.packetevents.enums.ServerVersion;
 import io.github.retrooper.packetevents.event.PacketListener;
 import io.github.retrooper.packetevents.packettype.PacketType;
 import io.github.retrooper.packetevents.packetwrappers.in.blockdig.WrappedPacketInBlockDig;
@@ -68,7 +70,9 @@ public class PlayerData implements PacketListener {
     //Miscellanious data.
     private boolean alerts;
     private boolean digging;
+    private boolean gliding;
     private int ticks;
+    private int riptideTicks;
     private boolean shouldCheck = true;
 
     //Transaction pinging system data.
@@ -76,6 +80,10 @@ public class PlayerData implements PacketListener {
     private short transactionID;
 
     public boolean isTakingKnockback() { return Math.abs(this.ticks - this.velocityTicks) < this.maxVelocityTicks; }
+
+    public boolean isRiptiding() { return riptideTicks > 0; }
+
+    public boolean isGliding() { return this.gliding; }
 
     public void processPacket(final Packet packet) {
         //Handle checks.
@@ -215,7 +223,9 @@ public class PlayerData implements PacketListener {
     private void processLocation(CustomLocation location, CustomLocation lastLocation) {
         ++this.ticksSinceVelocity;
         ++this.ticks;
-
+        if(this.riptideTicks > 0){
+            this.riptideTicks--;
+        }
         this.lastLocation = lastLocation;
         this.location = location;
 

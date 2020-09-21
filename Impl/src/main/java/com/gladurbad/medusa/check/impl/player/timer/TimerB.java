@@ -2,11 +2,13 @@ package com.gladurbad.medusa.check.impl.player.timer;
 
 import com.gladurbad.medusa.check.Check;
 import com.gladurbad.api.check.CheckInfo;
-import com.gladurbad.medusa.config.Config;
 import com.gladurbad.medusa.config.ConfigValue;
 import com.gladurbad.medusa.network.Packet;
 import com.gladurbad.medusa.playerdata.PlayerData;
+import com.gladurbad.medusa.util.PlayerUtil;
+import io.github.retrooper.packetevents.enums.ServerVersion;
 import io.github.retrooper.packetevents.packettype.PacketType;
+
 
 @CheckInfo(name = "Timer", type = "B")
 public class TimerB extends Check {
@@ -22,7 +24,7 @@ public class TimerB extends Check {
 
     @Override
     public void handle(Packet packet) {
-        if (packet.isFlying()) {
+        if (packet.isFlying() && PlayerUtil.getServerVersion().isLowerThan(ServerVersion.v_1_9)) {
             final long flyingTime = now();
             final long flyingTimeDelta = flyingTime - lastFlyingTime;
 

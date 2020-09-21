@@ -5,7 +5,10 @@ import com.gladurbad.medusa.check.Check;
 import com.gladurbad.medusa.network.Packet;
 import com.gladurbad.medusa.playerdata.PlayerData;
 import com.gladurbad.medusa.util.MathUtil;
+import com.gladurbad.medusa.util.PlayerUtil;
 import io.github.retrooper.packetevents.packettype.PacketType;
+
+import static io.github.retrooper.packetevents.enums.ServerVersion.v_1_13;
 
 @CheckInfo(name = "Speed", type = "C", dev = true)
 public class SpeedC extends Check {
@@ -23,7 +26,8 @@ public class SpeedC extends Check {
             final boolean invalid = acceleration > MathUtil.getBaseSpeed(data.getPlayer()) &&
                     !data.isTakingKnockback() &&
                     !data.getPlayer().isInsideVehicle() &&
-                    !data.getPlayer().isFlying();
+                    !data.getPlayer().isFlying() &&
+                    !data.isRiptiding();
 
             if (invalid) {
                 fail();

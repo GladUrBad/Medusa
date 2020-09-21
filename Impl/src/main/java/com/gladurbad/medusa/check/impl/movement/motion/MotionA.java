@@ -34,6 +34,7 @@ public class MotionA extends Check {
                 final boolean invalid = jumped &&
                         Math.abs(data.getDeltaY() - expectedJumpMotion) > 0.03 &&
                         notVelocity &&
+                        !data.isRiptiding() &&
                         !slime;
 
                 if (invalid) {

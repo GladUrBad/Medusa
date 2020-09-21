@@ -7,7 +7,10 @@ import com.gladurbad.medusa.playerdata.PlayerData;
 import com.gladurbad.medusa.util.CollisionUtil;
 import com.gladurbad.medusa.util.PlayerUtil;
 
+import io.github.retrooper.packetevents.enums.ServerVersion;
 import org.bukkit.Material;
+
+import static io.github.retrooper.packetevents.enums.ServerVersion.v_1_13;
 
 @CheckInfo(name = "Speed", type = "B")
 public class SpeedB extends Check {
@@ -55,7 +58,7 @@ public class SpeedB extends Check {
             }
 
             final boolean invalid = !data.getPlayer().isFlying()
-                    && data.getDeltaXZ() > limit && flyingTicks > 40;
+                    && data.getDeltaXZ() > limit && flyingTicks > 40 && !data.isRiptiding() && !data.isGliding();
 
             if (invalid) {
                 increaseBuffer();

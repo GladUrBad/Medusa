@@ -5,6 +5,8 @@ import com.gladurbad.api.check.CheckInfo;
 import com.gladurbad.medusa.network.Packet;
 import com.gladurbad.medusa.playerdata.PlayerData;
 import com.gladurbad.medusa.util.MathUtil;
+import com.gladurbad.medusa.util.PlayerUtil;
+import io.github.retrooper.packetevents.enums.ServerVersion;
 
 @CheckInfo(name = "Motion", type = "D")
 public class MotionD extends Check {
@@ -15,7 +17,7 @@ public class MotionD extends Check {
 
     @Override
     public void handle(Packet packet) {
-        if (packet.isFlying()) {
+        if (packet.isFlying() && PlayerUtil.getServerVersion().isLowerThan(ServerVersion.v_1_13)) {
             if (MathUtil.isScientificNotation(Math.abs(data.getDeltaY()))) {
                 increaseBuffer();
                 if (buffer > 3) {

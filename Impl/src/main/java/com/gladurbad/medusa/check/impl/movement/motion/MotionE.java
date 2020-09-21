@@ -19,7 +19,7 @@ public class MotionE extends Check {
 
     @Override
     public void handle(Packet packet) {
-        if (packet.isFlying()) {
+        if (packet.isFlying() && !data.getPlayer().isFlying()) {
             if (++teleportedTicks > 5) {
                 final boolean colliding = CollisionUtil.isOnGround(data.getLastBukkitLocation(), -0.5001)
                         && CollisionUtil.isOnGround(data.getBukkitLocation(), -0.5001);

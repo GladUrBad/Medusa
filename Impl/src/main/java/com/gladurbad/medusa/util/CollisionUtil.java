@@ -1,5 +1,7 @@
 package com.gladurbad.medusa.util;
 
+import com.gladurbad.medusa.Medusa;
+import io.github.retrooper.packetevents.enums.ServerVersion;
 import lombok.experimental.UtilityClass;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -8,6 +10,8 @@ import org.bukkit.block.Block;
 import org.bukkit.entity.Boat;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
+
+import java.util.concurrent.atomic.AtomicReference;
 
 @UtilityClass
 public class CollisionUtil {
@@ -19,12 +23,13 @@ public class CollisionUtil {
     }
 
 
+
     public boolean isOnChosenBlock(Player player, double yLevel, Material... materials) {
         final double expand = 0.31;
         final Location location = player.getLocation();
-        for (double x = -expand; x <= expand; x += expand) {
-            for (double z = -expand; z <= expand; z += expand) {
-                for (Material material : materials) {
+        for(double x = -expand; x <= expand; x += expand) {
+            for(double z = -expand; z <= expand; z+= expand) {
+                for(Material material : materials) {
                     if (getBlockAsync(location.clone().add(x, yLevel, z)).getType() == material) {
                         return true;
                     }
@@ -37,8 +42,8 @@ public class CollisionUtil {
     public boolean isOnGround(Player player) {
         final double expand = 0.31;
         final Location location = player.getLocation();
-        for (double x = -expand; x <= expand; x += expand) {
-            for (double z = -expand; z <= expand; z += expand) {
+        for(double x = -expand; x <= expand; x += expand) {
+            for(double z = -expand; z <= expand; z+= expand) {
                 if (getBlockAsync(location.clone().add(x, -0.5001, z)).getType() != Material.AIR || isOnLilyOrCarpet(player)) {
                     return true;
                 }
@@ -50,8 +55,8 @@ public class CollisionUtil {
     public boolean isOnSolid(Player player) {
         final double expand = 0.31;
         final Location location = player.getLocation();
-        for (double x = -expand; x <= expand; x += expand) {
-            for (double z = -expand; z <= expand; z += expand) {
+        for(double x = -expand; x <= expand; x += expand) {
+            for(double z = -expand; z <= expand; z+= expand) {
                 if (getBlockAsync(location.clone().add(x, -0.5001, z)).getType().isSolid()) {
                     return true;
                 }
@@ -63,8 +68,8 @@ public class CollisionUtil {
     public boolean isInLiquid(Player player) {
         final double expand = 0.31;
         final Location location = player.getLocation();
-        for (double x = -expand; x <= expand; x += expand) {
-            for (double z = -expand; z <= expand; z += expand) {
+        for(double x = -expand; x <= expand; x += expand) {
+            for(double z = -expand; z <= expand; z+= expand) {
                 if (getBlockAsync(location.clone().add(x, -0.5001, z)).isLiquid()) {
                     return true;
                 }
@@ -89,8 +94,8 @@ public class CollisionUtil {
 
     public boolean isOnGround(Location location, double dropDown) {
         final double expand = 0.31;
-        for (double x = -expand; x <= expand; x += expand) {
-            for (double z = -expand; z <= expand; z += expand) {
+        for(double x = -expand; x <= expand; x += expand) {
+            for(double z = -expand; z <= expand; z+= expand) {
                 if (getBlockAsync(location.clone().add(x, dropDown, z)).getType() != Material.AIR) {
                     return true;
                 }
@@ -101,8 +106,8 @@ public class CollisionUtil {
 
     public boolean blockNearHead(Location location) {
         final double expand = 0.31;
-        for (double x = -expand; x <= expand; x += expand) {
-            for (double z = -expand; z <= expand; z += expand) {
+        for(double x = -expand; x <= expand; x += expand) {
+            for(double z = -expand; z <= expand; z+= expand) {
                 if (getBlockAsync(location.clone().add(x, 2.0, z)).getType() != Material.AIR) {
                     return true;
                 }
@@ -113,7 +118,7 @@ public class CollisionUtil {
 
     public boolean isNearBoat(Player player) {
         //Modern spigot versions prevent async getNearbyEntity calls
-        if (ProtocolVersion.getGameVersion().isAbove(ProtocolVersion.v1_14_2) && !Bukkit.isPrimaryThread()) {
+        if (PlayerUtil.getServerVersion().isHigherThan(ServerVersion.v_1_14) && !Bukkit.isPrimaryThread()) {
             for (Boat boat : player.getWorld().getEntitiesByClass(Boat.class)) {
                 if (boat.getLocation().distanceSquared(player.getLocation()) <= 3 * 3) {
                     return true;

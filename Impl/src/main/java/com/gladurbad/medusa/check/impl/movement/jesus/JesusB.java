@@ -21,7 +21,7 @@ public class JesusB extends Check {
 			final Player player = data.getPlayer();
 
 			final boolean invalid = CollisionUtil.isOnChosenBlock(player, 0.1, Material.WATER, Material.STATIONARY_WATER) &&
-					!CollisionUtil.isOnSolid(player) && data.getDeltaY() == 0.0D;
+					!CollisionUtil.isOnSolid(player) && !data.getPlayer().isInsideVehicle() && data.getDeltaY() == 0.0D;
 
 			if (invalid) {
 				increaseBuffer();

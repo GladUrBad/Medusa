@@ -2,6 +2,7 @@ package com.gladurbad.medusa;
 
 import com.gladurbad.medusa.command.MedusaCommands;
 import com.gladurbad.medusa.config.Config;
+import com.gladurbad.medusa.listener.ModernVersionListeners;
 import com.gladurbad.medusa.manager.AlertManager;
 import com.gladurbad.medusa.network.PacketProcessor;
 import com.gladurbad.medusa.listener.RegistrationListener;
@@ -9,7 +10,9 @@ import com.gladurbad.medusa.manager.CheckManager;
 import com.gladurbad.medusa.manager.PlayerDataManager;
 import com.gladurbad.medusa.playerdata.PlayerData;
 import com.gladurbad.medusa.util.ChatUtil;
+import com.gladurbad.medusa.util.PlayerUtil;
 import io.github.retrooper.packetevents.PacketEvents;
+import io.github.retrooper.packetevents.enums.ServerVersion;
 import io.github.retrooper.packetevents.event.PacketEvent;
 import lombok.Getter;
 import org.bukkit.Bukkit;
@@ -49,6 +52,9 @@ public class Medusa extends JavaPlugin {
 
         PacketEvents.getAPI().getEventManager().registerListener(new PacketProcessor());
         PacketEvents.getAPI().getEventManager().registerListener(new RegistrationListener());
+        if(PlayerUtil.getServerVersion().isHigherThan(ServerVersion.v_1_13)){
+           Bukkit.getPluginManager().registerEvents(new ModernVersionListeners(),this);
+        }
 
         //Register online players into the system.
         for (final Player player : Bukkit.getOnlinePlayers()) {
