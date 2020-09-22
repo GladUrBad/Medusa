@@ -39,9 +39,6 @@ public class FlightA extends Check {
                             !data.isRiptiding() &&
                             !data.isGliding() &&
                             vehicleTicks > 20;
-           if(invalid){
-               data.getPlayer().sendMessage(difference * 100 + " > " + LIMIT * 100);
-           }
             if (invalid) {
                 if (increaseBuffer() > 5) {
                     fail();
