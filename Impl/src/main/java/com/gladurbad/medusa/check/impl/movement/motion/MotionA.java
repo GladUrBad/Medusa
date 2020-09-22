@@ -10,6 +10,8 @@ import io.github.retrooper.packetevents.packettype.PacketType;
 import org.bukkit.Material;
 import org.bukkit.potion.PotionEffectType;
 
+import java.util.Collections;
+
 @CheckInfo(name = "Motion", type = "A", dev = true)
 public class MotionA extends Check {
 
@@ -35,6 +37,7 @@ public class MotionA extends Check {
                         Math.abs(data.getDeltaY() - expectedJumpMotion) > 0.03 &&
                         notVelocity &&
                         !data.isRiptiding() &&
+                        !CollisionUtil.blockNearHead(data.getBukkitLocation()) &&
                         !slime;
 
                 if (invalid) {

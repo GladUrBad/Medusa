@@ -5,6 +5,7 @@ import com.gladurbad.api.check.CheckInfo;
 import com.gladurbad.medusa.network.Packet;
 import com.gladurbad.medusa.playerdata.PlayerData;
 import com.gladurbad.medusa.util.CollisionUtil;
+import org.bukkit.Material;
 
 @CheckInfo(name = "Flight", type = "A")
 public class FlightA extends Check {
@@ -29,16 +30,18 @@ public class FlightA extends Check {
             } else {
                 vehicleTicks++;
             }
-
             final boolean invalid =
                     difference > LIMIT &&
                             !CollisionUtil.isOnGround(data.getPlayer()) &&
+                            !CollisionUtil.isOnChosenBlock(data.getPlayer(), -1.0,Material.SLIME_BLOCK) &&
                             !CollisionUtil.isNearBoat(data.getPlayer()) &&
                             !data.getPlayer().isFlying() &&
                             !data.isRiptiding() &&
                             !data.isGliding() &&
                             vehicleTicks > 20;
-
+           if(invalid){
+               data.getPlayer().sendMessage(difference * 100 + " > " + LIMIT * 100);
+           }
             if (invalid) {
                 if (increaseBuffer() > 5) {
                     fail();

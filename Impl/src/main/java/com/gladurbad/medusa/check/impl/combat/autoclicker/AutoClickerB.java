@@ -31,7 +31,6 @@ public class AutoClickerB extends Check {
 
                 if (samples.size() >= 100) {
                     final double deviation = MathUtil.getStandardDeviation(samples);
-                    debug(deviation);
                     samples.clear();
                 }
             }
