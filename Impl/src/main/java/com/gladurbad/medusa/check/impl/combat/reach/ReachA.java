@@ -5,14 +5,20 @@ import com.gladurbad.medusa.check.*;
 import com.gladurbad.medusa.config.ConfigValue;
 import com.gladurbad.medusa.network.Packet;
 import com.gladurbad.medusa.playerdata.PlayerData;
+import com.gladurbad.medusa.util.MathUtil;
 import com.gladurbad.medusa.util.customtype.EvictingList;
 
 import com.gladurbad.medusa.util.customtype.Pair;
+import io.github.retrooper.packetevents.PacketEvents;
 import io.github.retrooper.packetevents.packetwrappers.in.useentity.WrappedPacketInUseEntity;
 
+import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.entity.Entity;
+import org.bukkit.util.Vector;
+
+import java.util.ArrayDeque;
 
 
 @CheckInfo(name = "Reach", type = "A")
@@ -21,6 +27,7 @@ public class ReachA extends Check {
     private static final ConfigValue reachMaxLatency = new ConfigValue(ConfigValue.ValueType.LONG, "reach-maxlatency");
     private static final ConfigValue reachSensitivity = new ConfigValue(ConfigValue.ValueType.INTEGER, "reach-sensitivity");
     private static final ConfigValue maxReach = new ConfigValue(ConfigValue.ValueType.DOUBLE, "max-reach");
+    private static final ConfigValue bufferDecay = new ConfigValue(ConfigValue.ValueType.DOUBLE, "buffer-decay");
     private static int REACH_BUFFER = -1;
 
     private Entity attacked, lastAttacked;
@@ -41,25 +48,22 @@ public class ReachA extends Check {
 
             if (data.getPlayer().getGameMode() == GameMode.CREATIVE) return;
 
-            if (historyLocations.size() == 20) {
-                final long ping = data.getTransactionPing();
+            if (historyLocations.size() == 20 && PacketEvents.getAPI().getPlayerUtils().getPing(data.getPlayer()) < reachMaxLatency.getLong()) {
+                final double distance = historyLocations.stream()
+                        .filter(pair -> Math.abs(now() - pair.getX() - PacketEvents.getAPI().getPlayerUtils().getPing(data.getPlayer())) < 200)
+                        .mapToDouble(pair -> {
+                            final Vector playerLoc = data.getPlayer().getLocation().toVector().setY(0);
+                            final Vector victimLoc = pair.getY().toVector().setY(0);
 
-                if (ping < reachMaxLatency.getLong()) {
-                    final double distance = this.historyLocations.stream()
-                      .filter(pair -> Math.abs(now() - pair.getX()) < Math.max(ping, 150L))
-                      .mapToDouble(pair -> {
-                          Location victimLoc = pair.getY();
-                          Location playerLoc = data.getBukkitLocation();
+                            return playerLoc.distance(victimLoc) - 0.57D;
+                        }).min().orElse(0.0);
 
-                          return playerLoc.toVector().setY(0).distance(victimLoc.toVector().setY(0)) - 0.57D;
-                      }).min().orElse(0.0);
-
-                    if (distance > maxReach.getDouble()) {
-                        increaseBuffer();
-                        if (buffer > REACH_BUFFER) fail();
-                    } else {
-                        decreaseBuffer();
+                if (distance > maxReach.getDouble()) {
+                    if (increaseBuffer() > REACH_BUFFER) {
+                        fail();
                     }
+                } else {
+                    decreaseBufferBy(bufferDecay.getDouble());
                 }
             }
             lastAttacked = attacked;
@@ -69,4 +73,5 @@ public class ReachA extends Check {
             }
         }
     }
+
 }

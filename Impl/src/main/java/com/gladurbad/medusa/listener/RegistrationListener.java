@@ -3,15 +3,15 @@ package com.gladurbad.medusa.listener;
 import com.gladurbad.medusa.config.Config;
 import com.gladurbad.medusa.manager.PlayerDataManager;
 import com.gladurbad.medusa.playerdata.PlayerData;
-import io.github.retrooper.packetevents.annotations.PacketHandler;
-import io.github.retrooper.packetevents.event.PacketListener;
-import io.github.retrooper.packetevents.event.impl.PlayerInjectEvent;
-import io.github.retrooper.packetevents.event.impl.PlayerUninjectEvent;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
+import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.event.player.PlayerQuitEvent;
 
-public class RegistrationListener implements PacketListener {
+public class RegistrationListener implements Listener {
 
-    @PacketHandler
-    public void onInject(PlayerInjectEvent event) {
+    @EventHandler
+    public void onInject(PlayerJoinEvent event) {
         final PlayerData playerData = new PlayerData(event.getPlayer().getUniqueId(), event.getPlayer());
         if (Config.TESTMODE) {
             playerData.setAlerts(true);
@@ -19,8 +19,8 @@ public class RegistrationListener implements PacketListener {
         PlayerDataManager.getInstance().getPlayerData().put(event.getPlayer().getUniqueId(), playerData);
     }
 
-    @PacketHandler
-    public void onUninject(PlayerUninjectEvent event) {
+    @EventHandler
+    public void onUninject(PlayerQuitEvent event) {
         PlayerDataManager.getInstance().getPlayerData().remove(event.getPlayer().getUniqueId());
     }
 

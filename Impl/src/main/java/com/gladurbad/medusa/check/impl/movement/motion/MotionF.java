@@ -5,6 +5,7 @@ import com.gladurbad.api.check.CheckInfo;
 import com.gladurbad.medusa.network.Packet;
 import com.gladurbad.medusa.playerdata.PlayerData;
 
+import com.gladurbad.medusa.util.CollisionUtil;
 import io.github.retrooper.packetevents.packettype.PacketType;
 import org.bukkit.util.Vector;
 
@@ -12,6 +13,8 @@ import org.bukkit.util.Vector;
 public class MotionF extends Check {
 
     private int teleportTicks;
+    private int offGroundTicks;
+    private Vector direction = new Vector(0, 0, 0);
 
     public MotionF(PlayerData data) {
         super(data);
@@ -20,7 +23,7 @@ public class MotionF extends Check {
     @Override
     public void handle(Packet packet) {
         if (packet.isFlying()) {
-            if (data.isSprinting() && data.getTicksSinceVelocity() > 15 && ++teleportTicks > 5) {
+            if (data.isSprinting() && data.getTicksSinceVelocity() > 15 && ++teleportTicks > 5 && !data.getPlayer().isFlying()) {
                 final double deltaX = data.getLocation().getX() - data.getLastLocation().getX();
                 final double deltaZ = data.getLocation().getZ() - data.getLastLocation().getZ();
 
@@ -28,18 +31,27 @@ public class MotionF extends Check {
                 final double directionZ = Math.cos(data.getPlayer().getEyeLocation().getYaw() * 3.1415927F / 180.0F) * (float) 1 * 0.5F;
 
                 final Vector positionDifference = new Vector(deltaX, 0, deltaZ);
-                final Vector direction = new Vector(directionX, 0, directionZ);
+
+                if (data.getPlayer().isOnGround()) {
+                    offGroundTicks = 0;
+                    direction.setX(directionX);
+                    direction.setY(0);
+                    direction.setZ(directionZ);
+                }
 
                 final double angle = positionDifference.angle(direction);
 
-                if (angle > 1.08) {
-                    increaseBuffer();
-                    if (buffer >= 5) {
+                final boolean invalid = !CollisionUtil.isInLiquid(data.getPlayer()) &&
+                        angle > 1.56 &&
+                        data.getDeltaXZ() > 0.25;
+
+                if (invalid) {
+                    if (increaseBuffer() >= 7) {
                         fail();
                         setBuffer(0);
                     }
                 } else {
-                    decreaseBufferBy(1);
+                    decreaseBufferBy(1.5);
                     setLastLegitLocation(data.getBukkitLocation());
                 }
             }

@@ -7,17 +7,15 @@ import com.gladurbad.medusa.playerdata.PlayerData;
 import io.github.retrooper.packetevents.packettype.PacketType;
 import io.github.retrooper.packetevents.packetwrappers.in.flying.WrappedPacketInFlying;
 
-@CheckInfo(name = "Inventory", type = "B")
+@CheckInfo(name = "Inventory", type = "B", dev = true)
 
 public class InventoryB extends Check {
     public InventoryB(PlayerData data) { super(data); }
 
     @Override
     public void handle(Packet packet) {
-        if (packet.isReceiving() && packet.isFlying()) {
-            final WrappedPacketInFlying wrappedPacketInFlying = new WrappedPacketInFlying(packet.getRawPacket());
-
-            if (wrappedPacketInFlying.isPosition()) {
+        if (packet.isFlying()) {
+            if (data.getDeltaXZ() > 0.14) {
                 if (data.isInInventory() && (System.currentTimeMillis() - data.getTimeInInventory()) > 1500) {
                     increaseBuffer();
                     if (buffer > 2) {

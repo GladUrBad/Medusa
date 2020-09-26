@@ -25,7 +25,9 @@ public class FlightB extends Check {
             final double acceleration = deltaY - lastDeltaY;
             final double lastAcceleration = lastDeltaY - lastLastDeltaY;
 
-            if (!CollisionUtil.isOnGround(data.getPlayer()) && !data.getPlayer().isFlying()) {
+            if (!CollisionUtil.isOnGround(data.getPlayer()) &&
+                    !data.getPlayer().isFlying() &&
+                    !CollisionUtil.isNearBoat(data.getPlayer())) {
                 if (++airTicks > 10) {
                     if (acceleration > 0.0 && lastAcceleration <= 0.0 && data.getTicksSinceVelocity() > 10) {
                         fail();

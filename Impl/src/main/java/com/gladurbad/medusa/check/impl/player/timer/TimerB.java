@@ -6,15 +6,19 @@ import com.gladurbad.medusa.config.Config;
 import com.gladurbad.medusa.config.ConfigValue;
 import com.gladurbad.medusa.network.Packet;
 import com.gladurbad.medusa.playerdata.PlayerData;
+import com.gladurbad.medusa.util.MathUtil;
 import io.github.retrooper.packetevents.packettype.PacketType;
+
+import java.util.ArrayDeque;
 
 @CheckInfo(name = "Timer", type = "B")
 public class TimerB extends Check {
 
-    private long lastFlyingTime, total;
+    private long lastFlyingTime, total, lastFlyingTimeDelta;
     private int packets;
+
     private static final ConfigValue maxPacketDiscrepancy = new ConfigValue(ConfigValue.ValueType.INTEGER, "max-packet-discrepancy");
-    private static final ConfigValue maxBuffer = new ConfigValue(ConfigValue.ValueType.INTEGER, "max-buffer");
+    private static final ConfigValue maxBuffer = new ConfigValue(ConfigValue.ValueType.DOUBLE, "max-buffer");
 
     public TimerB(PlayerData data) {
         super(data);
@@ -29,12 +33,18 @@ public class TimerB extends Check {
             total += flyingTimeDelta;
             packets++;
 
+            if (Math.abs(flyingTimeDelta - lastFlyingTimeDelta) > 175) {
+                total = 0;
+                packets = 0;
+            }
+
             if (total > 1000L) {
                 final int packetDiscrepancy = Math.abs(packets - 20);
 
                 if (packetDiscrepancy >= maxPacketDiscrepancy.getInt()) {
-                    if (increaseBuffer() > maxBuffer.getInt()) {
+                    if (increaseBuffer() > maxBuffer.getDouble()) {
                         fail();
+                        setBuffer(0);
                     }
                 } else {
                     decreaseBuffer();
@@ -45,6 +55,7 @@ public class TimerB extends Check {
             }
 
             lastFlyingTime = flyingTime;
+            lastFlyingTimeDelta = flyingTimeDelta;
         } else if (packet.isSending() && packet.getPacketId() == PacketType.Server.POSITION) {
             packets--;
         }

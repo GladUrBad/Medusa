@@ -5,6 +5,7 @@ import com.gladurbad.medusa.check.impl.combat.aim.*;
 import com.gladurbad.medusa.check.impl.combat.autoclicker.AutoClickerB;
 import com.gladurbad.medusa.check.impl.combat.autoclicker.AutoClickerA;
 import com.gladurbad.medusa.check.impl.combat.killaura.*;
+import com.gladurbad.medusa.check.impl.combat.reach.ReachB;
 import com.gladurbad.medusa.check.impl.movement.motion.*;
 import com.gladurbad.medusa.check.impl.combat.reach.ReachA;
 import com.gladurbad.medusa.check.impl.combat.velocity.VelocityA;
@@ -55,7 +56,9 @@ public class CheckManager {
             KillauraC.class,
             KillauraD.class,
             KillauraE.class,
+            KillauraF.class,
             ReachA.class,
+            ReachB.class,
             VelocityA.class,
             FastClimbA.class,
             FlightA.class,

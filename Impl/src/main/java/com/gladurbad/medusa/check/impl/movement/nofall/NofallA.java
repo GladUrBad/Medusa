@@ -25,7 +25,9 @@ public class NofallA extends Check {
                 final boolean clientOnGround = data.getLocation().getY() % 0.015625 == 0.0;
 
                 final boolean invalid = CollisionUtil.isInLiquid(data.getPlayer())
-                        && CollisionUtil.isCollidingWithClimbable(data.getPlayer());
+                        || CollisionUtil.isCollidingWithClimbable(data.getPlayer())
+                        || CollisionUtil.isNearBoat(data.getPlayer());
+
 
                 if (data.getPlayer().isInsideVehicle()) {
                     ticksSinceInVehicle = 0;

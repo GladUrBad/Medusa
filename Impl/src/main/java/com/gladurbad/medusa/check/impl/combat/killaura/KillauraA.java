@@ -9,6 +9,7 @@ import com.gladurbad.medusa.playerdata.PlayerData;
 public class KillauraA extends Check {
 
     private long flyingTime;
+    private int ticksSincePacketDrop;
 
     public KillauraA(PlayerData data) {
         super(data);
@@ -20,7 +21,20 @@ public class KillauraA extends Check {
             flyingTime = now();
         } else if (packet.isUseEntity()) {
             final long delay = now() - flyingTime;
-            if (delay <= 0) fail();
+
+            if (delay > 85) {
+                ticksSincePacketDrop = 0;
+            } else {
+                ++ticksSincePacketDrop;
+            }
+
+            if (delay <= 1 && ticksSincePacketDrop > 35) {
+                if (increaseBuffer() > 2) {
+                    fail();
+                }
+            } else {
+                decreaseBufferBy(0.1);
+            }
         }
     }
 }

@@ -116,7 +116,7 @@ public class CollisionUtil {
     }
 
     public boolean isNearBoat(Player player) {
-        for(Entity entity : player.getNearbyEntities(3, 3, 3)) {
+        for(Entity entity : player.getNearbyEntities(2, 2, 2)) {
             if (entity instanceof Boat) return true;
         }
         return false;

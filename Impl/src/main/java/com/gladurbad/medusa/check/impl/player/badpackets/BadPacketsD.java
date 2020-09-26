@@ -20,7 +20,7 @@ public class BadPacketsD extends Check {
             final byte id = packet.getPacketId();
 
             if (id == PacketType.Client.ENTITY_ACTION) {
-                if (++ticks > 1) {
+                if (++ticks > 4) {
                     fail();
                 }
             } else if (packet.isFlying()) {

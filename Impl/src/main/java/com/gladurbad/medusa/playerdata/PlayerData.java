@@ -51,7 +51,7 @@ public class PlayerData implements PacketListener {
     private double deltaX, deltaY, deltaZ, deltaXZ, lastDeltaX, lastDeltaY, lastDeltaZ, lastDeltaXZ;
     private float deltaYaw, deltaPitch, lastDeltaYaw, lastDeltaPitch;
     private CustomLocation lastLocation, location;
-    private boolean isSprinting, isSneaking, isInInventory;
+    private boolean isSprinting, isSneaking, isInInventory, hasSentEntityAction;
     private Vector lastVelocity = new Vector(0, 0, 0);
 
 
@@ -133,6 +133,8 @@ public class PlayerData implements PacketListener {
                 this.processLocation(location, lastLocation);
             } else if (packet.getPacketId() == PacketType.Client.ENTITY_ACTION) {
                 WrappedPacketInEntityAction wrappedPacketInEntityAction = new WrappedPacketInEntityAction(packet.getRawPacket());
+
+                hasSentEntityAction = true;
 
                 switch (wrappedPacketInEntityAction.getAction()) {
                     case START_SPRINTING:

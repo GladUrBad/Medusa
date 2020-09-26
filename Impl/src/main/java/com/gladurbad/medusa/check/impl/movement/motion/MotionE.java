@@ -21,8 +21,8 @@ public class MotionE extends Check {
     public void handle(Packet packet) {
         if (packet.isFlying()) {
             if (++teleportedTicks > 5) {
-                final boolean colliding = CollisionUtil.isOnGround(data.getLastBukkitLocation(), -0.5001)
-                        && CollisionUtil.isOnGround(data.getBukkitLocation(), -0.5001);
+                final boolean colliding = data.getLastLocation().isOnGround()
+                        && data.getLocation().isOnGround();
 
                 if (colliding) {
                     if (data.getDeltaY() > STEP_HEIGHT) {
@@ -30,6 +30,8 @@ public class MotionE extends Check {
                     } else {
                         setLastLegitLocation(data.getBukkitLocation());
                     }
+                } else {
+                    setLastLegitLocation(data.getBukkitLocation());
                 }
             }
         } else if (packet.isSending() && packet.getPacketId() == PacketType.Server.POSITION) {

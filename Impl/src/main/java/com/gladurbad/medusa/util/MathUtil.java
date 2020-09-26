@@ -500,6 +500,7 @@ public class MathUtil {
         return Math.sqrt(deviation / length);
     }
 
+
     public double getStandardDeviation(Collection<Double> numberArray) {
         double sum = 0.0, deviation = 0.0;
         int length = numberArray.size();
@@ -519,6 +520,10 @@ public class MathUtil {
         if (altDiff < diff) diff = altDiff;
         if (altAltDiff < diff) diff = altAltDiff;
         return diff;
+    }
+
+    public int getInTicks(long a) {
+        return MathUtil.floor(a / 50.);
     }
 
     public double getStandardDeviation(double[] numberArray) {
@@ -575,4 +580,5 @@ public class MathUtil {
     public boolean isScientificNotation(double d) {
         return Double.toString(d).contains("E");
     }
+
 }

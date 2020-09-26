@@ -21,7 +21,7 @@ public class SpeedC extends Check {
             final double acceleration = Math.abs(data.getDeltaXZ() - data.getLastDeltaXZ());
 
             final boolean invalid = acceleration > MathUtil.getBaseSpeed(data.getPlayer()) &&
-                    !data.isTakingKnockback() &&
+                    data.getTicksSinceVelocity() > 20 &&
                     !data.getPlayer().isInsideVehicle() &&
                     !data.getPlayer().isFlying();
 
@@ -31,7 +31,6 @@ public class SpeedC extends Check {
                 setLastLegitLocation(data.getBukkitLocation());
             }
 
-            ///debug(acceleration + " " + MathUtil.getBaseSpeed(data.getPlayer()));
         } else if (packet.isSending() && packet.getPacketId() == PacketType.Server.POSITION) {
             teleportedTicks = 0;
         }

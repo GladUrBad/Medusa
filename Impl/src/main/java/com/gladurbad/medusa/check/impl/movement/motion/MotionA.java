@@ -13,7 +13,7 @@ import org.bukkit.potion.PotionEffectType;
 @CheckInfo(name = "Motion", type = "A", dev = true)
 public class MotionA extends Check {
 
-    private boolean teleported;
+    private int teleportedTicks;
 
     public MotionA(PlayerData data) {
         super(data);
@@ -22,17 +22,18 @@ public class MotionA extends Check {
     @Override
     public void handle(Packet packet) {
         if (packet.isPosition()) {
-            if (!teleported) {
+            if (++teleportedTicks > 10) {
                 double expectedJumpMotion = 0.42F + (double) ((float) PlayerUtil.getPotionLevel(data.getPlayer(), PotionEffectType.JUMP) * 0.1F);
 
                 final boolean jumped = data.getLastLocation().isOnGround() &&
                         !data.getLocation().isOnGround() && data.getDeltaY() > 0;
 
                 final boolean notVelocity = data.getTicksSinceVelocity() > data.getMaxVelocityTicks();
-                final boolean slime = CollisionUtil.isOnChosenBlock(data.getPlayer(), -0.5, Material.SLIME_BLOCK);
+                final boolean slime = CollisionUtil.isOnChosenBlock(data.getPlayer(), -0.7, Material.SLIME_BLOCK);
 
                 final boolean invalid = jumped &&
                         Math.abs(data.getDeltaY() - expectedJumpMotion) > 0.03 &&
+                        !CollisionUtil.blockNearHead(data.getPlayer().getLocation()) &&
                         notVelocity &&
                         !slime;
 
@@ -40,9 +41,8 @@ public class MotionA extends Check {
                     fail();
                 }
             }
-            teleported = false;
-        } else if (packet.isReceiving() && packet.getPacketId() == PacketType.Server.POSITION) {
-            teleported = true;
+        } else if (packet.isSending() && packet.getPacketId() == PacketType.Server.POSITION) {
+            teleportedTicks = 0;
         }
     }
 }

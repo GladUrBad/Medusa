@@ -11,7 +11,7 @@ import io.github.retrooper.packetevents.PacketEvents;
 public class PingSpoofA extends Check {
 
     private static final ConfigValue maxPingDifference = new ConfigValue(ConfigValue.ValueType.LONG, "max-ping-difference");
-    private static final ConfigValue maxBuffer = new ConfigValue(ConfigValue.ValueType.INTEGER, "max-buffer");
+    private static final ConfigValue maxBuffer = new ConfigValue(ConfigValue.ValueType.DOUBLE, "max-buffer");
 
     public PingSpoofA(PlayerData data) {
         super(data);
@@ -26,7 +26,7 @@ public class PingSpoofA extends Check {
             final long pingDifference = Math.abs(keepAlivePing - transactionPing);
 
             if (pingDifference > maxPingDifference.getLong()) {
-                if (increaseBuffer() > maxBuffer.getInt()) {
+                if (increaseBuffer() > maxBuffer.getDouble()) {
                     fail();
                     resetBuffer();
                 }

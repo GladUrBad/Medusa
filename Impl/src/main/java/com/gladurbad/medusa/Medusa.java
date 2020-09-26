@@ -48,7 +48,8 @@ public class Medusa extends JavaPlugin {
         PacketEvents.init(this);
 
         PacketEvents.getAPI().getEventManager().registerListener(new PacketProcessor());
-        PacketEvents.getAPI().getEventManager().registerListener(new RegistrationListener());
+
+        Bukkit.getServer().getPluginManager().registerEvents(new RegistrationListener(), this);
 
         //Register online players into the system.
         for (final Player player : Bukkit.getOnlinePlayers()) {

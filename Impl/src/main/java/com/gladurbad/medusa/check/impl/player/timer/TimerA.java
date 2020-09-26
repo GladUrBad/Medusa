@@ -6,21 +6,25 @@ import com.gladurbad.medusa.config.ConfigValue;
 import com.gladurbad.medusa.network.Packet;
 import com.gladurbad.medusa.playerdata.PlayerData;
 
-import com.google.common.collect.Lists;
 import io.github.retrooper.packetevents.packettype.PacketType;
 
 import java.util.ArrayDeque;
-import java.util.Deque;
 
 @CheckInfo(name = "Timer", type = "A")
 public class TimerA extends Check {
 
     private long lastTime;
+    private long lastDelay;
+
     private final ArrayDeque<Long> samples = new ArrayDeque<>();
 
-    private static final ConfigValue maxTimerSpeed = new ConfigValue(ConfigValue.ValueType.DOUBLE, "max-speed");
-    private static final ConfigValue minTimerSpeed = new ConfigValue(ConfigValue.ValueType.DOUBLE, "min-speed");
-    private static final ConfigValue customBuffer = new ConfigValue(ConfigValue.ValueType.INTEGER, "max-buffer");
+    private static final ConfigValue maxTimerSpeed = new ConfigValue(ConfigValue.ValueType.DOUBLE, "max-timer-speed");
+    private static final ConfigValue minTimerSpeed = new ConfigValue(ConfigValue.ValueType.DOUBLE, "min-timer-speed");
+    private static final ConfigValue customBuffer = new ConfigValue(ConfigValue.ValueType.DOUBLE, "max-buffer");
+    private static final ConfigValue sampleSize = new ConfigValue(ConfigValue.ValueType.INTEGER, "sample-size");
+    private static final ConfigValue bufferDecay = new ConfigValue(ConfigValue.ValueType.DOUBLE, "buffer-decay");
+    private static final ConfigValue resetBufferOnFlag = new ConfigValue(ConfigValue.ValueType.BOOLEAN, "reset-buffer-on-flag");
+
 
     public TimerA(PlayerData data) {
         super(data);
@@ -32,24 +36,30 @@ public class TimerA extends Check {
             final long time = now();
             final long delay = time - lastTime;
 
-            if (now() - data.getLastSetbackTime() < 1000L) samples.clear();
+            if (now() - data.getLastSetbackTime() < 1000L ||
+                    Math.abs(delay - lastDelay) > 75) samples.clear();
 
             samples.add(delay);
-            if (samples.size() >= 20) {
+            if (samples.size() >= sampleSize.getInt()) {
                 double timerAverage = samples.parallelStream().mapToDouble(value -> value).average().orElse(0.0D);
                 double timerSpeed = 50 / timerAverage;
 
                 if (timerSpeed > maxTimerSpeed.getDouble() || timerSpeed < minTimerSpeed.getDouble()) {
-                    if (increaseBuffer() > customBuffer.getInt()) {
+                    if (increaseBuffer() > customBuffer.getDouble()) {
                         fail();
+                        if (resetBufferOnFlag.getBoolean()) {
+                            setBuffer(0);
+                        }
                     }
                 } else {
-                    decreaseBuffer();
+                    decreaseBufferBy(bufferDecay.getDouble());
                 }
+
                 samples.clear();
             }
             lastTime = time;
-        } else if (packet.isSending() && packet.getPacketId() == PacketType.Server.ENTITY_TELEPORT) {
+            lastDelay = delay;
+        } else if (packet.isSending() && packet.getPacketId() == PacketType.Server.POSITION) {
             samples.clear();
         } else if (packet.isReceiving() && packet.getPacketId() == PacketType.Client.STEER_VEHICLE) {
             samples.clear();
