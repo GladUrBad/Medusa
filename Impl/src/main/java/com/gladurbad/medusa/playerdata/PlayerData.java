@@ -21,6 +21,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import org.bukkit.Location;
+import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.bukkit.util.Vector;
 
@@ -99,7 +100,7 @@ public class PlayerData implements PacketListener {
                 final float pitch = wrappedPacketInFlying.getPitch();
                 final boolean onGround = wrappedPacketInFlying.isOnGround();
 
-                CustomLocation location = new CustomLocation(x, y, z, yaw, pitch, onGround);
+                CustomLocation location = new CustomLocation(getPlayer().getWorld(), x, y, z, yaw, pitch, onGround);
                 CustomLocation lastLocation = getLocation() != null ? getLocation() : location;
 
                 processLocation(location, lastLocation);
@@ -113,7 +114,7 @@ public class PlayerData implements PacketListener {
                 final float pitch = wrappedPacketInFlying.getPitch();
                 final boolean onGround = wrappedPacketInFlying.isOnGround();
 
-                CustomLocation location = new CustomLocation(x, y, z, yaw, pitch, onGround);
+                CustomLocation location = new CustomLocation(getPlayer().getWorld(), x, y, z, yaw, pitch, onGround);
                 CustomLocation lastLocation = this.getLocation() != null ? this.getLocation() : location;
 
                 this.processLocation(location, lastLocation);
@@ -127,7 +128,7 @@ public class PlayerData implements PacketListener {
                 final float pitch = this.getLocation().getPitch();
                 final boolean onGround = wrappedPacketInFlying.isOnGround();
 
-                CustomLocation location = new CustomLocation(x, y, z, yaw, pitch, onGround);
+                CustomLocation location = new CustomLocation(getPlayer().getWorld(), x, y, z, yaw, pitch, onGround);
                 CustomLocation lastLocation = this.getLocation() != null ? this.getLocation() : location;
 
                 this.processLocation(location, lastLocation);
@@ -259,10 +260,10 @@ public class PlayerData implements PacketListener {
     }
 
     public Location getLastBukkitLocation() {
-        return getLastLocation().toBukkit(getPlayer().getWorld());
+        return getLastLocation().toBukkit();
     }
 
     public Location getBukkitLocation() {
-        return getLocation().toBukkit(getPlayer().getWorld());
+        return getLocation().toBukkit();
     }
 }

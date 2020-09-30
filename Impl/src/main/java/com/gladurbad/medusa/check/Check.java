@@ -9,8 +9,10 @@ import com.gladurbad.medusa.manager.AlertManager;
 import com.gladurbad.medusa.network.Packet;
 import com.gladurbad.medusa.playerdata.PlayerData;
 
+import io.github.retrooper.packetevents.packetwrappers.out.position.WrappedPacketOutPosition;
 import lombok.Getter;
 import lombok.Setter;
+import net.minecraft.server.v1_8_R1.PacketPlayOutPosition;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
@@ -59,6 +61,9 @@ public abstract class Check implements MedusaCheck {
                 AlertManager.verbose(data, this);
                 if (event.isSetback()) {
                     final Location setBackLocation = lastLegitLocation == null ? data.getLastBukkitLocation() : lastLegitLocation;
+                    setBackLocation.setYaw(data.getPlayer().getEyeLocation().getYaw());
+                    setBackLocation.setPitch(data.getPlayer().getEyeLocation().getPitch());
+
                     Bukkit.getScheduler().runTask(Medusa.getInstance(), () -> data.getPlayer().teleport(setBackLocation));
                     data.setLastSetbackTime(now());
                     buffer = 0;

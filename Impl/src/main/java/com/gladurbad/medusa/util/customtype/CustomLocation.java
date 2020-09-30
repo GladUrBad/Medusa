@@ -10,12 +10,14 @@ import org.bukkit.util.Vector;
 @Setter
 public class CustomLocation {
 
+    private World world;
     private double x, y, z;
     private float yaw, pitch;
     private boolean onGround;
     private long timeStamp;
 
-    public CustomLocation(double x, double y, double z, float yaw, float pitch, boolean onGround) {
+    public CustomLocation(World world, double x, double y, double z, float yaw, float pitch, boolean onGround) {
+        this.world = world;
         this.x = x;
         this.y = y;
         this.z = z;
@@ -30,18 +32,18 @@ public class CustomLocation {
     }
 
     public CustomLocation offset(double x, double y, double z, float yaw, float pitch) {
-        return new CustomLocation(this.x + x, this.y + y, this.z + z, this.yaw + yaw, this.pitch + pitch, this.onGround);
+        return new CustomLocation(world, this.x + x, this.y + y, this.z + z, this.yaw + yaw, this.pitch + pitch, this.onGround);
     }
 
     public CustomLocation clone() {
-        return new CustomLocation(x, y, z, yaw, pitch, onGround);
+        return new CustomLocation(world, x, y, z, yaw, pitch, onGround);
     }
 
     public static CustomLocation fromBukkit(Location location) {
-        return new CustomLocation(location.getX(), location.getY(), location.getZ(), location.getYaw(), location.getPitch(), false);
+        return new CustomLocation(location.getWorld(), location.getX(), location.getY(), location.getZ(), location.getYaw(), location.getPitch(), false);
     }
 
-    public Location toBukkit(World world){ return new Location(world, getX(), getY(), getZ()); }
+    public Location toBukkit(){ return new Location(world, x, y, z); }
 
     public Vector getDirection() {
         Vector vector = new Vector();

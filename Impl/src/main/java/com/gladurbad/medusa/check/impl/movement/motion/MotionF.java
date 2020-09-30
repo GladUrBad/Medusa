@@ -23,7 +23,7 @@ public class MotionF extends Check {
     @Override
     public void handle(Packet packet) {
         if (packet.isFlying()) {
-            if (data.isSprinting() && data.getTicksSinceVelocity() > 15 && ++teleportTicks > 5 && !data.getPlayer().isFlying()) {
+            if (data.isSprinting() && data.getTicksSinceVelocity() > 15 && ++teleportTicks > 10 && !data.getPlayer().isFlying()) {
                 final double deltaX = data.getLocation().getX() - data.getLastLocation().getX();
                 final double deltaZ = data.getLocation().getZ() - data.getLastLocation().getZ();
 
@@ -37,13 +37,16 @@ public class MotionF extends Check {
                     direction.setX(directionX);
                     direction.setY(0);
                     direction.setZ(directionZ);
+                } else {
+                    ++offGroundTicks;
                 }
 
                 final double angle = positionDifference.angle(direction);
 
                 final boolean invalid = !CollisionUtil.isInLiquid(data.getPlayer()) &&
                         angle > 1.56 &&
-                        data.getDeltaXZ() > 0.25;
+                        data.getDeltaXZ() > 0.25 &&
+                        offGroundTicks < 8;
 
                 if (invalid) {
                     if (increaseBuffer() >= 7) {

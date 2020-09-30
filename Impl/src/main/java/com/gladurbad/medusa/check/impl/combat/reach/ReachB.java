@@ -5,6 +5,7 @@ import com.gladurbad.medusa.check.Check;
 import com.gladurbad.medusa.config.ConfigValue;
 import com.gladurbad.medusa.network.Packet;
 import com.gladurbad.medusa.playerdata.PlayerData;
+import io.github.retrooper.packetevents.PacketEvents;
 import io.github.retrooper.packetevents.packetwrappers.in.useentity.WrappedPacketInUseEntity;
 import org.bukkit.util.Vector;
 
@@ -24,7 +25,8 @@ public class ReachB extends Check {
         if (packet.isUseEntity()) {
             final WrappedPacketInUseEntity useEntity = new WrappedPacketInUseEntity(packet.getRawPacket());
 
-            if (useEntity.getAction() == WrappedPacketInUseEntity.EntityUseAction.ATTACK) {
+            if (useEntity.getAction() == WrappedPacketInUseEntity.EntityUseAction.ATTACK &&
+                    PacketEvents.getAPI().getPlayerUtils().getPing(data.getPlayer()) > 500L) {
                 final Vector playerLoc = data.getPlayer().getLocation().toVector().setY(0);
                 final Vector victimLoc = useEntity.getEntity().getLocation().toVector().setY(0);
 

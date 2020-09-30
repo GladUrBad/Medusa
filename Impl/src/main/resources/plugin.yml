@@ -1,5 +1,5 @@
 name: Medusa
-version: 1.3.6
+version: 1.4.2-HOTFIX-1
 main: com.gladurbad.medusa.Medusa
 load: STARTUP
 authors: [ GladUrBad ]

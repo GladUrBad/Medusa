@@ -6,6 +6,8 @@ import com.gladurbad.medusa.network.Packet;
 import com.gladurbad.medusa.playerdata.PlayerData;
 import com.gladurbad.medusa.util.CollisionUtil;
 import com.gladurbad.medusa.util.PlayerUtil;
+import io.github.retrooper.packetevents.PacketEvents;
+import io.github.retrooper.packetevents.enums.ServerVersion;
 import io.github.retrooper.packetevents.packettype.PacketType;
 import org.bukkit.Material;
 import org.bukkit.potion.PotionEffectType;
@@ -14,6 +16,7 @@ import org.bukkit.potion.PotionEffectType;
 public class MotionA extends Check {
 
     private int teleportedTicks;
+    private boolean slime;
 
     public MotionA(PlayerData data) {
         super(data);
@@ -29,7 +32,10 @@ public class MotionA extends Check {
                         !data.getLocation().isOnGround() && data.getDeltaY() > 0;
 
                 final boolean notVelocity = data.getTicksSinceVelocity() > data.getMaxVelocityTicks();
-                final boolean slime = CollisionUtil.isOnChosenBlock(data.getPlayer(), -0.7, Material.SLIME_BLOCK);
+
+                if (PacketEvents.getAPI().getServerUtils().getVersion().isLowerThan(ServerVersion.v_1_7_10)) {
+                    slime = CollisionUtil.isOnChosenBlock(data.getPlayer(), -0.7, Material.SLIME_BLOCK);
+                }
 
                 final boolean invalid = jumped &&
                         Math.abs(data.getDeltaY() - expectedJumpMotion) > 0.03 &&

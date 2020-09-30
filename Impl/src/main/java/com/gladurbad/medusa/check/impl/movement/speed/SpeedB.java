@@ -7,12 +7,15 @@ import com.gladurbad.medusa.playerdata.PlayerData;
 import com.gladurbad.medusa.util.CollisionUtil;
 import com.gladurbad.medusa.util.PlayerUtil;
 
+import io.github.retrooper.packetevents.PacketEvents;
+import io.github.retrooper.packetevents.enums.ServerVersion;
 import org.bukkit.Material;
 
 @CheckInfo(name = "Speed", type = "B")
 public class SpeedB extends Check {
 
     private int iceSlimeTicks, underBlockTicks, flyingTicks;
+    private boolean iceSlime;
 
     public SpeedB(PlayerData data) {
         super(data);
@@ -23,8 +26,13 @@ public class SpeedB extends Check {
         if (packet.isReceiving() && packet.isFlying()) {
             double limit = PlayerUtil.getBaseSpeed(data.getPlayer());
 
-            final boolean iceSlime = CollisionUtil.isOnChosenBlock(data.getPlayer(),
-                    -0.5001, Material.ICE, Material.PACKED_ICE, Material.SLIME_BLOCK);
+            if (PacketEvents.getAPI().getServerUtils().getVersion().isLowerThan(ServerVersion.v_1_7_10)) {
+                iceSlime = CollisionUtil.isOnChosenBlock(data.getPlayer(),
+                        -0.5001, Material.ICE, Material.PACKED_ICE, Material.SLIME_BLOCK);
+            } else {
+                iceSlime = CollisionUtil.isOnChosenBlock(data.getPlayer(),
+                        -0.5001, Material.ICE, Material.PACKED_ICE);
+            }
 
             final boolean underBlock = CollisionUtil.blockNearHead(data.getBukkitLocation());
             final boolean flying = data.getPlayer().isFlying();

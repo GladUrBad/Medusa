@@ -1,6 +1,5 @@
 package com.gladurbad.medusa.util;
 
-import com.gladurbad.medusa.Medusa;
 import lombok.experimental.UtilityClass;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -10,14 +9,18 @@ import org.bukkit.entity.Boat;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 
-import java.util.concurrent.atomic.AtomicReference;
 
 @UtilityClass
 public class CollisionUtil {
 
     private Block getBlockAsync(Location loc) {
-        if (loc.getWorld().isChunkLoaded(loc.getBlockX() >> 4, loc.getBlockZ() >> 4))
+        if (Bukkit.isPrimaryThread()) {
             return loc.getBlock();
+        } else {
+            if (loc.getWorld().isChunkLoaded(loc.getBlockX() >> 4, loc.getBlockZ() >> 4)) {
+                return loc.getBlock();
+            }
+        }
         return null;
     }
 
@@ -127,7 +130,7 @@ public class CollisionUtil {
         final int var1 = MathUtil.floor(location.getX());
         final int var2 = MathUtil.floor(location.getY());
         final int var3 = MathUtil.floor(location.getZ());
-        final Block var4 = new Location(location.getWorld(), var1, var2, var3).getBlock();
+        final Block var4 = getBlockAsync(new Location(location.getWorld(), var1, var2, var3));
         return var4.getType() == Material.LADDER || var4.getType() == Material.VINE;
     }
 
@@ -135,7 +138,7 @@ public class CollisionUtil {
         final int x = MathUtil.floor(player.getLocation().getX());
         final int y = MathUtil.floor(player.getLocation().getY() - 0.20000000298023224D - player.getEyeHeight());
         final int z = MathUtil.floor(player.getLocation().getZ());
-        final Block block = new Location(player.getLocation().getWorld(), x, y, z).getBlock();
+        final Block block = getBlockAsync(new Location(player.getLocation().getWorld(), x, y, z));
         return block.getType() == Material.SLIME_BLOCK;
     }
 }

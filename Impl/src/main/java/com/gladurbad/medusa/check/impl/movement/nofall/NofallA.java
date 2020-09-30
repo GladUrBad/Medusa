@@ -5,12 +5,14 @@ import com.gladurbad.api.check.CheckInfo;
 import com.gladurbad.medusa.network.Packet;
 import com.gladurbad.medusa.playerdata.PlayerData;
 import com.gladurbad.medusa.util.CollisionUtil;
+import io.github.retrooper.packetevents.packettype.PacketType;
 import io.github.retrooper.packetevents.packetwrappers.in.flying.WrappedPacketInFlying;
 
 @CheckInfo(name = "Nofall", type = "A")
 public class NofallA extends Check {
 
-    private int ticksSinceInVehicle;
+    private int ticksSinceInVehicle, teleportTicks;
+
     public NofallA(PlayerData data) {
         super(data);
     }
@@ -20,13 +22,14 @@ public class NofallA extends Check {
         if (packet.isFlying()) {
             final WrappedPacketInFlying flying = new WrappedPacketInFlying(packet.getRawPacket());
 
-            if (flying.isPosition()) {
+            if (flying.isPosition() && ++teleportTicks > 10) {
                 final boolean serverOnGround = flying.isOnGround();
                 final boolean clientOnGround = data.getLocation().getY() % 0.015625 == 0.0;
 
                 final boolean invalid = CollisionUtil.isInLiquid(data.getPlayer())
                         || CollisionUtil.isCollidingWithClimbable(data.getPlayer())
-                        || CollisionUtil.isNearBoat(data.getPlayer());
+                        || CollisionUtil.isNearBoat(data.getPlayer())
+                        || data.getPlayer().isFlying();
 
 
                 if (data.getPlayer().isInsideVehicle()) {
@@ -45,6 +48,8 @@ public class NofallA extends Check {
                     setLastLegitLocation(data.getPlayer().getLocation());
                 }
             }
+        } else if (packet.isSending() && packet.getPacketId() == PacketType.Server.POSITION) {
+            teleportTicks = 0;
         }
     }
 }

@@ -6,6 +6,8 @@ import com.gladurbad.medusa.network.Packet;
 import com.gladurbad.medusa.playerdata.PlayerData;
 import com.gladurbad.medusa.util.CollisionUtil;
 import com.gladurbad.medusa.util.PlayerUtil;
+import io.github.retrooper.packetevents.PacketEvents;
+import io.github.retrooper.packetevents.enums.ServerVersion;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffectType;
@@ -14,6 +16,7 @@ import org.bukkit.potion.PotionEffectType;
 public class MotionB extends Check {
 
     private int slimeTicks;
+    private boolean slime;
     public MotionB(PlayerData data) {
         super(data);
     }
@@ -24,7 +27,12 @@ public class MotionB extends Check {
             final Player player = data.getPlayer();
             float expectedJumpMotion = 0.42F;
 
-            final boolean slime = CollisionUtil.isOnChosenBlock(data.getPlayer(), -0.5001, Material.ICE, Material.PACKED_ICE, Material.SLIME_BLOCK);
+            if (PacketEvents.getAPI().getServerUtils().getVersion() == ServerVersion.v_1_7_10) {
+                slime = CollisionUtil.isOnChosenBlock(data.getPlayer(), -0.5001, Material.ICE, Material.PACKED_ICE);
+            } else if (PacketEvents.getAPI().getServerUtils().getVersion().isHigherThan(ServerVersion.v_1_7_10) && PacketEvents.getAPI().getServerUtils().getVersion().isLowerThan(ServerVersion.v_1_9)) {
+                slime = CollisionUtil.isOnChosenBlock(data.getPlayer(), -0.5001, Material.ICE, Material.PACKED_ICE, Material.SLIME_BLOCK);
+            }
+
             if (slime) {
                 slimeTicks = 0;
             }

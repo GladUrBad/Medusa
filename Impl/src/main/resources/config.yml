@@ -29,14 +29,9 @@ violations:
   clear-violations-delay: 10
 
 # Check configuration
-#
-#
 # enabled: Turns the check on/off.
 # max-violations: Amount of times a player can flag before running the specified punish-command.
 # punish-command: Command ran by the server when a player exceeds the specified max-violations.
-#
-#
-#
 checks:
   combat:
     aim:
@@ -44,22 +39,32 @@ checks:
         enabled: true
         max-violations: 100
         punish-command: 'ban %player% %prefix% Unfair Advantage'
+        # combat-only: Run this check only in combat? Doing so may help random false positives.
+        combat-only: false
       b:
         enabled: true
         max-violations: 100
         punish-command: 'ban %player% %prefix% Unfair Advantage'
+        # combat-only: Run this check only in combat? Doing so may help random false positives.
+        combat-only: false
       c:
         enabled: true
         max-violations: 100
         punish-command: 'ban %player% %prefix% Unfair Advantage'
+        # combat-only: Run this check only in combat? Doing so may help random false positives.
+        combat-only: false
       d:
         enabled: true
         max-violations: 100
         punish-command: 'ban %player% %prefix% Unfair Advantage'
+        # combat-only: Run this check only in combat? Doing so may help random false positives.
+        combat-only: false
       e:
         enabled: true
         max-violations: 50
         punish-command: 'ban %player% %prefix% Unfair Advantage'
+        # combat-only: Run this check only in combat? Doing so may help random false positives.
+        combat-only: true
     autoclicker:
       a:
         enabled: true
@@ -98,15 +103,26 @@ checks:
         punish-command: 'ban %player% %prefix% Unfair Advantage'
       f:
         enabled: true
-        max-violations: 20
-        punish-command: 'ban %player% %prefix% Unfair Advantage'
+        max-violations: 100
+        punish-command: 'kick %player% %prefix% Unfair Advantage'
         # max-angle: The maximum offset a player can be looking when they hit a player. From my testing, it tends to be 0.0-0.25 at most. I set this to 0.35 to be safe.
         # max-buffer: The maximum times a player can violate the check before flagging. Increasing helps reduce false positives.
         # buffer-decay: The amount the buffer decays when the player passes the check. Increasing this reduces detection but reduces false positives.
         max-angle: 0.35
         max-buffer: 8
         buffer-decay: 1
-
+      g:
+        enabled: true
+        max-violations: 20
+        punish-command: ''
+        # max-buffer: The maximum times a player can violate the check before flagging. Increasing helps reduce false positives.
+        # buffer-decay: The amount the buffer decays when the player passes the check. Increasing this reduces detection but reduces false positives.
+        max-buffer: 10
+        buffer-decay: 2
+      h:
+        enabled: true
+        max-violations: 100
+        punish-command: 'kick %player% %prefix% Unfair Advantage'
     reach:
       # Reach Type A: Sophisticated reach check capable of detecting as low as 3.3 reach.
       # Reach Type B: Simple reach check using buffers, this can only reliably detect 3.7+ reach. However, unlike Reach Type A, it does not rely on ping, making it more resistant to PingSpoof.
@@ -132,11 +148,14 @@ checks:
         max-buffer: 10
         buffer-decay: 0.5
     velocity:
-      # Would recommend leaving this disabled, some falses occur.
       a:
-        enabled: false
+        enabled: true
         max-violations: 100
         punish-command: 'ban %player% %prefix% Unfair Advantage'
+        # max-buffer: The maximum times a player can violate the check before flagging. Increasing helps reduce false positives.
+        # buffer-decay: The amount the buffer decays when the player passes the check. Increasing this reduces detection but reduces false positives.
+        max-buffer: 1.5
+        buffer-decay: 0.5
   movement:
     fastclimb:
       a:
@@ -239,6 +258,10 @@ checks:
         max-violations: 25
         punish-command: 'ban %player% %prefix% Unfair Advantage'
       d:
+        enabled: true
+        max-violations: 50
+        punish-command: 'kick %player% %prefix% Invalid packets detected! Hacking?'
+      e:
         enabled: true
         max-violations: 50
         punish-command: 'kick %player% %prefix% Invalid packets detected! Hacking?'

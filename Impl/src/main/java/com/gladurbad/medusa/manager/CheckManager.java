@@ -11,7 +11,7 @@ import com.gladurbad.medusa.check.impl.combat.reach.ReachA;
 import com.gladurbad.medusa.check.impl.combat.velocity.VelocityA;
 import com.gladurbad.medusa.check.impl.movement.jesus.JesusC;
 import com.gladurbad.medusa.check.impl.movement.speed.SpeedC;
-import com.gladurbad.medusa.check.impl.player.badpackets.BadPacketsA;
+import com.gladurbad.medusa.check.impl.player.badpackets.*;
 import com.gladurbad.medusa.check.impl.movement.fastclimb.FastClimbA;
 import com.gladurbad.medusa.check.impl.movement.flight.FlightA;
 import com.gladurbad.medusa.check.impl.movement.flight.FlightB;
@@ -20,9 +20,6 @@ import com.gladurbad.medusa.check.impl.movement.jesus.JesusB;
 import com.gladurbad.medusa.check.impl.movement.nofall.NofallA;
 import com.gladurbad.medusa.check.impl.movement.speed.SpeedA;
 import com.gladurbad.medusa.check.impl.movement.speed.SpeedB;
-import com.gladurbad.medusa.check.impl.player.badpackets.BadPacketsB;
-import com.gladurbad.medusa.check.impl.player.badpackets.BadPacketsC;
-import com.gladurbad.medusa.check.impl.player.badpackets.BadPacketsD;
 import com.gladurbad.medusa.check.impl.player.inventory.InventoryA;
 import com.gladurbad.medusa.check.impl.player.inventory.InventoryB;
 import com.gladurbad.medusa.check.impl.player.pingspoof.PingSpoofA;
@@ -57,6 +54,8 @@ public class CheckManager {
             KillauraD.class,
             KillauraE.class,
             KillauraF.class,
+            KillauraG.class,
+            KillauraH.class,
             ReachA.class,
             ReachB.class,
             VelocityA.class,
@@ -80,6 +79,7 @@ public class CheckManager {
             BadPacketsB.class,
             BadPacketsC.class,
             BadPacketsD.class,
+            BadPacketsE.class,
             InventoryA.class,
             InventoryB.class,
             PingSpoofA.class,
