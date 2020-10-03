@@ -15,6 +15,7 @@ public class MedusaAlertEvent extends Event implements Cancellable {
 
     private final MedusaCheck check;
 
+    // The Alert Event - its usage is obv, check any of the spigot events for more info
     public MedusaAlertEvent(MedusaCheck check, boolean setback) {
         super(true);
         this.check = check;
@@ -22,11 +23,12 @@ public class MedusaAlertEvent extends Event implements Cancellable {
     }
 
     private static final HandlerList handlers = new HandlerList();
-
+    // Returns the HandlerList
     public HandlerList getHandlers() {
         return handlers;
     }
 
+    // Duplicate of getHandlers
     public static HandlerList getHandlerList() {
         return handlers;
     }
