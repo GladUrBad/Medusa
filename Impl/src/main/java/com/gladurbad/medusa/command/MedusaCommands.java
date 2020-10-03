@@ -14,6 +14,7 @@ public class MedusaCommands implements CommandExecutor {
 
     private final List<MedusaArgument> arguments;
 
+    // The Code for the Commands
     public MedusaCommands(Medusa medusa) {
         arguments = new ArrayList<>();
         //Register commands here--------
@@ -26,6 +27,7 @@ public class MedusaCommands implements CommandExecutor {
         MedusaArgument.medusa = medusa;
     }
 
+    // Perm Check
     @Override
     public boolean onCommand(CommandSender commandSender, Command command, String s, String[] args) {
         if (commandSender instanceof Player){
