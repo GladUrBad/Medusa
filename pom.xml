@@ -28,10 +28,6 @@
             <id>jitpack.io</id>
             <url>https://jitpack.io</url>
         </repository>
-        <repository>
-            <id>funkemunky-releases</id>
-            <url>https://nexus.funkemunky.cc/content/repositories/releases/</url>
-        </repository>
     </repositories>
 
     <dependencies>
