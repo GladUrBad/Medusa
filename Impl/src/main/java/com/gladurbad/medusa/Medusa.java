@@ -32,16 +32,18 @@ public class Medusa extends JavaPlugin {
     public void onEnable() {
         instance = this;
 
+        // Get the Config (and save it if it doesn't exist) 
         this.saveDefaultConfig();
         Config.updateConfig();
 
+        // Register Checks. 
         CheckManager.registerChecks();
 
-
+        // Start Command Stuff. 
         MedusaCommands medusaCommands = new MedusaCommands(this);
         getCommand("medusa").setExecutor(medusaCommands);
 
-        //Register listeners.
+        // Register listeners.
         PacketEvents.getSettings().setIdentifier("medusa_identifier");
         PacketEvents.getSettings().setUninjectAsync(true);
         PacketEvents.getSettings().setInjectAsync(true);
@@ -51,7 +53,7 @@ public class Medusa extends JavaPlugin {
 
         Bukkit.getServer().getPluginManager().registerEvents(new RegistrationListener(), this);
 
-        //Register online players into the system.
+        // Register online players into the system.
         for (final Player player : Bukkit.getOnlinePlayers()) {
             UUID playerUUID = player.getUniqueId();
             if (!PlayerDataManager.getInstance().containsPlayer(playerUUID)) {
@@ -65,9 +67,11 @@ public class Medusa extends JavaPlugin {
             }
         }
 
+        // Set the plugin to enabled and log to console. 
         Bukkit.getLogger().info("Medusa by GladUrBad has been enabled.");
         instance.setEnabled(true);
 
+        // Setup the Alert Manager. 
         AlertManager.setup();
     }
 
@@ -77,6 +81,4 @@ public class Medusa extends JavaPlugin {
         PacketEvents.stop();
         instance = null;
     }
-
-
 }
