@@ -42,16 +42,7 @@ public class CollisionUtil {
     }
 
     public boolean isOnGround(Player player) {
-        final double expand = 0.31;
-        final Location location = player.getLocation();
-        for(double x = -expand; x <= expand; x += expand) {
-            for(double z = -expand; z <= expand; z+= expand) {
-                if (getBlockAsync(location.clone().add(x, -0.5001, z)).getType() != Material.AIR || isOnLilyOrCarpet(player)) {
-                    return true;
-                }
-            }
-        }
-        return false;
+        return isOnGround(player, -0.5001);
     }
 
     public boolean isOnSolid(Player player) {
