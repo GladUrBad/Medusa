@@ -7,6 +7,7 @@ import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Boat;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 
 
@@ -42,7 +43,7 @@ public class CollisionUtil {
     }
 
     public boolean isOnGround(Player player) {
-        return isOnGround(player, -0.5001);
+        return isOnGround(player.getLocation(), -0.5001);
     }
 
     public boolean isOnSolid(Player player) {
@@ -110,10 +111,10 @@ public class CollisionUtil {
     }
 
     public boolean isNearBoat(Player player) {
-        for(Entity entity : player.getNearbyEntities(2, 2, 2)) {
-            if (entity instanceof Boat) return true;
-        }
-        return false;
+        return player.getNearbyEntities(2, 2, 2)
+                .stream()
+                .filter(entity -> entity.getType().equals(EntityType.BOAT))
+                .count() > 0;
     }
 
     public boolean isCollidingWithClimbable(Player player) {

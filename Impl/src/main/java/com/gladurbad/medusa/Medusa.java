@@ -52,18 +52,15 @@ public class Medusa extends JavaPlugin {
         Bukkit.getServer().getPluginManager().registerEvents(new RegistrationListener(), this);
 
         //Register online players into the system.
-        for (final Player player : Bukkit.getOnlinePlayers()) {
-            UUID playerUUID = player.getUniqueId();
-            if (!PlayerDataManager.getInstance().containsPlayer(playerUUID)) {
-                final PlayerData playerData = new PlayerData(playerUUID, player);
+        Bukkit.getOnlinePlayers()
+                .stream()
+                .filter(player -> !PlayerDataManager.getInstance().containsPlayer(player))
+                .forEach(player -> {
+                    final PlayerData playerData = new PlayerData(player.getUniqueId(), player);
+                    if (Config.TESTMODE) playerData.setAlerts(true);
 
-                if (Config.TESTMODE) {
-                    playerData.setAlerts(true);
-                }
-
-                PlayerDataManager.getInstance().getPlayerData().put(playerUUID, playerData);
-            }
-        }
+                    PlayerDataManager.getInstance().getPlayerData().put(player.getUniqueId(), playerData);
+                });
 
         Bukkit.getLogger().info("Medusa by GladUrBad has been enabled.");
         instance.setEnabled(true);
