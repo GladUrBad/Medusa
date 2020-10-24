@@ -1,16 +1,17 @@
 package com.gladurbad.medusa;
 
+import me.godead.lilliputian.Dependency;
+import me.godead.lilliputian.Lilliputian;
+import me.godead.lilliputian.Repository;
+
 import com.gladurbad.medusa.command.MedusaCommands;
 import com.gladurbad.medusa.config.Config;
 import com.gladurbad.medusa.manager.AlertManager;
-import com.gladurbad.medusa.network.PacketProcessor;
 import com.gladurbad.medusa.listener.RegistrationListener;
 import com.gladurbad.medusa.manager.CheckManager;
 import com.gladurbad.medusa.manager.PlayerDataManager;
 import com.gladurbad.medusa.playerdata.PlayerData;
-import com.gladurbad.medusa.util.ChatUtil;
 import io.github.retrooper.packetevents.PacketEvents;
-import io.github.retrooper.packetevents.event.PacketEvent;
 import lombok.Getter;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -18,15 +19,12 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.UUID;
 
+
+
 public class Medusa extends JavaPlugin {
 
     @Getter
     private static Medusa instance;
-
-    @Override
-    public void onLoad() {
-        PacketEvents.load();
-    }
 
     @Override
     public void onEnable() {
@@ -46,8 +44,6 @@ public class Medusa extends JavaPlugin {
         PacketEvents.getSettings().setUninjectAsync(true);
         PacketEvents.getSettings().setInjectAsync(true);
         PacketEvents.init(this);
-
-        PacketEvents.getAPI().getEventManager().registerListener(new PacketProcessor());
 
         Bukkit.getServer().getPluginManager().registerEvents(new RegistrationListener(), this);
 

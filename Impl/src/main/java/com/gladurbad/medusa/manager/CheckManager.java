@@ -32,6 +32,8 @@ import com.gladurbad.medusa.config.Config;
 import com.gladurbad.medusa.playerdata.PlayerData;
 import org.bukkit.Bukkit;
 
+import com.gladurbad.medusa.network.PacketProcessor;
+import io.github.retrooper.packetevents.PacketEvents;
 
 import java.lang.reflect.Constructor;
 import java.util.ArrayList;
@@ -93,6 +95,7 @@ public class CheckManager {
     private static final List<Constructor<?>> CONSTRUCTORS = new ArrayList<>();
 
     public static void registerChecks() {
+        PacketEvents.getAPI().getEventManager().registerListener(new PacketProcessor());
         for (Class clazz : CHECKS) {
             if (Config.ENABLED_CHECKS.contains(clazz.getSimpleName())) {
                 try {

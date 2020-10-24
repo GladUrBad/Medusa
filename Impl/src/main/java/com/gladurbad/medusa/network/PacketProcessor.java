@@ -7,6 +7,10 @@ import io.github.retrooper.packetevents.event.PacketListener;
 import io.github.retrooper.packetevents.event.impl.PacketReceiveEvent;
 import io.github.retrooper.packetevents.event.impl.PacketSendEvent;
 
+import me.godead.lilliputian.Dependency;
+import me.godead.lilliputian.Lilliputian;
+import me.godead.lilliputian.Repository;
+
 public class PacketProcessor implements PacketListener {
 
     @PacketHandler
