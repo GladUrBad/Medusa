@@ -1,6 +1,6 @@
 package com.gladurbad.medusa.command;
 
-import com.gladurbad.medusa.manager.PlayerDataManager;
+import com.gladurbad.medusa.Medusa;
 import com.gladurbad.medusa.playerdata.PlayerData;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -20,7 +20,7 @@ public class ExemptCommand extends MedusaArgument{
             if (args.length == 2) {
                 Player player = Bukkit.getPlayer(args[1]);
                 if (player != null) {
-                    PlayerData playerData = PlayerDataManager.getInstance().getPlayerData(Bukkit.getPlayer(args[1]));
+                    PlayerData playerData = Medusa.getInstance().getDataManager().getPlayerData(Bukkit.getPlayer(args[1]));
                     if (playerData != null) {
                         if (playerData.isShouldCheck()) {
                             playerData.setShouldCheck(false);

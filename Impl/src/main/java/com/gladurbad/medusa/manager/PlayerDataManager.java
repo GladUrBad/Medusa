@@ -11,7 +11,7 @@ import java.util.UUID;
 @Getter
 public class PlayerDataManager {
 
-    private static final PlayerDataManager INSTANCE = new PlayerDataManager();
+    //private static final PlayerDataManager INSTANCE = new PlayerDataManager();
 
     private final Map<UUID, PlayerData> playerData = new HashMap<>();
 
@@ -20,19 +20,18 @@ public class PlayerDataManager {
     }
 
     public boolean containsPlayer(UUID playerUUID) {
-        return getInstance().getPlayerData().containsKey(playerUUID);
+        return this.playerData.containsKey(playerUUID);
     }
 
     public PlayerData getPlayerData(Player player) {
-        return getInstance().playerData.get(player.getUniqueId());
+        return this.playerData.get(player.getUniqueId());
     }
 
     public PlayerData getPlayerData(UUID playerUUID) {
-        return getInstance().playerData.get(playerUUID);
+        return this.playerData.get(playerUUID);
     }
 
-    public static PlayerDataManager getInstance() {
-        return INSTANCE;
+    public Map<UUID, PlayerData> getPlayerData() {
+        return playerData;
     }
-
 }

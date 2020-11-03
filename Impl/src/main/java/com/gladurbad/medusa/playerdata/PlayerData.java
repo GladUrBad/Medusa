@@ -1,9 +1,8 @@
 package com.gladurbad.medusa.playerdata;
 
+import com.gladurbad.medusa.Medusa;
 import com.gladurbad.medusa.check.Check;
-import com.gladurbad.medusa.manager.CheckManager;
 import com.gladurbad.medusa.network.Packet;
-
 import com.gladurbad.medusa.util.MathUtil;
 import com.gladurbad.medusa.util.customtype.CustomLocation;
 import io.github.retrooper.packetevents.PacketEvents;
@@ -13,19 +12,18 @@ import io.github.retrooper.packetevents.packetwrappers.in.blockdig.WrappedPacket
 import io.github.retrooper.packetevents.packetwrappers.in.clientcommand.WrappedPacketInClientCommand;
 import io.github.retrooper.packetevents.packetwrappers.in.entityaction.WrappedPacketInEntityAction;
 import io.github.retrooper.packetevents.packetwrappers.in.flying.WrappedPacketInFlying;
-
 import io.github.retrooper.packetevents.packetwrappers.in.transaction.WrappedPacketInTransaction;
 import io.github.retrooper.packetevents.packetwrappers.out.entityvelocity.WrappedPacketOutEntityVelocity;
 import io.github.retrooper.packetevents.packetwrappers.out.transaction.WrappedPacketOutTransaction;
 import lombok.Getter;
 import lombok.Setter;
-
 import org.bukkit.Location;
-import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.bukkit.util.Vector;
 
-import java.util.*;
+import java.util.List;
+import java.util.Random;
+import java.util.UUID;
 
 @Getter
 @Setter
@@ -40,7 +38,7 @@ public class PlayerData implements PacketListener {
         this.player = player;
         this.location = CustomLocation.fromBukkit(player.getLocation());
         this.lastLocation = this.location;
-        this.checks = CheckManager.loadChecks(this);
+        this.checks = Medusa.getInstance().getCheckManager().loadChecks(this);
 
         //Transaction ping system initialization.
         transactionID = (short) new Random().nextInt(32767);

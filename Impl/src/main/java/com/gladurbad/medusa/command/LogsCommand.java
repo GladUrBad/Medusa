@@ -1,7 +1,7 @@
 package com.gladurbad.medusa.command;
 
+import com.gladurbad.medusa.Medusa;
 import com.gladurbad.medusa.check.Check;
-import com.gladurbad.medusa.manager.PlayerDataManager;
 import com.gladurbad.medusa.playerdata.PlayerData;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
@@ -22,7 +22,7 @@ public class LogsCommand extends MedusaArgument {
             if (!Bukkit.getOnlinePlayers().contains(Bukkit.getPlayer(args[1]))) return false;
             final UUID targetPlayerUUID = Bukkit.getPlayer(args[1]).getUniqueId();
             if (targetPlayerUUID != null) {
-                PlayerData playerData = PlayerDataManager.getInstance().getPlayerData(targetPlayerUUID);
+                PlayerData playerData = Medusa.getInstance().getDataManager().getPlayerData(targetPlayerUUID);
                 sender.sendMessage(responsePrefix + medusaSeparator);
                 for (Check check : playerData.getChecks()) {
                     if (check.getVl() > 0) {

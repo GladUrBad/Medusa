@@ -1,6 +1,6 @@
 package com.gladurbad.medusa.command;
 
-import com.gladurbad.medusa.manager.PlayerDataManager;
+import com.gladurbad.medusa.Medusa;
 import com.gladurbad.medusa.playerdata.PlayerData;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
@@ -16,7 +16,7 @@ public class AlertsCommand extends MedusaArgument {
     @Override
     protected boolean handle(CommandSender sender, Command command, String label, String[] args) {
         if (sender instanceof Player) {
-            PlayerData playerData = PlayerDataManager.getInstance().getPlayerData((Player) sender);
+            PlayerData playerData = Medusa.getInstance().getDataManager().getPlayerData((Player) sender);
             if (playerData != null) {
                 if (playerData.isAlerts()) {
                     playerData.setAlerts(false);

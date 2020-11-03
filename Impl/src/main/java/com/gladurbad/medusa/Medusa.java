@@ -2,26 +2,27 @@ package com.gladurbad.medusa;
 
 import com.gladurbad.medusa.command.MedusaCommands;
 import com.gladurbad.medusa.config.Config;
-import com.gladurbad.medusa.manager.AlertManager;
-import com.gladurbad.medusa.network.PacketProcessor;
 import com.gladurbad.medusa.listener.RegistrationListener;
+import com.gladurbad.medusa.manager.AlertManager;
 import com.gladurbad.medusa.manager.CheckManager;
 import com.gladurbad.medusa.manager.PlayerDataManager;
+import com.gladurbad.medusa.network.PacketProcessor;
 import com.gladurbad.medusa.playerdata.PlayerData;
-import com.gladurbad.medusa.util.ChatUtil;
 import io.github.retrooper.packetevents.PacketEvents;
-import io.github.retrooper.packetevents.event.PacketEvent;
 import lombok.Getter;
 import org.bukkit.Bukkit;
-import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
-
-import java.util.UUID;
 
 public class Medusa extends JavaPlugin {
 
     @Getter
     private static Medusa instance;
+
+    @Getter
+    private CheckManager checkManager;
+
+    @Getter
+    private PlayerDataManager dataManager;
 
     @Override
     public void onLoad() {
@@ -33,9 +34,13 @@ public class Medusa extends JavaPlugin {
         instance = this;
 
         this.saveDefaultConfig();
-        Config.updateConfig();
 
-        CheckManager.registerChecks();
+        this.dataManager = new PlayerDataManager();
+
+        this.checkManager = new CheckManager();
+        this.checkManager.registerChecks();
+
+        Config.updateConfig();
 
 
         MedusaCommands medusaCommands = new MedusaCommands(this);
@@ -54,12 +59,12 @@ public class Medusa extends JavaPlugin {
         //Register online players into the system.
         Bukkit.getOnlinePlayers()
                 .stream()
-                .filter(player -> !PlayerDataManager.getInstance().containsPlayer(player))
+                .filter(player -> !this.dataManager.containsPlayer(player))
                 .forEach(player -> {
                     final PlayerData playerData = new PlayerData(player.getUniqueId(), player);
                     if (Config.TESTMODE) playerData.setAlerts(true);
 
-                    PlayerDataManager.getInstance().getPlayerData().put(player.getUniqueId(), playerData);
+                    this.dataManager.getPlayerData().put(player.getUniqueId(), playerData);
                 });
 
         Bukkit.getLogger().info("Medusa by GladUrBad has been enabled.");
@@ -71,9 +76,8 @@ public class Medusa extends JavaPlugin {
     @Override
     public void onDisable() {
         Bukkit.getLogger().info("Disabling Medusa by GladUrBad");
+        this.checkManager.disInit();
         PacketEvents.stop();
         instance = null;
     }
-
-
 }
