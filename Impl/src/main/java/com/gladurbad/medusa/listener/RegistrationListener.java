@@ -1,7 +1,7 @@
 package com.gladurbad.medusa.listener;
 
+import com.gladurbad.medusa.Medusa;
 import com.gladurbad.medusa.config.Config;
-import com.gladurbad.medusa.manager.PlayerDataManager;
 import com.gladurbad.medusa.playerdata.PlayerData;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -16,12 +16,12 @@ public class RegistrationListener implements Listener {
         if (Config.TESTMODE) {
             playerData.setAlerts(true);
         }
-        PlayerDataManager.getInstance().getPlayerData().put(event.getPlayer().getUniqueId(), playerData);
+        Medusa.getInstance().getDataManager().getPlayerData().put(event.getPlayer().getUniqueId(), playerData);
     }
 
     @EventHandler
     public void onUninject(PlayerQuitEvent event) {
-        PlayerDataManager.getInstance().getPlayerData().remove(event.getPlayer().getUniqueId());
+        Medusa.getInstance().getDataManager().getPlayerData().remove(event.getPlayer().getUniqueId());
     }
 
 }

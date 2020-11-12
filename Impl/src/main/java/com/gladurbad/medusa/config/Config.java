@@ -2,12 +2,15 @@ package com.gladurbad.medusa.config;
 
 import com.gladurbad.api.check.CheckInfo;
 import com.gladurbad.medusa.Medusa;
-import com.gladurbad.medusa.manager.CheckManager;
+import com.gladurbad.medusa.check.Check;
 import com.gladurbad.medusa.util.ChatUtil;
 import org.bukkit.Bukkit;
 
 import java.lang.reflect.Field;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class Config {
 
@@ -42,8 +45,8 @@ public class Config {
             VL_TO_ALERT = getIntegerFromConfig("violations.minimum-vl");
             ALERT_FORMAT = getStringFromConfig("violations.alert-format");
 
-            for (Class check : CheckManager.CHECKS) {
-                final CheckInfo checkInfo = (CheckInfo) check.getAnnotation(CheckInfo.class);
+            for (Class<? extends Check> check : Medusa.getInstance().getCheckManager().getChecks()) {
+                final CheckInfo checkInfo = check.getAnnotation(CheckInfo.class);
                 String checkType = "";
                 if (check.getName().contains("combat")) {
                     checkType = "combat";
