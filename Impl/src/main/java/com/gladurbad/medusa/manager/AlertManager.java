@@ -44,6 +44,8 @@ public class AlertManager {
                 Bukkit.getScheduler().runTask(Medusa.getInstance(), () ->
                         Bukkit.getServer().dispatchCommand(Bukkit.getServer().getConsoleSender(), check.getPunishCommand()
                                 .replace("%player%", data.getPlayer().getName())
+                                .replace("%check%", check.getCheckInfo().name())
+                                .replace("%type%", check.getCheckInfo().type())
                                 .replace("%prefix%", Config.PREFIX)));
             }
         }
