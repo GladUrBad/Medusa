@@ -53,7 +53,7 @@ public abstract class Check implements MedusaCheck {
     protected void fail() {
         ++vl;
 
-        MedusaAlertEvent event = new MedusaAlertEvent(this, setback);
+        MedusaAlertEvent event = new MedusaAlertEvent(data.getPlayer(), this, setback);
         Bukkit.getScheduler().runTaskAsynchronously(Medusa.getInstance(), () -> Bukkit.getPluginManager().callEvent(event));
 
         if(!event.isCancelled()) {
