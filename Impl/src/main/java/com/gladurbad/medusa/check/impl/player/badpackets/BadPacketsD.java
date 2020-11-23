@@ -1,31 +1,30 @@
 package com.gladurbad.medusa.check.impl.player.badpackets;
 
+import com.gladurbad.api.check.CheckInfo;
 import com.gladurbad.medusa.check.Check;
-import com.gladurbad.medusa.check.CheckInfo;
-import com.gladurbad.medusa.data.PlayerData;
-import com.gladurbad.medusa.packet.Packet;
-import io.github.retrooper.packetevents.packetwrappers.in.steervehicle.WrappedPacketInSteerVehicle;
+import com.gladurbad.medusa.network.Packet;
+import com.gladurbad.medusa.playerdata.PlayerData;
+import io.github.retrooper.packetevents.packettype.PacketType;
 
-@CheckInfo(name = "BadPackets (D)", description = "Checks for a common exploit in disabler modules.")
+@CheckInfo(name = "BadPackets", type = "D", dev = true)
 public class BadPacketsD extends Check {
 
-    public BadPacketsD(final PlayerData data) {
+    private int ticks;
+    public BadPacketsD(PlayerData data) {
         super(data);
     }
 
-
     @Override
-    public void handle(final Packet packet) {
-        if (packet.isSteerVehicle()) {
-            final WrappedPacketInSteerVehicle wrapper = new WrappedPacketInSteerVehicle(packet.getRawPacket());
+    public void handle(Packet packet) {
+        if (packet.isReceiving()) {
+            final byte id = packet.getPacketId();
 
-            final float forwardValue = Math.abs(wrapper.getForwardValue());
-            final float sideValue = Math.abs(wrapper.getSideValue());
-
-            final boolean invalid = forwardValue > .98F || sideValue > .98F;
-
-            if (invalid) {
-                fail();
+            if (id == PacketType.Client.ENTITY_ACTION) {
+                if (++ticks > 4) {
+                    fail();
+                }
+            } else if (packet.isFlying()) {
+                ticks = 0;
             }
         }
     }

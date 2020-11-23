@@ -1,35 +1,32 @@
 package com.gladurbad.medusa.check.impl.player.badpackets;
 
 import com.gladurbad.medusa.check.Check;
-import com.gladurbad.medusa.check.CheckInfo;
-import com.gladurbad.medusa.data.PlayerData;
-import com.gladurbad.medusa.packet.Packet;
-import io.github.retrooper.packetevents.packetwrappers.in.flying.WrappedPacketInFlying;
+import com.gladurbad.api.check.CheckInfo;
+import com.gladurbad.medusa.network.Packet;
+import com.gladurbad.medusa.playerdata.PlayerData;
 
-@CheckInfo(name = "BadPackets (C)", description = "Checks for flying packet sequence.")
+import io.github.retrooper.packetevents.packettype.PacketType;
+import io.github.retrooper.packetevents.packetwrappers.in.helditemslot.WrappedPacketInHeldItemSlot;
+
+@CheckInfo(name = "BadPackets", type = "C")
 public class BadPacketsC extends Check {
 
-    private int streak;
+    private int lastSlot;
 
-    public BadPacketsC(final PlayerData data) {
+    public BadPacketsC(PlayerData data) {
         super(data);
     }
 
     @Override
-    public void handle(final Packet packet) {
-        if (packet.isFlying()) {
-            final WrappedPacketInFlying wrapper = new WrappedPacketInFlying(packet.getRawPacket());
+    public void handle(Packet packet) {
+        if (packet.isReceiving() && packet.getPacketId() == PacketType.Client.HELD_ITEM_SLOT) {
+            final WrappedPacketInHeldItemSlot heldItemSlot = new WrappedPacketInHeldItemSlot(packet.getRawPacket());
+            final int slot = heldItemSlot.getItemInHandIndex();
 
-            if (wrapper.isPosition() || data.getPlayer().isInsideVehicle()) {
-                streak = 0;
-                return;
+            if (slot == lastSlot) {
+                fail();
             }
-
-            if (++streak > 20) {
-                fail("streak=" + streak);
-            }
-        } else if (packet.isSteerVehicle()) {
-            streak = 0;
+            lastSlot = slot;
         }
     }
 }

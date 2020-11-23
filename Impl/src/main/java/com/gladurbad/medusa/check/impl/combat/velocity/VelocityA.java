@@ -1,17 +1,23 @@
 package com.gladurbad.medusa.check.impl.combat.velocity;
 
 import com.gladurbad.medusa.check.Check;
-import com.gladurbad.medusa.check.CheckInfo;
-import com.gladurbad.medusa.data.PlayerData;
-import com.gladurbad.medusa.packet.Packet;
+import com.gladurbad.api.check.CheckInfo;
+import com.gladurbad.medusa.config.ConfigValue;
+import com.gladurbad.medusa.network.Packet;
+import com.gladurbad.medusa.playerdata.PlayerData;
+import com.gladurbad.medusa.util.CollisionUtil;
 
 import java.util.ArrayDeque;
 
-@CheckInfo(name = "Velocity (A)", experimental = true, description = "Checks for vertical velocity.")
+
+@CheckInfo(name = "Velocity", type = "A", dev = true)
 public class VelocityA extends Check {
 
-    private final ArrayDeque<Double> samples = new ArrayDeque<>();
+    private ArrayDeque<Double> samples = new ArrayDeque<>();
     private int weirdTicks;
+
+    private static final ConfigValue maxBuffer = new ConfigValue(ConfigValue.ValueType.DOUBLE, "max-buffer");
+    private static final ConfigValue bufferDecay = new ConfigValue(ConfigValue.ValueType.DOUBLE, "buffer-decay");
 
     public VelocityA(PlayerData data) {
         super(data);
@@ -20,14 +26,14 @@ public class VelocityA extends Check {
     @Override
     public void handle(Packet packet) {
         if (packet.isFlying()) {
-            if (data.getVelocityProcessor().getTicksSinceVelocity() < 5) {
-                final double taken = data.getPositionProcessor().getDeltaY();
-                final double expected = data.getVelocityProcessor().getLastVelocityY() * 0.99F;
+            if (data.getTicksSinceVelocity() < 5) {
+                final double taken = data.getDeltaY();
+                final double expected = data.getLastVelocity().getY() * 0.99F;
                 double percentage = (taken * 100) / expected;
 
-                final boolean invalid = data.getPositionProcessor().isOnClimbable() ||
-                        data.getPositionProcessor().isInLiquid() ||
-                        data.getPositionProcessor().isBlockNearHead();
+                final boolean invalid = CollisionUtil.isCollidingWithClimbable(data.getPlayer()) ||
+                        CollisionUtil.isInLiquid(data.getPlayer()) ||
+                        CollisionUtil.blockNearHead(data.getPlayer().getLocation());
 
                 if (invalid) {
                     weirdTicks = 0;
@@ -38,14 +44,12 @@ public class VelocityA extends Check {
                 samples.add(percentage);
 
                 if (samples.size() >= 5 && weirdTicks > 20) {
-                    final double max = samples.stream().mapToDouble(value -> value).max().orElse(0);
-                    debug(max);
-                    if (max < 100) {
-                        if (increaseBuffer() > 1) {
-                            fail("percentage=" + max);
+                    if (samples.stream().mapToDouble(value -> value).max().orElse(0) < 100) {
+                        if (increaseBuffer() > maxBuffer.getDouble()) {
+                            fail();
                         }
                     } else {
-                        decreaseBufferBy(0.5);
+                        decreaseBufferBy(bufferDecay.getDouble());
                     }
                     samples.clear();
                 }

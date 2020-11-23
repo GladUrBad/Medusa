@@ -1,21 +1,16 @@
 package com.gladurbad.medusa.check.impl.combat.autoclicker;
 
-import com.gladurbad.medusa.check.Check;
-import com.gladurbad.medusa.check.CheckInfo;
-import com.gladurbad.medusa.data.PlayerData;
-import com.gladurbad.medusa.exempt.type.ExemptType;
-import com.gladurbad.medusa.packet.Packet;
+import com.gladurbad.api.check.CheckInfo;
+import com.gladurbad.medusa.check.*;
+import com.gladurbad.medusa.config.ConfigValue;
+import com.gladurbad.medusa.network.Packet;
+import com.gladurbad.medusa.playerdata.PlayerData;
 
-/**
- * Created on 10/24/2020 Package com.gladurbad.medusa.check.impl.combat.autoclicker by GladUrBad
- *
- * This check ensures the player does not click at an abnormally fast rate. That's about it.
- */
-
-@CheckInfo(name = "AutoClicker (A)", description = "Checks for fast-clicking.")
+@CheckInfo(name = "AutoClicker", type = "A")
 public class AutoClickerA extends Check {
 
     private int ticks, cps;
+    private static final ConfigValue maxCPS = new ConfigValue(ConfigValue.ValueType.INTEGER, "max-cps");
 
     public AutoClickerA(PlayerData data) {
         super(data);
@@ -23,16 +18,16 @@ public class AutoClickerA extends Check {
 
     @Override
     public void handle(Packet packet) {
-        if (packet.isFlying() && !isExempt(ExemptType.AUTOCLICKER)) {
+        if (packet.isFlying() && !data.isDigging()) {
             if (++ticks >= 20) {
-                if (cps > 20) {
-                    fail("cps=" + cps);
+                if (cps > maxCPS.getInt()) {
+                    fail();
                 }
 
                 ticks = 0;
                 cps = 0;
             }
-        } else if (packet.isArmAnimation()) {
+        } else if (packet.isSwing()) {
             ++cps;
         }
     }

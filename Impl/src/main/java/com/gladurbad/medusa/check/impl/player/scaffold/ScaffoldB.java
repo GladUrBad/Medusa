@@ -1,39 +1,44 @@
 package com.gladurbad.medusa.check.impl.player.scaffold;
 
 import com.gladurbad.medusa.check.Check;
-import com.gladurbad.medusa.check.CheckInfo;
-import com.gladurbad.medusa.data.PlayerData;
-import com.gladurbad.medusa.packet.Packet;
+import com.gladurbad.api.check.CheckInfo;
+import com.gladurbad.medusa.network.Packet;
+import com.gladurbad.medusa.playerdata.PlayerData;
+import io.github.retrooper.packetevents.packettype.PacketType;
 
-@CheckInfo(name = "Scaffold (B)", description = "Checks for packet order.")
+@CheckInfo(name = "Scaffold", type = "B", dev = true)
 public class ScaffoldB extends Check {
 
-    private long lastBlockPlace;
     private boolean placedBlock;
 
-    public ScaffoldB(final PlayerData data) {
+    public ScaffoldB(PlayerData data) {
         super(data);
     }
 
     @Override
-    public void handle(final Packet packet) {
-        if (packet.isBlockPlace()) {
-            lastBlockPlace = now();
-            placedBlock = true;
-        } else if (packet.isFlying()) {
-            if (placedBlock) {
-                final long delay = now() - lastBlockPlace;
-                final boolean invalid = !data.getActionProcessor().isLagging() && delay > 15;
+    public void handle(Packet packet) {
+        if (packet.isReceiving()) {
+            if (packet.isFlying()) {
+                if (placedBlock) {
+                    final double accel = data.getDeltaXZ() - data.getLastDeltaXZ();
 
-                if (invalid) {
-                    if (increaseBuffer() > 2) {
-                        fail("delay=" + delay + " buffer=" + getBuffer());
+                    if (data.getDeltaYaw() > 90F) {
+                        if (accel > 0) {
+                            increaseBuffer();
+                            if (buffer > 2) {
+                                fail();
+                            }
+                        } else {
+                            decreaseBuffer();
+                        }
                     }
-                } else {
-                    decreaseBufferBy(0.1);
+                    placedBlock = false;
+                }
+            } else if (packet.getPacketId() == PacketType.Client.BLOCK_PLACE) {
+                if (data.getPlayer().getItemInHand().getType().isBlock()) {
+                    placedBlock = true;
                 }
             }
-            placedBlock = false;
         }
     }
 }

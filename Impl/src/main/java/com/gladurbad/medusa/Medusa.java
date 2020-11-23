@@ -1,76 +1,83 @@
 package com.gladurbad.medusa;
 
-import com.gladurbad.medusa.listener.BukkitEventListener;
-import com.gladurbad.medusa.listener.ClientBrandListener;
-import com.gladurbad.medusa.listener.NetworkListener;
-import com.gladurbad.medusa.listener.JoinQuitListener;
-import com.gladurbad.medusa.manager.*;
-import io.github.retrooper.packetevents.PacketEvents;
-import io.github.retrooper.packetevents.utils.server.ServerVersion;
-import lombok.Getter;
-import com.gladurbad.medusa.command.CommandManager;
+import com.gladurbad.medusa.command.MedusaCommands;
 import com.gladurbad.medusa.config.Config;
-import com.gladurbad.medusa.packet.processor.ReceivingPacketProcessor;
-import com.gladurbad.medusa.packet.processor.SendingPacketProcessor;
+import com.gladurbad.medusa.listener.RegistrationListener;
+import com.gladurbad.medusa.manager.AlertManager;
+import com.gladurbad.medusa.manager.CheckManager;
+import com.gladurbad.medusa.manager.PlayerDataManager;
+import com.gladurbad.medusa.network.PacketProcessor;
+import com.gladurbad.medusa.playerdata.PlayerData;
+import io.github.retrooper.packetevents.PacketEvents;
+import lombok.Getter;
 import org.bukkit.Bukkit;
-import org.bukkit.plugin.messaging.Messenger;
+import org.bukkit.plugin.java.JavaPlugin;
 
-@Getter
-public enum Medusa {
+public class Medusa extends JavaPlugin {
 
-    INSTANCE;
+    @Getter
+    private static Medusa instance;
 
-    private MedusaPlugin plugin;
+    @Getter
+    private CheckManager checkManager;
 
-    private long startTime;
+    @Getter
+    private PlayerDataManager dataManager;
 
-    private final TickManager tickManager = new TickManager();
-    private final ReceivingPacketProcessor receivingPacketProcessor = new ReceivingPacketProcessor();
-    private final SendingPacketProcessor sendingPacketProcessor = new SendingPacketProcessor();
-    private final PlayerDataManager playerDataManager = new PlayerDataManager();
-    private final CommandManager commandManager = new CommandManager(this.getPlugin());
-
-    public void start(final MedusaPlugin plugin) {
-        this.plugin = plugin;
-        assert plugin != null : "Error while starting Medusa.";
-
-        this.getPlugin().saveDefaultConfig();
-        Config.updateConfig();
-
-        CheckManager.setup();
-        ThemeManager.setup();
-
-        Bukkit.getOnlinePlayers().forEach(player -> this.getPlayerDataManager().add(player));
-
-        getPlugin().saveDefaultConfig();
-        getPlugin().getCommand("medusa").setExecutor(commandManager);
-
-        tickManager.start();
-
-        final Messenger messenger = Bukkit.getMessenger();
-        messenger.registerIncomingPluginChannel(plugin, "MC|Brand", new ClientBrandListener());
-
-        startTime = System.currentTimeMillis();
-
-        Bukkit.getServer().getPluginManager().registerEvents(new BukkitEventListener(), plugin);
-        Bukkit.getServer().getPluginManager().registerEvents(new ClientBrandListener(), plugin);
-
-        PacketEvents.getSettings()
-                .injectAsync(true)
-                .ejectAsync(true)
-                .injectEarly(true)
-                .packetHandlingThreadCount(1)
-                .checkForUpdates(true)
-                .backupServerVersion(ServerVersion.v_1_8_8);
-
-        PacketEvents.getAPI().getEventManager().registerListener(new NetworkListener());
-        PacketEvents.getAPI().getEventManager().registerListener(new JoinQuitListener());
+    @Override
+    public void onLoad() {
+        PacketEvents.load();
     }
 
-    public void stop(final MedusaPlugin plugin) {
-        this.plugin = plugin;
-        assert plugin != null : "Error while shutting down Medusa.";
+    @Override
+    public void onEnable() {
+        instance = this;
 
-        tickManager.stop();
+        this.saveDefaultConfig();
+
+        this.dataManager = new PlayerDataManager();
+
+        this.checkManager = new CheckManager();
+        this.checkManager.registerChecks();
+
+        Config.updateConfig();
+
+
+        MedusaCommands medusaCommands = new MedusaCommands(this);
+        getCommand("medusa").setExecutor(medusaCommands);
+
+        //Register listeners.
+        PacketEvents.getSettings().setIdentifier("medusa_identifier");
+        PacketEvents.getSettings().setUninjectAsync(true);
+        PacketEvents.getSettings().setInjectAsync(true);
+        PacketEvents.init(this);
+
+        PacketEvents.getAPI().getEventManager().registerListener(new PacketProcessor());
+
+        Bukkit.getServer().getPluginManager().registerEvents(new RegistrationListener(), this);
+
+        //Register online players into the system.
+        Bukkit.getOnlinePlayers()
+                .stream()
+                .filter(player -> !this.dataManager.containsPlayer(player))
+                .forEach(player -> {
+                    final PlayerData playerData = new PlayerData(player.getUniqueId(), player);
+                    if (Config.TESTMODE) playerData.setAlerts(true);
+
+                    this.dataManager.getPlayerData().put(player.getUniqueId(), playerData);
+                });
+
+        Bukkit.getLogger().info("Medusa by GladUrBad has been enabled.");
+        instance.setEnabled(true);
+
+        AlertManager.setup();
+    }
+
+    @Override
+    public void onDisable() {
+        Bukkit.getLogger().info("Disabling Medusa by GladUrBad");
+        this.checkManager.disInit();
+        PacketEvents.stop();
+        instance = null;
     }
 }

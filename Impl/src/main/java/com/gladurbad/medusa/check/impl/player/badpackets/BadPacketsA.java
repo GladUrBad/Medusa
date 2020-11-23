@@ -1,23 +1,25 @@
 package com.gladurbad.medusa.check.impl.player.badpackets;
 
 import com.gladurbad.medusa.check.Check;
-import com.gladurbad.medusa.check.CheckInfo;
-import com.gladurbad.medusa.data.PlayerData;
-import com.gladurbad.medusa.packet.Packet;
+import com.gladurbad.api.check.CheckInfo;
+import com.gladurbad.medusa.network.Packet;
+import com.gladurbad.medusa.playerdata.PlayerData;
+import io.github.retrooper.packetevents.packetwrappers.in.flying.WrappedPacketInFlying;
 
-@CheckInfo(name = "BadPackets (A)", description = "Checks for invalid pitch rotation.")
+@CheckInfo(name = "BadPackets", type = "A")
 public class BadPacketsA extends Check {
 
-    public BadPacketsA(final PlayerData data) {
+    public BadPacketsA(PlayerData data) {
         super(data);
     }
 
     @Override
-    public void handle(final Packet packet) {
-        if (packet.isRotation()) {
-            final float pitch = data.getRotationProcessor().getPitch();
-
-            if (Math.abs(pitch) > 90) fail("pitch=" + pitch);
+    public void handle(Packet packet) {
+        if (packet.isFlying()) {
+            WrappedPacketInFlying inFlying = new WrappedPacketInFlying(packet.getRawPacket());
+            if (Math.abs(inFlying.getPitch()) > 90.0F) {
+                fail();
+            }
         }
     }
 }

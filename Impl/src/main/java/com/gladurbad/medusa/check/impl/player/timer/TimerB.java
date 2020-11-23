@@ -1,45 +1,64 @@
 package com.gladurbad.medusa.check.impl.player.timer;
 
 import com.gladurbad.medusa.check.Check;
-import com.gladurbad.medusa.check.CheckInfo;
-import com.gladurbad.medusa.data.PlayerData;
-import com.gladurbad.medusa.packet.Packet;
+import com.gladurbad.api.check.CheckInfo;
+import com.gladurbad.medusa.config.Config;
+import com.gladurbad.medusa.config.ConfigValue;
+import com.gladurbad.medusa.network.Packet;
+import com.gladurbad.medusa.playerdata.PlayerData;
 import com.gladurbad.medusa.util.MathUtil;
-import com.gladurbad.medusa.util.type.EvictingList;
+import io.github.retrooper.packetevents.packettype.PacketType;
 
-@CheckInfo(name = "Timer (B)",  description = "Checks for game speed which is too slow.", experimental = true)
+import java.util.ArrayDeque;
+
+@CheckInfo(name = "Timer", type = "B")
 public class TimerB extends Check {
 
-    private final EvictingList<Long> samples = new EvictingList<>(50);
-    private long lastFlyingTime;
+    private long lastFlyingTime, total, lastFlyingTimeDelta;
+    private int packets;
 
+    private static final ConfigValue maxPacketDiscrepancy = new ConfigValue(ConfigValue.ValueType.INTEGER, "max-packet-discrepancy");
+    private static final ConfigValue maxBuffer = new ConfigValue(ConfigValue.ValueType.DOUBLE, "max-buffer");
 
-    public TimerB(final PlayerData data) {
+    public TimerB(PlayerData data) {
         super(data);
     }
 
     @Override
-    public void handle(final Packet packet) {
+    public void handle(Packet packet) {
         if (packet.isFlying()) {
-            final long now = now();
-            final long delta = now - lastFlyingTime;
+            final long flyingTime = now();
+            final long flyingTimeDelta = flyingTime - lastFlyingTime;
 
-            samples.add(delta);
-            if (samples.isFull()) {
-                final double average = samples.stream().mapToDouble(value -> value).average().orElse(1);
-                final double speed = 50 / average;
+            total += flyingTimeDelta;
+            packets++;
 
-                final double deviation = MathUtil.getStandardDeviation(samples);
+            if (Math.abs(flyingTimeDelta - lastFlyingTimeDelta) > 175) {
+                total = 0;
+                packets = 0;
+            }
 
-                if (speed <= 0.82 && deviation < 50.0) {
-                    if (increaseBuffer() > 35) {
-                        fail(String.format("speed=%.2f deviation=%.2f", speed, deviation));
+            if (total > 1000L) {
+                final int packetDiscrepancy = Math.abs(packets - 20);
+
+                if (packetDiscrepancy >= maxPacketDiscrepancy.getInt()) {
+                    if (increaseBuffer() > maxBuffer.getDouble()) {
+                        fail();
+                        setBuffer(0);
                     }
                 } else {
-                    multiplyBuffer(0.75);
+                    decreaseBuffer();
                 }
+
+                packets = 0;
+                total = 0;
             }
-            lastFlyingTime = now;
+
+            lastFlyingTime = flyingTime;
+            lastFlyingTimeDelta = flyingTimeDelta;
+        } else if (packet.isSending() && packet.getPacketId() == PacketType.Server.POSITION) {
+            packets--;
         }
     }
+
 }

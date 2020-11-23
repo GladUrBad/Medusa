@@ -1,56 +1,64 @@
 package com.gladurbad.medusa.check.impl.combat.killaura;
 
 import com.gladurbad.medusa.check.Check;
-import com.gladurbad.medusa.check.CheckInfo;
-import com.gladurbad.medusa.data.PlayerData;
-import com.gladurbad.medusa.exempt.type.ExemptType;
-import com.gladurbad.medusa.packet.Packet;
-import org.bukkit.entity.Entity;
+import com.gladurbad.api.check.CheckInfo;
+import com.gladurbad.medusa.network.Packet;
+import com.gladurbad.medusa.playerdata.PlayerData;
+import com.gladurbad.medusa.util.customtype.EvictingList;
+
+import io.github.retrooper.packetevents.packettype.PacketType;
+import io.github.retrooper.packetevents.packetwrappers.in.useentity.WrappedPacketInUseEntity;
+
 import org.bukkit.entity.EntityType;
 
-/**
- * Created on 10/24/2020 Package com.gladurbad.medusa.check.impl.combat.killaura by GladUrBad
- *
- * This check checks if the player decelerates when hitting a Player. If they don't decelerate, then
- * they are probably using KeepSprint, commonly found in Killaura.
- */
+@CheckInfo(name = "Killaura", type = "B", dev = true)
+public class KillauraB extends Check {
 
-@CheckInfo(name = "KillAura (B)", experimental = true, description = "Checks for KeepSprint modules.")
-public class KillAuraB extends Check {
+    private int hitTicks;
+    private final EvictingList<Long> clickDelays = new EvictingList<>(20);
+    private long lastClickTime;
+    private double cps;
 
-    public KillAuraB(PlayerData data) {
+    public KillauraB(PlayerData data) {
         super(data);
     }
 
     @Override
     public void handle(Packet packet) {
-        if (packet.isPosLook()) {
-            if (data.getExemptProcessor().isExempt(ExemptType.COMBAT)) {
-                final boolean sprinting = data.getActionProcessor().isSprinting();
-                final double deltaXZ = data.getPositionProcessor().getDeltaXZ();
-                final double lastDeltaXZ = data.getPositionProcessor().getLastDeltaXZ();
+        if (packet.isReceiving() && packet.getPacketId() == PacketType.Client.POSITION_LOOK) {
+            if (++hitTicks < 2 && data.isSprinting()) {
+                final double acceleration = Math.abs(data.getDeltaXZ() - data.getLastDeltaXZ());
 
-                final double acceleration = Math.abs(deltaXZ - lastDeltaXZ);
-                final long clickDelay = data.getClickProcessor().getDelay();
-                final boolean onGround = data.getPositionProcessor().isMathematicallyOnGround();
-                final Entity target = data.getCombatProcessor().getTarget();
-
-                final boolean invalid = acceleration < 0.0025 &&
-                        deltaXZ > 0.22 &&
-                        onGround &&
-                        sprinting &&
-                        clickDelay < 250 &&
-                        target.getType() == EntityType.PLAYER;
-
-                if (invalid) {
-                    if (increaseBuffer() > 5) {
-                        fail("acceleration=" + acceleration);
+                if (cps < 15 && cps > 4) {
+                    if (acceleration < 0.0125) {
+                        increaseBuffer();
+                        if (buffer > 7) {
+                            fail();
+                        }
+                    } else {
                         decreaseBuffer();
                     }
-                } else {
-                    decreaseBufferBy(0.5);
                 }
             }
+        } else if (packet.isUseEntity()) {
+            final WrappedPacketInUseEntity wrappedPacketInUseEntity = new WrappedPacketInUseEntity(packet.getRawPacket());
+            if (wrappedPacketInUseEntity.getAction()
+                    == WrappedPacketInUseEntity.EntityUseAction.ATTACK
+                    && wrappedPacketInUseEntity.getEntity().getType() == EntityType.PLAYER) {
+                this.hitTicks = 0;
+            }
+        } else if (packet.isSwing()) {
+            final long clickTime = now();
+            final long clickDelay = clickTime - lastClickTime;
+
+            clickDelays.add(clickDelay);
+
+            if (clickDelays.size() >= 20) {
+                final double average = clickDelays.parallelStream().mapToDouble(value -> value).average().orElse(0.0);
+                cps = 1000L / average;
+            }
+
+            lastClickTime = clickTime;
         }
     }
 }
