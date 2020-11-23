@@ -1,0 +1,246 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="BranchesTreeState">
+    <expand />
+    <select />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="d3bc3713-a941-4b01-9bda-42a178e40630" name="Default Changelist" comment="1.5 code.">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Class" />
+      </list>
+    </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="InvalidFacetManager">
+    <ignored-facets>
+      <facet id="Impl/invalid/Minecraft" />
+      <facet id="Medusa/invalid/Minecraft" />
+    </ignored-facets>
+  </component>
+  <component name="MavenImportPreferences">
+    <option name="generalSettings">
+      <MavenGeneralSettings>
+        <option name="mavenHome" value="C:\Program Files\JetBrains\IntelliJ IDEA Community Edition 2019.3.4\plugins\maven\lib\maven3" />
+      </MavenGeneralSettings>
+    </option>
+  </component>
+  <component name="ProjectId" id="1jNw57MzqU5LcXP32BqmTE2Rn53" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
+  <component name="ProjectViewState">
+    <option name="autoscrollToSource" value="true" />
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+    <option name="showMembers" value="true" />
+  </component>
+  <component name="PropertiesComponent">
+    <property name="ASKED_MARK_IGNORED_FILES_AS_EXCLUDED" value="true" />
+    <property name="ASKED_SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
+    <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
+    <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
+    <property name="jdk.selected.JAVA_MODULE" value="1.8" />
+    <property name="last_directory_selection" value="$PROJECT_DIR$/ExampleAPI/src" />
+    <property name="last_opened_file_path" value="$USER_HOME$/Desktop/Programming/VisionClientLol" />
+    <property name="project.structure.last.edited" value="Project" />
+    <property name="project.structure.proportion" value="0.15" />
+    <property name="project.structure.side.proportion" value="0.35632184" />
+    <property name="settings.editor.selected.configurable" value="org.jetbrains.plugins.github.ui.GithubSettingsConfigurable" />
+  </component>
+  <component name="RecentsManager">
+    <key name="ExtractSuperBase.RECENT_KEYS">
+      <recent name="com.gladurbad.medusa.manager" />
+    </key>
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\rubik\IdeaProjects\Medusa" />
+      <recent name="C:\Users\rubik\IdeaProjects\Medusa\ExampleAPI" />
+    </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\rubik\IdeaProjects\Medusa\Impl\src\main\java" />
+      <recent name="C:\Users\rubik\IdeaProjects\Medusa\Impl\src\main" />
+      <recent name="C:\Users\rubik\IdeaProjects\Medusa\Impl\src" />
+      <recent name="C:\Users\rubik\IdeaProjects\Medusa" />
+      <recent name="C:\Users\rubik\IdeaProjects\Medusa\Impl" />
+    </key>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="d3bc3713-a941-4b01-9bda-42a178e40630" name="Default Changelist" comment="" />
+      <created>1603657671044</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1603657671044</updated>
+    </task>
+    <task id="LOCAL-00001" summary="cheese">
+      <created>1605647677546</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1605647677546</updated>
+    </task>
+    <task id="LOCAL-00002" summary="1.5 code.">
+      <created>1606158175897</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1606158175897</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
+    <servers />
+  </component>
+  <component name="UnknownFeatures">
+    <option featureType="com.intellij.facetType" implementationName="minecraft" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State>
+              <option name="CUSTOM_BOOLEAN_PROPERTIES">
+                <map>
+                  <entry key="Show.Git.Branches" value="false" />
+                </map>
+              </option>
+            </State>
+          </value>
+        </entry>
+      </map>
+    </option>
+    <option name="oldMeFiltersMigrated" value="true" />
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="cheese" />
+    <MESSAGE value="1.5 code." />
+    <option name="LAST_COMMIT_MESSAGE" value="1.5 code." />
+  </component>
+  <component name="WindowStateProjectService">
+    <state x="440" y="94" key="#Project_Structure" timestamp="1603659042076">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="440" y="94" key="#Project_Structure/0.0.1920.1040/1920.1.1920.1040@0.0.1920.1040" timestamp="1603659042076" />
+    <state x="765" y="223" key="#com.intellij.ide.util.MemberChooser" timestamp="1606153711791">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="765" y="223" key="#com.intellij.ide.util.MemberChooser/0.0.1920.1040/1920.1.1920.1040@0.0.1920.1040" timestamp="1606153711791" />
+    <state x="811" y="436" key="#com.intellij.refactoring.move.MoveHandler.SelectRefactoringDialog" timestamp="1606151359189">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="811" y="436" key="#com.intellij.refactoring.move.MoveHandler.SelectRefactoringDialog/0.0.1920.1040/1920.1.1920.1040@0.0.1920.1040" timestamp="1606151359189" />
+    <state x="698" y="405" width="553" height="287" key="#com.intellij.refactoring.move.moveClassesOrPackages.MoveClassesOrPackagesDialog.classes" timestamp="1606067330344">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="698" y="405" width="553" height="287" key="#com.intellij.refactoring.move.moveClassesOrPackages.MoveClassesOrPackagesDialog.classes/0.0.1920.1040/1920.1.1920.1040@0.0.1920.1040" timestamp="1606067330344" />
+    <state x="428" y="0" key="#com.intellij.refactoring.rename.AutomaticRenamingDialog" timestamp="1603746364600">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="428" y="0" key="#com.intellij.refactoring.rename.AutomaticRenamingDialog/0.0.1920.1040/1920.1.1920.1040@0.0.1920.1040" timestamp="1603746364600" />
+    <state x="690" y="267" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog" timestamp="1605636764518">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="690" y="267" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog/0.0.1920.1040/1920.1.1920.1040@0.0.1920.1040" timestamp="1605636764518" />
+    <state x="427" y="1" key="CommitChangelistDialog2" timestamp="1606158637995">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="427" y="1" key="CommitChangelistDialog2/0.0.1920.1040/1920.1.1920.1040@0.0.1920.1040" timestamp="1606158637995" />
+    <state x="24" y="85" key="DiffContextDialog" timestamp="1606158405373">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="24" y="85" key="DiffContextDialog/0.0.1920.1040/1920.1.1920.1040@0.0.1920.1040" timestamp="1606158405373" />
+    <state x="740" y="275" key="FileChooserDialogImpl" timestamp="1605992097758">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="740" y="275" key="FileChooserDialogImpl/0.0.1920.1040/1920.1.1920.1040@0.0.1920.1040" timestamp="1605992097758" />
+    <state x="836" y="422" key="Github.ShareDialog" timestamp="1605451507976">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="836" y="422" key="Github.ShareDialog/0.0.1920.1040/1920.1.1920.1040@0.0.1920.1040" timestamp="1605451507976" />
+    <state width="1877" height="239" key="GridCell.Tab.0.bottom" timestamp="1606158034628">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state width="1877" height="239" key="GridCell.Tab.0.bottom/0.0.1920.1040/1920.1.1920.1040@0.0.1920.1040" timestamp="1606158034628" />
+    <state width="1877" height="239" key="GridCell.Tab.0.center" timestamp="1606158034627">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state width="1877" height="239" key="GridCell.Tab.0.center/0.0.1920.1040/1920.1.1920.1040@0.0.1920.1040" timestamp="1606158034627" />
+    <state width="1877" height="239" key="GridCell.Tab.0.left" timestamp="1606158034627">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state width="1877" height="239" key="GridCell.Tab.0.left/0.0.1920.1040/1920.1.1920.1040@0.0.1920.1040" timestamp="1606158034627" />
+    <state width="1877" height="239" key="GridCell.Tab.0.right" timestamp="1606158034627">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state width="1877" height="239" key="GridCell.Tab.0.right/0.0.1920.1040/1920.1.1920.1040@0.0.1920.1040" timestamp="1606158034627" />
+    <state x="620" y="138" key="NewModule_or_Project.wizard" timestamp="1604014444592">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="620" y="138" key="NewModule_or_Project.wizard/0.0.1920.1040/1920.1.1920.1040@0.0.1920.1040" timestamp="1604014444592" />
+    <state x="450" y="268" key="SettingsEditor" timestamp="1606158351194">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="450" y="268" key="SettingsEditor/0.0.1920.1040/1920.1.1920.1040@0.0.1920.1040" timestamp="1606158351194" />
+    <state x="552" y="249" key="Vcs.Push.Dialog.v2" timestamp="1606158579629">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="552" y="249" key="Vcs.Push.Dialog.v2/0.0.1920.1040/1920.1.1920.1040@0.0.1920.1040" timestamp="1606158579629" />
+    <state x="776" y="298" key="chooseDestDirectoryDialog" timestamp="1603659137063">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="776" y="298" key="chooseDestDirectoryDialog/0.0.1920.1040/1920.1.1920.1040@0.0.1920.1040" timestamp="1603659137063" />
+    <state x="92" y="92" width="1736" height="856" key="com.intellij.history.integration.ui.views.FileHistoryDialog" timestamp="1605901443631">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="92" y="92" width="1736" height="856" key="com.intellij.history.integration.ui.views.FileHistoryDialog/0.0.1920.1040/1920.1.1920.1040@0.0.1920.1040" timestamp="1605901443631" />
+    <state x="777" y="430" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2" timestamp="1606158437985">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="777" y="430" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2/0.0.1920.1040/1920.1.1920.1040@0.0.1920.1040" timestamp="1606158437985" />
+    <state x="1920" y="1" width="1428" height="1022" key="dock-window-1" timestamp="1606097351979">
+      <screen x="1920" y="1" width="1920" height="1040" />
+    </state>
+    <state x="1920" y="1" width="1428" height="1022" key="dock-window-1/0.0.1920.1040/1920.1.1920.1040@0.0.1920.1040" timestamp="1606097351979" />
+    <state x="2056" y="1" width="1259" height="761" maximized="true" key="dock-window-2" timestamp="1605383159770">
+      <screen x="1920" y="1" width="1920" height="1040" />
+    </state>
+    <state x="2056" y="1" width="1259" height="761" maximized="true" key="dock-window-2/0.0.1920.1040/1920.1.1920.1040@0.0.1920.1040" timestamp="1605383159770" />
+    <state x="690" y="270" key="extract.method.dialog" timestamp="1603746578018">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="690" y="270" key="extract.method.dialog/0.0.1920.1040/1920.1.1920.1040@0.0.1920.1040" timestamp="1603746578018" />
+    <state x="668" y="237" width="583" height="624" key="find.popup" timestamp="1606081695189">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="668" y="237" width="583" height="624" key="find.popup/0.0.1920.1040/1920.1.1920.1040@0.0.1920.1040" timestamp="1606081695189" />
+    <state x="674" y="386" key="git4idea.remote.GitConfigureRemotesDialog" timestamp="1606158574075">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="674" y="386" key="git4idea.remote.GitConfigureRemotesDialog/0.0.1920.1040/1920.1.1920.1040@0.0.1920.1040" timestamp="1606158574075" />
+    <state x="342" y="95" key="new project wizard" timestamp="1605051173161">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="342" y="95" key="new project wizard/0.0.1920.1040/1920.1.1920.1040@0.0.1920.1040" timestamp="1605051173161" />
+    <state x="2262" y="96" key="new project wizard/0.0.1920.1040/1920.1.1920.1040@1920.1.1920.1040" timestamp="1603668170378" />
+    <state x="616" y="240" key="run.anything.popup" timestamp="1604115614330">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="616" y="240" key="run.anything.popup/0.0.1920.1040/1920.1.1920.1040@0.0.1920.1040" timestamp="1604115614330" />
+    <state x="623" y="225" width="672" height="678" key="search.everywhere.popup" timestamp="1605930340269">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="623" y="225" width="672" height="678" key="search.everywhere.popup/0.0.1920.1040/1920.1.1920.1040@0.0.1920.1040" timestamp="1605930340269" />
+  </component>
+</project>

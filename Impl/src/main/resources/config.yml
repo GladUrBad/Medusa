@@ -1,0 +1,227 @@
+##############################
+#    Medusa Configuration    #
+##############################
+
+# Appearance configuration.
+# If you want to change how Medusa looks, you can do it here.
+appearance:
+  # Theme system.
+  # How to make theme:
+  # Split the string with dollar sign symbol ($)
+  # First, put the name of the Theme (Ex: Medusa)
+  # Then, put $ and space after it (Ex: Medusa$ )
+  #
+  # After this, put the alert format and a $ after it,
+  # followed by a space (Ex: &aMedusa » &f%player% &7failed &f%check% &7(x%vl%)$ )
+  #
+  # Then, put TWO (no more, no less, can be the same)
+  # accent colours you want using the Minecraft colour code symbols (Ex: &a &c)
+  themes:
+    - "Medusa$ &aMedusa » &f%player% &7failed &f%check% &7(x%vl%)$ &a &2"
+    - "Overflow$ &7[&cMedusa&7] %player% flagged &c%check% VL: &c%vl% %dev%$ &c &4"
+    - "Sparky$ &eMedusa &7> &6%player% &7has failed &6%check% &cx%vl%$ &6 &e"
+  # Accent colours. Changes color look of aspects of Medusa.
+  accents:
+    accentOne: '&a'
+    accentTwo: '&2'
+
+violations:
+  alert-format: '&aMedusa » &f%player% &7failed &f%check% &7(x%vl%)'
+  alert-cooldown: 500
+  minimum-vl-to-alert: 10
+  clear-violations-delay: 15
+
+# Check configuration
+# enabled: Turns the check on/off.
+# max-violations: Amount of times a player can flag before running the specified punish-command.
+# punish-command: Command ran by the server when a player exceeds the specified max-violations.
+checks:
+  combat:
+    aimassist:
+      a:
+        enabled: true
+        max-violations: 100
+        punish-command: ''
+      b:
+        enabled: true
+        max-violations: 100
+        punish-command: ''
+      c:
+        enabled: true
+        max-violations: 100
+        punish-command: ''
+      d:
+        enabled: true
+        max-violations: 100
+        punish-command: ''
+      e:
+        enabled: true
+        max-violations: 100
+        punish-command: ''
+      f:
+        enabled: true
+        max-violations: 100
+        punish-command: ''
+      g:
+        enabled: true
+        max-violations: 100
+        punish-command: ''
+    autoclicker:
+      a:
+        enabled: true
+        max-violations: 10
+        punish-command: ''
+      b:
+        enabled: true
+        max-violations: 10
+        punish-command: ''
+    killaura:
+      a:
+        enabled: true
+        max-violations: 50
+        punish-command: ''
+      b:
+        enabled: true
+        max-violations: 50
+        punish-command: ''
+      c:
+        enabled: true
+        max-violations: 50
+        punish-command: ''
+      d:
+        enabled: true
+        max-violations: 50
+        punish-command: ''
+      e:
+        enabled: true
+        max-violations: 50
+        punish-command: ''
+    hitbox:
+      a:
+        enabled: true
+        max-violations: 50
+        punish-command: ''
+      b:
+        enabled: true
+        max-violations: 50
+        punish-command: ''
+    velocity:
+      a:
+        enabled: true
+        max-violations: 50
+        punish-command: ''
+  movement:
+    fastclimb:
+      a:
+        enabled: true
+        max-violations: 50
+        punish-command: ''
+    fly:
+      a:
+        enabled: true
+        max-violations: 50
+        punish-command: ''
+      b:
+        enabled: true
+        max-violations: 50
+        punish-command: ''
+      c:
+        enabled: true
+        max-violations: 50
+        punish-command: ''
+    jesus:
+      a:
+        enabled: true
+        max-violations: 50
+        punish-command: ''
+    motion:
+      a:
+        enabled: true
+        max-violations: 50
+        punish-command: ''
+      b:
+        enabled: true
+        max-violations: 50
+        punish-command: ''
+      c:
+        enabled: true
+        max-violations: 50
+        punish-command: ''
+      d:
+        enabled: true
+        max-violations: 50
+        punish-command: ''
+      e:
+        enabled: true
+        max-violations: 50
+        punish-command: ''
+    speed:
+      a:
+        enabled: true
+        max-violations: 50
+        punish-command: ''
+      b:
+        enabled: true
+        max-violations: 50
+        punish-command: ''
+      c:
+        enabled: true
+        max-violations: 50
+        punish-command: ''
+  player:
+    timer:
+      a:
+        enabled: true
+        max-violations: 50
+        punish-command: ''
+      b:
+        enabled: true
+        max-violations: 50
+        punish-command: ''
+    hand:
+      a:
+        enabled: true
+        max-violations: 50
+        punish-command: ''
+      b:
+        enabled: true
+        max-violations: 50
+        punish-command: ''
+      c:
+        enabled: true
+        max-violations: 50
+        punish-command: ''
+    badpackets:
+      a:
+        enabled: true
+        max-violations: 50
+        punish-command: ''
+      b:
+        enabled: true
+        max-violations: 50
+        punish-command: ''
+      c:
+        enabled: true
+        max-violations: 50
+        punish-command: ''
+      d:
+        enabled: true
+        max-violations: 50
+        punish-command: ''
+      e:
+        enabled: true
+        max-violations: 50
+        punish-command: ''
+      f:
+        enabled: true
+        max-violations: 50
+        punish-command: ''
+    scaffold:
+      a:
+        enabled: true
+        max-violations: 50
+        punish-command: ''
+      b:
+        enabled: true
+        max-violations: 50
+        punish-command: ''
