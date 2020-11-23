@@ -1,37 +1,42 @@
 package com.gladurbad.medusa.check.impl.combat.killaura;
 
-import com.gladurbad.api.check.CheckInfo;
-import com.gladurbad.medusa.check.*;
-import com.gladurbad.medusa.config.ConfigValue;
-import com.gladurbad.medusa.network.Packet;
-import com.gladurbad.medusa.playerdata.PlayerData;
+import com.gladurbad.medusa.check.Check;
+import com.gladurbad.medusa.check.CheckInfo;
 
-import io.github.retrooper.packetevents.packettype.PacketType;
+import com.gladurbad.medusa.data.PlayerData;
+import com.gladurbad.medusa.packet.Packet;
 
-@CheckInfo(name = "Killaura", type = "D")
-public class KillauraD extends Check {
+/**
+ * Created on 10/24/2020 Package com.gladurbad.medusa.check.impl.combat.killaura by GladUrBad
+ *
+ * This check checks for abnormally high aim accuracy. Usually killaura's get above 95% consistently.
+ * A legit player hovers around 0-80%. This check is easily falsed. I should probably make sure the players are moving
+ * and looking around. But this has the basic concept.
+ */
 
-    private static final ConfigValue sampleSize = new ConfigValue(ConfigValue.ValueType.INTEGER, "sample-size");
-    private static final ConfigValue maxAccuracy = new ConfigValue(ConfigValue.ValueType.INTEGER, "max-accuracy");
+@CheckInfo(name = "KillAura (D)", experimental = true, description = "Checks for high accuracy.")
+public class KillAuraD extends Check {
 
-    private int swings, hits;
 
-    public KillauraD(PlayerData data) {
+    public KillAuraD(PlayerData data) {
         super(data);
     }
 
     @Override
     public void handle(Packet packet) {
-        if (packet.getPacketId() == PacketType.Client.ARM_ANIMATION) {
-            if (++swings >= sampleSize.getInt()) {
-                if (hits > maxAccuracy.getInt()) {
-                    fail();
+        if (packet.isUseEntity()) {
+            final boolean invalid = data.getCombatProcessor().getHitMissRatio() > 98 &&
+                    data.getRotationProcessor().getDeltaYaw() > 1.5F &&
+                    data.getRotationProcessor().getDeltaPitch() > 0 &&
+                    data.getPositionProcessor().getDeltaXZ() > 0.1;
+
+            if (invalid) {
+                if (increaseBuffer() > 25) {
+                    fail("accuracy=" + data.getCombatProcessor().getHitMissRatio() + " buffer=" + getBuffer());
                 }
-                swings = 0;
-                hits = 0;
+            } else {
+                decreaseBufferBy(2);
             }
-        } else if (packet.getPacketId() == PacketType.Client.USE_ENTITY) {
-            ++hits;
         }
     }
 }

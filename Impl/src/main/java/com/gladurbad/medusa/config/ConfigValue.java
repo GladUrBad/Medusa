@@ -1,6 +1,7 @@
 package com.gladurbad.medusa.config;
 
-import lombok.*;
+import lombok.Getter;
+import lombok.Setter;
 
 public class ConfigValue {
     @Setter

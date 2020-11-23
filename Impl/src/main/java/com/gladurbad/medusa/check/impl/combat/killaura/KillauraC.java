@@ -1,36 +1,29 @@
 package com.gladurbad.medusa.check.impl.combat.killaura;
 
 import com.gladurbad.medusa.check.Check;
-import com.gladurbad.api.check.CheckInfo;
-import com.gladurbad.medusa.network.Packet;
-import com.gladurbad.medusa.playerdata.PlayerData;
-import io.github.retrooper.packetevents.packetwrappers.in.useentity.WrappedPacketInUseEntity;
+import com.gladurbad.medusa.check.CheckInfo;
+import com.gladurbad.medusa.data.PlayerData;
+import com.gladurbad.medusa.packet.Packet;
 
-@CheckInfo(name = "Killaura", type = "C")
-public class KillauraC extends Check {
+/**
+ * Created on 10/24/2020 Package com.gladurbad.medusa.check.impl.combat.killaura by GladUrBad
+ *
+ * In Minecraft, it's impossible to hit two or more unique entities in the same tick. This check
+ * ensures they do not.
+ */
+@CheckInfo(name = "KillAura (C)", description = "Checks for entities hit in one tick.")
+public class KillAuraC extends Check {
 
-    private int entitiesHit;
-    private int lastEntityId;
-
-    public KillauraC(PlayerData data) {
+    public KillAuraC(PlayerData data) {
         super(data);
     }
 
     @Override
     public void handle(Packet packet) {
-        if (packet.isFlying()) {
-            entitiesHit = 0;
-        } else if (packet.isUseEntity()) {
-            final WrappedPacketInUseEntity wrappedPacketInUseEntity = new WrappedPacketInUseEntity(packet.getRawPacket());
-            final int entityId = wrappedPacketInUseEntity.getEntityId();
-
-            if (entityId != lastEntityId) {
-                if (++entitiesHit > 1) {
-                    fail();
-                }
+        if (packet.isUseEntity()) {
+            if (data.getCombatProcessor().getCurrentTargets() > 1) {
+                fail("entities=" + data.getCombatProcessor().getCurrentTargets());
             }
-
-            lastEntityId = entityId;
         }
     }
 }

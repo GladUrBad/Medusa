@@ -1,40 +1,51 @@
 package com.gladurbad.medusa.check.impl.combat.killaura;
 
 import com.gladurbad.medusa.check.Check;
-import com.gladurbad.api.check.CheckInfo;
-import com.gladurbad.medusa.network.Packet;
-import com.gladurbad.medusa.playerdata.PlayerData;
+import com.gladurbad.medusa.check.CheckInfo;
+import com.gladurbad.medusa.data.PlayerData;
+import com.gladurbad.medusa.packet.Packet;
 
-@CheckInfo(name = "Killaura", type = "A")
-public class KillauraA extends Check {
+/**
+ * Created on 10/24/2020 Package com.gladurbad.medusa.check.impl.combat.killaura by GladUrBad
+ *
+ * This check ensures the client sends packets in the correct order while attacking. Flags older clients usually.
+ * This check needs an overhaul. While it should not false under most conditions, occasionally it might false with lag.
+ * It also is not very good at flagging under such conditions.
+ * Although, I would rather this not false than detect more, since what this
+ * checks for doesn't provide an advantage.
+ *
+ * Packet order: ArmAnimation -> UseEntity -> Instance of flying packet.
+ */
 
-    private long flyingTime;
-    private int ticksSincePacketDrop;
+@CheckInfo(name = "KillAura (A)", description = "Checks for packet order.")
+public class KillAuraA extends Check {
 
-    public KillauraA(PlayerData data) {
+    private boolean usedEntity;
+    private long lastUseEntityTime;
+
+    public KillAuraA(PlayerData data) {
         super(data);
     }
 
     @Override
     public void handle(Packet packet) {
-        if (packet.isFlying()) {
-            flyingTime = now();
-        } else if (packet.isUseEntity()) {
-            final long delay = now() - flyingTime;
+        if (packet.isUseEntity()) {
+            usedEntity = true;
+            lastUseEntityTime = now();
+        } else if (packet.isFlying()) {
+            if (usedEntity) {
+                final long delay = now() - lastUseEntityTime;
+                final boolean invalid = !data.getActionProcessor().isLagging() && delay > 15;
 
-            if (delay > 85) {
-                ticksSincePacketDrop = 0;
-            } else {
-                ++ticksSincePacketDrop;
-            }
-
-            if (delay <= 1 && ticksSincePacketDrop > 35) {
-                if (increaseBuffer() > 2) {
-                    fail();
+                if (invalid) {
+                    if (increaseBuffer() > 2) {
+                        fail("delay=" + delay + " buffer=" + getBuffer());
+                    }
+                } else {
+                    decreaseBufferBy(0.15);
                 }
-            } else {
-                decreaseBufferBy(0.1);
             }
+            usedEntity = false;
         }
     }
 }

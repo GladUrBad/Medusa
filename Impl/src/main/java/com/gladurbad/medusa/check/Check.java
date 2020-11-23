@@ -1,114 +1,147 @@
 package com.gladurbad.medusa.check;
 
-import com.gladurbad.api.check.CheckInfo;
-import com.gladurbad.api.check.MedusaCheck;
-import com.gladurbad.api.listener.MedusaAlertEvent;
-import com.gladurbad.medusa.config.*;
-import com.gladurbad.medusa.Medusa;
-import com.gladurbad.medusa.manager.AlertManager;
-import com.gladurbad.medusa.network.Packet;
-import com.gladurbad.medusa.playerdata.PlayerData;
-
-import io.github.retrooper.packetevents.packetwrappers.out.position.WrappedPacketOutPosition;
+import com.gladurbad.medusa.config.Config;
 import lombok.Getter;
 import lombok.Setter;
-import net.minecraft.server.v1_8_R1.PacketPlayOutPosition;
+import com.gladurbad.medusa.Medusa;
+import com.gladurbad.medusa.data.PlayerData;
+import com.gladurbad.medusa.exempt.type.ExemptType;
+import com.gladurbad.medusa.util.anticheat.AlertUtil;
+import com.gladurbad.medusa.packet.Packet;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
+import org.bukkit.Material;
 
+import java.util.Objects;
 
 @Getter
-@Setter
-public abstract class Check implements MedusaCheck {
+public abstract class Check {
 
-    //Data for check.
     protected final PlayerData data;
 
-    //Check data from config.
-    private final boolean enabled;
-    private final int maxVl;
-    private final boolean setback;
-    private final String punishCommand;
-
-    //Check information.
     private int vl;
-    protected double buffer;
-    protected Location lastLegitLocation;
+    private long lastFlagTime;
+    private CheckType checkType;
+    @Setter private int maxVl;
+    private double buffer;
+    @Setter private String punishCommand;
 
-    public Check(PlayerData data) {
+    public Check(final PlayerData data) {
         this.data = data;
-        this.enabled = Config.ENABLED_CHECKS.contains(getCheckInfo().name() + getCheckInfo().type());
-        this.maxVl = Config.MAX_VIOLATIONS.get(getCheckInfo().name() + getCheckInfo().type());
-        this.setback = Config.SETBACK_CHECKS.contains(getCheckInfo().name() + getCheckInfo().type());
-        this.punishCommand = Config.PUNISH_COMMANDS.get(getCheckInfo().name() + getCheckInfo().type());
+        this.maxVl = Config.MAX_VIOLATIONS.get(this.getClass().getSimpleName());
+        this.punishCommand = Config.PUNISH_COMMANDS.get(this.getClass().getSimpleName());
+
+        final String packageName = this.getClass().getPackage().getName();
+
+        if (packageName.contains("combat")) {
+            checkType = CheckType.COMBAT;
+        } else if (packageName.contains("movement")) {
+            checkType = CheckType.MOVEMENT;
+        } else if (packageName.contains("player")) {
+            checkType = CheckType.PLAYER;
+        }
     }
 
     public abstract void handle(final Packet packet);
 
-    public CheckInfo getCheckInfo() {
-        return this.getClass().getAnnotation(CheckInfo.class);
-    }
-
-    protected void fail() {
+    public void fail(final Object info) {
         ++vl;
+        data.setTotalViolations(data.getTotalViolations() + 1);
 
-        MedusaAlertEvent event = new MedusaAlertEvent(data.getPlayer(), this, setback);
-        Bukkit.getScheduler().runTaskAsynchronously(Medusa.getInstance(), () -> Bukkit.getPluginManager().callEvent(event));
+        switch (checkType) {
+            case COMBAT:
+                data.setCombatViolations(data.getCombatViolations() + 1);
+                break;
+            case MOVEMENT:
+                data.setMovementViolations(data.getMovementViolations() + 1);
+                break;
+            case PLAYER:
+                data.setPlayerViolations(data.getPlayerViolations() + 1);
+                break;
+        }
 
-        if(!event.isCancelled()) {
-            if (vl >= Config.VL_TO_ALERT) {
-                AlertManager.verbose(data, this);
-                if (event.isSetback()) {
-                    final Location setBackLocation = lastLegitLocation == null ? data.getLastBukkitLocation() : lastLegitLocation;
-                    setBackLocation.setYaw(data.getPlayer().getEyeLocation().getYaw());
-                    setBackLocation.setPitch(data.getPlayer().getEyeLocation().getPitch());
-
-                    Bukkit.getScheduler().runTask(Medusa.getInstance(), () -> data.getPlayer().teleport(setBackLocation));
-                    data.setLastSetbackTime(now());
-                    buffer = 0;
-                }
-            }
+        if (System.currentTimeMillis() - lastFlagTime > Config.ALERT_COOLDOWN && vl > Config.MIN_VL_TO_ALERT) {
+            AlertUtil.handleAlert(this, data, Objects.toString(info));
+            this.lastFlagTime = System.currentTimeMillis();
         }
     }
 
-    protected double increaseBuffer() {
-        buffer = Math.min(10000, buffer + 1);
-        return buffer;
+    public void fail() {
+        ++vl;
+        fail("");
     }
 
-    protected double decreaseBuffer() {
-        buffer = Math.max(0, buffer - 1);
-        return buffer;
+    protected boolean isExempt(final ExemptType exemptType) {
+        return data.getExemptProcessor().isExempt(exemptType);
     }
 
-    protected double increaseBufferBy(double amount) {
-        buffer = Math.min(100, buffer + amount);
-        return buffer;
+    protected boolean isExempt(final ExemptType... exemptTypes) {
+        return data.getExemptProcessor().isExempt(exemptTypes);
     }
 
-    protected double decreaseBufferBy(double amount) {
-        buffer = Math.max(0, buffer - amount);
-        return buffer;
-    }
-
-    protected void resetBuffer() {
-        buffer = 0;
-    }
-
-    protected void multiplyBuffer(double multiplier) {
-        buffer *= multiplier;
-    }
-
-    protected long now() {
+    public long now() {
         return System.currentTimeMillis();
     }
 
+    public int ticks() { return Medusa.INSTANCE.getTickManager().getTicks(); }
 
-    protected void debug(Object info) {
-        Bukkit.broadcastMessage(ChatColor.AQUA + "Debug: " + ChatColor.RESET + info);
+    public double increaseBuffer() {
+        return buffer = Math.min(10000, buffer + 1);
     }
 
-    protected void debugPerPlayer(Object info) { data.getPlayer().sendMessage(ChatColor.AQUA + "Debug: " + ChatColor.RESET + info);}
+    public double increaseBufferBy(final double amount) {
+        return buffer = Math.min(10000, buffer + amount);
+    }
 
+    public double decreaseBuffer() {
+        return buffer = Math.max(0, buffer - 1);
+    }
+
+    public double decreaseBufferBy(final double amount) {
+        return buffer = Math.max(0, buffer - amount);
+    }
+
+    public void resetBuffer() {
+        buffer = 0;
+    }
+
+    public void multiplyBuffer(final double multiplier) {
+        buffer *= multiplier;
+    }
+
+    public int hitTicks() {
+        return data.getCombatProcessor().getHitTicks();
+    }
+
+    public boolean digging() {
+        return data.getActionProcessor().isDigging();
+    }
+
+    public CheckInfo getCheckInfo() {
+        if (this.getClass().isAnnotationPresent(CheckInfo.class)) {
+            return this.getClass().getAnnotation(CheckInfo.class);
+        } else {
+            System.err.println("CheckInfo annotation hasn't been added to the class " + this.getClass().getSimpleName() + ".");
+        }
+        return null;
+    }
+
+    public void debug(final Object object) {
+        Bukkit.broadcastMessage(ChatColor.GREEN + "[Medusa-Debug] " + ChatColor.GRAY + object);
+    }
+
+    public void debug(final Object... objects) {
+        for (Object object : objects) {
+            Bukkit.broadcastMessage(ChatColor.GREEN + "[Medusa-Debug] " + ChatColor.GRAY + object);
+        }
+    }
+
+    enum CheckType {
+        COMBAT, MOVEMENT, PLAYER;
+    }
+
+    public boolean isBridging() {
+        return data.getPlayer().getLocation().clone().subtract(0, 2, 0).getBlock().getType() == Material.AIR;
+    }
 }

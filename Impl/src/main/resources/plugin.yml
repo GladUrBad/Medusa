@@ -1,11 +1,18 @@
 name: Medusa
-version: 1.4.2-HOTFIX-1
-main: com.gladurbad.medusa.Medusa
-load: STARTUP
-authors: [ GladUrBad ]
-softdepend: [PlaceholderAPI]
+version: 1.5
+main: com.gladurbad.medusa.MedusaPlugin
+authors: [GladUrBad]
+description: Medusa Anticheat
 
 commands:
   medusa:
-    description: Medusa Anticheat commands.
-    usage: /<command>
+    description: Commands for Medusa Anticheat.
+    usage: /medusa
+    aliases: [anticheat, ac]
+    permission: medusa.commands
+  alerts:
+    description: Toggles alerts for Medusa Anticheat.
+    usage: /alerts
+    permission: medusa.alerts
+
+

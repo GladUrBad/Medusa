@@ -1,54 +1,39 @@
 package com.gladurbad.medusa.check.impl.movement.motion;
 
 import com.gladurbad.medusa.check.Check;
-import com.gladurbad.api.check.CheckInfo;
-import com.gladurbad.medusa.network.Packet;
-import com.gladurbad.medusa.playerdata.PlayerData;
-import com.gladurbad.medusa.util.CollisionUtil;
-import com.gladurbad.medusa.util.PlayerUtil;
-import io.github.retrooper.packetevents.PacketEvents;
-import io.github.retrooper.packetevents.enums.ServerVersion;
-import io.github.retrooper.packetevents.packettype.PacketType;
-import org.bukkit.Material;
-import org.bukkit.potion.PotionEffectType;
+import com.gladurbad.medusa.check.CheckInfo;
+import com.gladurbad.medusa.data.PlayerData;
+import com.gladurbad.medusa.packet.Packet;
 
-@CheckInfo(name = "Motion", type = "A", dev = true)
+@CheckInfo(name = "Motion (A)", experimental = true, description = "Checks for constant vertical movement.")
 public class MotionA extends Check {
 
-    private int teleportedTicks;
-    private boolean slime;
-
-    public MotionA(PlayerData data) {
+    public MotionA(final PlayerData data) {
         super(data);
     }
 
     @Override
-    public void handle(Packet packet) {
+    public void handle(final Packet packet) {
         if (packet.isPosition()) {
-            if (++teleportedTicks > 10) {
-                double expectedJumpMotion = 0.42F + (double) ((float) PlayerUtil.getPotionLevel(data.getPlayer(), PotionEffectType.JUMP) * 0.1F);
+            final double absDeltaY = Math.abs(data.getPositionProcessor().getDeltaY());
+            final double absLastDeltaY = Math.abs(data.getPositionProcessor().getLastDeltaY());
+            final double acceleration = absDeltaY - absLastDeltaY;
 
-                final boolean jumped = data.getLastLocation().isOnGround() &&
-                        !data.getLocation().isOnGround() && data.getDeltaY() > 0;
+            final boolean invalid = acceleration == 0.0 &&
+                    data.getPositionProcessor().getDeltaY() != 0.0 &&
+                    data.getPositionProcessor().getLastDeltaY() != 0.0 &&
+                    !data.getPositionProcessor().isInLiquid() &&
+                    !data.getPositionProcessor().isOnSlime() &&
+                    !data.getPositionProcessor().isOnClimbable() &&
+                    !data.getPositionProcessor().isBlockNearHead();
 
-                final boolean notVelocity = data.getTicksSinceVelocity() > data.getMaxVelocityTicks();
-
-                if (PacketEvents.getAPI().getServerUtils().getVersion().isLowerThan(ServerVersion.v_1_7_10)) {
-                    slime = CollisionUtil.isOnChosenBlock(data.getPlayer(), -0.7, Material.SLIME_BLOCK);
+            if (invalid) {
+                if (increaseBuffer() > 2) {
+                    fail("deltaY=" + absDeltaY);
                 }
-
-                final boolean invalid = jumped &&
-                        Math.abs(data.getDeltaY() - expectedJumpMotion) > 0.03 &&
-                        !CollisionUtil.blockNearHead(data.getPlayer().getLocation()) &&
-                        notVelocity &&
-                        !slime;
-
-                if (invalid) {
-                    fail();
-                }
+            } else {
+                decreaseBufferBy(0.25);
             }
-        } else if (packet.isSending() && packet.getPacketId() == PacketType.Server.POSITION) {
-            teleportedTicks = 0;
         }
     }
 }
