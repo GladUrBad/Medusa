@@ -10,14 +10,14 @@ import org.bukkit.event.HandlerList;
 
 @Getter
 @Setter
-public class MedusaAlertEvent extends Event implements Cancellable {
+public class MedusaFlagEvent extends Event implements Cancellable {
 
     private boolean cancelled, setback;
 
     private final Player player;
     private final MedusaCheck check;
 
-    public MedusaAlertEvent(Player player, MedusaCheck check, boolean setback) {
+    public MedusaFlagEvent(Player player, MedusaCheck check, boolean setback) {
         super(true);
         this.player = player;
         this.check = check;

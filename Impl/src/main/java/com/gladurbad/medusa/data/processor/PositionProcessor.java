@@ -27,11 +27,13 @@ public class PositionProcessor {
 
     private boolean flying, inVehicle, inLiquid, inAir, inWeb,
             blockNearHead, onClimbable, onSolidGround, nearBoat, onSlime,
-            onIce, nearPiston;
+            onIce, nearPiston, nearTrapdoor;
 
     private int airTicks, sinceVehicleTicks, sinceFlyingTicks,
             groundTicks, teleportTicks, sinceSlimeTicks, solidGroundTicks,
             iceTicks, sinceIceTicks;
+
+    private BoundingBox boundingBox;
 
     private boolean onGround, lastOnGround, mathematicallyOnGround;
 
@@ -52,6 +54,8 @@ public class PositionProcessor {
         this.z = z;
         this.onGround = onGround;
 
+        handleCollisions();
+
         lastDeltaX = deltaX;
         lastDeltaY = deltaY;
         lastDeltaZ = deltaZ;
@@ -63,8 +67,6 @@ public class PositionProcessor {
         deltaXZ = Math.hypot(deltaX, deltaZ);
 
         mathematicallyOnGround = y % 0.015625 == 0.0;
-
-        handleCollisions();
     }
 
     public void handleTicks() {
@@ -121,6 +123,8 @@ public class PositionProcessor {
         final BoundingBox boundingBox = new BoundingBox(data.getPlayer())
                 .expandSpecific(0, 0, 0.55, 0.6, 0, 0);
 
+        this.boundingBox = boundingBox;
+
         final double minX = boundingBox.getMinX();
         final double minY = boundingBox.getMinY();
         final double minZ = boundingBox.getMinZ();
@@ -129,7 +133,7 @@ public class PositionProcessor {
         final double maxZ = boundingBox.getMaxZ();
 
         for (double x = minX; x <= maxX; x += (maxX - minX)) {
-            for (double y = minY; y <= maxY + 0.01; y += (maxY - minY) / 4) { //Expand max by 0.01 to compensate shortly for precision issues due to FP.
+            for (double y = minY; y <= maxY + 0.01; y += (maxY - minY) / 5) { //Expand max by 0.01 to compensate shortly for precision issues due to FP.
                 for (double z = minZ; z <= maxZ; z += (maxZ - minZ)) {
                     final Location location = new Location(data.getPlayer().getWorld(), x, y, z);
                     final Block block = this.getBlock(location);
@@ -146,11 +150,11 @@ public class PositionProcessor {
         inAir = blocks.stream().allMatch(block -> block.getType() == Material.AIR);
         onIce = blocks.stream().anyMatch(block -> block.getType().toString().contains("ICE"));
         onSolidGround = blocks.stream().anyMatch(block -> block.getType().isSolid());
-        blockNearHead = blocks.stream().filter(block -> block.getLocation().getY() - data.getPositionProcessor().getY() > 1.8)
-                .anyMatch(block -> block.getType() != Material.AIR);
+        nearTrapdoor = this.isCollidingAtLocation(1.801, Material.TRAP_DOOR);
+        blockNearHead = blocks.stream().filter(block -> block.getLocation().getY() - data.getPositionProcessor().getY() > 1.5)
+                .anyMatch(block -> block.getType() != Material.AIR) || nearTrapdoor;
         onSlime = blocks.stream().anyMatch(block -> block.getType().toString().equalsIgnoreCase("SLIME_BLOCK"));
         nearPiston = blocks.stream().anyMatch(block -> block.getType().toString().contains("PISTON"));
-
         handleTicks();
     }
 
@@ -163,14 +167,17 @@ public class PositionProcessor {
         this.onClimbable = var4.getType() == Material.LADDER || var4.getType() == Material.VINE;
     }
 
+
     public void handleOnBoat() {
-        for (final Entity entity : data.getPlayer().getNearbyEntities(1.5, 1.5, 1.5)) {
-            if (entity instanceof Boat) {
-                nearBoat = true;
-                return;
+        Bukkit.getScheduler().runTask(Medusa.INSTANCE.getPlugin(), () -> {
+            for (final Entity entity : data.getPlayer().getNearbyEntities(1.5, 1.5, 1.5)) {
+                if (entity instanceof Boat) {
+                    nearBoat = true;
+                    return;
+                }
             }
-        }
-        nearBoat = false;
+            nearBoat = false;
+        });
     }
 
     public void handleTeleport() {
@@ -182,6 +189,22 @@ public class PositionProcessor {
             return blocks.stream().allMatch(block -> block.getType() == blockType);
         }
         return blocks.stream().anyMatch(block -> block.getType() == blockType);
+    }
+
+    public boolean isCollidingAtLocation(double drop, Material... materials) {
+        final double expand = 0.3;
+        final Location location = data.getPlayer().getLocation();
+        for(double x = -expand; x <= expand; x += expand) {
+            for(double z = -expand; z <= expand; z+= expand) {
+                Material material = getBlock(location.clone().add(x, drop, z)).getType();
+                if (material != null) {
+                    for (Material material1 : materials) {
+                        if (material == material1) return true;
+                    }
+                }
+            }
+        }
+        return false;
     }
 
     //Taken from Fiona. If you have anything better, please let me know, thanks.

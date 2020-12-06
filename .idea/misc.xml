@@ -9,13 +9,9 @@
     <option name="originalFiles">
       <list>
         <option value="$PROJECT_DIR$/pom.xml" />
-      </list>
-    </option>
-    <option name="ignoredFiles">
-      <set>
         <option value="$PROJECT_DIR$/API/pom.xml" />
         <option value="$PROJECT_DIR$/ExampleAPI/pom.xml" />
-      </set>
+      </list>
     </option>
   </component>
   <component name="ProjectRootManager" version="2" languageLevel="JDK_10" default="false" project-jdk-name="10" project-jdk-type="JavaSDK" />

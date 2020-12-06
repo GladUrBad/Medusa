@@ -1,18 +1,17 @@
 package com.gladurbad.medusa.check.impl.combat.autoclicker;
 
 import com.gladurbad.medusa.check.Check;
-import com.gladurbad.medusa.check.CheckInfo;
+import com.gladurbad.api.check.CheckInfo;
 import com.gladurbad.medusa.data.PlayerData;
 import com.gladurbad.medusa.exempt.type.ExemptType;
 import com.gladurbad.medusa.packet.Packet;
+import io.github.retrooper.packetevents.packetwrappers.in.useentity.WrappedPacketInUseEntity;
 
 /**
  * Created on 10/24/2020 Package com.gladurbad.medusa.check.impl.combat.autoclicker by GladUrBad
- *
- * This check ensures the player does not click at an abnormally fast rate. That's about it.
  */
 
-@CheckInfo(name = "AutoClicker (A)", description = "Checks for fast-clicking.")
+@CheckInfo(name = "AutoClicker (A)", description = "Checks for attack speed.")
 public class AutoClickerA extends Check {
 
     private int ticks, cps;
@@ -23,7 +22,7 @@ public class AutoClickerA extends Check {
 
     @Override
     public void handle(Packet packet) {
-        if (packet.isFlying() && !isExempt(ExemptType.AUTOCLICKER)) {
+        if (packet.isFlying()) {
             if (++ticks >= 20) {
                 if (cps > 20) {
                     fail("cps=" + cps);
@@ -32,8 +31,11 @@ public class AutoClickerA extends Check {
                 ticks = 0;
                 cps = 0;
             }
-        } else if (packet.isArmAnimation()) {
-            ++cps;
+        } else if (packet.isUseEntity()) {
+            final WrappedPacketInUseEntity wrapper = new WrappedPacketInUseEntity(packet.getRawPacket());
+            if (wrapper.getAction() == WrappedPacketInUseEntity.EntityUseAction.ATTACK) {
+                ++cps;
+            }
         }
     }
 }

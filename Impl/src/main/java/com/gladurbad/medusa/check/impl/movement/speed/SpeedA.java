@@ -1,9 +1,13 @@
 package com.gladurbad.medusa.check.impl.movement.speed;
 
 import com.gladurbad.medusa.check.Check;
-import com.gladurbad.medusa.check.CheckInfo;
+import com.gladurbad.api.check.CheckInfo;
 import com.gladurbad.medusa.data.PlayerData;
 import com.gladurbad.medusa.packet.Packet;
+
+/**
+ * Created on 11/17/2020 Package com.gladurbad.medusa.check.impl.movement.speed by GladUrBad
+ */
 
 @CheckInfo(name = "Speed (A)", description = "Checks for horizontal friction.")
 public class SpeedA extends Check {
@@ -28,10 +32,10 @@ public class SpeedA extends Check {
 
             if (invalid) {
                 if (increaseBuffer() > 2.5) {
-                    fail("prediction=" + prediction + " actual=" + deltaXZ + " difference=" + difference);
+                    fail(String.format("diff=%.6f", difference));
                 }
             } else {
-                decreaseBufferBy(0.5);
+                decreaseBufferBy(0.25);
             }
         }
     }

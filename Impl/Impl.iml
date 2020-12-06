@@ -24,7 +24,7 @@
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="library" name="Maven: com.gladurbad:API:1.0" level="project" />
+    <orderEntry type="module" module-name="API" />
     <orderEntry type="library" name="Maven: com.github.retrooper:packetevents:1.7.9" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Maven: org.projectlombok:lombok:1.18.10" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Maven: org.github.spigot:1.8:1.8" level="project" />

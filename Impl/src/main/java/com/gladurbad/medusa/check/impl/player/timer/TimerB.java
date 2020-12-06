@@ -1,11 +1,15 @@
 package com.gladurbad.medusa.check.impl.player.timer;
 
 import com.gladurbad.medusa.check.Check;
-import com.gladurbad.medusa.check.CheckInfo;
+import com.gladurbad.api.check.CheckInfo;
 import com.gladurbad.medusa.data.PlayerData;
 import com.gladurbad.medusa.packet.Packet;
 import com.gladurbad.medusa.util.MathUtil;
 import com.gladurbad.medusa.util.type.EvictingList;
+
+/**
+ * Created on 11/13/2020 Package com.gladurbad.medusa.check.impl.player.timer by GladUrBad
+ */
 
 @CheckInfo(name = "Timer (B)",  description = "Checks for game speed which is too slow.", experimental = true)
 public class TimerB extends Check {

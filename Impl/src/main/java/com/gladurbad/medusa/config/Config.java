@@ -1,12 +1,9 @@
 package com.gladurbad.medusa.config;
 
+import com.gladurbad.api.check.CheckInfo;
 import com.gladurbad.medusa.Medusa;
-import com.gladurbad.medusa.check.CheckInfo;
 import com.gladurbad.medusa.manager.CheckManager;
-import com.gladurbad.medusa.util.ColorUtil;
-import lombok.Setter;
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 
 import java.lang.reflect.Field;
 import java.util.*;

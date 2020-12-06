@@ -10,7 +10,7 @@ public abstract class MedusaCommand implements Comparable<MedusaCommand> {
     protected abstract boolean handle(final CommandSender sender, final Command command, final String label, final String[] args);
 
     public void sendLineBreak(final CommandSender sender) {
-        sender.sendMessage(ColorUtil.translate(Config.ACCENT_TWO + "&m--------------------------------------------------"));
+        sender.sendMessage(ColorUtil.translate(Config.ACCENT_TWO + "&m----------------------------------------------"));
     }
 
     public void sendRetardedNewLine(final CommandSender sender) {

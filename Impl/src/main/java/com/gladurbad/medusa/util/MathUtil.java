@@ -43,6 +43,10 @@ public class MathUtil {
         return Math.sqrt(variance);
     }
 
+    public boolean mathOnGround(final double posY) {
+        return posY % 0.015625 == 0;
+    }
+
     public double getSkewness(final Collection<? extends Number> data) {
         double sum = 0;
         int count = 0;

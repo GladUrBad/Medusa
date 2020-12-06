@@ -1,7 +1,7 @@
 package com.gladurbad.medusa.check.impl.combat.aimassist;
 
 import com.gladurbad.medusa.check.Check;
-import com.gladurbad.medusa.check.CheckInfo;
+import com.gladurbad.api.check.CheckInfo;
 import com.gladurbad.medusa.data.PlayerData;
 import com.gladurbad.medusa.packet.Packet;
 import com.gladurbad.medusa.util.MathUtil;
@@ -32,7 +32,7 @@ public class AimAssistD extends Check {
     @Override
     public void handle(Packet packet) {
         if (packet.isRotation()) {
-            final float deltaYaw = data.getRotationProcessor().getDeltaYaw();
+            final float deltaYaw = data.getRotationProcessor().getDeltaYaw() % 360F;
             final float deltaPitch = data.getRotationProcessor().getDeltaPitch();
 
             final double divisorYaw = MathUtil.getGcd((long) (deltaYaw * MathUtil.EXPANDER), (long) (lastDeltaYaw * MathUtil.EXPANDER));
@@ -54,16 +54,15 @@ public class AimAssistD extends Check {
                 final double floorModuloX = Math.abs(Math.floor(moduloX) - moduloX);
                 final double floorModuloY = Math.abs(Math.floor(moduloY) - moduloY);
 
-                final boolean invalidX = moduloX > 60.d && floorModuloX > 0.1;
-                final boolean invalidY = moduloY > 60.d && floorModuloY > 0.1;
+                final boolean invalidX = moduloX > 90.d && floorModuloX > 0.1;
+                final boolean invalidY = moduloY > 90.d && floorModuloY > 0.1;
 
                 if (invalidX && invalidY) {
-                    if (increaseBuffer() > 4) {
-                        fail("mX=" + moduloX + " mY=" + moduloY + " fmX=" + floorModuloX + " fmY=" + floorModuloY);
-                        multiplyBuffer(0.85);
+                    if (increaseBuffer() > 6) {
+                        fail(String.format("mx=%.2f, my=%.2f, fmx=%.2f, fmy=%.2f", moduloX, moduloY, floorModuloX, floorModuloY));
                     }
                 } else {
-                    decreaseBufferBy(0.5);
+                    decreaseBufferBy(0.25);
                 }
             }
             this.lastDeltaYaw = deltaYaw;

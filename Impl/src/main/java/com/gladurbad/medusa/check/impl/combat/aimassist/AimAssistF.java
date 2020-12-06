@@ -1,15 +1,13 @@
 package com.gladurbad.medusa.check.impl.combat.aimassist;
 
 import com.gladurbad.medusa.check.Check;
-import com.gladurbad.medusa.check.CheckInfo;
+import com.gladurbad.api.check.CheckInfo;
 import com.gladurbad.medusa.data.PlayerData;
 import com.gladurbad.medusa.exempt.type.ExemptType;
 import com.gladurbad.medusa.packet.Packet;
 
 /**
  * Created 11/14/2020 Package com.gladurbad.medusa.check.impl.combat.aim by GladUrBad
- *
- * You cannot send two of the same rotations without teleporting.
  */
 
 @CheckInfo(name = "AimAssist (F)", description = "Checks for impossible rotation.")
@@ -28,7 +26,7 @@ public class AimAssistF extends Check {
             final boolean exempt = isExempt(ExemptType.TELEPORT);
 
             if (!exempt && deltaPitch == 0 && deltaYaw == 0) {
-                fail(System.currentTimeMillis() - getLastFlagTime());
+                fail();
             }
         }
     }

@@ -19,7 +19,15 @@ public enum ExemptType {
 
     VELOCITY(data -> data.getVelocityProcessor().isTakingVelocity()),
 
+    JOINED(data -> System.currentTimeMillis() - data.getJoinTime() < 5000L),
+
+    TRAPDOOR(data -> data.getPositionProcessor().isNearTrapdoor()),
+
     SLIME(data -> data.getPositionProcessor().getSinceSlimeTicks() < 30),
+
+    WEB(data -> data.getPositionProcessor().isInWeb()),
+
+    CLIMBABLE(data -> data.getPositionProcessor().isOnClimbable()),
 
     DIGGING(data -> Medusa.INSTANCE.getTickManager().getTicks() - data.getActionProcessor().getLastDiggingTick() < 10),
 

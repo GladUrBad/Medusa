@@ -1,11 +1,15 @@
 package com.gladurbad.medusa.check.impl.movement.motion;
 
 import com.gladurbad.medusa.check.Check;
-import com.gladurbad.medusa.check.CheckInfo;
+import com.gladurbad.api.check.CheckInfo;
 import com.gladurbad.medusa.data.PlayerData;
+import com.gladurbad.medusa.exempt.type.ExemptType;
 import com.gladurbad.medusa.packet.Packet;
-import io.github.retrooper.packetevents.packettype.PacketType;
 import org.bukkit.util.Vector;
+
+/**
+ * Created on 11/17/2020 Package com.gladurbad.medusa.check.impl.movement.motion by GladUrBad
+ */
 
 @CheckInfo(name = "Motion (D)", description = "Checks for sprint direction.")
 public class MotionD extends Check {
@@ -46,11 +50,12 @@ public class MotionD extends Check {
                 final boolean invalid = !data.getPositionProcessor().isInLiquid() &&
                         angle > 85 &&
                         data.getPositionProcessor().getDeltaXZ() > 0.25 &&
-                        offGroundTicks < 8;
+                        offGroundTicks < 8 &&
+                        !isExempt(ExemptType.TELEPORT, ExemptType.VELOCITY);
 
                 if (invalid) {
-                    if (increaseBuffer() >= 4) {
-                        fail("angle (deg)=" + angle + " buffer=" + getBuffer());
+                    if (increaseBuffer() >= 8) {
+                        fail(String.format("angle=%.2f, buffer=%.2f", angle, getBuffer()));
                     }
                 } else {
                     decreaseBufferBy(0.25);

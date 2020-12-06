@@ -32,6 +32,10 @@ public class Packet {
         return isReceiving() && packetId == PacketType.Client.USE_ENTITY;
     }
 
+    public boolean isExplosion() {
+        return isReceiving() && packetId == PacketType.Server.EXPLOSION;
+    }
+
     public boolean isRotation() {
         return isReceiving() && (packetId == PacketType.Client.LOOK || packetId == PacketType.Client.POSITION_LOOK);
     }

@@ -17,19 +17,22 @@ appearance:
   # Then, put TWO (no more, no less, can be the same)
   # accent colours you want using the Minecraft colour code symbols (Ex: &a &c)
   themes:
-    - "Medusa$ &aMedusa » &f%player% &7failed &f%check% &7(x%vl%)$ &a &2"
+    - "Medusa$ &aMedusa » &f%player% &7failed &f%check% &7(x%vl%) &c%dev%$ &a &2"
     - "Overflow$ &7[&cMedusa&7] %player% flagged &c%check% VL: &c%vl% %dev%$ &c &4"
     - "Sparky$ &eMedusa &7> &6%player% &7has failed &6%check% &cx%vl%$ &6 &e"
+    - "Karhu$ &8[&b&lMedusa&r&8] &3%player% &8- &3%check% &f%dev% &3(&bx%vl%&3)$ &b &3"
+    - "Rock$ &8[&c!&8] &f%player% &7may be using &f%check% &c(%vl%)$ &c &c"
+    - "Vulcan$ &8[&c&l!&8] &c%player% &7failed &b%check% &7[VL: &c%vl%&7]$ %c &7"
   # Accent colours. Changes color look of aspects of Medusa.
   accents:
     accentOne: '&a'
     accentTwo: '&2'
 
 violations:
-  alert-format: '&aMedusa » &f%player% &7failed &f%check% &7(x%vl%)'
-  alert-cooldown: 500
-  minimum-vl-to-alert: 10
-  clear-violations-delay: 15
+  alert-format: '&aMedusa » &f%player% &7failed &f%check% &7(x%vl%) &c%dev%'
+  alert-cooldown: 2500
+  minimum-vl-to-alert: 5
+  clear-violations-delay: 10
 
 # Check configuration
 # enabled: Turns the check on/off.
@@ -75,6 +78,14 @@ checks:
         enabled: true
         max-violations: 10
         punish-command: ''
+      c:
+        enabled: true
+        max-violations: 10
+        punish-command: ''
+      d:
+        enabled: true
+        max-violations: 10
+        punish-command: ''
     killaura:
       a:
         enabled: true
@@ -102,6 +113,10 @@ checks:
         max-violations: 50
         punish-command: ''
       b:
+        enabled: true
+        max-violations: 50
+        punish-command: ''
+      c:
         enabled: true
         max-violations: 50
         punish-command: ''
@@ -134,6 +149,10 @@ checks:
         enabled: true
         max-violations: 50
         punish-command: ''
+      b:
+        enabled: true
+        max-violations: 50
+        punish-command: ''
     motion:
       a:
         enabled: true
@@ -148,10 +167,6 @@ checks:
         max-violations: 50
         punish-command: ''
       d:
-        enabled: true
-        max-violations: 50
-        punish-command: ''
-      e:
         enabled: true
         max-violations: 50
         punish-command: ''
@@ -175,6 +190,10 @@ checks:
         max-violations: 50
         punish-command: ''
       b:
+        enabled: true
+        max-violations: 50
+        punish-command: ''
+      c:
         enabled: true
         max-violations: 50
         punish-command: ''
@@ -216,12 +235,24 @@ checks:
         enabled: true
         max-violations: 50
         punish-command: ''
-    scaffold:
-      a:
+      g:
         enabled: true
         max-violations: 50
         punish-command: ''
-      b:
+      h:
+        enabled: true
+        max-violations: 50
+        punish-command: ''
+      i:
+        enabled: true
+        max-violations: 50
+        punish-command: ''
+      j:
+        enabled: true
+        max-violations: 50
+        punish-command: ''
+    scaffold:
+      a:
         enabled: true
         max-violations: 50
         punish-command: ''

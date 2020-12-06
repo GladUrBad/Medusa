@@ -1,5 +1,5 @@
 name: Medusa
-version: 1.5
+version: 1.5-PRE4
 main: com.gladurbad.medusa.MedusaPlugin
 authors: [GladUrBad]
 description: Medusa Anticheat
@@ -10,9 +10,5 @@ commands:
     usage: /medusa
     aliases: [anticheat, ac]
     permission: medusa.commands
-  alerts:
-    description: Toggles alerts for Medusa Anticheat.
-    usage: /alerts
-    permission: medusa.alerts
 
 

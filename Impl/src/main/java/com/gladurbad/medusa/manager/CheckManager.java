@@ -2,29 +2,19 @@ package com.gladurbad.medusa.manager;
 
 import com.gladurbad.medusa.check.Check;
 import com.gladurbad.medusa.check.impl.combat.aimassist.*;
-import com.gladurbad.medusa.check.impl.combat.autoclicker.AutoClickerA;
-import com.gladurbad.medusa.check.impl.combat.autoclicker.AutoClickerB;
-import com.gladurbad.medusa.check.impl.combat.hitbox.HitBoxB;
+import com.gladurbad.medusa.check.impl.combat.autoclicker.*;
+import com.gladurbad.medusa.check.impl.combat.hitbox.*;
 import com.gladurbad.medusa.check.impl.combat.killaura.*;
-import com.gladurbad.medusa.check.impl.combat.hitbox.HitBoxA;
-import com.gladurbad.medusa.check.impl.combat.velocity.VelocityA;
-import com.gladurbad.medusa.check.impl.movement.fastclimb.FastClimbA;
-import com.gladurbad.medusa.check.impl.movement.fly.FlyA;
-import com.gladurbad.medusa.check.impl.movement.fly.FlyB;
-import com.gladurbad.medusa.check.impl.movement.fly.FlyC;
-import com.gladurbad.medusa.check.impl.movement.jesus.JesusA;
+import com.gladurbad.medusa.check.impl.combat.velocity.*;
+import com.gladurbad.medusa.check.impl.movement.fastclimb.*;
+import com.gladurbad.medusa.check.impl.movement.fly.*;
+import com.gladurbad.medusa.check.impl.movement.jesus.*;
 import com.gladurbad.medusa.check.impl.movement.motion.*;
-import com.gladurbad.medusa.check.impl.movement.speed.SpeedA;
-import com.gladurbad.medusa.check.impl.movement.speed.SpeedB;
-import com.gladurbad.medusa.check.impl.movement.speed.SpeedC;
-import com.gladurbad.medusa.check.impl.player.hand.HandA;
-import com.gladurbad.medusa.check.impl.player.hand.HandB;
-import com.gladurbad.medusa.check.impl.player.hand.HandC;
+import com.gladurbad.medusa.check.impl.movement.speed.*;
 import com.gladurbad.medusa.check.impl.player.badpackets.*;
-import com.gladurbad.medusa.check.impl.player.scaffold.ScaffoldA;
-import com.gladurbad.medusa.check.impl.player.scaffold.ScaffoldB;
-import com.gladurbad.medusa.check.impl.player.timer.TimerA;
-import com.gladurbad.medusa.check.impl.player.timer.TimerB;
+import com.gladurbad.medusa.check.impl.player.hand.*;
+import com.gladurbad.medusa.check.impl.player.scaffold.*;
+import com.gladurbad.medusa.check.impl.player.timer.*;
 import com.gladurbad.medusa.config.Config;
 import com.gladurbad.medusa.data.PlayerData;
 import org.bukkit.Bukkit;
@@ -44,6 +34,8 @@ public class CheckManager {
             AimAssistG.class,
             AutoClickerA.class,
             AutoClickerB.class,
+            AutoClickerC.class,
+            AutoClickerD.class,
             KillAuraA.class,
             KillAuraB.class,
             KillAuraC.class,
@@ -51,22 +43,24 @@ public class CheckManager {
             KillAuraE.class,
             HitBoxA.class,
             HitBoxB.class,
+            HitBoxC.class,
             VelocityA.class,
             FastClimbA.class,
             FlyA.class,
             FlyB.class,
             FlyC.class,
             JesusA.class,
+            JesusB.class,
             MotionA.class,
             MotionB.class,
             MotionC.class,
             MotionD.class,
-            MotionE.class,
             SpeedA.class,
             SpeedB.class,
             SpeedC.class,
             TimerA.class,
             TimerB.class,
+            TimerC.class,
             HandA.class,
             HandB.class,
             HandC.class,
@@ -76,8 +70,11 @@ public class CheckManager {
             BadPacketsD.class,
             BadPacketsE.class,
             BadPacketsF.class,
+            BadPacketsG.class,
+            BadPacketsH.class,
+            BadPacketsI.class,
+            BadPacketsJ.class,
             ScaffoldA.class,
-            ScaffoldB.class,
     };
 
     private static final List<Constructor<?>> CONSTRUCTORS = new ArrayList<>();

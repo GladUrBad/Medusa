@@ -1,5 +1,8 @@
 package com.gladurbad.medusa.check;
 
+import com.gladurbad.api.check.CheckInfo;
+import com.gladurbad.api.check.MedusaCheck;
+import com.gladurbad.api.listener.MedusaFlagEvent;
 import com.gladurbad.medusa.config.Config;
 import lombok.Getter;
 import lombok.Setter;
@@ -10,27 +13,34 @@ import com.gladurbad.medusa.util.anticheat.AlertUtil;
 import com.gladurbad.medusa.packet.Packet;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
-import org.bukkit.Location;
 import org.bukkit.Material;
-
 import java.util.Objects;
 
 @Getter
-public abstract class Check {
+@Setter
+public abstract class Check implements MedusaCheck {
 
+    //Data for check.
     protected final PlayerData data;
 
+    //Check data from config.
+    private final boolean enabled;
+    private final int maxVl;
+    private final boolean setback;
+    private final String punishCommand;
+
+    //Check information.
     private int vl;
     private long lastFlagTime;
     private CheckType checkType;
-    @Setter private int maxVl;
     private double buffer;
-    @Setter private String punishCommand;
 
     public Check(final PlayerData data) {
         this.data = data;
         this.maxVl = Config.MAX_VIOLATIONS.get(this.getClass().getSimpleName());
         this.punishCommand = Config.PUNISH_COMMANDS.get(this.getClass().getSimpleName());
+        this.setback = Config.SETBACK_CHECKS.contains(this.getClass().getSimpleName());
+        this.enabled = Config.ENABLED_CHECKS.contains(this.getClass().getSimpleName());
 
         final String packageName = this.getClass().getPackage().getName();
 
@@ -46,24 +56,31 @@ public abstract class Check {
     public abstract void handle(final Packet packet);
 
     public void fail(final Object info) {
-        ++vl;
-        data.setTotalViolations(data.getTotalViolations() + 1);
+        final MedusaFlagEvent event = new MedusaFlagEvent(data.getPlayer(), this, setback);
+        Bukkit.getPluginManager().callEvent(event);
 
-        switch (checkType) {
-            case COMBAT:
-                data.setCombatViolations(data.getCombatViolations() + 1);
-                break;
-            case MOVEMENT:
-                data.setMovementViolations(data.getMovementViolations() + 1);
-                break;
-            case PLAYER:
-                data.setPlayerViolations(data.getPlayerViolations() + 1);
-                break;
-        }
+        if (!event.isCancelled()) {
+            ++vl;
+            data.setTotalViolations(data.getTotalViolations() + 1);
 
-        if (System.currentTimeMillis() - lastFlagTime > Config.ALERT_COOLDOWN && vl > Config.MIN_VL_TO_ALERT) {
-            AlertUtil.handleAlert(this, data, Objects.toString(info));
-            this.lastFlagTime = System.currentTimeMillis();
+            switch (checkType) {
+                case COMBAT:
+                    data.setCombatViolations(data.getCombatViolations() + 1);
+                    break;
+                case MOVEMENT:
+                    data.setMovementViolations(data.getMovementViolations() + 1);
+                    if (event.isSetback()) //handle setback here.
+                    break;
+                case PLAYER:
+                    data.setPlayerViolations(data.getPlayerViolations() + 1);
+                    break;
+            }
+
+
+            if (System.currentTimeMillis() - lastFlagTime > Config.ALERT_COOLDOWN && vl > Config.MIN_VL_TO_ALERT) {
+                AlertUtil.handleAlert(this, data, Objects.toString(info));
+                this.lastFlagTime = System.currentTimeMillis();
+            }
         }
     }
 
@@ -84,14 +101,8 @@ public abstract class Check {
         return System.currentTimeMillis();
     }
 
-    public int ticks() { return Medusa.INSTANCE.getTickManager().getTicks(); }
-
     public double increaseBuffer() {
         return buffer = Math.min(10000, buffer + 1);
-    }
-
-    public double increaseBufferBy(final double amount) {
-        return buffer = Math.min(10000, buffer + amount);
     }
 
     public double decreaseBuffer() {
@@ -106,16 +117,11 @@ public abstract class Check {
         buffer = 0;
     }
 
+    public void setBuffer(final double buffer) {
+        this.buffer = buffer;
+    }
     public void multiplyBuffer(final double multiplier) {
         buffer *= multiplier;
-    }
-
-    public int hitTicks() {
-        return data.getCombatProcessor().getHitTicks();
-    }
-
-    public boolean digging() {
-        return data.getActionProcessor().isDigging();
     }
 
     public CheckInfo getCheckInfo() {

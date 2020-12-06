@@ -1,10 +1,15 @@
 package com.gladurbad.medusa.check.impl.player.badpackets;
 
 import com.gladurbad.medusa.check.Check;
-import com.gladurbad.medusa.check.CheckInfo;
+import com.gladurbad.api.check.CheckInfo;
 import com.gladurbad.medusa.data.PlayerData;
 import com.gladurbad.medusa.packet.Packet;
 import io.github.retrooper.packetevents.packetwrappers.in.steervehicle.WrappedPacketInSteerVehicle;
+
+/**
+ * Created on 11/14/2020 Package com.gladurbad.medusa.check.impl.player.badpackets by GladUrBad
+ */
+
 
 @CheckInfo(name = "BadPackets (D)", description = "Checks for a common exploit in disabler modules.")
 public class BadPacketsD extends Check {

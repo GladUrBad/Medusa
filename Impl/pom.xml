@@ -53,7 +53,6 @@
             <groupId>com.gladurbad</groupId>
             <artifactId>API</artifactId>
             <version>${project.parent.version}</version>
-            <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>com.github.retrooper</groupId>

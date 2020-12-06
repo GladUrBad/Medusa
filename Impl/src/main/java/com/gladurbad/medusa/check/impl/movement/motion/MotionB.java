@@ -1,10 +1,14 @@
 package com.gladurbad.medusa.check.impl.movement.motion;
 
 import com.gladurbad.medusa.check.Check;
-import com.gladurbad.medusa.check.CheckInfo;
+import com.gladurbad.api.check.CheckInfo;
 import com.gladurbad.medusa.data.PlayerData;
 import com.gladurbad.medusa.exempt.type.ExemptType;
 import com.gladurbad.medusa.packet.Packet;
+
+/**
+ * Created on 11/17/2020 Package com.gladurbad.medusa.check.impl.movement.motion by GladUrBad
+ */
 
 @CheckInfo(name = "Motion (B)", description = "Checks for fast-fall cheats.")
 public class MotionB extends Check {
@@ -21,7 +25,7 @@ public class MotionB extends Check {
             final boolean invalid = deltaY < -3.92 &&
                     !isExempt(ExemptType.TELEPORT);
 
-            if (invalid) fail("speed (m/s)=" + (deltaY * 20));
+            if (invalid) fail(String.format("dy=%.2f", deltaY));
         }
     }
 }

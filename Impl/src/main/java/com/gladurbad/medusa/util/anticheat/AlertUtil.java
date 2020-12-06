@@ -40,11 +40,11 @@ public class AlertUtil {
 
         alertMessage.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/tp " + data.getPlayer().getName()));
         alertMessage.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder(ColorUtil.translate(
-                "&aDescription: &f" + check.getCheckInfo().description() +
-                "\n&aInfo: &7" + info +
-                "\n&aPing: &7" + PacketEvents.getAPI().getPlayerUtils().getPing(data.getPlayer()) +
-                "\n&aTPS: &7" + String.format("%.2f", PacketEvents.getAPI().getServerUtils().getTPS()) +
-                "\n&aClick to teleport.")).create()));
+                Config.ACCENT_ONE + "Description: &7" + check.getCheckInfo().description() +
+                        "\n" + Config.ACCENT_ONE + "Info: &7" + info +
+                        "\n" + Config.ACCENT_ONE + "Ping: &7" + PacketEvents.getAPI().getPlayerUtils().getPing(data.getPlayer()) +
+                        "\n" + Config.ACCENT_ONE + "TPS: &7" + String.format("%.2f", PacketEvents.getAPI().getServerUtils().getTPS()) +
+                        "\n" + Config.ACCENT_TWO + "Click to teleport.")).create()));
 
         alerts.forEach(player -> player.getPlayer().spigot().sendMessage(alertMessage));
     }

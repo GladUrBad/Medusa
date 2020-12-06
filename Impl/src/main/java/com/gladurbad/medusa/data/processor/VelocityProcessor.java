@@ -8,8 +8,8 @@ import lombok.Getter;
 import com.gladurbad.medusa.Medusa;
 import com.gladurbad.medusa.data.PlayerData;
 import org.bukkit.Bukkit;
+import org.bukkit.util.Vector;
 
-import java.util.Vector;
 import java.util.concurrent.ThreadLocalRandom;
 
 @Getter
@@ -18,6 +18,8 @@ public class VelocityProcessor {
     private final PlayerData data;
     private double velocityX, velocityY, velocityZ;
     private double lastVelocityX, lastVelocityY, lastVelocityZ;
+    private Vector bukkitVelocity = new Vector(0, 0, 0);
+    private double maxBukkitVelocityY, maxBukkitVelocityXz;
     private int maxVelocityTicks, velocityTicks, ticksSinceVelocity;
     private short transactionID, velocityID;
     private long transactionPing, transactionReply;
@@ -62,6 +64,9 @@ public class VelocityProcessor {
 
     public void handleFlying() {
         ++ticksSinceVelocity;
+        bukkitVelocity = data.getPlayer().getVelocity();
+        maxBukkitVelocityY = bukkitVelocity.getY() + 0.1;
+        maxBukkitVelocityXz = Math.hypot(bukkitVelocity.getX(), bukkitVelocity.getZ()) + 0.1;
     }
 
     public boolean isTakingVelocity() {

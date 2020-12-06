@@ -26,12 +26,12 @@ public class Checks extends MedusaCommand {
                 final PlayerData playerData = Medusa.INSTANCE.getPlayerDataManager().getPlayerData(player);
 
                 if (playerData != null) {
-                    sendLineBreak(sender);
+                    sendRetardedNewLine(sender);
                     sendMessage(sender, ColorUtil.translate(Config.ACCENT_ONE + "There are " + playerData.getChecks().size() + " registered checks for " + player.getName() + "\n" + " \n"));
                     for (final Check check : playerData.getChecks()) {
                         sendMessage(sender, ColorUtil.translate(Config.ACCENT_ONE + check.getCheckInfo().name()));
                     }
-                    sendLineBreak(sender);
+                    sendRetardedNewLine(sender);
                     return true;
                 }
             }

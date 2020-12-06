@@ -25,7 +25,7 @@ public class Info extends MedusaCommand {
                 final PlayerData playerData = Medusa.INSTANCE.getPlayerDataManager().getPlayerData(player);
 
                 if (playerData != null) {
-                    sendLineBreak(sender);
+                    sendRetardedNewLine(sender);
                     sendMessage(sender, ColorUtil.translate(Config.ACCENT_ONE + "Information for &c" + playerData.getPlayer().getName() + Config.ACCENT_ONE + "."));
                     sendRetardedNewLine(sender);
                     sendMessage(sender, ColorUtil.translate(Config.ACCENT_TWO + "&oGeneral information:"));
@@ -35,12 +35,6 @@ public class Info extends MedusaCommand {
                     final String clientBrand = playerData.getClientBrand() == null ? "&cCould not resolve client brand for this player." : playerData.getClientBrand();
                     sendMessage(sender, ColorUtil.translate(Config.ACCENT_ONE  + "Client brand: → " + Config.ACCENT_TWO + clientBrand));
                     sendRetardedNewLine(sender);
-                    sendMessage(sender, ColorUtil.translate(Config.ACCENT_TWO + "&oViolations information:"));
-                    sendMessage(sender, ColorUtil.translate(Config.ACCENT_ONE + "Total check violations → " + Config.ACCENT_TWO + playerData.getTotalViolations()));
-                    sendMessage(sender, ColorUtil.translate(Config.ACCENT_ONE + "Combat check violations → " + Config.ACCENT_TWO + playerData.getCombatViolations()));
-                    sendMessage(sender, ColorUtil.translate(Config.ACCENT_ONE + "Movement check violations → " + Config.ACCENT_TWO + playerData.getMovementViolations()));
-                    sendMessage(sender, ColorUtil.translate(Config.ACCENT_ONE + "Player check violations → " + Config.ACCENT_TWO + playerData.getPlayerViolations()));
-                    sendLineBreak(sender);
                     return true;
                 }
             }

@@ -24,13 +24,13 @@ public class Theme extends MedusaCommand {
                }
             }
         } else if (args.length == 1) {
-            sendLineBreak(sender);
+            sendRetardedNewLine(sender);
             sendMessage(sender, Config.ACCENT_ONE + "Themes for the anti-cheat:");
             sendRetardedNewLine(sender);
             for (ThemeManager.Theme theme : ThemeManager.themes) {
                 sendMessage(sender, Config.ACCENT_ONE + theme.getName());
             }
-            sendLineBreak(sender);
+            sendRetardedNewLine(sender);
             return true;
         }
         return false;

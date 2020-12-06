@@ -1,10 +1,7 @@
 package com.gladurbad.medusa.command;
 
 import com.gladurbad.medusa.MedusaPlugin;
-import com.gladurbad.medusa.command.impl.Alerts;
-import com.gladurbad.medusa.command.impl.Checks;
-import com.gladurbad.medusa.command.impl.Info;
-import com.gladurbad.medusa.command.impl.Theme;
+import com.gladurbad.medusa.command.impl.*;
 import com.gladurbad.medusa.util.ColorUtil;
 import com.gladurbad.medusa.config.Config;
 import org.bukkit.command.Command;
@@ -23,6 +20,7 @@ public class CommandManager implements CommandExecutor {
         commands.add(new Alerts());
         commands.add(new Checks());
         commands.add(new Info());
+        commands.add(new Violations());
         commands.add(new Theme());
     }
 
@@ -42,14 +40,14 @@ public class CommandManager implements CommandExecutor {
                     }
                 }
             } else {
-                commandSender.sendMessage(ColorUtil.translate(Config.ACCENT_TWO + "&m--------------------------------------------------"));
+                commandSender.sendMessage("");
                 commandSender.sendMessage(ColorUtil.translate(Config.ACCENT_ONE + "Medusa AntiCheat Commands:\n" + " \n"));
                 for (final MedusaCommand medusaCommand : commands) {
                     commandSender.sendMessage(ColorUtil.translate( Config.ACCENT_ONE + "/medusa " +
                             medusaCommand.getCommandInfo().name() + " " +
                             medusaCommand.getCommandInfo().syntax()));
                 }
-                commandSender.sendMessage(ColorUtil.translate(Config.ACCENT_TWO + "&m--------------------------------------------------"));
+                commandSender.sendMessage("");
                 return true;
             }
         }

@@ -1,11 +1,14 @@
 package com.gladurbad.medusa.check.impl.movement.speed;
 
 import com.gladurbad.medusa.check.Check;
-import com.gladurbad.medusa.check.CheckInfo;
+import com.gladurbad.api.check.CheckInfo;
 import com.gladurbad.medusa.data.PlayerData;
 import com.gladurbad.medusa.exempt.type.ExemptType;
 import com.gladurbad.medusa.packet.Packet;
 
+/**
+ * Created on 11/17/2020 Package com.gladurbad.medusa.check.impl.movement.speed by GladUrBad
+ */
 @CheckInfo(name = "Speed (C)", description = "Checks for switching direction mid-air.", experimental = true)
 public class SpeedC extends Check {
 
@@ -26,14 +29,14 @@ public class SpeedC extends Check {
             final double absLastDeltaX = Math.abs(lastDeltaX);
             final double absLastDeltaZ = Math.abs(lastDeltaZ);
 
-            if (data.getPositionProcessor().getAirTicks() > 2 && !isExempt(ExemptType.VELOCITY)) {
+            if (data.getPositionProcessor().getAirTicks() > 2 && !isExempt(ExemptType.VELOCITY, ExemptType.BOAT, ExemptType.TELEPORT, ExemptType.FLYING)) {
                 final boolean xSwitched = (deltaX > 0 && lastDeltaX < 0) || (deltaX < 0 && lastDeltaX > 0);
                 final boolean zSwitched = (deltaZ > 0 && lastDeltaZ < 0) || (deltaZ < 0 && lastDeltaZ > 0);
 
                 if (xSwitched) {
                     if (Math.abs(absDeltaX - absLastDeltaX) > 0.05) {
                         if (increaseBuffer() > 1.25) {
-                            fail("xBuffer=" + getBuffer());
+                            fail();
                         }
                     }
                 } else {
@@ -42,7 +45,7 @@ public class SpeedC extends Check {
                 if (zSwitched) {
                     if (Math.abs(absDeltaZ - absLastDeltaZ) > 0.05) {
                         if (increaseBuffer() > 1.25) {
-                            fail("zBuffer=" + getBuffer());
+                            fail();
                         }
                     }
                 } else {

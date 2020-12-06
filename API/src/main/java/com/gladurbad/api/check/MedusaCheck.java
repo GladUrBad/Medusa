@@ -4,6 +4,8 @@ public interface MedusaCheck {
 
     CheckInfo getCheckInfo();
 
+    String getPunishCommand();
+
     boolean isSetback();
 
     boolean isEnabled();
@@ -11,4 +13,8 @@ public interface MedusaCheck {
     int getMaxVl();
 
     int getVl();
+
+    double getBuffer();
+
+    long getLastFlagTime();
 }

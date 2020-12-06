@@ -1,10 +1,14 @@
 package com.gladurbad.medusa.check.impl.movement.fly;
 
 import com.gladurbad.medusa.check.Check;
-import com.gladurbad.medusa.check.CheckInfo;
+import com.gladurbad.api.check.CheckInfo;
 import com.gladurbad.medusa.data.PlayerData;
 import com.gladurbad.medusa.exempt.type.ExemptType;
 import com.gladurbad.medusa.packet.Packet;
+
+/**
+ * Created on 11/17/2020 Package com.gladurbad.medusa.check.impl.movement.fly by GladUrBad
+ */
 
 @CheckInfo(name = "Fly (B)", description = "Checks for jumping mid-air.")
 public class FlyB extends Check {
@@ -26,7 +30,7 @@ public class FlyB extends Check {
 
             if (airTicks > 10) {
                 if (invalid) {
-                    fail("acceleration=" + acceleration + " airTicks=" + airTicks + " deltaY=" + deltaY);
+                    fail(String.format("accel=%.2f, at=%.2f", acceleration, airTicks));
                 }
             }
 

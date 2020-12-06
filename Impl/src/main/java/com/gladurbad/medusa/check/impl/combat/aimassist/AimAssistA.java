@@ -1,7 +1,7 @@
 package com.gladurbad.medusa.check.impl.combat.aimassist;
 
+import com.gladurbad.api.check.CheckInfo;
 import com.gladurbad.medusa.check.Check;
-import com.gladurbad.medusa.check.CheckInfo;
 import com.gladurbad.medusa.data.PlayerData;
 import com.gladurbad.medusa.packet.Packet;
 import com.gladurbad.medusa.util.MathUtil;
@@ -25,17 +25,17 @@ public class AimAssistA extends Check {
             final float pitch = data.getRotationProcessor().getPitch();
 
             final boolean invalidPitch = (MathUtil.isExponentiallySmall(deltaPitch) ||
-                    deltaPitch == 0F) && deltaYaw > 2F && Math.abs(pitch) < 85F;
+                    deltaPitch == 0F) && deltaYaw > 2F && Math.abs(pitch) < 85F && deltaYaw < 40F;
 
             final boolean invalidYaw = (MathUtil.isExponentiallySmall(deltaYaw) ||
-                    deltaYaw == 0F) && deltaPitch > 2F ;
+                    deltaYaw == 0F) && deltaPitch > 2F && deltaPitch < 40F;
 
             if (invalidPitch || invalidYaw) {
-                if (increaseBuffer() > 5) {
-                    fail("deltaYaw=" + deltaYaw + " deltaPitch=" + deltaPitch);
+                if (increaseBuffer() > 10) {
+                    fail(String.format("deltaYaw=%.2f, deltaPitch=%.2f", deltaYaw, deltaPitch));
                 }
             } else {
-                decreaseBuffer();
+                resetBuffer();
             }
         }
     }

@@ -1,17 +1,21 @@
-package com.gladurbad.medusa.check.impl.player.scaffold;
+package com.gladurbad.medusa.check.impl.player.badpackets;
 
 import com.gladurbad.medusa.check.Check;
-import com.gladurbad.medusa.check.CheckInfo;
+import com.gladurbad.api.check.CheckInfo;
 import com.gladurbad.medusa.data.PlayerData;
 import com.gladurbad.medusa.packet.Packet;
 
-@CheckInfo(name = "Scaffold (B)", description = "Checks for packet order.")
-public class ScaffoldB extends Check {
+/**
+ * Created on 11/10/2020 Package com.gladurbad.medusa.check.impl.player.scaffold by GladUrBad
+ */
+
+@CheckInfo(name = "BadPackets (G)", description = "Checks for packet order.")
+public class BadPacketsG extends Check {
 
     private long lastBlockPlace;
     private boolean placedBlock;
 
-    public ScaffoldB(final PlayerData data) {
+    public BadPacketsG(final PlayerData data) {
         super(data);
     }
 
