@@ -1,11 +1,11 @@
 package com.gladurbad.medusa.util.anticheat;
 
 import com.gladurbad.medusa.check.Check;
+import com.gladurbad.medusa.config.Config;
 import com.gladurbad.medusa.data.PlayerData;
 import com.gladurbad.medusa.util.ColorUtil;
 import io.github.retrooper.packetevents.PacketEvents;
 import lombok.Getter;
-import com.gladurbad.medusa.config.Config;
 import lombok.experimental.UtilityClass;
 import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.ComponentBuilder;

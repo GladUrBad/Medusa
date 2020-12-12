@@ -10,10 +10,10 @@ import java.util.List;
 
 public class ThemeManager {
 
-    public static final List<Theme> themes = new ArrayList<>();
+    public final List<Theme> themes = new ArrayList<>();
 
     //This is so jank, maybe I will rewrite it in the future.
-    public static void setup() {
+    public void setup() {
         for (String str : Config.THEMES) {
             final String[] themePieces = str.split("\\$ ");
             final String[] accentColourCodes = themePieces[2].split(" ");

@@ -1,30 +1,67 @@
 package com.gladurbad.medusa.manager;
 
 import com.gladurbad.medusa.check.Check;
-import com.gladurbad.medusa.check.impl.combat.aimassist.*;
-import com.gladurbad.medusa.check.impl.combat.autoclicker.*;
-import com.gladurbad.medusa.check.impl.combat.hitbox.*;
-import com.gladurbad.medusa.check.impl.combat.killaura.*;
-import com.gladurbad.medusa.check.impl.combat.velocity.*;
-import com.gladurbad.medusa.check.impl.movement.fastclimb.*;
-import com.gladurbad.medusa.check.impl.movement.fly.*;
-import com.gladurbad.medusa.check.impl.movement.jesus.*;
-import com.gladurbad.medusa.check.impl.movement.motion.*;
-import com.gladurbad.medusa.check.impl.movement.speed.*;
-import com.gladurbad.medusa.check.impl.player.badpackets.*;
-import com.gladurbad.medusa.check.impl.player.hand.*;
-import com.gladurbad.medusa.check.impl.player.scaffold.*;
-import com.gladurbad.medusa.check.impl.player.timer.*;
+import com.gladurbad.medusa.check.impl.combat.aimassist.AimAssistA;
+import com.gladurbad.medusa.check.impl.combat.aimassist.AimAssistB;
+import com.gladurbad.medusa.check.impl.combat.aimassist.AimAssistC;
+import com.gladurbad.medusa.check.impl.combat.aimassist.AimAssistD;
+import com.gladurbad.medusa.check.impl.combat.aimassist.AimAssistE;
+import com.gladurbad.medusa.check.impl.combat.aimassist.AimAssistF;
+import com.gladurbad.medusa.check.impl.combat.aimassist.AimAssistG;
+import com.gladurbad.medusa.check.impl.combat.autoclicker.AutoClickerA;
+import com.gladurbad.medusa.check.impl.combat.autoclicker.AutoClickerB;
+import com.gladurbad.medusa.check.impl.combat.autoclicker.AutoClickerC;
+import com.gladurbad.medusa.check.impl.combat.autoclicker.AutoClickerD;
+import com.gladurbad.medusa.check.impl.combat.hitbox.HitBoxA;
+import com.gladurbad.medusa.check.impl.combat.hitbox.HitBoxB;
+import com.gladurbad.medusa.check.impl.combat.hitbox.HitBoxC;
+import com.gladurbad.medusa.check.impl.combat.killaura.KillAuraA;
+import com.gladurbad.medusa.check.impl.combat.killaura.KillAuraB;
+import com.gladurbad.medusa.check.impl.combat.killaura.KillAuraC;
+import com.gladurbad.medusa.check.impl.combat.killaura.KillAuraD;
+import com.gladurbad.medusa.check.impl.combat.killaura.KillAuraE;
+import com.gladurbad.medusa.check.impl.combat.velocity.VelocityA;
+import com.gladurbad.medusa.check.impl.movement.fastclimb.FastClimbA;
+import com.gladurbad.medusa.check.impl.movement.fly.FlyA;
+import com.gladurbad.medusa.check.impl.movement.fly.FlyB;
+import com.gladurbad.medusa.check.impl.movement.fly.FlyC;
+import com.gladurbad.medusa.check.impl.movement.jesus.JesusA;
+import com.gladurbad.medusa.check.impl.movement.jesus.JesusB;
+import com.gladurbad.medusa.check.impl.movement.motion.MotionA;
+import com.gladurbad.medusa.check.impl.movement.motion.MotionB;
+import com.gladurbad.medusa.check.impl.movement.motion.MotionC;
+import com.gladurbad.medusa.check.impl.movement.motion.MotionD;
+import com.gladurbad.medusa.check.impl.movement.speed.SpeedA;
+import com.gladurbad.medusa.check.impl.movement.speed.SpeedB;
+import com.gladurbad.medusa.check.impl.movement.speed.SpeedC;
+import com.gladurbad.medusa.check.impl.player.badpackets.BadPacketsA;
+import com.gladurbad.medusa.check.impl.player.badpackets.BadPacketsB;
+import com.gladurbad.medusa.check.impl.player.badpackets.BadPacketsC;
+import com.gladurbad.medusa.check.impl.player.badpackets.BadPacketsD;
+import com.gladurbad.medusa.check.impl.player.badpackets.BadPacketsE;
+import com.gladurbad.medusa.check.impl.player.badpackets.BadPacketsF;
+import com.gladurbad.medusa.check.impl.player.badpackets.BadPacketsG;
+import com.gladurbad.medusa.check.impl.player.badpackets.BadPacketsH;
+import com.gladurbad.medusa.check.impl.player.badpackets.BadPacketsI;
+import com.gladurbad.medusa.check.impl.player.badpackets.BadPacketsJ;
+import com.gladurbad.medusa.check.impl.player.hand.HandA;
+import com.gladurbad.medusa.check.impl.player.hand.HandB;
+import com.gladurbad.medusa.check.impl.player.hand.HandC;
+import com.gladurbad.medusa.check.impl.player.scaffold.ScaffoldA;
+import com.gladurbad.medusa.check.impl.player.timer.TimerA;
+import com.gladurbad.medusa.check.impl.player.timer.TimerB;
+import com.gladurbad.medusa.check.impl.player.timer.TimerC;
 import com.gladurbad.medusa.config.Config;
 import com.gladurbad.medusa.data.PlayerData;
 import org.bukkit.Bukkit;
+
 import java.lang.reflect.Constructor;
 import java.util.ArrayList;
 import java.util.List;
 
 public class CheckManager {
 
-    public static final Class[] CHECKS = new Class[] {
+    public final Class[] CHECKS = new Class[]{
             AimAssistA.class,
             AimAssistB.class,
             AimAssistC.class,
@@ -77,9 +114,9 @@ public class CheckManager {
             ScaffoldA.class,
     };
 
-    private static final List<Constructor<?>> CONSTRUCTORS = new ArrayList<>();
+    private final List<Constructor<?>> CONSTRUCTORS = new ArrayList<>();
 
-    public static List<Check> loadChecks(PlayerData data) {
+    public List<Check> loadChecks(PlayerData data) {
         final List<Check> checkList = new ArrayList<>();
         for (Constructor<?> constructor : CONSTRUCTORS) {
             try {
@@ -92,7 +129,7 @@ public class CheckManager {
         return checkList;
     }
 
-    public static void setup() {
+    public void setup() {
         for (Class clazz : CHECKS) {
             if (Config.ENABLED_CHECKS.contains(clazz.getSimpleName())) {
                 try {

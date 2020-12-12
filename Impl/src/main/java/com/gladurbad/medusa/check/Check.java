@@ -4,16 +4,16 @@ import com.gladurbad.api.check.CheckInfo;
 import com.gladurbad.api.check.MedusaCheck;
 import com.gladurbad.api.listener.MedusaFlagEvent;
 import com.gladurbad.medusa.config.Config;
-import lombok.Getter;
-import lombok.Setter;
-import com.gladurbad.medusa.Medusa;
 import com.gladurbad.medusa.data.PlayerData;
 import com.gladurbad.medusa.exempt.type.ExemptType;
-import com.gladurbad.medusa.util.anticheat.AlertUtil;
 import com.gladurbad.medusa.packet.Packet;
+import com.gladurbad.medusa.util.anticheat.AlertUtil;
+import lombok.Getter;
+import lombok.Setter;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
+
 import java.util.Objects;
 
 @Getter

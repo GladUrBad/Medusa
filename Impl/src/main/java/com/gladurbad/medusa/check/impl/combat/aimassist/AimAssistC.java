@@ -1,8 +1,9 @@
 package com.gladurbad.medusa.check.impl.combat.aimassist;
 
-import com.gladurbad.medusa.check.Check;
 import com.gladurbad.api.check.CheckInfo;
+import com.gladurbad.medusa.check.Check;
 import com.gladurbad.medusa.data.PlayerData;
+import com.gladurbad.medusa.data.processor.RotationProcessor;
 import com.gladurbad.medusa.exempt.type.ExemptType;
 import com.gladurbad.medusa.packet.Packet;
 
@@ -20,10 +21,13 @@ public class AimAssistC extends Check {
     @Override
     public void handle(Packet packet) {
         if (packet.isRotation()) {
-            final double deltaYaw = data.getRotationProcessor().getDeltaYaw();
-            final double yawAccel = data.getRotationProcessor().getYawAccel();
-            final double deltaPitch = data.getRotationProcessor().getDeltaPitch();
-            final double pitchAccel = data.getRotationProcessor().getPitchAccel();
+
+            RotationProcessor rotationProcessor = data.getRotationProcessor();
+
+            final double deltaYaw = rotationProcessor.getDeltaYaw();
+            final double yawAccel = rotationProcessor.getYawAccel();
+            final double deltaPitch = rotationProcessor.getDeltaPitch();
+            final double pitchAccel = rotationProcessor.getPitchAccel();
 
             final boolean invalidYaw = yawAccel == 0 && Math.abs(deltaYaw) > 1.5F && !isExempt(ExemptType.TELEPORT);
             final boolean invalidPitch = pitchAccel == 0 && Math.abs(deltaPitch) > 1.5F && !isExempt(ExemptType.TELEPORT);

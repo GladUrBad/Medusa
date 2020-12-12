@@ -1,14 +1,15 @@
 package com.gladurbad.medusa.data.processor;
 
-import com.gladurbad.medusa.util.type.BoundingBox;
-import lombok.Getter;
 import com.gladurbad.medusa.Medusa;
 import com.gladurbad.medusa.data.PlayerData;
-import org.bukkit.*;
+import com.gladurbad.medusa.util.type.BoundingBox;
+import lombok.Getter;
+import org.bukkit.Bukkit;
+import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Boat;
 import org.bukkit.entity.Entity;
-import org.bukkit.entity.Player;
 import org.bukkit.util.NumberConversions;
 
 import java.util.ArrayList;

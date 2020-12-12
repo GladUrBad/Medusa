@@ -1,10 +1,9 @@
 package com.gladurbad.medusa.check.impl.movement.fly;
 
-import com.gladurbad.medusa.check.Check;
 import com.gladurbad.api.check.CheckInfo;
+import com.gladurbad.medusa.check.Check;
 import com.gladurbad.medusa.data.PlayerData;
 import com.gladurbad.medusa.packet.Packet;
-import org.bukkit.Material;
 
 /**
  * Created on 11/17/2020 Package com.gladurbad.medusa.check.impl.movement.fly by GladUrBad

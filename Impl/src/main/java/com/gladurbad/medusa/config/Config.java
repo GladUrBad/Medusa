@@ -2,11 +2,13 @@ package com.gladurbad.medusa.config;
 
 import com.gladurbad.api.check.CheckInfo;
 import com.gladurbad.medusa.Medusa;
-import com.gladurbad.medusa.manager.CheckManager;
 import org.bukkit.Bukkit;
 
 import java.lang.reflect.Field;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class Config {
 
@@ -43,7 +45,7 @@ public class Config {
             CLEAR_VIOLATIONS_DELAY = getIntegerFromConfig("violations.clear-violations-delay");
 
             //Checks
-            for (Class check : CheckManager.CHECKS) {
+            for (Class check : Medusa.INSTANCE.getCheckManager().CHECKS) {
                 final CheckInfo checkInfo = (CheckInfo) check.getAnnotation(CheckInfo.class);
                 String checkType = "";
                 if (check.getName().contains("combat")) {
