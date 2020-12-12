@@ -16,6 +16,7 @@ import io.github.retrooper.packetevents.PacketEvents;
 import io.github.retrooper.packetevents.utils.server.ServerVersion;
 import lombok.Getter;
 import org.bukkit.Bukkit;
+import org.bukkit.event.HandlerList;
 import org.bukkit.plugin.messaging.Messenger;
 
 @Getter
@@ -80,5 +81,8 @@ public enum Medusa {
         assert plugin != null : "Error while shutting down Medusa.";
 
         tickManager.stop();
+
+        HandlerList.unregisterAll(plugin);
+        Bukkit.getScheduler().cancelTasks(plugin);
     }
 }
