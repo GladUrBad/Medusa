@@ -1,0 +1,375 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="BranchesTreeState">
+    <expand />
+    <select />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="d3bc3713-a941-4b01-9bda-42a178e40630" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/ExampleAPI/src/main/java/com/gladurbad/exampleapi/ExamplePlugin.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/ExampleAPI/src/main/java/com/gladurbad/exampleapi/listener/ExampleListener.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Impl/src/main/java/com/gladurbad/medusa/check/impl/combat/autoclicker/AutoClickerC.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Impl/src/main/java/com/gladurbad/medusa/check/impl/combat/autoclicker/AutoClickerD.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Impl/src/main/java/com/gladurbad/medusa/check/impl/combat/hitbox/HitBoxC.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Impl/src/main/java/com/gladurbad/medusa/check/impl/movement/jesus/JesusB.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Impl/src/main/java/com/gladurbad/medusa/check/impl/player/badpackets/BadPacketsH.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Impl/src/main/java/com/gladurbad/medusa/check/impl/player/badpackets/BadPacketsI.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Impl/src/main/java/com/gladurbad/medusa/check/impl/player/badpackets/BadPacketsJ.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Impl/src/main/java/com/gladurbad/medusa/check/impl/player/timer/TimerC.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Impl/src/main/java/com/gladurbad/medusa/command/impl/Violations.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Impl/src/main/java/com/gladurbad/medusa/util/HitboxExpansion.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/compiler.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/encodings.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/encodings.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/Maven__com_gladurbad_API_1_0.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/API/API.iml" beforeDir="false" afterPath="$PROJECT_DIR$/API/API.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/API/src/com/gladurbad/api/check/CheckInfo.java" beforeDir="false" afterPath="$PROJECT_DIR$/API/src/main/java/com/gladurbad/api/check/CheckInfo.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/API/src/com/gladurbad/api/check/MedusaCheck.java" beforeDir="false" afterPath="$PROJECT_DIR$/API/src/main/java/com/gladurbad/api/check/MedusaCheck.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/API/src/com/gladurbad/api/listener/MedusaAlertEvent.java" beforeDir="false" afterPath="$PROJECT_DIR$/API/src/main/java/com/gladurbad/api/listener/MedusaFlagEvent.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ExampleAPI/ExampleAPI.iml" beforeDir="false" afterPath="$PROJECT_DIR$/ExampleAPI/ExampleAPI.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ExampleAPI/src/main/java/dev/funkemunky/medample/ExamplePlugin.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ExampleAPI/src/main/java/dev/funkemunky/medample/listener/ExampleListener.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ExampleAPI/src/main/resources/plugin.yml" beforeDir="false" afterPath="$PROJECT_DIR$/ExampleAPI/src/main/resources/plugin.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Impl/Impl.iml" beforeDir="false" afterPath="$PROJECT_DIR$/Impl/Impl.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Impl/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/Impl/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Impl/src/main/java/com/gladurbad/medusa/check/Check.java" beforeDir="false" afterPath="$PROJECT_DIR$/Impl/src/main/java/com/gladurbad/medusa/check/Check.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Impl/src/main/java/com/gladurbad/medusa/check/CheckInfo.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Impl/src/main/java/com/gladurbad/medusa/check/impl/combat/aimassist/AimAssistA.java" beforeDir="false" afterPath="$PROJECT_DIR$/Impl/src/main/java/com/gladurbad/medusa/check/impl/combat/aimassist/AimAssistA.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Impl/src/main/java/com/gladurbad/medusa/check/impl/combat/aimassist/AimAssistB.java" beforeDir="false" afterPath="$PROJECT_DIR$/Impl/src/main/java/com/gladurbad/medusa/check/impl/combat/aimassist/AimAssistB.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Impl/src/main/java/com/gladurbad/medusa/check/impl/combat/aimassist/AimAssistC.java" beforeDir="false" afterPath="$PROJECT_DIR$/Impl/src/main/java/com/gladurbad/medusa/check/impl/combat/aimassist/AimAssistC.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Impl/src/main/java/com/gladurbad/medusa/check/impl/combat/aimassist/AimAssistD.java" beforeDir="false" afterPath="$PROJECT_DIR$/Impl/src/main/java/com/gladurbad/medusa/check/impl/combat/aimassist/AimAssistD.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Impl/src/main/java/com/gladurbad/medusa/check/impl/combat/aimassist/AimAssistE.java" beforeDir="false" afterPath="$PROJECT_DIR$/Impl/src/main/java/com/gladurbad/medusa/check/impl/combat/aimassist/AimAssistE.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Impl/src/main/java/com/gladurbad/medusa/check/impl/combat/aimassist/AimAssistF.java" beforeDir="false" afterPath="$PROJECT_DIR$/Impl/src/main/java/com/gladurbad/medusa/check/impl/combat/aimassist/AimAssistF.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Impl/src/main/java/com/gladurbad/medusa/check/impl/combat/aimassist/AimAssistG.java" beforeDir="false" afterPath="$PROJECT_DIR$/Impl/src/main/java/com/gladurbad/medusa/check/impl/combat/aimassist/AimAssistG.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Impl/src/main/java/com/gladurbad/medusa/check/impl/combat/autoclicker/AutoClickerA.java" beforeDir="false" afterPath="$PROJECT_DIR$/Impl/src/main/java/com/gladurbad/medusa/check/impl/combat/autoclicker/AutoClickerA.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Impl/src/main/java/com/gladurbad/medusa/check/impl/combat/autoclicker/AutoClickerB.java" beforeDir="false" afterPath="$PROJECT_DIR$/Impl/src/main/java/com/gladurbad/medusa/check/impl/combat/autoclicker/AutoClickerB.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Impl/src/main/java/com/gladurbad/medusa/check/impl/combat/hitbox/HitBoxA.java" beforeDir="false" afterPath="$PROJECT_DIR$/Impl/src/main/java/com/gladurbad/medusa/check/impl/combat/hitbox/HitBoxA.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Impl/src/main/java/com/gladurbad/medusa/check/impl/combat/hitbox/HitBoxB.java" beforeDir="false" afterPath="$PROJECT_DIR$/Impl/src/main/java/com/gladurbad/medusa/check/impl/combat/hitbox/HitBoxB.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Impl/src/main/java/com/gladurbad/medusa/check/impl/combat/killaura/KillAuraA.java" beforeDir="false" afterPath="$PROJECT_DIR$/Impl/src/main/java/com/gladurbad/medusa/check/impl/combat/killaura/KillAuraA.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Impl/src/main/java/com/gladurbad/medusa/check/impl/combat/killaura/KillAuraB.java" beforeDir="false" afterPath="$PROJECT_DIR$/Impl/src/main/java/com/gladurbad/medusa/check/impl/combat/killaura/KillAuraB.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Impl/src/main/java/com/gladurbad/medusa/check/impl/combat/killaura/KillAuraC.java" beforeDir="false" afterPath="$PROJECT_DIR$/Impl/src/main/java/com/gladurbad/medusa/check/impl/combat/killaura/KillAuraC.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Impl/src/main/java/com/gladurbad/medusa/check/impl/combat/killaura/KillAuraD.java" beforeDir="false" afterPath="$PROJECT_DIR$/Impl/src/main/java/com/gladurbad/medusa/check/impl/combat/killaura/KillAuraD.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Impl/src/main/java/com/gladurbad/medusa/check/impl/combat/killaura/KillAuraE.java" beforeDir="false" afterPath="$PROJECT_DIR$/Impl/src/main/java/com/gladurbad/medusa/check/impl/combat/killaura/KillAuraE.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Impl/src/main/java/com/gladurbad/medusa/check/impl/combat/velocity/VelocityA.java" beforeDir="false" afterPath="$PROJECT_DIR$/Impl/src/main/java/com/gladurbad/medusa/check/impl/combat/velocity/VelocityA.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Impl/src/main/java/com/gladurbad/medusa/check/impl/movement/fastclimb/FastClimbA.java" beforeDir="false" afterPath="$PROJECT_DIR$/Impl/src/main/java/com/gladurbad/medusa/check/impl/movement/fastclimb/FastClimbA.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Impl/src/main/java/com/gladurbad/medusa/check/impl/movement/fly/FlyA.java" beforeDir="false" afterPath="$PROJECT_DIR$/Impl/src/main/java/com/gladurbad/medusa/check/impl/movement/fly/FlyA.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Impl/src/main/java/com/gladurbad/medusa/check/impl/movement/fly/FlyB.java" beforeDir="false" afterPath="$PROJECT_DIR$/Impl/src/main/java/com/gladurbad/medusa/check/impl/movement/fly/FlyB.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Impl/src/main/java/com/gladurbad/medusa/check/impl/movement/fly/FlyC.java" beforeDir="false" afterPath="$PROJECT_DIR$/Impl/src/main/java/com/gladurbad/medusa/check/impl/movement/fly/FlyC.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Impl/src/main/java/com/gladurbad/medusa/check/impl/movement/jesus/JesusA.java" beforeDir="false" afterPath="$PROJECT_DIR$/Impl/src/main/java/com/gladurbad/medusa/check/impl/movement/jesus/JesusA.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Impl/src/main/java/com/gladurbad/medusa/check/impl/movement/motion/MotionA.java" beforeDir="false" afterPath="$PROJECT_DIR$/Impl/src/main/java/com/gladurbad/medusa/check/impl/movement/motion/MotionA.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Impl/src/main/java/com/gladurbad/medusa/check/impl/movement/motion/MotionB.java" beforeDir="false" afterPath="$PROJECT_DIR$/Impl/src/main/java/com/gladurbad/medusa/check/impl/movement/motion/MotionB.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Impl/src/main/java/com/gladurbad/medusa/check/impl/movement/motion/MotionC.java" beforeDir="false" afterPath="$PROJECT_DIR$/Impl/src/main/java/com/gladurbad/medusa/check/impl/movement/motion/MotionC.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Impl/src/main/java/com/gladurbad/medusa/check/impl/movement/motion/MotionD.java" beforeDir="false" afterPath="$PROJECT_DIR$/Impl/src/main/java/com/gladurbad/medusa/check/impl/movement/motion/MotionD.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Impl/src/main/java/com/gladurbad/medusa/check/impl/movement/motion/MotionE.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Impl/src/main/java/com/gladurbad/medusa/check/impl/movement/speed/SpeedA.java" beforeDir="false" afterPath="$PROJECT_DIR$/Impl/src/main/java/com/gladurbad/medusa/check/impl/movement/speed/SpeedA.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Impl/src/main/java/com/gladurbad/medusa/check/impl/movement/speed/SpeedB.java" beforeDir="false" afterPath="$PROJECT_DIR$/Impl/src/main/java/com/gladurbad/medusa/check/impl/movement/speed/SpeedB.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Impl/src/main/java/com/gladurbad/medusa/check/impl/movement/speed/SpeedC.java" beforeDir="false" afterPath="$PROJECT_DIR$/Impl/src/main/java/com/gladurbad/medusa/check/impl/movement/speed/SpeedC.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Impl/src/main/java/com/gladurbad/medusa/check/impl/player/badpackets/BadPacketsA.java" beforeDir="false" afterPath="$PROJECT_DIR$/Impl/src/main/java/com/gladurbad/medusa/check/impl/player/badpackets/BadPacketsA.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Impl/src/main/java/com/gladurbad/medusa/check/impl/player/badpackets/BadPacketsB.java" beforeDir="false" afterPath="$PROJECT_DIR$/Impl/src/main/java/com/gladurbad/medusa/check/impl/player/badpackets/BadPacketsB.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Impl/src/main/java/com/gladurbad/medusa/check/impl/player/badpackets/BadPacketsC.java" beforeDir="false" afterPath="$PROJECT_DIR$/Impl/src/main/java/com/gladurbad/medusa/check/impl/player/badpackets/BadPacketsC.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Impl/src/main/java/com/gladurbad/medusa/check/impl/player/badpackets/BadPacketsD.java" beforeDir="false" afterPath="$PROJECT_DIR$/Impl/src/main/java/com/gladurbad/medusa/check/impl/player/badpackets/BadPacketsD.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Impl/src/main/java/com/gladurbad/medusa/check/impl/player/badpackets/BadPacketsE.java" beforeDir="false" afterPath="$PROJECT_DIR$/Impl/src/main/java/com/gladurbad/medusa/check/impl/player/badpackets/BadPacketsE.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Impl/src/main/java/com/gladurbad/medusa/check/impl/player/badpackets/BadPacketsF.java" beforeDir="false" afterPath="$PROJECT_DIR$/Impl/src/main/java/com/gladurbad/medusa/check/impl/player/badpackets/BadPacketsF.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Impl/src/main/java/com/gladurbad/medusa/check/impl/player/hand/HandA.java" beforeDir="false" afterPath="$PROJECT_DIR$/Impl/src/main/java/com/gladurbad/medusa/check/impl/player/hand/HandA.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Impl/src/main/java/com/gladurbad/medusa/check/impl/player/hand/HandB.java" beforeDir="false" afterPath="$PROJECT_DIR$/Impl/src/main/java/com/gladurbad/medusa/check/impl/player/hand/HandB.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Impl/src/main/java/com/gladurbad/medusa/check/impl/player/hand/HandC.java" beforeDir="false" afterPath="$PROJECT_DIR$/Impl/src/main/java/com/gladurbad/medusa/check/impl/player/hand/HandC.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Impl/src/main/java/com/gladurbad/medusa/check/impl/player/scaffold/ScaffoldA.java" beforeDir="false" afterPath="$PROJECT_DIR$/Impl/src/main/java/com/gladurbad/medusa/check/impl/player/scaffold/ScaffoldA.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Impl/src/main/java/com/gladurbad/medusa/check/impl/player/scaffold/ScaffoldB.java" beforeDir="false" afterPath="$PROJECT_DIR$/Impl/src/main/java/com/gladurbad/medusa/check/impl/player/badpackets/BadPacketsG.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Impl/src/main/java/com/gladurbad/medusa/check/impl/player/timer/TimerA.java" beforeDir="false" afterPath="$PROJECT_DIR$/Impl/src/main/java/com/gladurbad/medusa/check/impl/player/timer/TimerA.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Impl/src/main/java/com/gladurbad/medusa/check/impl/player/timer/TimerB.java" beforeDir="false" afterPath="$PROJECT_DIR$/Impl/src/main/java/com/gladurbad/medusa/check/impl/player/timer/TimerB.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Impl/src/main/java/com/gladurbad/medusa/command/CommandManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/Impl/src/main/java/com/gladurbad/medusa/command/CommandManager.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Impl/src/main/java/com/gladurbad/medusa/command/MedusaCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/Impl/src/main/java/com/gladurbad/medusa/command/MedusaCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Impl/src/main/java/com/gladurbad/medusa/command/impl/Checks.java" beforeDir="false" afterPath="$PROJECT_DIR$/Impl/src/main/java/com/gladurbad/medusa/command/impl/Checks.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Impl/src/main/java/com/gladurbad/medusa/command/impl/Info.java" beforeDir="false" afterPath="$PROJECT_DIR$/Impl/src/main/java/com/gladurbad/medusa/command/impl/Info.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Impl/src/main/java/com/gladurbad/medusa/command/impl/Theme.java" beforeDir="false" afterPath="$PROJECT_DIR$/Impl/src/main/java/com/gladurbad/medusa/command/impl/Theme.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Impl/src/main/java/com/gladurbad/medusa/config/Config.java" beforeDir="false" afterPath="$PROJECT_DIR$/Impl/src/main/java/com/gladurbad/medusa/config/Config.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Impl/src/main/java/com/gladurbad/medusa/data/processor/PositionProcessor.java" beforeDir="false" afterPath="$PROJECT_DIR$/Impl/src/main/java/com/gladurbad/medusa/data/processor/PositionProcessor.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Impl/src/main/java/com/gladurbad/medusa/data/processor/VelocityProcessor.java" beforeDir="false" afterPath="$PROJECT_DIR$/Impl/src/main/java/com/gladurbad/medusa/data/processor/VelocityProcessor.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Impl/src/main/java/com/gladurbad/medusa/exempt/type/ExemptType.java" beforeDir="false" afterPath="$PROJECT_DIR$/Impl/src/main/java/com/gladurbad/medusa/exempt/type/ExemptType.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Impl/src/main/java/com/gladurbad/medusa/manager/CheckManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/Impl/src/main/java/com/gladurbad/medusa/manager/CheckManager.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Impl/src/main/java/com/gladurbad/medusa/packet/Packet.java" beforeDir="false" afterPath="$PROJECT_DIR$/Impl/src/main/java/com/gladurbad/medusa/packet/Packet.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Impl/src/main/java/com/gladurbad/medusa/packet/processor/SendingPacketProcessor.java" beforeDir="false" afterPath="$PROJECT_DIR$/Impl/src/main/java/com/gladurbad/medusa/packet/processor/SendingPacketProcessor.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Impl/src/main/java/com/gladurbad/medusa/util/anticheat/AlertUtil.java" beforeDir="false" afterPath="$PROJECT_DIR$/Impl/src/main/java/com/gladurbad/medusa/util/anticheat/AlertUtil.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Impl/src/main/resources/config.yml" beforeDir="false" afterPath="$PROJECT_DIR$/Impl/src/main/resources/config.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Impl/src/main/resources/plugin.yml" beforeDir="false" afterPath="$PROJECT_DIR$/Impl/src/main/resources/plugin.yml" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Enum" />
+        <option value="AnnotationType" />
+        <option value="Interface" />
+        <option value="Class" />
+      </list>
+    </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="InvalidFacetManager">
+    <ignored-facets>
+      <facet id="Impl/invalid/Minecraft" />
+      <facet id="Medusa/invalid/Minecraft" />
+    </ignored-facets>
+  </component>
+  <component name="MavenImportPreferences">
+    <option name="generalSettings">
+      <MavenGeneralSettings>
+        <option name="mavenHome" value="C:\Program Files\JetBrains\IntelliJ IDEA Community Edition 2019.3.4\plugins\maven\lib\maven3" />
+      </MavenGeneralSettings>
+    </option>
+  </component>
+  <component name="ProjectId" id="1jNw57MzqU5LcXP32BqmTE2Rn53" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
+  <component name="ProjectViewState">
+    <option name="autoscrollToSource" value="true" />
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">
+    <property name="ASKED_MARK_IGNORED_FILES_AS_EXCLUDED" value="true" />
+    <property name="ASKED_SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
+    <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
+    <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
+    <property name="jdk.selected.JAVA_MODULE" value="1.8" />
+    <property name="last_directory_selection" value="$PROJECT_DIR$/ExampleAPI/src" />
+    <property name="last_opened_file_path" value="$USER_HOME$/Desktop/Programming/VisionClientLol" />
+    <property name="project.structure.last.edited" value="Project" />
+    <property name="project.structure.proportion" value="0.15" />
+    <property name="project.structure.side.proportion" value="0.35632184" />
+    <property name="settings.editor.selected.configurable" value="preferences.customizations" />
+  </component>
+  <component name="RecentsManager">
+    <key name="ExtractSuperBase.RECENT_KEYS">
+      <recent name="com.gladurbad.medusa.manager" />
+    </key>
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\rubik\IdeaProjects\Medusa" />
+      <recent name="C:\Users\rubik\IdeaProjects\Medusa\ExampleAPI" />
+    </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\rubik\IdeaProjects\Medusa\Impl\src\main\java" />
+      <recent name="C:\Users\rubik\IdeaProjects\Medusa\Impl\src\main" />
+      <recent name="C:\Users\rubik\IdeaProjects\Medusa\Impl\src" />
+      <recent name="C:\Users\rubik\IdeaProjects\Medusa" />
+      <recent name="C:\Users\rubik\IdeaProjects\Medusa\Impl" />
+    </key>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="d3bc3713-a941-4b01-9bda-42a178e40630" name="Default Changelist" comment="" />
+      <created>1603657671044</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1603657671044</updated>
+    </task>
+    <task id="LOCAL-00001" summary="cheese">
+      <created>1605647677546</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1605647677546</updated>
+    </task>
+    <task id="LOCAL-00002" summary="1.5 code.">
+      <created>1606158175897</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1606158175897</updated>
+    </task>
+    <task id="LOCAL-00003" summary="Cleaned up the alerts information and reformatted some code.">
+      <created>1606188480790</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1606188480790</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
+    <servers />
+  </component>
+  <component name="UnknownFeatures">
+    <option featureType="com.intellij.facetType" implementationName="minecraft" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State>
+              <option name="CUSTOM_BOOLEAN_PROPERTIES">
+                <map>
+                  <entry key="Show.Git.Branches" value="false" />
+                </map>
+              </option>
+            </State>
+          </value>
+        </entry>
+      </map>
+    </option>
+    <option name="oldMeFiltersMigrated" value="true" />
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="cheese" />
+    <MESSAGE value="1.5 code." />
+    <MESSAGE value="Cleaned up the alerts information and reformatted some code." />
+    <option name="LAST_COMMIT_MESSAGE" value="Cleaned up the alerts information and reformatted some code." />
+  </component>
+  <component name="WindowStateProjectService">
+    <state x="440" y="94" key="#Project_Structure" timestamp="1603659042076">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="440" y="94" key="#Project_Structure/0.0.1920.1040/1920.1.1920.1040@0.0.1920.1040" timestamp="1603659042076" />
+    <state x="752" y="378" key="#Scopes" timestamp="1607179963059">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="752" y="378" key="#Scopes/0.0.1920.1040/1920.1.1920.1040@0.0.1920.1040" timestamp="1607179963059" />
+    <state x="414" y="175" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1607211682725">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="414" y="175" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.1920.1040/1920.1.1920.1040@0.0.1920.1040" timestamp="1607211682725" />
+    <state x="765" y="223" key="#com.intellij.ide.util.MemberChooser" timestamp="1607277809652">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="765" y="223" key="#com.intellij.ide.util.MemberChooser/0.0.1920.1040/1920.1.1920.1040@0.0.1920.1040" timestamp="1607277809652" />
+    <state x="681" y="209" key="#com.intellij.ide.util.frameworkSupport.AddFrameworkSupportDialog" timestamp="1607276484950">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="681" y="209" key="#com.intellij.ide.util.frameworkSupport.AddFrameworkSupportDialog/0.0.1920.1040/1920.1.1920.1040@0.0.1920.1040" timestamp="1607276484950" />
+    <state x="811" y="436" key="#com.intellij.refactoring.move.MoveHandler.SelectRefactoringDialog" timestamp="1607275993900">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="811" y="436" key="#com.intellij.refactoring.move.MoveHandler.SelectRefactoringDialog/0.0.1920.1040/1920.1.1920.1040@0.0.1920.1040" timestamp="1607275993900" />
+    <state x="698" y="405" width="553" height="287" key="#com.intellij.refactoring.move.moveClassesOrPackages.MoveClassesOrPackagesDialog.classes" timestamp="1607276936414">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="698" y="405" width="553" height="287" key="#com.intellij.refactoring.move.moveClassesOrPackages.MoveClassesOrPackagesDialog.classes/0.0.1920.1040/1920.1.1920.1040@0.0.1920.1040" timestamp="1607276936414" />
+    <state x="428" y="0" key="#com.intellij.refactoring.rename.AutomaticRenamingDialog" timestamp="1603746364600">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="428" y="0" key="#com.intellij.refactoring.rename.AutomaticRenamingDialog/0.0.1920.1040/1920.1.1920.1040@0.0.1920.1040" timestamp="1603746364600" />
+    <state x="690" y="267" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog" timestamp="1607180837536">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="690" y="267" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog/0.0.1920.1040/1920.1.1920.1040@0.0.1920.1040" timestamp="1607180837536" />
+    <state x="427" y="1" key="CommitChangelistDialog2" timestamp="1606188480130">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="427" y="1" key="CommitChangelistDialog2/0.0.1920.1040/1920.1.1920.1040@0.0.1920.1040" timestamp="1606188480130" />
+    <state x="24" y="85" key="DiffContextDialog" timestamp="1606158405373">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="24" y="85" key="DiffContextDialog/0.0.1920.1040/1920.1.1920.1040@0.0.1920.1040" timestamp="1606158405373" />
+    <state x="740" y="275" key="FileChooserDialogImpl" timestamp="1607209698807">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="740" y="275" key="FileChooserDialogImpl/0.0.1920.1040/1920.1.1920.1040@0.0.1920.1040" timestamp="1607209698807" />
+    <state x="836" y="422" key="Github.ShareDialog" timestamp="1605451507976">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="836" y="422" key="Github.ShareDialog/0.0.1920.1040/1920.1.1920.1040@0.0.1920.1040" timestamp="1605451507976" />
+    <state width="914" height="238" key="GridCell.Tab.0.bottom" timestamp="1607279330769">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state width="914" height="238" key="GridCell.Tab.0.bottom/0.0.1920.1040/1920.1.1920.1040@0.0.1920.1040" timestamp="1607279330769" />
+    <state width="1877" height="235" key="GridCell.Tab.0.bottom/0.0.1920.1040/1920.1.1920.1040@1920.1.1920.1040" timestamp="1607108183211" />
+    <state width="914" height="238" key="GridCell.Tab.0.center" timestamp="1607279330769">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state width="914" height="238" key="GridCell.Tab.0.center/0.0.1920.1040/1920.1.1920.1040@0.0.1920.1040" timestamp="1607279330769" />
+    <state width="1877" height="235" key="GridCell.Tab.0.center/0.0.1920.1040/1920.1.1920.1040@1920.1.1920.1040" timestamp="1607108183211" />
+    <state width="914" height="238" key="GridCell.Tab.0.left" timestamp="1607279330769">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state width="914" height="238" key="GridCell.Tab.0.left/0.0.1920.1040/1920.1.1920.1040@0.0.1920.1040" timestamp="1607279330769" />
+    <state width="1877" height="235" key="GridCell.Tab.0.left/0.0.1920.1040/1920.1.1920.1040@1920.1.1920.1040" timestamp="1607108183211" />
+    <state width="914" height="238" key="GridCell.Tab.0.right" timestamp="1607279330769">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state width="914" height="238" key="GridCell.Tab.0.right/0.0.1920.1040/1920.1.1920.1040@0.0.1920.1040" timestamp="1607279330769" />
+    <state width="1877" height="235" key="GridCell.Tab.0.right/0.0.1920.1040/1920.1.1920.1040@1920.1.1920.1040" timestamp="1607108183211" />
+    <state x="490" y="175" key="Maven.ArtifactSearchDialog" timestamp="1607275558457">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="490" y="175" key="Maven.ArtifactSearchDialog/0.0.1920.1040/1920.1.1920.1040@0.0.1920.1040" timestamp="1607275558457" />
+    <state x="620" y="138" key="NewModule_or_Project.wizard" timestamp="1604014444592">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="620" y="138" key="NewModule_or_Project.wizard/0.0.1920.1040/1920.1.1920.1040@0.0.1920.1040" timestamp="1604014444592" />
+    <state x="450" y="268" key="SettingsEditor" timestamp="1607180109201">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="450" y="268" key="SettingsEditor/0.0.1920.1040/1920.1.1920.1040@0.0.1920.1040" timestamp="1607180109201" />
+    <state width="498" height="446" key="SwitcherDM" timestamp="1607275538853">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state width="498" height="446" key="SwitcherDM/0.0.1920.1040/1920.1.1920.1040@0.0.1920.1040" timestamp="1607275538853" />
+    <state x="552" y="249" key="Vcs.Push.Dialog.v2" timestamp="1606188603724">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="552" y="249" key="Vcs.Push.Dialog.v2/0.0.1920.1040/1920.1.1920.1040@0.0.1920.1040" timestamp="1606188603724" />
+    <state x="776" y="298" key="chooseDestDirectoryDialog" timestamp="1603659137063">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="776" y="298" key="chooseDestDirectoryDialog/0.0.1920.1040/1920.1.1920.1040@0.0.1920.1040" timestamp="1603659137063" />
+    <state x="92" y="92" width="1736" height="856" key="com.intellij.history.integration.ui.views.DirectoryHistoryDialog" timestamp="1607276239465">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="92" y="92" width="1736" height="856" key="com.intellij.history.integration.ui.views.DirectoryHistoryDialog/0.0.1920.1040/1920.1.1920.1040@0.0.1920.1040" timestamp="1607276239465" />
+    <state x="92" y="92" width="1736" height="856" key="com.intellij.history.integration.ui.views.FileHistoryDialog" timestamp="1606775216720">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="92" y="92" width="1736" height="856" key="com.intellij.history.integration.ui.views.FileHistoryDialog/0.0.1920.1040/1920.1.1920.1040@0.0.1920.1040" timestamp="1606775216720" />
+    <state x="777" y="430" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2" timestamp="1606188498081">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="777" y="430" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2/0.0.1920.1040/1920.1.1920.1040@0.0.1920.1040" timestamp="1606188498081" />
+    <state x="1920" y="1" width="1489" height="1027" key="dock-window-1" timestamp="1607278152808">
+      <screen x="1920" y="1" width="1920" height="1040" />
+    </state>
+    <state x="1920" y="1" width="1489" height="1027" key="dock-window-1/0.0.1920.1040/1920.1.1920.1040@0.0.1920.1040" timestamp="1607278152808" />
+    <state x="1913" y="1" width="974" height="1047" key="dock-window-2" timestamp="1607195881125">
+      <screen x="1920" y="1" width="1920" height="1040" />
+    </state>
+    <state x="1913" y="1" width="974" height="1047" key="dock-window-2/0.0.1920.1040/1920.1.1920.1040@0.0.1920.1040" timestamp="1607195881125" />
+    <state x="690" y="270" key="extract.method.dialog" timestamp="1603746578018">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="690" y="270" key="extract.method.dialog/0.0.1920.1040/1920.1.1920.1040@0.0.1920.1040" timestamp="1603746578018" />
+    <state x="646" y="229" width="583" height="624" key="find.popup" timestamp="1607277131406">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="646" y="229" width="583" height="624" key="find.popup/0.0.1920.1040/1920.1.1920.1040@0.0.1920.1040" timestamp="1607277131406" />
+    <state x="674" y="386" key="git4idea.remote.GitConfigureRemotesDialog" timestamp="1606158574075">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="674" y="386" key="git4idea.remote.GitConfigureRemotesDialog/0.0.1920.1040/1920.1.1920.1040@0.0.1920.1040" timestamp="1606158574075" />
+    <state x="342" y="95" key="new project wizard" timestamp="1607275874481">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="342" y="95" key="new project wizard/0.0.1920.1040/1920.1.1920.1040@0.0.1920.1040" timestamp="1607275874481" />
+    <state x="2262" y="96" key="new project wizard/0.0.1920.1040/1920.1.1920.1040@1920.1.1920.1040" timestamp="1603668170378" />
+    <state x="755" y="265" key="refactoring.ChangeSignatureDialog" timestamp="1607277269005">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="755" y="265" key="refactoring.ChangeSignatureDialog/0.0.1920.1040/1920.1.1920.1040@0.0.1920.1040" timestamp="1607277269005" />
+    <state x="616" y="240" key="run.anything.popup" timestamp="1604115614330">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="616" y="240" key="run.anything.popup/0.0.1920.1040/1920.1.1920.1040@0.0.1920.1040" timestamp="1604115614330" />
+    <state x="623" y="225" width="672" height="678" key="search.everywhere.popup" timestamp="1607195867856">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="623" y="225" width="672" height="678" key="search.everywhere.popup/0.0.1920.1040/1920.1.1920.1040@0.0.1920.1040" timestamp="1607195867856" />
+  </component>
+</project>
