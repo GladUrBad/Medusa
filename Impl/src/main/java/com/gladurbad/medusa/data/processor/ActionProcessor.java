@@ -1,14 +1,13 @@
 package com.gladurbad.medusa.data.processor;
 
 import com.gladurbad.medusa.Medusa;
+import com.gladurbad.medusa.data.PlayerData;
 import com.gladurbad.medusa.util.MathUtil;
 import com.gladurbad.medusa.util.type.EvictingList;
 import io.github.retrooper.packetevents.packetwrappers.in.blockdig.WrappedPacketInBlockDig;
 import io.github.retrooper.packetevents.packetwrappers.in.clientcommand.WrappedPacketInClientCommand;
 import io.github.retrooper.packetevents.packetwrappers.in.entityaction.WrappedPacketInEntityAction;
 import lombok.Getter;
-import com.gladurbad.medusa.data.PlayerData;
-import org.bukkit.Bukkit;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 

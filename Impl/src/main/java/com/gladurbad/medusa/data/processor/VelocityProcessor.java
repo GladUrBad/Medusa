@@ -1,13 +1,11 @@
 package com.gladurbad.medusa.data.processor;
 
-import io.github.retrooper.packetevents.PacketEvents;
-import io.github.retrooper.packetevents.packetwrappers.in.transaction.WrappedPacketInTransaction;
-import io.github.retrooper.packetevents.packetwrappers.out.entityvelocity.WrappedPacketOutEntityVelocity;
-import io.github.retrooper.packetevents.packetwrappers.out.transaction.WrappedPacketOutTransaction;
-import lombok.Getter;
 import com.gladurbad.medusa.Medusa;
 import com.gladurbad.medusa.data.PlayerData;
-import org.bukkit.Bukkit;
+import io.github.retrooper.packetevents.PacketEvents;
+import io.github.retrooper.packetevents.packetwrappers.in.transaction.WrappedPacketInTransaction;
+import io.github.retrooper.packetevents.packetwrappers.out.transaction.WrappedPacketOutTransaction;
+import lombok.Getter;
 import org.bukkit.util.Vector;
 
 import java.util.concurrent.ThreadLocalRandom;

@@ -1,10 +1,9 @@
 package com.gladurbad.medusa.check.impl.movement.fastclimb;
 
-import com.gladurbad.medusa.check.Check;
 import com.gladurbad.api.check.CheckInfo;
+import com.gladurbad.medusa.check.Check;
 import com.gladurbad.medusa.data.PlayerData;
 import com.gladurbad.medusa.packet.Packet;
-import com.gladurbad.medusa.util.PlayerUtil;
 
 /**
  * Created on 10/26/2020 Package com.gladurbad.medusa.check.impl.movement.fastclimb by GladUrBad

@@ -2,7 +2,7 @@ package com.gladurbad.medusa.check.impl.combat.hitbox;
 
 import com.gladurbad.api.check.CheckInfo;
 import com.gladurbad.medusa.Medusa;
-import com.gladurbad.medusa.check.*;
+import com.gladurbad.medusa.check.Check;
 import com.gladurbad.medusa.data.PlayerData;
 import com.gladurbad.medusa.packet.Packet;
 import com.gladurbad.medusa.util.HitboxExpansion;

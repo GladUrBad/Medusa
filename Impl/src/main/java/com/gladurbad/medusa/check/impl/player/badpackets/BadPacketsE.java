@@ -1,7 +1,7 @@
 package com.gladurbad.medusa.check.impl.player.badpackets;
 
-import com.gladurbad.medusa.check.Check;
 import com.gladurbad.api.check.CheckInfo;
+import com.gladurbad.medusa.check.Check;
 import com.gladurbad.medusa.data.PlayerData;
 import com.gladurbad.medusa.packet.Packet;
 import io.github.retrooper.packetevents.packetwrappers.in.helditemslot.WrappedPacketInHeldItemSlot;

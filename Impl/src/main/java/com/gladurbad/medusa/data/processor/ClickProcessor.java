@@ -1,7 +1,7 @@
 package com.gladurbad.medusa.data.processor;
 
-import lombok.Getter;
 import com.gladurbad.medusa.data.PlayerData;
+import lombok.Getter;
 
 @Getter
 public class ClickProcessor {

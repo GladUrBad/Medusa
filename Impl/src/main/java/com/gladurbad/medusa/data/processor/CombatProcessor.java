@@ -1,8 +1,8 @@
 package com.gladurbad.medusa.data.processor;
 
+import com.gladurbad.medusa.data.PlayerData;
 import io.github.retrooper.packetevents.packetwrappers.in.useentity.WrappedPacketInUseEntity;
 import lombok.Getter;
-import com.gladurbad.medusa.data.PlayerData;
 import org.bukkit.entity.Entity;
 
 

@@ -1,15 +1,18 @@
 package com.gladurbad.medusa.command;
 
 import com.gladurbad.medusa.MedusaPlugin;
-import com.gladurbad.medusa.command.impl.*;
-import com.gladurbad.medusa.util.ColorUtil;
+import com.gladurbad.medusa.command.impl.Alerts;
+import com.gladurbad.medusa.command.impl.Checks;
+import com.gladurbad.medusa.command.impl.Info;
+import com.gladurbad.medusa.command.impl.Theme;
+import com.gladurbad.medusa.command.impl.Violations;
 import com.gladurbad.medusa.config.Config;
+import com.gladurbad.medusa.util.ColorUtil;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 public class CommandManager implements CommandExecutor {

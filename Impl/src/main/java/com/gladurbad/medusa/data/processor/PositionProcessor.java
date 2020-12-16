@@ -1,19 +1,23 @@
 package com.gladurbad.medusa.data.processor;
 
-import com.gladurbad.medusa.util.type.BoundingBox;
-import lombok.Getter;
 import com.gladurbad.medusa.Medusa;
 import com.gladurbad.medusa.data.PlayerData;
-import org.bukkit.*;
+import com.gladurbad.medusa.util.type.BoundingBox;
+import lombok.Getter;
+import org.bukkit.Bukkit;
+import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Boat;
 import org.bukkit.entity.Entity;
-import org.bukkit.entity.Player;
 import org.bukkit.util.NumberConversions;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.FutureTask;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 
 @Getter
 public class PositionProcessor {
@@ -218,9 +222,13 @@ public class PositionProcessor {
             });
             Bukkit.getScheduler().runTask(Medusa.INSTANCE.getPlugin(), futureTask);
             try {
-                return futureTask.get();
-            } catch (Exception exception) {
-                exception.printStackTrace();
+                /*
+                 * It shouldn't take more than 3 seconds to load a block
+                 * Just put a timeout to avoid issues
+                 */
+                return futureTask.get(5000, TimeUnit.MILLISECONDS);
+            } catch (InterruptedException | ExecutionException | TimeoutException e) {
+                e.printStackTrace();
             }
             return null;
         }

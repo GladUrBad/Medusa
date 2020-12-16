@@ -2,15 +2,11 @@ package com.gladurbad.medusa.listener;
 
 import com.gladurbad.medusa.Medusa;
 import com.gladurbad.medusa.data.PlayerData;
-
-import com.gladurbad.medusa.manager.PlayerDataManager;
+import com.gladurbad.medusa.packet.Packet;
 import io.github.retrooper.packetevents.event.PacketListener;
-import io.github.retrooper.packetevents.event.PacketListenerDynamic;
 import io.github.retrooper.packetevents.event.annotation.PacketHandler;
 import io.github.retrooper.packetevents.event.impl.PacketReceiveEvent;
 import io.github.retrooper.packetevents.event.impl.PacketSendEvent;
-import com.gladurbad.medusa.packet.Packet;
-import io.github.retrooper.packetevents.event.priority.PacketEventPriority;
 
 
 public final class NetworkListener implements PacketListener {

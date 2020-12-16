@@ -1,7 +1,6 @@
 package com.gladurbad.medusa.manager;
 
 import com.gladurbad.medusa.data.PlayerData;
-import lombok.Getter;
 import org.bukkit.entity.Player;
 
 import java.util.Collection;
