@@ -85,7 +85,6 @@ public abstract class Check implements MedusaCheck {
     }
 
     public void fail() {
-        ++vl;
         fail("");
     }
 
