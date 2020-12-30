@@ -1,7 +1,7 @@
 package com.gladurbad.medusa.check.impl.combat.hitbox;
 
 import com.gladurbad.api.check.CheckInfo;
-import com.gladurbad.medusa.check.Check;
+import com.gladurbad.medusa.check.*;
 import com.gladurbad.medusa.data.PlayerData;
 import com.gladurbad.medusa.packet.Packet;
 import io.github.retrooper.packetevents.packetwrappers.in.useentity.WrappedPacketInUseEntity;
@@ -43,11 +43,11 @@ public class HitBoxB extends Check {
 
             if (invalid) {
                 if (increaseBuffer() > 10) {
-                    decreaseBufferBy(2);
+                    decreaseBuffer(2);
                     fail(String.format("angle difference: %.2f > %.2f, buffer: %.2f", angle, maxAngle, getBuffer()));
                 }
             } else {
-                decreaseBufferBy(0.5);
+                decreaseBuffer(0.5);
             }
         }
     }

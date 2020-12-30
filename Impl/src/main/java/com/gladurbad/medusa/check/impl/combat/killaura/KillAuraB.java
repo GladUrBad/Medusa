@@ -1,7 +1,7 @@
 package com.gladurbad.medusa.check.impl.combat.killaura;
 
-import com.gladurbad.api.check.CheckInfo;
 import com.gladurbad.medusa.check.Check;
+import com.gladurbad.api.check.CheckInfo;
 import com.gladurbad.medusa.data.PlayerData;
 import com.gladurbad.medusa.exempt.type.ExemptType;
 import com.gladurbad.medusa.packet.Packet;
@@ -45,7 +45,7 @@ public class KillAuraB extends Check {
                         decreaseBuffer();
                     }
                 } else {
-                    decreaseBufferBy(0.5);
+                    decreaseBuffer(0.5);
                 }
             }
         }

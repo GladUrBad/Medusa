@@ -1,7 +1,7 @@
 package com.gladurbad.medusa.check.impl.player.timer;
 
-import com.gladurbad.api.check.CheckInfo;
 import com.gladurbad.medusa.check.Check;
+import com.gladurbad.api.check.CheckInfo;
 import com.gladurbad.medusa.data.PlayerData;
 import com.gladurbad.medusa.exempt.type.ExemptType;
 import com.gladurbad.medusa.packet.Packet;
@@ -18,7 +18,7 @@ public class TimerC extends Check {
 
     @Override
     public void handle(final Packet packet) {
-        if (packet.isFlying() && !isExempt(ExemptType.JOINED)) {
+        if (packet.isFlying() && !isExempt(ExemptType.JOINED, ExemptType.TPS)) {
             if (lastFlyingTime != 0L) {
                 final long now = now();
                 balance += 50L;

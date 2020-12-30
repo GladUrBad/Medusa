@@ -13,8 +13,8 @@ public class PunishUtil {
         if (!check.getPunishCommand().isEmpty()) {
             Bukkit.getScheduler().runTask(Medusa.INSTANCE.getPlugin(), () ->
                     Bukkit.getServer().dispatchCommand(Bukkit.getServer().getConsoleSender(), check.getPunishCommand()
-                            .replace("%player%", data.getPlayer().getName())
-                            .replace("%check%", check.getCheckInfo().name())));
+                            .replaceAll("%player%", data.getPlayer().getName())
+                            .replaceAll("%check%", check.getCheckInfo().name())));
         }
     }
 }

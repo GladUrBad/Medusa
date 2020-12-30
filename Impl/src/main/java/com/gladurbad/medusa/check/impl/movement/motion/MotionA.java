@@ -1,7 +1,7 @@
 package com.gladurbad.medusa.check.impl.movement.motion;
 
-import com.gladurbad.api.check.CheckInfo;
 import com.gladurbad.medusa.check.Check;
+import com.gladurbad.api.check.CheckInfo;
 import com.gladurbad.medusa.data.PlayerData;
 import com.gladurbad.medusa.exempt.type.ExemptType;
 import com.gladurbad.medusa.packet.Packet;
@@ -41,7 +41,7 @@ public class MotionA extends Check {
                     fail(String.format("aDy=%.2f, vx=%.2f, vy=%.2f, vz=%.2f", absDeltaY, vel.getX(), vel.getY(), vel.getZ()));
                 }
             } else {
-                decreaseBufferBy(0.25);
+                decreaseBuffer(0.25);
             }
         }
     }

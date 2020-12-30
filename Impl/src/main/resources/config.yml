@@ -22,7 +22,7 @@ appearance:
     - "Sparky$ &eMedusa &7> &6%player% &7has failed &6%check% &cx%vl%$ &6 &e"
     - "Karhu$ &8[&b&lMedusa&r&8] &3%player% &8- &3%check% &f%dev% &3(&bx%vl%&3)$ &b &3"
     - "Rock$ &8[&c!&8] &f%player% &7may be using &f%check% &c(%vl%)$ &c &c"
-    - "Vulcan$ &8[&c&l!&8] &c%player% &7failed &b%check% &7[VL: &c%vl%&7]$ %c &7"
+    - "Vulcan$ &8[&c&l!&8] &c%player% &7failed &b%check% &7[VL: &c%vl%&7]$ &c &7"
   # Accent colours. Changes color look of aspects of Medusa.
   accents:
     accentOne: '&a'
@@ -43,216 +43,224 @@ checks:
     aimassist:
       a:
         enabled: true
-        max-violations: 100
-        punish-command: ''
+        max-violations: 10
+        punish-command: 'kick %player% Unfair Advantage - Cheat %check%'
       b:
         enabled: true
-        max-violations: 100
-        punish-command: ''
+        max-violations: 10
+        punish-command: 'kick %player% Unfair Advantage - Cheat %check%'
       c:
         enabled: true
-        max-violations: 100
-        punish-command: ''
+        max-violations: 10
+        punish-command: 'kick %player% Unfair Advantage - Cheat %check%'
       d:
         enabled: true
-        max-violations: 100
+        max-violations: 0
         punish-command: ''
       e:
         enabled: true
-        max-violations: 100
-        punish-command: ''
+        max-violations: 10
+        punish-command: 'kick %player% Unfair Advantage - Cheat %check%'
       f:
         enabled: true
-        max-violations: 100
-        punish-command: ''
+        max-violations: 1
+        punish-command: 'ban %player% Unfair Advantage - Cheat %check%'
       g:
         enabled: true
-        max-violations: 100
-        punish-command: ''
+        max-violations: 25
+        punish-command: 'kick %player% Unfair Advantage - Cheat %check%'
     autoclicker:
       a:
         enabled: true
         max-violations: 10
-        punish-command: ''
+        punish-command: '%player% Unfair Advantage - Cheat %check%'
       b:
         enabled: true
-        max-violations: 10
+        max-violations: 0
         punish-command: ''
       c:
         enabled: true
-        max-violations: 10
+        max-violations: 0
         punish-command: ''
       d:
         enabled: true
-        max-violations: 10
+        max-violations: 0
         punish-command: ''
     killaura:
       a:
         enabled: true
-        max-violations: 50
-        punish-command: ''
+        max-violations: 5
+        punish-command: 'ban %player% Unfair Advantage - Cheat %check%'
       b:
         enabled: true
-        max-violations: 50
-        punish-command: ''
+        max-violations: 5
+        punish-command: 'ban %player% Unfair Advantage - Cheat %check%'
       c:
         enabled: true
-        max-violations: 50
-        punish-command: ''
+        max-violations: 5
+        punish-command: 'ban %player% Unfair Advantage - Cheat %check%'
       d:
         enabled: true
-        max-violations: 50
-        punish-command: ''
+        max-violations: 5
+        punish-command: 'kick %player% Unfair Advantage - Cheat %check%'
       e:
         enabled: true
+        max-violations: 5
+        punish-command: 'ban %player% Unfair Advantage - Cheat %check%'
+      f:
+        enabled: true
         max-violations: 50
-        punish-command: ''
+        punish-command: 'kick %player% Unfair Advantage - Cheat %check%'
     hitbox:
       a:
         enabled: true
-        max-violations: 50
-        punish-command: ''
+        max-violations: 25
+        punish-command: 'ban %player% Unfair Advantage - Cheat %check%'
       b:
         enabled: true
-        max-violations: 50
-        punish-command: ''
+        max-violations: 25
+        punish-command: 'ban %player% Unfair Advantage - Cheat %check%'
       c:
         enabled: true
-        max-violations: 50
+        max-violations: 0
         punish-command: ''
     velocity:
       a:
         enabled: true
-        max-violations: 50
+        max-violations: 0
+        punish-command: ''
+      b:
+        enabled: true
+        max-violations: 0
         punish-command: ''
   movement:
     fastclimb:
       a:
         enabled: true
-        max-violations: 50
-        punish-command: ''
+        max-violations: 5
+        punish-command: 'ban %player% Unfair Advantage - Cheat %check%'
     fly:
       a:
         enabled: true
-        max-violations: 50
-        punish-command: ''
+        max-violations: 35
+        punish-command: 'ban %player% Unfair Advantage - Cheat %check%'
       b:
         enabled: true
-        max-violations: 50
-        punish-command: ''
+        max-violations: 10
+        punish-command: 'ban %player% Unfair Advantage - Cheat %check%'
       c:
         enabled: true
-        max-violations: 50
-        punish-command: ''
+        max-violations: 10
+        punish-command: 'ban %player% Unfair Advantage - Cheat %check%'
     jesus:
       a:
         enabled: true
-        max-violations: 50
-        punish-command: ''
+        max-violations: 25
+        punish-command: 'ban %player% Unfair Advantage - Cheat %check%'
       b:
         enabled: true
-        max-violations: 50
-        punish-command: ''
+        max-violations: 25
+        punish-command: 'ban %player% Unfair Advantage - Cheat %check%'
     motion:
       a:
         enabled: true
-        max-violations: 50
-        punish-command: ''
+        max-violations: 5
+        punish-command: 'ban %player% Unfair Advantage - Cheat %check%'
       b:
         enabled: true
-        max-violations: 50
-        punish-command: ''
+        max-violations: 5
+        punish-command: 'ban %player% Unfair Advantage - Cheat %check%'
       c:
         enabled: true
-        max-violations: 50
-        punish-command: ''
+        max-violations: 25
+        punish-command: 'ban %player% Unfair Advantage - Cheat %check%'
       d:
         enabled: true
-        max-violations: 50
-        punish-command: ''
+        max-violations: 5
+        punish-command: 'ban %player% Unfair Advantage - Cheat %check%'
     speed:
       a:
         enabled: true
-        max-violations: 50
-        punish-command: ''
+        max-violations: 25
+        punish-command: 'ban %player% Unfair Advantage - Cheat %check%'
       b:
         enabled: true
         max-violations: 50
-        punish-command: ''
+        punish-command: 'ban %player% Unfair Advantage - Cheat %check%'
       c:
         enabled: true
-        max-violations: 50
-        punish-command: ''
+        max-violations: 10
+        punish-command: 'ban %player% Unfair Advantage - Cheat %check%'
   player:
     timer:
       a:
         enabled: true
         max-violations: 50
-        punish-command: ''
+        punish-command: 'kick %player% Unfair Advantage - Cheat %check%'
       b:
         enabled: true
         max-violations: 50
-        punish-command: ''
+        punish-command: 'kick %player% Unfair Advantage - Cheat %check%'
       c:
         enabled: true
         max-violations: 50
-        punish-command: ''
+        punish-command: 'kick %player% Unfair Advantage - Cheat %check%'
     hand:
       a:
         enabled: true
-        max-violations: 50
+        max-violations: 0
         punish-command: ''
       b:
         enabled: true
-        max-violations: 50
-        punish-command: ''
+        max-violations: 15
+        punish-command: 'kick %player% Unfair Advantage - Cheat %check%'
       c:
         enabled: true
-        max-violations: 50
-        punish-command: ''
-    badpackets:
+        max-violations: 15
+        punish-command: 'kick %player% Unfair Advantage - Cheat %check%'
+    protocol:
       a:
         enabled: true
-        max-violations: 50
-        punish-command: ''
+        max-violations: 1
+        punish-command: 'ban %player% Unfair Advantage - Cheat %check%'
       b:
         enabled: true
-        max-violations: 50
-        punish-command: ''
+        max-violations: 15
+        punish-command: 'ban %player% Unfair Advantage - Cheat %check%'
       c:
         enabled: true
-        max-violations: 50
-        punish-command: ''
+        max-violations: 15
+        punish-command: 'ban %player% Unfair Advantage - Cheat %check%'
       d:
         enabled: true
-        max-violations: 50
-        punish-command: ''
+        max-violations: 15
+        punish-command: 'ban %player% Unfair Advantage - Cheat %check%'
       e:
         enabled: true
-        max-violations: 50
-        punish-command: ''
+        max-violations: 15
+        punish-command: 'ban %player% Unfair Advantage - Cheat %check%'
       f:
         enabled: true
-        max-violations: 50
-        punish-command: ''
+        max-violations: 15
+        punish-command: 'ban %player% Unfair Advantage - Cheat %check%'
       g:
         enabled: true
-        max-violations: 50
-        punish-command: ''
+        max-violations: 15
+        punish-command: 'ban %player% Unfair Advantage - Cheat %check%'
       h:
         enabled: true
-        max-violations: 50
-        punish-command: ''
+        max-violations: 15
+        punish-command: 'ban %player% Unfair Advantage - Cheat %check%'
       i:
         enabled: true
-        max-violations: 50
-        punish-command: ''
+        max-violations: 15
+        punish-command: 'ban %player% Unfair Advantage - Cheat %check%'
       j:
         enabled: true
-        max-violations: 50
-        punish-command: ''
+        max-violations: 15
+        punish-command: 'ban %player% Unfair Advantage - Cheat %check%'
     scaffold:
       a:
         enabled: true
-        max-violations: 50
-        punish-command: ''
+        max-violations: 10
+        punish-command: 'kick %player% Unfair Advantage - Cheat %check%'

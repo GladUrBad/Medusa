@@ -1,7 +1,7 @@
 package com.gladurbad.medusa.check.impl.movement.jesus;
 
-import com.gladurbad.api.check.CheckInfo;
 import com.gladurbad.medusa.check.Check;
+import com.gladurbad.api.check.CheckInfo;
 import com.gladurbad.medusa.data.PlayerData;
 import com.gladurbad.medusa.data.processor.PositionProcessor;
 import com.gladurbad.medusa.packet.Packet;
@@ -25,14 +25,15 @@ public class JesusA extends Check {
             final boolean check = movement.isInLiquid() && !movement.isOnSolidGround();
 
             if (check) {
-                final boolean onWater = movement.isCollidingAtLocation(-0.1, Material.WATER, Material.STATIONARY_WATER) &&
-                        movement.isCollidingAtLocation(0.1, Material.AIR)
-                        && !movement.isCollidingAtLocation(-0.001, Material.WATER_LILY, Material.CARPET);
+                //So fucking ugly, going to fix this later.
+                final boolean onWater = movement.isCollidingAtLocation(-0.1, material -> material.toString().contains("WATER"), PositionProcessor.CollisionType.ALL) &&
+                        movement.isCollidingAtLocation(0.1, material -> material == Material.AIR, PositionProcessor.CollisionType.ALL)
+                        && !movement.isCollidingAtLocation(-0.001, material -> material == Material.CARPET || material == Material.WATER_LILY, PositionProcessor.CollisionType.ANY);
 
                 if (onWater) {
                     if (increaseBuffer() > 10) fail();
                 } else {
-                    decreaseBufferBy(0.15);
+                    decreaseBuffer(0.15);
                 }
             }
         }

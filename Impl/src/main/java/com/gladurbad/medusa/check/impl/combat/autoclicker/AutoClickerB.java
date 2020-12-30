@@ -1,20 +1,24 @@
 package com.gladurbad.medusa.check.impl.combat.autoclicker;
 
-import com.gladurbad.api.check.CheckInfo;
 import com.gladurbad.medusa.check.Check;
+import com.gladurbad.api.check.CheckInfo;
 import com.gladurbad.medusa.data.PlayerData;
 import com.gladurbad.medusa.exempt.type.ExemptType;
 import com.gladurbad.medusa.packet.Packet;
 import com.gladurbad.medusa.util.MathUtil;
 import com.gladurbad.medusa.util.type.EvictingList;
 
+import java.util.ArrayDeque;
+
 /**
- * Created on 11/14/2020 Package com.gladurbad.medusa.check.impl.combat.autoclicker by GladUrBad
+ * Created on 12/30/2020 Package com.gladurbad.medusa.check.impl.combat.autoclicker by GladUrBad
  */
-@CheckInfo(name = "AutoClicker (B)", description = "Checks for consistency in clicks.")
+@CheckInfo(name = "AutoClicker (B)", description = "Simple change in statistics check.")
 public class AutoClickerB extends Check {
 
-    private final EvictingList<Long> samples = new EvictingList<>(120);
+    private int ticks;
+    private double lastDev, lastSkew, lastKurt;
+    private ArrayDeque<Integer> samples = new ArrayDeque<>();
 
     public AutoClickerB(final PlayerData data) {
         super(data);
@@ -23,27 +27,37 @@ public class AutoClickerB extends Check {
     @Override
     public void handle(final Packet packet) {
         if (packet.isArmAnimation() && !isExempt(ExemptType.AUTOCLICKER)) {
-            final long delay = data.getClickProcessor().getDelay();
+            if (ticks < 4) {
+                samples.add(ticks);
 
-            if (delay > 5000L) {
-                samples.clear();
-                return;
-            }
+                if (samples.size() == 120) {
+                    final double deviation = MathUtil.getStandardDeviation(samples);
+                    final double skewness = MathUtil.getSkewness(samples);
+                    final double kurtosis = MathUtil.getKurtosis(samples);
 
-            samples.add(delay);
+                    final double deltaDeviation = Math.abs(deviation - lastDev);
+                    final double deltaSkewness = Math.abs(skewness - lastSkew);
+                    final double deltaKurtosis = Math.abs(kurtosis - lastKurt);
 
-            if (samples.isFull()) {
-                final double deviation = MathUtil.getStandardDeviation(samples);
-
-                if (deviation < 150) {
-                    if (increaseBuffer() > 100) {
-                        fail(String.format("dev=%.2f, buffer=%.2f", deviation, getBuffer()));
-                        multiplyBuffer(0.75);
+                    if (deltaDeviation < 0.01 || deltaSkewness < 0.01 || deltaKurtosis < 0.01) {
+                        if (increaseBuffer(10) > 50) {
+                            fail("dd=" + deltaDeviation + " ds=" + deltaSkewness + " dk=" + deltaKurtosis);
+                        }
+                    } else {
+                        decreaseBuffer(8);
                     }
-                } else {
-                    decreaseBufferBy(24);
+
+                    lastDev = deviation;
+                    lastSkew = skewness;
+                    lastKurt = kurtosis;
+
+                    samples.clear();
                 }
             }
+
+            ticks = 0;
+        } else if (packet.isFlying()) {
+            ++ticks;
         }
     }
 }

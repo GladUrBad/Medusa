@@ -1,7 +1,7 @@
 package com.gladurbad.medusa.check.impl.player.scaffold;
 
-import com.gladurbad.api.check.CheckInfo;
 import com.gladurbad.medusa.check.Check;
+import com.gladurbad.api.check.CheckInfo;
 import com.gladurbad.medusa.data.PlayerData;
 import com.gladurbad.medusa.packet.Packet;
 
@@ -36,7 +36,7 @@ public class ScaffoldA extends Check {
                         fail(String.format("accel=%.2f, deltaYaw=%.2f, deltaPitch=%.2f", accel, deltaYaw, deltaPitch));
                     }
                 } else {
-                    decreaseBufferBy(0.5);
+                    decreaseBuffer(0.5);
                 }
             }
             placedBlock = false;

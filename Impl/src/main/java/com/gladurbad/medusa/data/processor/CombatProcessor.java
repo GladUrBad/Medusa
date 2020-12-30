@@ -1,8 +1,8 @@
 package com.gladurbad.medusa.data.processor;
 
-import com.gladurbad.medusa.data.PlayerData;
 import io.github.retrooper.packetevents.packetwrappers.in.useentity.WrappedPacketInUseEntity;
 import lombok.Getter;
+import com.gladurbad.medusa.data.PlayerData;
 import org.bukkit.entity.Entity;
 
 
@@ -23,17 +23,19 @@ public class CombatProcessor {
             return;
         }
 
-        lastTarget = target == null ? wrapper.getEntity() : target;
-        target = wrapper.getEntity();
+        if (wrapper.getEntity() != null) {
+            lastTarget = target == null ? wrapper.getEntity() : target;
+            target = wrapper.getEntity();
 
-        distance = data.getPlayer().getLocation().toVector().setY(0).distance(target.getLocation().toVector().setY(0)) - .42;
+            distance = data.getPlayer().getLocation().toVector().setY(0).distance(target.getLocation().toVector().setY(0)) - .42;
 
-        ++hits;
+            ++hits;
 
-        hitTicks = 0;
+            hitTicks = 0;
 
-        if (target != lastTarget) {
-            ++currentTargets;
+            if (target != lastTarget) {
+                ++currentTargets;
+            }
         }
     }
 

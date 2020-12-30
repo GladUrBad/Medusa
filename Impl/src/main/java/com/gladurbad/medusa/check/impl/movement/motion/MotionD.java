@@ -1,7 +1,7 @@
 package com.gladurbad.medusa.check.impl.movement.motion;
 
-import com.gladurbad.api.check.CheckInfo;
 import com.gladurbad.medusa.check.Check;
+import com.gladurbad.api.check.CheckInfo;
 import com.gladurbad.medusa.data.PlayerData;
 import com.gladurbad.medusa.exempt.type.ExemptType;
 import com.gladurbad.medusa.packet.Packet;
@@ -58,7 +58,7 @@ public class MotionD extends Check {
                         fail(String.format("angle=%.2f, buffer=%.2f", angle, getBuffer()));
                     }
                 } else {
-                    decreaseBufferBy(0.25);
+                    decreaseBuffer(0.25);
                 }
             }
         } else if (packet.isTeleport()) {

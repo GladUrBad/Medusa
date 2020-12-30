@@ -2,7 +2,7 @@ package com.gladurbad.medusa.check.impl.combat.hitbox;
 
 import com.gladurbad.api.check.CheckInfo;
 import com.gladurbad.medusa.Medusa;
-import com.gladurbad.medusa.check.Check;
+import com.gladurbad.medusa.check.*;
 import com.gladurbad.medusa.data.PlayerData;
 import com.gladurbad.medusa.packet.Packet;
 import com.gladurbad.medusa.util.HitboxExpansion;
@@ -48,14 +48,16 @@ public class HitBoxA extends Check {
                             return location.toVector().setY(0).distance(playerLocAsVector) - expansion;
                         }).min().orElse(-1);
 
-                if (distance > 3.1) {
-                    if (increaseBuffer() > 4) {
+                if (distance > 3.05) {
+                    if (increaseBuffer() > 3) {
+                        if (getBuffer() > 8) setBuffer(8);
                         fail(String.format("dist=%.2f, buf=%.2f, exp=%.2f, ent=%s", distance, getBuffer(), expansion, target.getType().getName()));
-                        if (getBuffer() > 8) decreaseBufferBy(2);
+
                     }
                 } else {
-                    decreaseBufferBy(0.03);
+                    decreaseBuffer(0.025);
                 }
+
             }
         }
     }

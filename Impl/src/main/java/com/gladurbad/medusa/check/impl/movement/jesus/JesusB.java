@@ -1,7 +1,7 @@
 package com.gladurbad.medusa.check.impl.movement.jesus;
 
-import com.gladurbad.api.check.CheckInfo;
 import com.gladurbad.medusa.check.Check;
+import com.gladurbad.api.check.CheckInfo;
 import com.gladurbad.medusa.data.PlayerData;
 import com.gladurbad.medusa.data.processor.PositionProcessor;
 import com.gladurbad.medusa.exempt.type.ExemptType;
@@ -21,10 +21,12 @@ public class JesusB extends Check {
     public void handle(final Packet packet) {
         if (packet.isPosition()) {
             final PositionProcessor move = data.getPositionProcessor();
-            final boolean onWater = move.isCollidingAtLocation(-0.1, Material.WATER, Material.STATIONARY_WATER) &&
-                    !move.isCollidingAtLocation(-0.001, Material.WATER_LILY, Material.CARPET);
+            final boolean onWater =
+                    move.isCollidingAtLocation(-0.1, material -> material.toString().contains("WATER"), PositionProcessor.CollisionType.ANY) &&
+                    !move.isCollidingAtLocation(-0.001, material -> material == Material.CARPET || material == Material.WATER_LILY, PositionProcessor.CollisionType.ANY);
 
             final boolean exempt = isExempt(ExemptType.VELOCITY);
+
             if (onWater && !exempt) {
                 if (++ticks > 10) {
                     final double prediction = move.getLastDeltaXZ() * 0.8F;
@@ -35,12 +37,13 @@ public class JesusB extends Check {
                             fail("diff=" + difference);
                         }
                     } else {
-                        decreaseBufferBy(0.05);
+                        decreaseBuffer(0.05);
                     }
                 }
             } else {
                 ticks = 0;
             }
+
 
         }
     }

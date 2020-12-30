@@ -12,16 +12,15 @@ import org.bukkit.event.HandlerList;
 @Setter
 public class MedusaFlagEvent extends Event implements Cancellable {
 
-    private boolean cancelled, setback;
+    private boolean cancelled;
 
     private final Player player;
     private final MedusaCheck check;
 
-    public MedusaFlagEvent(Player player, MedusaCheck check, boolean setback) {
+    public MedusaFlagEvent(Player player, MedusaCheck check) {
         super(true);
         this.player = player;
         this.check = check;
-        this.setback = setback;
     }
 
     private static final HandlerList handlers = new HandlerList();

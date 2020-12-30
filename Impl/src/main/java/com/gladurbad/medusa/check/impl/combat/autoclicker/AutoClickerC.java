@@ -1,7 +1,7 @@
 package com.gladurbad.medusa.check.impl.combat.autoclicker;
 
-import com.gladurbad.api.check.CheckInfo;
 import com.gladurbad.medusa.check.Check;
+import com.gladurbad.api.check.CheckInfo;
 import com.gladurbad.medusa.data.PlayerData;
 import com.gladurbad.medusa.exempt.type.ExemptType;
 import com.gladurbad.medusa.packet.Packet;
@@ -12,7 +12,8 @@ import java.util.ArrayDeque;
 @CheckInfo(name = "AutoClicker (C)", experimental = true, description = "Checks for rounded(ish) CPS.")
 public class AutoClickerC extends Check {
 
-    private final ArrayDeque<Long> samples = new ArrayDeque<>();
+    private final ArrayDeque<Integer> samples = new ArrayDeque<>();
+    private int ticks;
 
     public AutoClickerC(final PlayerData data) {
         super(data);
@@ -21,30 +22,28 @@ public class AutoClickerC extends Check {
     @Override
     public void handle(final Packet packet) {
         if (packet.isArmAnimation() && !isExempt(ExemptType.AUTOCLICKER)) {
-            final long delay = data.getClickProcessor().getDelay();
+           if (ticks < 4) {
+               samples.add(ticks);
+           }
 
-            if (delay > 5000L) {
-                samples.clear();
-                return;
-            }
+           if (samples.size() == 50) {
+               final double cps = MathUtil.getCps(samples);
+               final double difference = Math.abs(Math.round(cps) - cps);
 
-            samples.add(delay);
+               if (difference < 0.001) {
+                   if (increaseBuffer(10) > 25) {
+                       fail("diff=" + difference);
+                   }
+               } else {
+                   decreaseBuffer(8);
+               }
 
-            if (samples.size() >= 20) {
-                final double cps = MathUtil.getCps(samples);
-                final double difference = Math.abs(Math.round(cps) - cps);
+               samples.clear();
+           }
 
-                if (difference < 0.08D) {
-                    if (increaseBuffer() > 3) {
-                        fail(String.format("difference=%.2f, buffer=%.2f", difference, getBuffer()));
-                        multiplyBuffer(0.5);
-                    }
-                } else {
-                    decreaseBufferBy(0.5);
-                }
-
-                samples.clear();
-            }
+           ticks = 0;
+        } else if (packet.isFlying()) {
+            ++ticks;
         }
     }
 }

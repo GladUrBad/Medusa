@@ -2,6 +2,7 @@ package com.gladurbad.medusa.listener;
 
 import com.gladurbad.medusa.Medusa;
 import com.gladurbad.medusa.data.PlayerData;
+import com.gladurbad.medusa.manager.PlayerDataManager;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;

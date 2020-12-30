@@ -1,7 +1,7 @@
 package com.gladurbad.medusa.check.impl.movement.motion;
 
-import com.gladurbad.api.check.CheckInfo;
 import com.gladurbad.medusa.check.Check;
+import com.gladurbad.api.check.CheckInfo;
 import com.gladurbad.medusa.data.PlayerData;
 import com.gladurbad.medusa.exempt.type.ExemptType;
 import com.gladurbad.medusa.packet.Packet;
@@ -33,20 +33,22 @@ public class MotionC extends Check {
             final Vector vel = data.getPlayer().getVelocity();
 
             final double expectedJumpMotion = 0.42F + (double) ((float) PlayerUtil.getPotionLevel(data.getPlayer(), PotionEffectType.JUMP) * 0.1F);
+            final double maxHighJump = 0.42F + (double) ((float) PlayerUtil.getPotionLevel(data.getPlayer(), PotionEffectType.JUMP) * 0.1F) +
+                    (data.getVelocityProcessor().getTicksSinceVelocity() < 5 ? data.getVelocityProcessor().getVelocityY() + 0.15 : 0);
             final boolean jumped = deltaY > 0 && lastPosY % (1D/64) == 0 && !onGround && !step;
 
-            final boolean exempt = isExempt(ExemptType.VELOCITY, ExemptType.VEHICLE,
+            final boolean exempt = isExempt(ExemptType.VEHICLE,
                     ExemptType.FLYING, ExemptType.SLIME, ExemptType.UNDERBLOCK, ExemptType.PISTON,
                     ExemptType.LIQUID, ExemptType.BOAT, ExemptType.TELEPORT, ExemptType.WEB, ExemptType.TRAPDOOR);
 
-            if (jumped && !exempt) {
+            if (jumped && !exempt && !isExempt(ExemptType.VELOCITY)) {
                 if (deltaY < expectedJumpMotion) {
                     fail(String.format("lowhop: dy=%.2f, expected=%.2f", deltaY, expectedJumpMotion));
                 }
             }
 
-            if (!exempt && !step) {
-                if (deltaY > expectedJumpMotion) {
+            if (!exempt && !step && !data.getPositionProcessor().isNearSlab()) {
+                if (deltaY > maxHighJump) {
                     fail(String.format("highjump: dy=%.2f, max=%.2f, vx=%.2f, vy=%.2f, vz=%.2f", deltaY, expectedJumpMotion, vel.getX(), vel.getY(), vel.getZ()));
                 }
             }

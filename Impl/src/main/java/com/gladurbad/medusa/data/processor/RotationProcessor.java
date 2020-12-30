@@ -1,9 +1,9 @@
 package com.gladurbad.medusa.data.processor;
 
-import com.gladurbad.medusa.Medusa;
-import com.gladurbad.medusa.data.PlayerData;
 import com.gladurbad.medusa.util.MathUtil;
 import lombok.Getter;
+import com.gladurbad.medusa.Medusa;
+import com.gladurbad.medusa.data.PlayerData;
 
 import java.util.ArrayDeque;
 

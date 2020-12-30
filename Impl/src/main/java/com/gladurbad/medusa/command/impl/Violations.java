@@ -6,6 +6,7 @@ import com.gladurbad.medusa.command.MedusaCommand;
 import com.gladurbad.medusa.config.Config;
 import com.gladurbad.medusa.data.PlayerData;
 import com.gladurbad.medusa.util.ColorUtil;
+import io.github.retrooper.packetevents.PacketEvents;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;

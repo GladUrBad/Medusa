@@ -1,8 +1,8 @@
 package com.gladurbad.medusa.check.impl.player.hand;
 
-import com.gladurbad.api.check.CheckInfo;
 import com.gladurbad.medusa.Medusa;
 import com.gladurbad.medusa.check.Check;
+import com.gladurbad.api.check.CheckInfo;
 import com.gladurbad.medusa.data.PlayerData;
 import com.gladurbad.medusa.packet.Packet;
 import org.bukkit.Bukkit;

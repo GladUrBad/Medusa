@@ -1,11 +1,13 @@
 package com.gladurbad.medusa.util;
 
+import com.gladurbad.medusa.util.type.Pair;
 import com.google.common.collect.Lists;
 import lombok.experimental.UtilityClass;
 import net.minecraft.server.v1_8_R3.MathHelper;
 import org.bukkit.Location;
 import org.bukkit.util.Vector;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
@@ -45,6 +47,32 @@ public class MathUtil {
 
     public boolean mathOnGround(final double posY) {
         return posY % 0.015625 == 0;
+    }
+    public Pair<List<Double>, List<Double>> getOutliers(final Collection<? extends Number> collection) {
+        final List<Double> values = new ArrayList<>();
+
+        for (final Number number : collection) {
+            values.add(number.doubleValue());
+        }
+
+        final double q1 = getMedian(values.subList(0, values.size() / 2));
+        final double q3 = getMedian(values.subList(values.size() / 2, values.size()));
+
+        final double iqr = Math.abs(q1 - q3);
+        final double lowThreshold = q1 - 1.5 * iqr, highThreshold = q3 + 1.5 * iqr;
+
+        final Pair<List<Double>, List<Double>> tuple = new Pair<>(new ArrayList<>(), new ArrayList<>());
+
+        for (final Double value : values) {
+            if (value < lowThreshold) {
+                tuple.getX().add(value);
+            }
+            else if (value > highThreshold) {
+                tuple.getY().add(value);
+            }
+        }
+
+        return tuple;
     }
 
     public double getSkewness(final Collection<? extends Number> data) {

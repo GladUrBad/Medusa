@@ -1,7 +1,7 @@
 package com.gladurbad.medusa.check.impl.combat.aimassist;
 
-import com.gladurbad.api.check.CheckInfo;
 import com.gladurbad.medusa.check.Check;
+import com.gladurbad.api.check.CheckInfo;
 import com.gladurbad.medusa.data.PlayerData;
 import com.gladurbad.medusa.packet.Packet;
 import com.gladurbad.medusa.util.MathUtil;
@@ -62,7 +62,7 @@ public class AimAssistD extends Check {
                         fail(String.format("mx=%.2f, my=%.2f, fmx=%.2f, fmy=%.2f", moduloX, moduloY, floorModuloX, floorModuloY));
                     }
                 } else {
-                    decreaseBufferBy(0.25);
+                    decreaseBuffer(0.25);
                 }
             }
             this.lastDeltaYaw = deltaYaw;

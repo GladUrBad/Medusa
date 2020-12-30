@@ -6,6 +6,7 @@ import io.github.retrooper.packetevents.event.PacketListener;
 import io.github.retrooper.packetevents.event.annotation.PacketHandler;
 import io.github.retrooper.packetevents.event.impl.PlayerEjectEvent;
 import io.github.retrooper.packetevents.event.impl.PostPlayerInjectEvent;
+import org.bukkit.event.EventHandler;
 
 public class JoinQuitListener implements PacketListener {
 

@@ -1,7 +1,7 @@
 package com.gladurbad.medusa.command;
 
-import com.gladurbad.medusa.config.Config;
 import com.gladurbad.medusa.util.ColorUtil;
+import com.gladurbad.medusa.config.Config;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 

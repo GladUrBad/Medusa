@@ -13,7 +13,6 @@ public class ExampleListener implements Listener {
         final Player player = event.getPlayer();
         final MedusaCheck check = event.getCheck();
         final boolean cancelled = event.isCancelled();
-        final boolean setback = event.isSetback();
 
         Bukkit.broadcastMessage(player.getName() + " flagged " + check.getCheckInfo().name());
     }

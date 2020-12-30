@@ -1,23 +1,23 @@
 package com.gladurbad.medusa.data.processor;
 
-import com.gladurbad.medusa.Medusa;
-import com.gladurbad.medusa.data.PlayerData;
 import com.gladurbad.medusa.util.type.BoundingBox;
 import lombok.Getter;
-import org.bukkit.Bukkit;
-import org.bukkit.Location;
-import org.bukkit.Material;
+import com.gladurbad.medusa.Medusa;
+import com.gladurbad.medusa.data.PlayerData;
+import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Boat;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.Player;
+import org.bukkit.material.Stairs;
+import org.bukkit.material.Step;
 import org.bukkit.util.NumberConversions;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.ExecutionException;
 import java.util.concurrent.FutureTask;
-import java.util.concurrent.TimeUnit;
-import java.util.concurrent.TimeoutException;
+import java.util.function.Predicate;
 
 @Getter
 public class PositionProcessor {
@@ -31,11 +31,11 @@ public class PositionProcessor {
 
     private boolean flying, inVehicle, inLiquid, inAir, inWeb,
             blockNearHead, onClimbable, onSolidGround, nearBoat, onSlime,
-            onIce, nearPiston, nearTrapdoor;
+            onIce, nearPiston, nearTrapdoor, nearSlab, nearStairs;
 
     private int airTicks, sinceVehicleTicks, sinceFlyingTicks,
             groundTicks, teleportTicks, sinceSlimeTicks, solidGroundTicks,
-            iceTicks, sinceIceTicks;
+            iceTicks, sinceIceTicks, blockNearHeadTicks, sinceBlockNearHeadTicks;
 
     private BoundingBox boundingBox;
 
@@ -74,52 +74,19 @@ public class PositionProcessor {
     }
 
     public void handleTicks() {
-        if (onGround && mathematicallyOnGround) ++groundTicks;
-        else groundTicks = 0;
-
-        if (inAir) {
-            ++airTicks;
-        } else {
-            airTicks = 0;
-        }
-
+        groundTicks = onGround && mathematicallyOnGround ? groundTicks + 1 : 0;
+        blockNearHeadTicks = blockNearHead ? blockNearHeadTicks + 1 : 0;
+        sinceBlockNearHeadTicks = blockNearHead ? 0 : sinceBlockNearHeadTicks + 1;
+        airTicks = inAir ? airTicks + 1 : 0;
         ++teleportTicks;
-
-        if (data.getPlayer().isInsideVehicle()) {
-            sinceVehicleTicks = 0;
-            inVehicle = true;
-        } else {
-            ++sinceVehicleTicks;
-            inVehicle = false;
-        }
-
-        if (onIce) {
-            ++iceTicks;
-            sinceIceTicks = 0;
-        } else {
-            iceTicks = 0;
-            ++sinceIceTicks;
-        }
-
-        if (onSolidGround) {
-            ++solidGroundTicks;
-        } else {
-            solidGroundTicks = 0;
-        }
-
-        if (data.getPlayer().isFlying()) {
-            flying = true;
-            sinceFlyingTicks = 0;
-        } else {
-            ++sinceFlyingTicks;
-            flying = false;
-        }
-
-        if (onSlime) {
-            sinceSlimeTicks = 0;
-        } else {
-            ++sinceSlimeTicks;
-        }
+        inVehicle = data.getPlayer().isInsideVehicle();
+        sinceVehicleTicks = inVehicle ? 0 : sinceVehicleTicks + 1;
+        iceTicks = onIce ? iceTicks + 1 : 0;
+        sinceIceTicks = onIce ? 0 : sinceIceTicks + 1;
+        solidGroundTicks = onSolidGround ? solidGroundTicks + 1 : 0;
+        flying = data.getPlayer().isFlying();
+        sinceFlyingTicks = flying ? 0 : sinceFlyingTicks + 1;
+        sinceSlimeTicks = onSlime ? 0 : sinceSlimeTicks + 1;
     }
 
     public void handleCollisions() {
@@ -154,7 +121,9 @@ public class PositionProcessor {
         inAir = blocks.stream().allMatch(block -> block.getType() == Material.AIR);
         onIce = blocks.stream().anyMatch(block -> block.getType().toString().contains("ICE"));
         onSolidGround = blocks.stream().anyMatch(block -> block.getType().isSolid());
-        nearTrapdoor = this.isCollidingAtLocation(1.801, Material.TRAP_DOOR);
+        nearSlab = blocks.stream().anyMatch(block -> block.getType().getData() == Step.class);
+        nearStairs = blocks.stream().anyMatch(block -> block.getType().getData() == Stairs.class);
+        nearTrapdoor = this.isCollidingAtLocation(1.801, material -> material == Material.TRAP_DOOR, CollisionType.ANY);
         blockNearHead = blocks.stream().filter(block -> block.getLocation().getY() - data.getPositionProcessor().getY() > 1.5)
                 .anyMatch(block -> block.getType() != Material.AIR) || nearTrapdoor;
         onSlime = blocks.stream().anyMatch(block -> block.getType().toString().equalsIgnoreCase("SLIME_BLOCK"));
@@ -195,20 +164,19 @@ public class PositionProcessor {
         return blocks.stream().anyMatch(block -> block.getType() == blockType);
     }
 
-    public boolean isCollidingAtLocation(double drop, Material... materials) {
-        final double expand = 0.3;
-        final Location location = data.getPlayer().getLocation();
-        for(double x = -expand; x <= expand; x += expand) {
-            for(double z = -expand; z <= expand; z+= expand) {
-                Material material = getBlock(location.clone().add(x, drop, z)).getType();
+    public boolean isCollidingAtLocation(double drop, Predicate<Material> predicate, CollisionType collisionType) {
+        final ArrayList<Material> materials = new ArrayList<>();
+
+        for (double x = -0.3; x <= 0.3; x += 0.3) {
+            for (double z = -0.3; z <= 0.3; z+= 0.3) {
+                final Material material = getBlock(data.getPlayer().getLocation().clone().add(x, drop, z)).getType();
                 if (material != null) {
-                    for (Material material1 : materials) {
-                        if (material == material1) return true;
-                    }
+                    materials.add(material);
                 }
             }
         }
-        return false;
+
+        return collisionType == CollisionType.ALL ? materials.stream().allMatch(predicate) : materials.stream().allMatch(predicate);
     }
 
     //Taken from Fiona. If you have anything better, please let me know, thanks.
@@ -222,13 +190,9 @@ public class PositionProcessor {
             });
             Bukkit.getScheduler().runTask(Medusa.INSTANCE.getPlugin(), futureTask);
             try {
-                /*
-                 * It shouldn't take more than 3 seconds to load a block
-                 * Just put a timeout to avoid issues
-                 */
-                return futureTask.get(5000, TimeUnit.MILLISECONDS);
-            } catch (InterruptedException | ExecutionException | TimeoutException e) {
-                e.printStackTrace();
+                return futureTask.get();
+            } catch (Exception exception) {
+                exception.printStackTrace();
             }
             return null;
         }

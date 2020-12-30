@@ -4,16 +4,17 @@ import com.gladurbad.api.check.CheckInfo;
 import com.gladurbad.api.check.MedusaCheck;
 import com.gladurbad.api.listener.MedusaFlagEvent;
 import com.gladurbad.medusa.config.Config;
-import com.gladurbad.medusa.data.PlayerData;
-import com.gladurbad.medusa.exempt.type.ExemptType;
-import com.gladurbad.medusa.packet.Packet;
-import com.gladurbad.medusa.util.anticheat.AlertUtil;
+import com.gladurbad.medusa.util.anticheat.PunishUtil;
 import lombok.Getter;
 import lombok.Setter;
+import com.gladurbad.medusa.Medusa;
+import com.gladurbad.medusa.data.PlayerData;
+import com.gladurbad.medusa.exempt.type.ExemptType;
+import com.gladurbad.medusa.util.anticheat.AlertUtil;
+import com.gladurbad.medusa.packet.Packet;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
-
 import java.util.Objects;
 
 @Getter
@@ -56,8 +57,8 @@ public abstract class Check implements MedusaCheck {
     public abstract void handle(final Packet packet);
 
     public void fail(final Object info) {
-        final MedusaFlagEvent event = new MedusaFlagEvent(data.getPlayer(), this, setback);
-        Bukkit.getPluginManager().callEvent(event);
+        final MedusaFlagEvent event = new MedusaFlagEvent(data.getPlayer(), this);
+        Bukkit.getScheduler().runTaskAsynchronously(Medusa.INSTANCE.getPlugin(), () -> Bukkit.getPluginManager().callEvent(event));
 
         if (!event.isCancelled()) {
             ++vl;
@@ -69,7 +70,6 @@ public abstract class Check implements MedusaCheck {
                     break;
                 case MOVEMENT:
                     data.setMovementViolations(data.getMovementViolations() + 1);
-                    if (event.isSetback()) //handle setback here.
                     break;
                 case PLAYER:
                     data.setPlayerViolations(data.getPlayerViolations() + 1);
@@ -77,16 +77,19 @@ public abstract class Check implements MedusaCheck {
             }
 
 
-            if (System.currentTimeMillis() - lastFlagTime > Config.ALERT_COOLDOWN && vl > Config.MIN_VL_TO_ALERT) {
+            if (System.currentTimeMillis() - lastFlagTime > Config.ALERT_COOLDOWN && vl >= Config.MIN_VL_TO_ALERT) {
                 AlertUtil.handleAlert(this, data, Objects.toString(info));
                 this.lastFlagTime = System.currentTimeMillis();
+            }
+
+            if (vl > maxVl) {
+                PunishUtil.punish(this, data);
             }
         }
     }
 
     public void fail() {
-        ++vl;
-        fail("");
+        fail("No info provided.");
     }
 
     protected boolean isExempt(final ExemptType exemptType) {
@@ -105,11 +108,15 @@ public abstract class Check implements MedusaCheck {
         return buffer = Math.min(10000, buffer + 1);
     }
 
+    public double increaseBuffer(final double amount) {
+        return  buffer += amount;
+    }
+
     public double decreaseBuffer() {
         return buffer = Math.max(0, buffer - 1);
     }
 
-    public double decreaseBufferBy(final double amount) {
+    public double decreaseBuffer(final double amount) {
         return buffer = Math.max(0, buffer - amount);
     }
 

@@ -3,7 +3,6 @@ package com.gladurbad.medusa.check.impl.combat.aimassist;
 import com.gladurbad.api.check.CheckInfo;
 import com.gladurbad.medusa.check.Check;
 import com.gladurbad.medusa.data.PlayerData;
-import com.gladurbad.medusa.data.processor.RotationProcessor;
 import com.gladurbad.medusa.exempt.type.ExemptType;
 import com.gladurbad.medusa.packet.Packet;
 import com.gladurbad.medusa.util.MathUtil;
@@ -13,7 +12,7 @@ import com.gladurbad.medusa.util.type.EvictingList;
  * Created on 11/15/2020 Package com.gladurbad.medusa.check.impl.combat.aim by GladUrBad
  */
 
-@CheckInfo(name = "AimAssist (G)" , description = "Checks for common factors in aim-bots/aim-assists.")
+@CheckInfo(name = "AimAssist (G)" , description = "Checks for extremely smooth rotations.")
 public class AimAssistG extends Check {
 
     private final EvictingList<Float> yawAccelSamples = new EvictingList<>(20);
@@ -26,13 +25,10 @@ public class AimAssistG extends Check {
     @Override
     public void handle(final Packet packet) {
         if (packet.isRotation() && isExempt(ExemptType.COMBAT)) {
+            final float yawAccel = data.getRotationProcessor().getYawAccel();
+            final float pitchAccel = data.getRotationProcessor().getPitchAccel();
 
-            RotationProcessor rotationProcessor = data.getRotationProcessor();
-
-            final float yawAccel = rotationProcessor.getYawAccel();
-            final float pitchAccel = rotationProcessor.getPitchAccel();
-
-            final float deltaYaw = rotationProcessor.getDeltaYaw() % 360F;
+            final float deltaYaw = data.getRotationProcessor().getDeltaYaw() % 360F;
 
             yawAccelSamples.add(yawAccel);
             pitchAccelSamples.add(pitchAccel);
@@ -51,12 +47,10 @@ public class AimAssistG extends Check {
                 if (averageInvalid && deviationInvalid) {
                     if (increaseBuffer() > 8) {
                         fail(String.format("yaa=%.2f, paa=%.2f, yad=%.2f, pad=%.2f", yawAccelAverage, pitchAccelAverage, yawAccelDeviation, pitchAccelDeviation));
-                        if (getBuffer() > 10) {
-                            decreaseBuffer();
-                        }
+                        setBuffer(8);
                     }
                 } else {
-                    decreaseBufferBy(0.25);
+                    decreaseBuffer(0.25);
                 }
             }
         }

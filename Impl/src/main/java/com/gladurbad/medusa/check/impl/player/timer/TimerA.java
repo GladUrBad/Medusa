@@ -1,8 +1,9 @@
 package com.gladurbad.medusa.check.impl.player.timer;
 
-import com.gladurbad.api.check.CheckInfo;
 import com.gladurbad.medusa.check.Check;
+import com.gladurbad.api.check.CheckInfo;
 import com.gladurbad.medusa.data.PlayerData;
+import com.gladurbad.medusa.exempt.type.ExemptType;
 import com.gladurbad.medusa.packet.Packet;
 import com.gladurbad.medusa.util.type.EvictingList;
 
@@ -23,7 +24,7 @@ public class TimerA extends Check {
 
     @Override
     public void handle(Packet packet) {
-        if (packet.isFlying()) {
+        if (packet.isFlying() && !isExempt(ExemptType.TPS)) {
             final long now = now();
             final long delta = now - lastFlyingTime;
 
@@ -38,7 +39,7 @@ public class TimerA extends Check {
                 if (speed >= 1.02) {
                     if (increaseBuffer() > 30) {
                         fail(String.format("speed=%.4f, delta=%o, buffer=%.2f", speed, delta, getBuffer()));
-                        if (getBuffer() > 35) decreaseBufferBy(getBuffer() - 35);
+                        if (getBuffer() > 35) decreaseBuffer(getBuffer() - 35);
                     }
                 } else {
                     decreaseBuffer();
