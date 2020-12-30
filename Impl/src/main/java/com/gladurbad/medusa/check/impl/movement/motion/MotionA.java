@@ -26,15 +26,15 @@ public class MotionA extends Check {
             final double acceleration = absDeltaY - absLastDeltaY;
             final Vector vel = data.getPlayer().getVelocity();
 
-            final boolean invalid = acceleration == 0.0 &&
-                     !isExempt(ExemptType.JOINED, ExemptType.TRAPDOOR, ExemptType.VELOCITY, ExemptType.FLYING, ExemptType.WEB) &&
-                    data.getPositionProcessor().getDeltaY() != 0.0 &&
-                    data.getPositionProcessor().getLastDeltaY() != 0.0 &&
-                    !data.getPositionProcessor().isInLiquid() &&
-                    !data.getPositionProcessor().isOnSlime() &&
-                    !data.getPositionProcessor().isOnClimbable() &&
-                    !data.getPositionProcessor().isBlockNearHead() &&
-                    !data.getPositionProcessor().isInWeb();
+            final boolean invalid = acceleration == 0.0 
+                    && !isExempt(ExemptType.JOINED, ExemptType.TRAPDOOR, ExemptType.VELOCITY, ExemptType.FLYING, ExemptType.WEB)
+                    && data.getPositionProcessor().getDeltaY() != 0.0
+                    && data.getPositionProcessor().getLastDeltaY() != 0.0 
+                    && !data.getPositionProcessor().isInLiquid() 
+                    && !data.getPositionProcessor().isOnSlime() 
+                    && !data.getPositionProcessor().isOnClimbable() 
+                    && !data.getPositionProcessor().isBlockNearHead() 
+                    && !data.getPositionProcessor().isInWeb();
 
             if (invalid) {
                 if (increaseBuffer() > 2) {
