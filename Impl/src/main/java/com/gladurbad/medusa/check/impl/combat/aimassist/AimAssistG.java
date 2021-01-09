@@ -25,17 +25,17 @@ public class AimAssistG extends Check {
     @Override
     public void handle(final Packet packet) {
         if (packet.isRotation() && isExempt(ExemptType.COMBAT)) {
-            final float yawAccel = data.getRotationProcessor().getYawAccel();
-            final float pitchAccel = data.getRotationProcessor().getPitchAccel();
+            final float yawAccel = rotationInfo().getYawAccel();
+            final float pitchAccel = rotationInfo().getPitchAccel();
 
-            final float deltaYaw = data.getRotationProcessor().getDeltaYaw() % 360F;
+            final float deltaYaw = rotationInfo().getDeltaYaw() % 360F;
 
             yawAccelSamples.add(yawAccel);
             pitchAccelSamples.add(pitchAccel);
 
             if (yawAccelSamples.isFull() && pitchAccelSamples.isFull()) {
-                final double yawAccelAverage = yawAccelSamples.stream().mapToDouble(value -> value).average().orElse(0);
-                final double pitchAccelAverage = pitchAccelSamples.stream().mapToDouble(value -> value).average().orElse(0);
+                final double yawAccelAverage = MathUtil.getAverage(yawAccelSamples);
+                final double pitchAccelAverage = MathUtil.getAverage(pitchAccelSamples);
 
                 final double yawAccelDeviation = MathUtil.getStandardDeviation(yawAccelSamples);
                 final double pitchAccelDeviation = MathUtil.getStandardDeviation(pitchAccelSamples);
@@ -45,12 +45,15 @@ public class AimAssistG extends Check {
                 final boolean deviationInvalid = yawAccelDeviation < 5 && pitchAccelDeviation > 5 && !exemptRotation;
 
                 if (averageInvalid && deviationInvalid) {
-                    if (increaseBuffer() > 8) {
-                        fail(String.format("yaa=%.2f, paa=%.2f, yad=%.2f, pad=%.2f", yawAccelAverage, pitchAccelAverage, yawAccelDeviation, pitchAccelDeviation));
-                        setBuffer(8);
+                    buffer = Math.min(buffer + 1, 20);
+                    if (buffer > 8) {
+                        fail(String.format(
+                                "yaa=%.2f, paa=%.2f, yad=%.2f, pad=%.2f",
+                                yawAccelAverage, pitchAccelAverage, yawAccelDeviation, pitchAccelDeviation
+                        ));
                     }
                 } else {
-                    decreaseBuffer(0.25);
+                    buffer = Math.max(0, buffer - 0.5);
                 }
             }
         }

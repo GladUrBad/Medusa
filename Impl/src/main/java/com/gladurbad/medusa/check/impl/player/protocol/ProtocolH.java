@@ -19,7 +19,7 @@ public class ProtocolH extends Check {
             final WrappedPacketInUseEntity wrapper = new WrappedPacketInUseEntity(packet.getRawPacket());
 
             if (wrapper.getAction() == WrappedPacketInUseEntity.EntityUseAction.ATTACK) {
-                final boolean invalid = data.getActionProcessor().isPlacing();
+                final boolean invalid = actionInfo().isPlacing();
 
                 if (invalid) {
                     fail();

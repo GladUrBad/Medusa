@@ -23,14 +23,14 @@ public class KillAuraB extends Check {
     public void handle(Packet packet) {
         if (packet.isPosLook()) {
             if (data.getExemptProcessor().isExempt(ExemptType.COMBAT)) {
-                final boolean sprinting = data.getActionProcessor().isSprinting();
-                final double deltaXZ = data.getPositionProcessor().getDeltaXZ();
-                final double lastDeltaXZ = data.getPositionProcessor().getLastDeltaXZ();
+                final boolean sprinting = actionInfo().isSprinting();
+                final double deltaXZ = positionInfo().getDeltaXZ();
+                final double lastDeltaXZ = positionInfo().getLastDeltaXZ();
 
                 final double acceleration = Math.abs(deltaXZ - lastDeltaXZ);
-                final long clickDelay = data.getClickProcessor().getDelay();
-                final boolean onGround = data.getPositionProcessor().isMathematicallyOnGround();
-                final Entity target = data.getCombatProcessor().getTarget();
+                final long clickDelay = clickInfo().getDelay();
+                final boolean onGround = positionInfo().isMathematicallyOnGround();
+                final Entity target = combatInfo().getTarget();
 
                 final boolean invalid = acceleration < 0.0025 &&
                         deltaXZ > 0.22 &&
@@ -40,12 +40,12 @@ public class KillAuraB extends Check {
                         target.getType() == EntityType.PLAYER;
 
                 if (invalid) {
-                    if (increaseBuffer() > 5) {
+                    if (++buffer > 5) {
                         fail(String.format("acceleration=%.6f", acceleration));
-                        decreaseBuffer();
+                        buffer = Math.min(10, buffer);
                     }
                 } else {
-                    decreaseBuffer(0.5);
+                    buffer = Math.max(buffer - 0.25, 0);
                 }
             }
         }

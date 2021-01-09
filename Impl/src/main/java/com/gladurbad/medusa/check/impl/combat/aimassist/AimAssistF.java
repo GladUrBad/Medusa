@@ -19,13 +19,11 @@ public class AimAssistF extends Check {
 
     @Override
     public void handle(final Packet packet) {
-        if (packet.isRotation()) {
-            final float deltaYaw = data.getRotationProcessor().getDeltaYaw();
-            final float deltaPitch = data.getRotationProcessor().getDeltaPitch();
+        if (packet.isRotation() && !isExempt(ExemptType.TELEPORT)) {
+            final float deltaYaw = rotationInfo().getDeltaYaw();
+            final float deltaPitch = rotationInfo().getDeltaPitch();
 
-            final boolean exempt = isExempt(ExemptType.TELEPORT);
-
-            if (!exempt && deltaPitch == 0 && deltaYaw == 0) {
+            if (deltaPitch == 0 && deltaYaw == 0) {
                 fail();
             }
         }

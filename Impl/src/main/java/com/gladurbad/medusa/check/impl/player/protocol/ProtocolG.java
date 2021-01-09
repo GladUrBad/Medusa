@@ -27,14 +27,14 @@ public class ProtocolG extends Check {
         } else if (packet.isFlying()) {
             if (placedBlock) {
                 final long delay = now() - lastBlockPlace;
-                final boolean invalid = !data.getActionProcessor().isLagging() && delay > 15;
+                final boolean invalid = !actionInfo().isLagging() && delay > 15;
 
                 if (invalid) {
-                    if (increaseBuffer() > 2) {
-                        fail("delay=" + delay + " buffer=" + getBuffer());
+                    if (++buffer > 5) {
+                        fail("delay=" + delay + " buffer=" + buffer);
                     }
                 } else {
-                    decreaseBuffer(0.1);
+                    buffer = Math.max(buffer - 2, 0);
                 }
             }
             placedBlock = false;

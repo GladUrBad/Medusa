@@ -4,12 +4,11 @@ import com.gladurbad.medusa.check.Check;
 import com.gladurbad.api.check.CheckInfo;
 import com.gladurbad.medusa.data.PlayerData;
 import com.gladurbad.medusa.data.processor.PositionProcessor;
+import com.gladurbad.medusa.data.processor.VelocityProcessor;
 import com.gladurbad.medusa.exempt.type.ExemptType;
 import com.gladurbad.medusa.packet.Packet;
-import com.gladurbad.medusa.util.MathUtil;
 import com.gladurbad.medusa.util.PlayerUtil;
 import io.github.retrooper.packetevents.packetwrappers.in.flying.WrappedPacketInFlying;
-import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffectType;
 
 /**
@@ -20,7 +19,6 @@ import org.bukkit.potion.PotionEffectType;
 public class SpeedB extends Check {
 
     private int groundTicks, airTicks;
-    private double lastFlagBuffer;
 
     public SpeedB(PlayerData data) {
         super(data);
@@ -30,49 +28,43 @@ public class SpeedB extends Check {
     public void handle(Packet packet) {
         if (packet.isPosition() && !isExempt(ExemptType.TELEPORT, ExemptType.FLYING)) {
             final WrappedPacketInFlying flying = new WrappedPacketInFlying(packet.getRawPacket());
+
+            //We make this because the flag method of this check works a little bit differently.
+            //This helps me avoid if else chains for flags/nested ternary operators.
+            double speed = 0.0D;
+
             groundTicks = flying.isOnGround() ? groundTicks + 1 : 0;
             airTicks = !flying.isOnGround() ? airTicks + 1 : 0;
-
-            final Player player = data.getPlayer();
-            final PositionProcessor pos = data.getPositionProcessor();
             
-            final double deltaXZ = Math.abs(pos.getDeltaXZ());
-            final double lastDeltaXz = Math.abs(pos.getLastDeltaXZ());
-            final double deltaY = pos.getDeltaY();
-            final double lastDeltaY = pos.getLastDeltaY();
+            final PositionProcessor position = positionInfo();
+            final VelocityProcessor velocity = velocityInfo();
+            
+            final double deltaXZ = Math.abs(position.getDeltaXZ());
+            final double deltaY = position.getDeltaY();
 
             //Return here to prevent it from running the calculations pointlessly.
             if (deltaXZ == 0) return;
 
-            final boolean onGround = pos.isMathematicallyOnGround();
-
             double maxGroundSpeed = getSpeed(0.287D);
             double maxAirSpeed = getSpeed(0.362D);
-            double maxAfterJumpAirSpeed = getAfterJumpSpeed(0.62D);
+            double maxAfterJumpAirSpeed = getAfterJumpSpeed();
 
-            final int sinceIceTicks = pos.getSinceIceTicks();
-            final int sinceSlimeTicks = pos.getSinceSlimeTicks();
-            final int sinceUnderBlockTicks = pos.getSinceBlockNearHeadTicks();
+            final int sinceIceTicks = position.getSinceIceTicks();
+            final int sinceSlimeTicks = position.getSinceSlimeTicks();
+            final int sinceUnderBlockTicks = position.getSinceBlockNearHeadTicks();
 
             final boolean velocityExempt = isExempt(ExemptType.VELOCITY);
 
             //Handle velocity speed increase (incorrectly but this whole check is improper)
             if (velocityExempt) {
-                final double velocityX = data.getVelocityProcessor().getVelocityX();
-                final double velocityZ = data.getVelocityProcessor().getVelocityZ();
-                final double velocityXz = Math.hypot(velocityX, velocityZ);
-                maxAirSpeed += velocityXz + 0.5;
-                maxGroundSpeed += velocityXz + 0.5;
+                final double velocityXz = Math.hypot(velocity.getVelocityX(), velocity.getVelocityZ()) + 0.5;
+                maxAirSpeed += velocityXz;
+                maxGroundSpeed += velocityXz;
             }
 
             //Handle jumping speed increase.
             if (deltaY > 0.4199 && airTicks == 1) {
-                if (deltaXZ > maxAfterJumpAirSpeed) {
-                    //debug(String.format("JUMP: dxz=%.4f, mas=%.4f", deltaXZ, maxAfterJumpAirSpeed));
-                    increaseBuffer();
-                } else {
-                    decreaseBuffer(0.05);
-                }
+                speed = deltaXZ/maxAfterJumpAirSpeed;
             }
 
             //Handle max air speed checking. (airTicks > 1 because of jumping increase first tick)
@@ -80,13 +72,7 @@ public class SpeedB extends Check {
             if (airTicks > 1 || (airTicks > 0 && deltaY < 0.4199)) {
                 if (sinceUnderBlockTicks <= 15) maxAirSpeed += 0.3;
                 if (sinceIceTicks <= 15 || sinceSlimeTicks <= 10) maxAirSpeed += 0.25;
-
-                if (deltaXZ > maxAirSpeed) {
-                    //debug(String.format("AIR: dxz=%.4f, mas=%.4f", deltaXZ, maxAirSpeed));
-                    increaseBuffer();
-                } else {
-                    decreaseBuffer(0.05);
-                }
+                speed = deltaXZ/maxAirSpeed;
             }
 
             //Handle max ground speed checking. (groundTicks > 1 because of landing speed increase)
@@ -95,42 +81,38 @@ public class SpeedB extends Check {
                 if (groundTicks < 7) maxGroundSpeed += 0.17;
                 if (sinceUnderBlockTicks <= 15) maxGroundSpeed += 0.15;
                 if (sinceIceTicks <= 15 || sinceSlimeTicks <= 10) maxGroundSpeed += 0.2;
-
-                if (deltaXZ > maxGroundSpeed) {
-                    //debug(String.format("GROUND: dxz=%.4f, mas=%.4f", deltaXZ, maxGroundSpeed));
-                    increaseBuffer();
-                } else {
-                    decreaseBuffer(0.05);
-                }
+                speed = deltaXZ/maxGroundSpeed;
             }
 
-            if (getBuffer() >= 15) setBuffer(15);
+            //debug("buffer=" + buffer);
 
-            //Because of the funny way I made this check my flag method seems a little weird.
-            if (getBuffer() > 7.5 && getBuffer() >= lastFlagBuffer) {
-                if (airTicks > 1) {
-                    fail(String.format("AIR: buffer=%o, speed=%.2f", Math.round(getBuffer()), (deltaXZ/maxAirSpeed)));
-                } else if (airTicks == 1) {
-                    fail(String.format("JUMP: buffer=%o, speed=%.2f", Math.round(getBuffer()), (deltaXZ/maxAfterJumpAirSpeed)));
-                } else if (groundTicks > 0) {
-                    fail(String.format("GROUND: buffer=%o, speed=%.2f", Math.round(getBuffer()), (deltaXZ/maxGroundSpeed)));
+            final double shiftedSpeed = Math.round(speed * 100);
+
+            if (shiftedSpeed > 100) {
+                if ((buffer += shiftedSpeed > 150 ? 60 : 20) > 100 || shiftedSpeed > 1000) {
+                    fail(String.format(
+                            "speed=%o%%, buffer=%.2f",
+                            Math.round(speed * 100), buffer
+                    ));
+                    //Prevents the buffer from going too high and becoming redundant.
+                    buffer = Math.min(350, buffer);
                 }
-                lastFlagBuffer = getBuffer();
+            } else {
+                buffer = Math.max(buffer - 1, 0);
             }
         }
     }
 
     //Stolen from Artemis Client, could be quite inaccurate.
-    private double getSpeed(final double movement) {
-        double baseSpeed = movement;
-        if (PlayerUtil.getPotionLevel(data.getPlayer(), PotionEffectType.SPEED) > 0) {
-            baseSpeed *= 1.0D + 0.2D * (double)(PlayerUtil.getPotionLevel(data.getPlayer(), PotionEffectType.SPEED));
+    private double getSpeed(double movement) {
+        if (PlayerUtil.getPotionLevel(player(), PotionEffectType.SPEED) > 0) {
+            movement *= 1.0D + 0.2D * (double)(PlayerUtil.getPotionLevel(player(), PotionEffectType.SPEED));
         }
-        return baseSpeed;
+        return movement;
     }
 
     //Slightly inaccurate, maybe going to improve the math on this one more later.
-    private double getAfterJumpSpeed(double movement) {
-        return movement += 0.033 * (double) (PlayerUtil.getPotionLevel(data.getPlayer(), PotionEffectType.SPEED));
+    private double getAfterJumpSpeed() {
+        return 0.62 + 0.033 * (double) (PlayerUtil.getPotionLevel(player(), PotionEffectType.SPEED));
     }
 }

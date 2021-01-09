@@ -19,7 +19,7 @@ public class ProtocolI extends Check {
             final WrappedPacketInUseEntity wrapper = new WrappedPacketInUseEntity(packet.getRawPacket());
 
             if (wrapper.getAction() == WrappedPacketInUseEntity.EntityUseAction.ATTACK) {
-                final boolean invalid = data.getActionProcessor().isBlocking();
+                final boolean invalid = actionInfo().isBlocking();
 
                 if (invalid) {
                     fail();

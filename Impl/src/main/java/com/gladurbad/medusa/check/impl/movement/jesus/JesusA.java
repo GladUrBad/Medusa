@@ -21,19 +21,23 @@ public class JesusA extends Check {
     @Override
     public void handle(final Packet packet) {
         if (packet.isPosition()) {
-            PositionProcessor movement = data.getPositionProcessor();
+            PositionProcessor movement = positionInfo();
             final boolean check = movement.isInLiquid() && !movement.isOnSolidGround();
 
             if (check) {
+                player().isOnGround();
                 //So fucking ugly, going to fix this later.
                 final boolean onWater = movement.isCollidingAtLocation(-0.1, material -> material.toString().contains("WATER"), PositionProcessor.CollisionType.ALL) &&
                         movement.isCollidingAtLocation(0.1, material -> material == Material.AIR, PositionProcessor.CollisionType.ALL)
                         && !movement.isCollidingAtLocation(-0.001, material -> material == Material.CARPET || material == Material.WATER_LILY, PositionProcessor.CollisionType.ANY);
 
                 if (onWater) {
-                    if (increaseBuffer() > 10) fail();
+                    if (++buffer > 10) {
+                        buffer /= 2;
+                        fail();
+                    }
                 } else {
-                    decreaseBuffer(0.15);
+                    buffer = Math.max(buffer - 2, 0);
                 }
             }
         }

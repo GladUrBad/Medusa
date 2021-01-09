@@ -19,15 +19,15 @@ public class ProtocolJ extends Check {
             final WrappedPacketInUseEntity wrapper = new WrappedPacketInUseEntity(packet.getRawPacket());
 
             if (wrapper.getAction() == WrappedPacketInUseEntity.EntityUseAction.ATTACK) {
-                final boolean sword = data.getPlayer().getItemInHand().getType().toString().contains("SWORD");
-                final boolean invalid = data.getActionProcessor().isSendingDig();
+                final boolean sword = player().getItemInHand().getType().toString().contains("SWORD");
+                final boolean invalid = actionInfo().isSendingDig();
 
                 if (invalid && sword) {
-                    if (increaseBuffer() > 5) {
+                    if (++buffer > 5) {
                         fail();
                     }
                 } else {
-                    decreaseBuffer(1);
+                    buffer = Math.max(buffer - 1, 0);
                 }
             }
         }

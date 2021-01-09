@@ -29,30 +29,30 @@ public class AutoClickerB extends Check {
         if (packet.isArmAnimation() && !isExempt(ExemptType.AUTOCLICKER)) {
             if (ticks < 4) {
                 samples.add(ticks);
+            }
 
-                if (samples.size() == 120) {
-                    final double deviation = MathUtil.getStandardDeviation(samples);
-                    final double skewness = MathUtil.getSkewness(samples);
-                    final double kurtosis = MathUtil.getKurtosis(samples);
+            if (samples.size() == 120) {
+                final double deviation = MathUtil.getStandardDeviation(samples);
+                final double skewness = MathUtil.getSkewness(samples);
+                final double kurtosis = MathUtil.getKurtosis(samples);
 
-                    final double deltaDeviation = Math.abs(deviation - lastDev);
-                    final double deltaSkewness = Math.abs(skewness - lastSkew);
-                    final double deltaKurtosis = Math.abs(kurtosis - lastKurt);
+                final double deltaDeviation = Math.abs(deviation - lastDev);
+                final double deltaSkewness = Math.abs(skewness - lastSkew);
+                final double deltaKurtosis = Math.abs(kurtosis - lastKurt);
 
-                    if (deltaDeviation < 0.01 || deltaSkewness < 0.01 || deltaKurtosis < 0.01) {
-                        if (increaseBuffer(10) > 50) {
-                            fail("dd=" + deltaDeviation + " ds=" + deltaSkewness + " dk=" + deltaKurtosis);
-                        }
-                    } else {
-                        decreaseBuffer(8);
+                if (deltaDeviation < 0.01 || deltaSkewness < 0.01 || deltaKurtosis < 0.01) {
+                    if ((buffer += 10) > 50) {
+                        fail("dd=" + deltaDeviation + " ds=" + deltaSkewness + " dk=" + deltaKurtosis);
                     }
-
-                    lastDev = deviation;
-                    lastSkew = skewness;
-                    lastKurt = kurtosis;
-
-                    samples.clear();
+                } else {
+                    buffer = Math.max(buffer - 8, 0);
                 }
+
+                lastDev = deviation;
+                lastSkew = skewness;
+                lastKurt = kurtosis;
+
+                samples.clear();
             }
 
             ticks = 0;

@@ -37,12 +37,12 @@ public class TimerA extends Check {
                 final double speed = 50 / average;
 
                 if (speed >= 1.02) {
-                    if (increaseBuffer() > 30) {
-                        fail(String.format("speed=%.4f, delta=%o, buffer=%.2f", speed, delta, getBuffer()));
-                        if (getBuffer() > 35) decreaseBuffer(getBuffer() - 35);
+                    if (++buffer > 30) {
+                        buffer = Math.min(buffer, 50);
+                        fail(String.format("speed=%.4f, delta=%o, buffer=%.2f", speed, delta, buffer));
                     }
                 } else {
-                    decreaseBuffer();
+                    buffer = Math.max(0, buffer - 1);
                 }
             }
 

@@ -21,22 +21,20 @@ public class AimAssistC extends Check {
     @Override
     public void handle(Packet packet) {
         if (packet.isRotation() && !isExempt(ExemptType.TELEPORT)) {
-            final RotationProcessor rots = data.getRotationProcessor();
-
-            final float deltaYaw = rots.getDeltaYaw();
-            final double yawAccel = rots.getYawAccel();
-            final float deltaPitch = rots.getDeltaPitch();
-            final double pitchAccel = rots.getPitchAccel();
+            final float deltaYaw = rotationInfo().getDeltaYaw();
+            final double yawAccel = rotationInfo().getYawAccel();
+            final float deltaPitch = rotationInfo().getDeltaPitch();
+            final double pitchAccel = rotationInfo().getPitchAccel();
 
             final boolean invalidYaw = yawAccel < 0.1 && Math.abs(deltaYaw) > 1.5F;
             final boolean invalidPitch = pitchAccel < 0.1 && Math.abs(deltaPitch) > 1.5F;
 
             if (invalidPitch || invalidYaw) {
-                if (increaseBuffer() > 8) {
+                if (++buffer > 8) {
                     fail(String.format("dY=%.2f, dP=%.2f, yA=%.2f, pA=%.2f", deltaYaw, deltaPitch, yawAccel, pitchAccel));
                 }
             } else {
-                decreaseBuffer();
+                buffer = Math.max(0, buffer - 1);
             }
         }
     }

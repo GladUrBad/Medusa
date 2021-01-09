@@ -5,6 +5,7 @@ import com.gladurbad.medusa.check.Check;
 import com.gladurbad.api.check.CheckInfo;
 import com.gladurbad.medusa.data.PlayerData;
 import com.gladurbad.medusa.packet.Packet;
+import io.github.retrooper.packetevents.packetwrappers.in.blockplace.WrappedPacketInBlockPlace;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.block.BlockFace;
@@ -31,37 +32,35 @@ public class HandB extends Check implements Listener {
 
     @EventHandler
     public void onBlockPlace(BlockPlaceEvent event) {
-        if (event.getPlayer() == data.getPlayer()) {
-            final BlockFace blockFace = event.getBlockAgainst().getFace(event.getBlock());
-            final Location blockLoc = event.getBlockAgainst().getLocation();
-            if (!interactedCorrectly(blockLoc, data.getPlayer().getEyeLocation(), blockFace)) {
-                fail("face=" + blockFace);
+        if (event.getPlayer() == player()) {
+            final BlockFace face = event.getBlockAgainst().getFace(event.getBlock());
+            final Location eyeLocation = player().getEyeLocation();
+            final Location location = event.getBlockAgainst().getLocation();
+
+            final boolean invalid = !interactedCorrectly(location, eyeLocation, face);
+
+            if (invalid) {
+                fail();
             }
         }
     }
 
-    //I know it's ugly. idc lol
-    private boolean interactedCorrectly(Location blockLoc, Location playerLoc, BlockFace face) {
-        if (face == BlockFace.UP) {
-            final double limit = blockLoc.getY();
-            return playerLoc.getY() > limit;
-        } else if (face == BlockFace.DOWN) {
-            final double limit = blockLoc.getY();
-            return playerLoc.getY() < limit;
-        } else if (face == BlockFace.WEST) {
-            final double limit = blockLoc.getX();
-            return limit > playerLoc.getX();
-        } else if (face == BlockFace.EAST) {
-            final double limit = blockLoc.getX();
-            return playerLoc.getX() > limit;
-        } else if (face == BlockFace.NORTH) {
-            final double limit = blockLoc.getZ();
-            return playerLoc.getZ() < limit;
-        } else if (face == BlockFace.SOUTH) {
-            final double limit = blockLoc.getZ();
-            return playerLoc.getZ() > limit;
-        } else {
-            return true;
+    private boolean interactedCorrectly(Location block, Location player, BlockFace face) {
+        switch (face) {
+            case UP:
+                return player.getY() > block.getY();
+            case DOWN:
+                return player.getY() < block.getY();
+            case WEST:
+                return player.getX() < block.getX();
+            case EAST:
+                return player.getX() > block.getX();
+            case NORTH:
+                return player.getZ() < block.getZ();
+            case SOUTH:
+                return player.getZ() > block.getZ();
+            default:
+                return true;
         }
     }
 }

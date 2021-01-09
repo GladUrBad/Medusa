@@ -23,29 +23,29 @@ public class FlyA extends Check {
     @Override
     public void handle(Packet packet) {
         if (packet.isPosition()) {
-            final double deltaY = data.getPositionProcessor().getDeltaY();
-            final double lastDeltaY = data.getPositionProcessor().getLastDeltaY();
+            final double deltaY = positionInfo().getDeltaY();
+            final double lastDeltaY = positionInfo().getLastDeltaY();
 
             final double prediction = (lastDeltaY - 0.08) * 0.98F;
             final double difference = Math.abs(deltaY - prediction);
 
             final boolean invalid = difference > 0.001D &&
                     //Retarded collision processor makes me do dumb shit that could make bypasses like this.
-                    !(data.getPositionProcessor().getY() % 0.5 == 0 && data.getPositionProcessor().isOnGround() && lastDeltaY < 0) &&
-                    data.getPositionProcessor().isInAir() &&
-                    !data.getPositionProcessor().isNearBoat() &&
-                    !data.getPlayer().isFlying() &&
-                    !data.getPlayer().isInsideVehicle() &&
-                    data.getPositionProcessor().getAirTicks() > 15 &&
-                    !data.getVelocityProcessor().isTakingVelocity() &&
+                    !(positionInfo().getY() % 0.5 == 0 && positionInfo().isOnGround() && lastDeltaY < 0) &&
+                    positionInfo().isInAir() &&
+                    !positionInfo().isNearBoat() &&
+                    !player().isFlying() &&
+                    !player().isInsideVehicle() &&
+                    positionInfo().getAirTicks() > 15 &&
+                    !velocityInfo().isTakingVelocity() &&
                     Math.abs(prediction) > 0.005;
 
             if (invalid) {
-                if (increaseBuffer() > 5) {
-                    fail(String.format("diff=%.4f, buffer=%.2f", difference, getBuffer()));
+                if (++buffer > 5) {
+                    fail(String.format("diff=%.4f, buffer=%.2f", difference, buffer));
                 }
             } else {
-                decreaseBuffer(0.035);
+                buffer = Math.max(buffer - 0.035, 0);
             }
         }
     }

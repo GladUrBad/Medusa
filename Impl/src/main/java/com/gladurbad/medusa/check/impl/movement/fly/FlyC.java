@@ -18,8 +18,6 @@ import io.github.retrooper.packetevents.packetwrappers.in.flying.WrappedPacketIn
 @CheckInfo(name = "Fly (C)", experimental = true, description = "Checks for ground-spoof.")
 public class FlyC extends Check {
 
-    private static double ON_GROUND = 1/64D;
-
     public FlyC(PlayerData data) {
         super(data);
     }
@@ -29,6 +27,7 @@ public class FlyC extends Check {
         if (packet.isPosition()) {
             final WrappedPacketInFlying wrapper = new WrappedPacketInFlying(packet.getRawPacket());
 
+            final double ON_GROUND = 1 / 64D;
             final boolean positionGround = wrapper.getY() % ON_GROUND == 0;
             final boolean packetGround = wrapper.isOnGround();
 
@@ -36,11 +35,11 @@ public class FlyC extends Check {
                     ExemptType.FLYING, ExemptType.JOINED);
 
             if (!exempt && positionGround != packetGround) {
-                if (increaseBuffer() > 4) {
+                if (++buffer > 4) {
                     fail();
                 }
             } else {
-                decreaseBuffer(0.15);
+               buffer = Math.max(buffer - 0.15, 0);
             }
         }
     }

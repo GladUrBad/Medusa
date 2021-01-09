@@ -19,10 +19,10 @@ public class VelocityA extends Check {
     @Override
     public void handle(Packet packet) {
         if (packet.isFlying()) {
-            if (data.getVelocityProcessor().getTicksSinceVelocity() < 5) {
-                final double deltaY = data.getPositionProcessor().getDeltaY();
+            if (velocityInfo().getTicksSinceVelocity() < 5) {
+                final double deltaY = positionInfo().getDeltaY();
 
-                final double expectedDeltaY = data.getVelocityProcessor().getVelocityY();
+                final double expectedDeltaY = velocityInfo().getVelocityY();
                 final int percentage = (int) Math.round((deltaY * 100.0) / expectedDeltaY);
 
                 final boolean exempt = isExempt(ExemptType.LIQUID, ExemptType.PISTON, ExemptType.CLIMBABLE,
@@ -31,12 +31,12 @@ public class VelocityA extends Check {
                 final boolean invalid = !exempt && percentage != 100 && expectedDeltaY > 0;
 
                 if (invalid) {
-                    if (increaseBuffer() > 5) {
-                        setBuffer(0);
+                    if (++buffer > 5) {
+                        buffer = 0;
                         fail();
                     }
                 } else {
-                    setBuffer(0);
+                    buffer = 0;
                 }
             }
         }

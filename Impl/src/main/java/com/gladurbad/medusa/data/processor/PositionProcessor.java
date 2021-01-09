@@ -41,7 +41,7 @@ public class PositionProcessor {
 
     private boolean onGround, lastOnGround, mathematicallyOnGround;
 
-    private List<Block> blocks = new ArrayList<>();
+    private final List<Block> blocks = new ArrayList<>();
 
     public PositionProcessor(final PlayerData data) {
         this.data = data;

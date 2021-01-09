@@ -3,6 +3,7 @@ package com.gladurbad.medusa.data.processor;
 import com.gladurbad.medusa.Medusa;
 import com.gladurbad.medusa.util.MathUtil;
 import com.gladurbad.medusa.util.type.EvictingList;
+import io.github.retrooper.packetevents.PacketEvents;
 import io.github.retrooper.packetevents.packetwrappers.in.blockdig.WrappedPacketInBlockDig;
 import io.github.retrooper.packetevents.packetwrappers.in.clientcommand.WrappedPacketInClientCommand;
 import io.github.retrooper.packetevents.packetwrappers.in.entityaction.WrappedPacketInEntityAction;
@@ -27,6 +28,8 @@ public class ActionProcessor {
     private int sprintingTicks, sneakingTicks;
 
     private long lastFlyingTime;
+
+    private long ping;
 
     public ActionProcessor(final PlayerData data) {
         this.data = data;
@@ -124,5 +127,6 @@ public class ActionProcessor {
             lagging = deviation > 120;
         }
         lastFlyingTime = System.currentTimeMillis();
+        ping = PacketEvents.getAPI().getPlayerUtils().getPing(data.getPlayer());
     }
 }

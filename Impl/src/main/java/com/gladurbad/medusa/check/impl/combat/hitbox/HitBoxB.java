@@ -23,11 +23,11 @@ public class HitBoxB extends Check {
         if (packet.isUseEntity()) {
             final WrappedPacketInUseEntity useEntity = new WrappedPacketInUseEntity(packet.getRawPacket());
 
-            final double deltaX = useEntity.getEntity().getLocation().getX() - data.getPlayer().getLocation().getX();
-            final double deltaZ = useEntity.getEntity().getLocation().getZ() - data.getPlayer().getLocation().getZ();
+            final double deltaX = useEntity.getEntity().getLocation().getX() - player().getLocation().getX();
+            final double deltaZ = useEntity.getEntity().getLocation().getZ() - player().getLocation().getZ();
 
-            final double directionX = -Math.sin(data.getPlayer().getEyeLocation().getYaw() * 3.1415927F / 180.0F) * (float) 1 * 0.5F;
-            final double directionZ = Math.cos(data.getPlayer().getEyeLocation().getYaw() * 3.1415927F / 180.0F) * (float) 1 * 0.5F;
+            final double directionX = -Math.sin(player().getEyeLocation().getYaw() * 3.1415927F / 180.0F) * (float) 1 * 0.5F;
+            final double directionZ = Math.cos(player().getEyeLocation().getYaw() * 3.1415927F / 180.0F) * (float) 1 * 0.5F;
 
             final Vector direction = new Vector(directionX, 0, directionZ);
             final Vector positionDifference = new Vector(deltaX, 0, deltaZ);
@@ -42,12 +42,12 @@ public class HitBoxB extends Check {
             final boolean invalid = angle > maxAngle;
 
             if (invalid) {
-                if (increaseBuffer() > 10) {
-                    decreaseBuffer(2);
-                    fail(String.format("angle difference: %.2f > %.2f, buffer: %.2f", angle, maxAngle, getBuffer()));
+                buffer = Math.min(buffer + 1, 20);
+                if (buffer > 10) {
+                    fail(String.format("angle difference: %.2f > %.2f, buffer: %.2f", angle, maxAngle, buffer));
                 }
             } else {
-                decreaseBuffer(0.5);
+                buffer = Math.max(buffer - 2, 0);
             }
         }
     }

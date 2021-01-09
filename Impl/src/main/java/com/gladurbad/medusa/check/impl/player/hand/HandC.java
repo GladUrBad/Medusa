@@ -29,7 +29,7 @@ public class HandC extends Check implements Listener {
 
     @EventHandler
     public void onBlockBreak(BlockBreakEvent event) {
-        if (event.getPlayer() == data.getPlayer()) {
+        if (event.getPlayer() == player()) {
             if (event.getBlock().isLiquid()) fail("block=" + event.getBlock().getType());
         }
     }

@@ -22,14 +22,12 @@ public class AutoClickerA extends Check {
 
     @Override
     public void handle(Packet packet) {
-        if (packet.isFlying()) {
+        if (packet.isFlying() && !isExempt(ExemptType.AUTOCLICKER)) {
             if (++ticks >= 20) {
-                if (cps > 20) {
+                if (cps > 24) {
                     fail("cps=" + cps);
                 }
-
-                ticks = 0;
-                cps = 0;
+                ticks = cps = 0;
             }
         } else if (packet.isUseEntity()) {
             final WrappedPacketInUseEntity wrapper = new WrappedPacketInUseEntity(packet.getRawPacket());

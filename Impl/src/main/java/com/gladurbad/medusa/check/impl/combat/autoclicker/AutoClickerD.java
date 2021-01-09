@@ -40,13 +40,12 @@ public class AutoClickerD extends Check {
                 final int duplicates = (int) (samples.size() - samples.stream().distinct().count());
 
                 if (outliers < 2 && duplicates > 16) {
-                    if (increaseBuffer(10) > 50) {
+                    if ((buffer += 10) > 50) {
                         fail();
                     }
                 } else {
-                    decreaseBuffer(8);
+                    buffer = Math.max(buffer - 8, 0);
                 }
-
                 samples.clear();
             }
 

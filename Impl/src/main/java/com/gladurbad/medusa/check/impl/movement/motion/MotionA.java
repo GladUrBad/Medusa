@@ -21,27 +21,27 @@ public class MotionA extends Check {
     @Override
     public void handle(final Packet packet) {
         if (packet.isPosition()) {
-            final double absDeltaY = Math.abs(data.getPositionProcessor().getDeltaY());
-            final double absLastDeltaY = Math.abs(data.getPositionProcessor().getLastDeltaY());
+            final double absDeltaY = Math.abs(positionInfo().getDeltaY());
+            final double absLastDeltaY = Math.abs(positionInfo().getLastDeltaY());
             final double acceleration = absDeltaY - absLastDeltaY;
-            final Vector vel = data.getPlayer().getVelocity();
+            final Vector vel = player().getVelocity();
 
-            final boolean invalid = acceleration == 0.0 
-                    && !isExempt(ExemptType.JOINED, ExemptType.TRAPDOOR, ExemptType.VELOCITY, ExemptType.FLYING, ExemptType.WEB)
-                    && data.getPositionProcessor().getDeltaY() != 0.0
-                    && data.getPositionProcessor().getLastDeltaY() != 0.0 
-                    && !data.getPositionProcessor().isInLiquid() 
-                    && !data.getPositionProcessor().isOnSlime() 
-                    && !data.getPositionProcessor().isOnClimbable() 
-                    && !data.getPositionProcessor().isBlockNearHead() 
-                    && !data.getPositionProcessor().isInWeb();
+            final boolean invalid = acceleration == 0.0 &&
+                     !isExempt(ExemptType.JOINED, ExemptType.TRAPDOOR, ExemptType.VELOCITY, ExemptType.FLYING, ExemptType.WEB) &&
+                    positionInfo().getDeltaY() != 0.0 &&
+                    positionInfo().getLastDeltaY() != 0.0 &&
+                    !positionInfo().isInLiquid() &&
+                    !positionInfo().isOnSlime() &&
+                    !positionInfo().isOnClimbable() &&
+                    !positionInfo().isBlockNearHead() &&
+                    !positionInfo().isInWeb();
 
             if (invalid) {
-                if (increaseBuffer() > 2) {
+                if (++buffer > 2) {
                     fail(String.format("aDy=%.2f, vx=%.2f, vy=%.2f, vz=%.2f", absDeltaY, vel.getX(), vel.getY(), vel.getZ()));
                 }
             } else {
-                decreaseBuffer(0.25);
+                buffer = Math.max(buffer - 0.25, 0);
             }
         }
     }

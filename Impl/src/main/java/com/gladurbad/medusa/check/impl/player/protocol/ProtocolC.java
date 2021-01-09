@@ -25,7 +25,7 @@ public class ProtocolC extends Check {
         if (packet.isFlying()) {
             final WrappedPacketInFlying wrapper = new WrappedPacketInFlying(packet.getRawPacket());
 
-            if (wrapper.isPosition() || data.getPlayer().isInsideVehicle()) {
+            if (wrapper.isPosition() || player().isInsideVehicle()) {
                 streak = 0;
                 return;
             }

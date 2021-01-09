@@ -20,10 +20,10 @@ public class MotionB extends Check {
     @Override
     public void handle(final Packet packet) {
         if (packet.isPosition()) {
-            final double deltaY = data.getPositionProcessor().getDeltaY();
+            final double deltaY = positionInfo().getDeltaY();
 
-            final boolean invalid = deltaY < -3.92 
-                    && !isExempt(ExemptType.TELEPORT);
+            final boolean invalid = deltaY < -3.92 &&
+                    !isExempt(ExemptType.TELEPORT);
 
             if (invalid) fail(String.format("dy=%.2f", deltaY));
         }

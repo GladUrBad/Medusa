@@ -6,15 +6,11 @@ public interface MedusaCheck {
 
     String getPunishCommand();
 
-    boolean isSetback();
-
     boolean isEnabled();
 
     int getMaxVl();
 
     int getVl();
-
-    double getBuffer();
 
     long getLastFlagTime();
 }

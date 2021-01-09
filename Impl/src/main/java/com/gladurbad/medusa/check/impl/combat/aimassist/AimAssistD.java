@@ -32,8 +32,8 @@ public class AimAssistD extends Check {
     @Override
     public void handle(Packet packet) {
         if (packet.isRotation()) {
-            final float deltaYaw = data.getRotationProcessor().getDeltaYaw() % 360F;
-            final float deltaPitch = data.getRotationProcessor().getDeltaPitch();
+            final float deltaYaw = rotationInfo().getDeltaYaw() % 360F;
+            final float deltaPitch = rotationInfo().getDeltaPitch();
 
             final double divisorYaw = MathUtil.getGcd((long) (deltaYaw * MathUtil.EXPANDER), (long) (lastDeltaYaw * MathUtil.EXPANDER));
             final double divisorPitch = MathUtil.getGcd((long) (deltaPitch * MathUtil.EXPANDER), (long) (lastDeltaPitch * MathUtil.EXPANDER));
@@ -58,11 +58,14 @@ public class AimAssistD extends Check {
                 final boolean invalidY = moduloY > 90.d && floorModuloY > 0.1;
 
                 if (invalidX && invalidY) {
-                    if (increaseBuffer() > 6) {
-                        fail(String.format("mx=%.2f, my=%.2f, fmx=%.2f, fmy=%.2f", moduloX, moduloY, floorModuloX, floorModuloY));
+                    if (++buffer > 6) {
+                        fail(String.format(
+                                "mx=%.2f, my=%.2f, fmx=%.2f, fmy=%.2f",
+                                moduloX, moduloY, floorModuloX, floorModuloY
+                        ));
                     }
                 } else {
-                    decreaseBuffer(0.25);
+                    buffer = Math.max(0, buffer - 0.25);
                 }
             }
             this.lastDeltaYaw = deltaYaw;

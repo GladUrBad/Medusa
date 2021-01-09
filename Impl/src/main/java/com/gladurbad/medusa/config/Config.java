@@ -24,7 +24,6 @@ public class Config {
 
     //Checks stuff
     public static List<String> ENABLED_CHECKS = new ArrayList<>();
-    public static List<String> SETBACK_CHECKS = new ArrayList<>();
     public static Map<String, Integer> MAX_VIOLATIONS = new HashMap<>();
     public static Map<String, String> PUNISH_COMMANDS = new HashMap<>();
 
@@ -87,16 +86,10 @@ public class Config {
                 final int maxViolations = getIntegerFromConfig("checks." + checkType + "." + getPathFromCheckName(checkInfo.name()) + ".max-violations");
                 final String punishCommand = getStringFromConfig("checks." + checkType + "." + getPathFromCheckName(checkInfo.name()) + ".punish-command");
 
-                if (checkType.equals("movement")) {
-                    final boolean setBack = getBooleanFromConfig("checks.movement." + getPathFromCheckName(checkInfo.name()) + ".setback");
-                    if (setBack) {
-                        SETBACK_CHECKS.add(check.getSimpleName());
-                    }
-                }
-
                 if (enabled) {
                     ENABLED_CHECKS.add(check.getSimpleName());
                 }
+
                 MAX_VIOLATIONS.put(check.getSimpleName(), maxViolations);
                 PUNISH_COMMANDS.put(check.getSimpleName(), punishCommand);
             }

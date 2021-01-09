@@ -37,11 +37,11 @@ public class TimerB extends Check {
                 final double deviation = MathUtil.getStandardDeviation(samples);
 
                 if (speed <= 0.82 && deviation < 50.0) {
-                    if (increaseBuffer() > 35) {
+                    if (++buffer > 35) {
                         fail(String.format("speed=%.2f deviation=%.2f", speed, deviation));
                     }
                 } else {
-                    multiplyBuffer(0.75);
+                    buffer /= 2;
                 }
             }
             lastFlyingTime = now;

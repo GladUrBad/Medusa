@@ -4,6 +4,7 @@ import com.gladurbad.api.check.CheckInfo;
 import com.gladurbad.medusa.check.Check;
 import com.gladurbad.medusa.data.PlayerData;
 import com.gladurbad.medusa.data.processor.RotationProcessor;
+import com.gladurbad.medusa.exempt.type.ExemptType;
 import com.gladurbad.medusa.packet.Packet;
 import com.gladurbad.medusa.util.MathUtil;
 
@@ -16,9 +17,7 @@ import java.util.function.Predicate;
 @CheckInfo(name = "AimAssist (A)", description = "Checks for irregular movements in the rotation.")
 public class AimAssistA extends Check {
 
-    private final double minimumRotation = .009400162506103516;
-    private final Predicate<Float> validDeltaYaw = yaw -> yaw > 2F && yaw < 35F;
-    private final Predicate<Float> validDeltaPitch = pitch -> pitch > 2F && pitch < 35F;
+    private final Predicate<Float> validRotation = rotation -> rotation > 2F && rotation < 35F;
 
     public AimAssistA(PlayerData data) {
         super(data);
@@ -26,22 +25,22 @@ public class AimAssistA extends Check {
 
     @Override
     public void handle(Packet packet) {
-        if (packet.isRotation()) {
-            final RotationProcessor rots = data.getRotationProcessor();
+        if (packet.isRotation() && !isExempt(ExemptType.VEHICLE)) {
+            final float deltaPitch = Math.abs(rotationInfo().getDeltaPitch());
+            final float deltaYaw =  Math.abs(rotationInfo().getDeltaYaw() % 360F);
+            final float pitch = Math.abs(rotationInfo().getPitch());
 
-            final float deltaPitch = Math.abs(rots.getDeltaPitch());
-            final float deltaYaw =  Math.abs(rots.getDeltaYaw() % 360F);
-            final float pitch = Math.abs(rots.getPitch());
+            final boolean invalidPitch = deltaPitch < 0.009 && validRotation.test(deltaYaw);
+            final boolean invalidYaw = deltaYaw < 0.009 && validRotation.test(deltaPitch);
 
-            final boolean invalidPitch = deltaPitch < minimumRotation && validDeltaYaw.test(deltaYaw) && pitch < 89.9F;
-            final boolean invalidYaw = deltaYaw < minimumRotation && validDeltaPitch.test(deltaPitch);
+            final boolean invalid = (invalidPitch || invalidYaw) && pitch < 89F;
 
-            if (invalidPitch || invalidYaw) {
-                if (increaseBuffer() > 10) {
+            if (invalid) {
+                if (++buffer > 10) {
                     fail(String.format("deltaYaw=%.2f, deltaPitch=%.2f", deltaYaw, deltaPitch));
                 }
             } else {
-                decreaseBuffer(2);
+                buffer = Math.max(0, buffer - 1);
             }
         }
     }

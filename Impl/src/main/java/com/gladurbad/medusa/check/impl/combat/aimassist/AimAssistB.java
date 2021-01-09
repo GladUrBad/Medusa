@@ -19,19 +19,18 @@ public class AimAssistB extends Check {
 
     @Override
     public void handle(Packet packet) {
-        if (packet.isRotation()) {
-            final float deltaYaw = data.getRotationProcessor().getDeltaYaw() % 360F;
-            final float deltaPitch = data.getRotationProcessor().getDeltaPitch();
+        if (packet.isRotation() && !isExempt(ExemptType.TELEPORT)) {
+            final float deltaYaw = rotationInfo().getDeltaYaw() % 360F;
+            final float deltaPitch = rotationInfo().getDeltaPitch();
 
-            final boolean invalidPitch = deltaPitch % 1 == 0 && deltaPitch != 0F && !isExempt(ExemptType.TELEPORT);
-            final boolean invalidYaw = deltaYaw % 1 == 0 && deltaYaw != 0F && !isExempt(ExemptType.TELEPORT);
+            final boolean invalid = (deltaPitch % 1 == 0 || deltaYaw % 1 == 0) && deltaPitch != 0 && deltaYaw != 0;
 
-            if (invalidPitch || invalidYaw) {
-                if (increaseBuffer() > 4) {
-                    fail(String.format("buffer=%.2f", getBuffer()));
+            if (invalid) {
+                if (++buffer > 4) {
+                    fail(String.format("buffer=%.2f", buffer));
                 }
             } else {
-                decreaseBuffer(0.25);
+                buffer = Math.max(0, buffer - 0.25);
             }
         }
     }

@@ -27,14 +27,14 @@ public class KillAuraA extends Check {
         } else if (packet.isFlying()) {
             if (usedEntity) {
                 final long delay = now() - lastUseEntityTime;
-                final boolean invalid = !data.getActionProcessor().isLagging() && delay > 15;
+                final boolean invalid = !actionInfo().isLagging() && delay > 15;
 
                 if (invalid) {
-                    if (increaseBuffer() > 2) {
+                    if (++buffer > 2) {
                         fail(String.format("delay=%d", delay));
                     }
                 } else {
-                    decreaseBuffer(0.15);
+                    buffer = Math.max(buffer - 0.15, 0);
                 }
             }
             usedEntity = false;

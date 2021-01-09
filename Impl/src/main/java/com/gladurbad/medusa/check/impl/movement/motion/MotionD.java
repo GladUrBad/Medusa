@@ -25,18 +25,18 @@ public class MotionD extends Check {
     @Override
     public void handle(final Packet packet) {
         if (packet.isFlying()) {
-            if (data.getActionProcessor().isSprinting() &&
-                    data.getVelocityProcessor().getTicksSinceVelocity() > 15 &&
-                    ++teleportTicks > 10 && !data.getPlayer().isFlying()) {
-                final double deltaX = data.getPositionProcessor().getX() - data.getPositionProcessor().getLastX();
-                final double deltaZ = data.getPositionProcessor().getZ() - data.getPositionProcessor().getLastZ();
+            if (actionInfo().isSprinting() &&
+                    velocityInfo().getTicksSinceVelocity() > 15 &&
+                    ++teleportTicks > 10 && !player().isFlying()) {
+                final double deltaX = positionInfo().getX() - positionInfo().getLastX();
+                final double deltaZ = positionInfo().getZ() - positionInfo().getLastZ();
 
-                final double directionX = -Math.sin(data.getPlayer().getEyeLocation().getYaw() * 3.1415927F / 180.0F) * (float) 1 * 0.5F;
-                final double directionZ = Math.cos(data.getPlayer().getEyeLocation().getYaw() * 3.1415927F / 180.0F) * (float) 1 * 0.5F;
+                final double directionX = -Math.sin(player().getEyeLocation().getYaw() * 3.1415927F / 180.0F) * (float) 1 * 0.5F;
+                final double directionZ = Math.cos(player().getEyeLocation().getYaw() * 3.1415927F / 180.0F) * (float) 1 * 0.5F;
 
                 final Vector positionDifference = new Vector(deltaX, 0, deltaZ);
 
-                if (data.getPlayer().isOnGround()) {
+                if (player().isOnGround()) {
                     offGroundTicks = 0;
                     direction.setX(directionX);
                     direction.setY(0);
@@ -47,18 +47,18 @@ public class MotionD extends Check {
 
                 final double angle = Math.toDegrees(positionDifference.angle(direction));
 
-                final boolean invalid = !data.getPositionProcessor().isInLiquid() &&
+                final boolean invalid = !positionInfo().isInLiquid() &&
                         angle > 85 &&
-                        data.getPositionProcessor().getDeltaXZ() > 0.25 &&
+                        positionInfo().getDeltaXZ() > 0.25 &&
                         offGroundTicks < 8 &&
                         !isExempt(ExemptType.TELEPORT, ExemptType.VELOCITY);
 
                 if (invalid) {
-                    if (increaseBuffer() >= 8) {
-                        fail(String.format("angle=%.2f, buffer=%.2f", angle, getBuffer()));
+                    if (++buffer >= 8) {
+                        fail(String.format("angle=%.2f, buffer=%.2f", angle, buffer));
                     }
                 } else {
-                    decreaseBuffer(0.25);
+                    buffer = Math.max(buffer - 0.5, 0);
                 }
             }
         } else if (packet.isTeleport()) {

@@ -22,6 +22,7 @@ public class AutoClickerC extends Check {
     @Override
     public void handle(final Packet packet) {
         if (packet.isArmAnimation() && !isExempt(ExemptType.AUTOCLICKER)) {
+
            if (ticks < 4) {
                samples.add(ticks);
            }
@@ -31,11 +32,11 @@ public class AutoClickerC extends Check {
                final double difference = Math.abs(Math.round(cps) - cps);
 
                if (difference < 0.001) {
-                   if (increaseBuffer(10) > 25) {
+                   if ((buffer += 10) > 25) {
                        fail("diff=" + difference);
                    }
                } else {
-                   decreaseBuffer(8);
+                   buffer = Math.max(buffer - 8, 0);
                }
 
                samples.clear();

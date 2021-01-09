@@ -19,37 +19,37 @@ public class SpeedC extends Check {
     @Override
     public void handle(final Packet packet) {
         if (packet.isPosition()) {
-            final double deltaX = data.getPositionProcessor().getDeltaX();
-            final double lastDeltaX = data.getPositionProcessor().getLastDeltaX();
-            final double deltaZ = data.getPositionProcessor().getDeltaZ();
-            final double lastDeltaZ = data.getPositionProcessor().getLastDeltaZ();
+            final double deltaX = positionInfo().getDeltaX();
+            final double lastDeltaX = positionInfo().getLastDeltaX();
+            final double deltaZ = positionInfo().getDeltaZ();
+            final double lastDeltaZ = positionInfo().getLastDeltaZ();
 
             final double absDeltaX = Math.abs(deltaX);
             final double absDeltaZ = Math.abs(deltaZ);
             final double absLastDeltaX = Math.abs(lastDeltaX);
             final double absLastDeltaZ = Math.abs(lastDeltaZ);
 
-            if (data.getPositionProcessor().getAirTicks() > 2 && !isExempt(ExemptType.VELOCITY, ExemptType.BOAT, ExemptType.TELEPORT, ExemptType.FLYING)) {
+            if (positionInfo().getAirTicks() > 2 && !isExempt(ExemptType.VELOCITY, ExemptType.BOAT, ExemptType.TELEPORT, ExemptType.FLYING)) {
                 final boolean xSwitched = (deltaX > 0 && lastDeltaX < 0) || (deltaX < 0 && lastDeltaX > 0);
                 final boolean zSwitched = (deltaZ > 0 && lastDeltaZ < 0) || (deltaZ < 0 && lastDeltaZ > 0);
 
                 if (xSwitched) {
                     if (Math.abs(absDeltaX - absLastDeltaX) > 0.05) {
-                        if (increaseBuffer() > 1.25) {
+                        if (++buffer > 1.25) {
                             fail();
                         }
                     }
                 } else {
-                    decreaseBuffer(0.05);
+                    buffer = Math.max(buffer - 0.05, 0);
                 }
                 if (zSwitched) {
                     if (Math.abs(absDeltaZ - absLastDeltaZ) > 0.05) {
-                        if (increaseBuffer() > 1.25) {
+                        if (++buffer > 1.25) {
                             fail();
                         }
                     }
                 } else {
-                    decreaseBuffer(0.05);
+                    buffer = Math.max(buffer - 0.05, 0);
                 }
             }
         }

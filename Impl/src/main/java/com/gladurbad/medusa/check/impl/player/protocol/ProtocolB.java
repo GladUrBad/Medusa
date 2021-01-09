@@ -23,7 +23,7 @@ public class ProtocolB extends Check {
         if (packet.isAbilities()) {
             final WrappedPacketInAbilities wrapper = new WrappedPacketInAbilities(packet.getRawPacket());
 
-            final boolean invalid = wrapper.isFlightAllowed() && !data.getPlayer().getAllowFlight();
+            final boolean invalid = wrapper.isFlightAllowed() && !player().getAllowFlight();
 
             if (invalid) {
                 fail();

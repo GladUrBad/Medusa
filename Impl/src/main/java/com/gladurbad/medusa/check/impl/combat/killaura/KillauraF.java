@@ -21,16 +21,16 @@ public class KillauraF extends Check {
     @Override
     public void handle(final Packet packet) {
         if (packet.isUseEntity()) {
-            final Entity target = data.getCombatProcessor().getTarget();
-            final Player attacker = data.getPlayer();
+            final Entity target = combatInfo().getTarget();
+            final Player attacker = player();
 
             if (target == null || attacker == null ) return;
 
             final Location targetLocation = target.getLocation();
             final Location attackerLocation = attacker.getLocation();
 
-            final float yaw = data.getRotationProcessor().getYaw() % 360F;
-            final float pitch = data.getRotationProcessor().getPitch();
+            final float yaw = rotationInfo().getYaw() % 360F;
+            final float pitch = rotationInfo().getPitch();
 
             if (lastAttackerLocation != null) {
                 final boolean check = yaw != lastYaw &&
@@ -38,11 +38,11 @@ public class KillauraF extends Check {
                         attackerLocation.distance(lastAttackerLocation) > 0.1;
 
                 if (check && !attacker.hasLineOfSight(target)) {
-                    if (increaseBuffer(10) > 50) {
+                    if ((buffer += 10) > 50) {
                         fail();
                     }
                 } else {
-                    decreaseBuffer(20);
+                    buffer = Math.max(buffer - 20, 0);
                 }
             }
 

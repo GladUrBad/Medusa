@@ -8,7 +8,7 @@ import com.gladurbad.medusa.packet.Packet;
 /**
  * Created on 10/24/2020 Package com.gladurbad.medusa.check.impl.combat.killaura by GladUrBad
  */
-@CheckInfo(name = "KillAura (C)", description = "Checks for entities hit in one tick.")
+@CheckInfo(name = "KillAura (C)", description = "Checks for multi-aura.")
 public class KillAuraC extends Check {
 
     public KillAuraC(PlayerData data) {
@@ -18,8 +18,7 @@ public class KillAuraC extends Check {
     @Override
     public void handle(Packet packet) {
         if (packet.isUseEntity()) {
-            final int targets = data.getCombatProcessor().getCurrentTargets();
-            if (targets > 1) fail("targets=" + targets);
+            if (combatInfo().getCurrentTargets() > 1) fail();
         }
     }
 }

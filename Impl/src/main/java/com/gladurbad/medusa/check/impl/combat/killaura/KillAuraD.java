@@ -30,12 +30,13 @@ public class KillAuraD extends Check {
     public void handle(Packet packet) {
         if (packet.isUseEntity()) {
             final WrappedPacketInUseEntity wrapper = new WrappedPacketInUseEntity(packet.getRawPacket());
-            final float yaw = data.getRotationProcessor().getYaw() % 360F;
-            final float pitch = data.getRotationProcessor().getPitch();
-            final boolean isMoving = data.getPositionProcessor().getDeltaXZ() != 0;
+            final float yaw = rotationInfo().getYaw() % 360F;
+            final float pitch = rotationInfo().getPitch();
+            final boolean isMoving = positionInfo().getDeltaXZ() != 0;
             if (wrapper.getEntity() != null) {
                 if (lastLocation != null && lastYaw != null && lastPitch != null) {
-                    if (wrapper.getEntity().getLocation().distance(lastLocation) > 0.1 && lastYaw != yaw && lastPitch != pitch && isMoving) {
+                    if (wrapper.getEntity().getLocation().distance(lastLocation) > 0.1
+                            && lastYaw != yaw && lastPitch != pitch && isMoving) {
                         ++hits;
                     }
                 }
@@ -47,11 +48,11 @@ public class KillAuraD extends Check {
             if (++swings >= 50) {
                 final double accuracy = hits/swings;
                 if (hits > 40) {
-                    if (increaseBuffer(10) > 20) {
-                        fail("accuracy - " + hits + " landed from a sample size of " + swings);
+                    if ((buffer += 10) > 20) {
+                        fail("accuracy=" + accuracy);
                     }
                 } else {
-                    decreaseBuffer(2);
+                    buffer = Math.max(buffer - 2, 0);
                 }
                 hits = swings = 0;
             }

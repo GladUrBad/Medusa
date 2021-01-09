@@ -21,22 +21,22 @@ public class HitBoxC extends Check {
         if (packet.isUseEntity()) {
             final WrappedPacketInUseEntity wrapper = new WrappedPacketInUseEntity(packet.getRawPacket());
 
-            if (data.getPlayer().getGameMode() != GameMode.SURVIVAL) return;
+            if (player().getGameMode() != GameMode.SURVIVAL) return;
 
             if (wrapper.getAction() == WrappedPacketInUseEntity.EntityUseAction.ATTACK) {
-                final Vector attacker = data.getPlayer().getLocation().toVector().setY(0);
-                final Vector victim = data.getCombatProcessor().getTarget().getLocation().toVector().setY(0);
+                final Vector attacker = player().getLocation().toVector().setY(0);
+                final Vector victim = combatInfo().getTarget().getLocation().toVector().setY(0);
 
-                final double expansion = HitboxExpansion.getExpansion(data.getCombatProcessor().getTarget());
+                final double expansion = HitboxExpansion.getExpansion(combatInfo().getTarget());
                 final double distance = attacker.distance(victim) - expansion;
 
                 if (distance > 3.5) {
-                    if (increaseBuffer() > 20) {
-                        setBuffer(20);
-                        fail(String.format("reach=%.2f, buffer=%.2f", distance, getBuffer()));
+                    if (++buffer > 20) {
+                        buffer = 20;
+                        fail(String.format("reach=%.2f, buffer=%.2f", distance, buffer));
                     }
                 } else {
-                    decreaseBuffer(2);
+                    buffer = Math.max(buffer - 4, 0);
                 }
             }
         }

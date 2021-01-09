@@ -25,15 +25,15 @@ public class ProtocolF extends Check {
 
             final boolean unmount = wrapper.isUnmount();
 
-            final boolean invalid = data.getPlayer().getVehicle() == null && !unmount;
+            final boolean invalid = player().getVehicle() == null && !unmount;
 
             if (invalid) {
-                if (increaseBuffer() > 8) {
+                if (++buffer > 8) {
                     fail();
-                    multiplyBuffer(.5);
+                    buffer /= 2;
                 }
             } else {
-                resetBuffer();
+                buffer = 0;
             }
         }
     }

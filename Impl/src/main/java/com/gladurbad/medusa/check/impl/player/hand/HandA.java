@@ -29,9 +29,9 @@ public class HandA extends Check implements Listener {
 
     @EventHandler
     public void onBlockPlace(BlockPlaceEvent event) {
-        if (event.getPlayer() == data.getPlayer()) {
+        if (event.getPlayer() == player()) {
             final Vector vec = event.getBlock().getLocation().toVector().setY(0);
-            final Vector playerVec = data.getPlayer().getLocation().toVector().setY(0);
+            final Vector playerVec = player().getLocation().toVector().setY(0);
             final double distance = playerVec.distance(vec) - 0.5;
 
             if (distance > 4.5) {
