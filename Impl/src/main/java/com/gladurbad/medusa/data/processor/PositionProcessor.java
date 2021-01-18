@@ -10,6 +10,7 @@ import org.bukkit.block.Block;
 import org.bukkit.entity.Boat;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
+import org.bukkit.entity.Vehicle;
 import org.bukkit.material.Stairs;
 import org.bukkit.material.Step;
 import org.bukkit.util.NumberConversions;
@@ -143,7 +144,7 @@ public class PositionProcessor {
 
 
     public void handleOnBoat() {
-        nearBoat = PlayerUtil.getEntitiesWithinRadius(data.getPlayer().getLocation(), 2);
+        nearBoat = PlayerUtil.isNearVehicle(data.getPlayer());
     }
 
     public void handleTeleport() {

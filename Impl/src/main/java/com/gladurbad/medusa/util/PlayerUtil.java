@@ -10,6 +10,7 @@ import org.bukkit.block.Block;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
+import org.bukkit.entity.Vehicle;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.util.Vector;
@@ -51,7 +52,7 @@ public class PlayerUtil {
      * @param distance The distance
      * @return The block in the given distance, otherwise null
      */
-    public static Block getLookingBlock(final Player player, final int distance) {
+    public Block getLookingBlock(final Player player, final int distance) {
         Location loc = player.getEyeLocation();
 
         final Vector v = loc.getDirection().normalize();
@@ -81,7 +82,7 @@ public class PlayerUtil {
      * @return The entities within that radius
      * @author Nik
      */
-    public static List<Entity> getEntitiesWithinRadius(final Location location, final double radius) {
+    public List<Entity> getEntitiesWithinRadius(final Location location, final double radius) {
 
         final double expander = 16.0D;
 
@@ -109,6 +110,14 @@ public class PlayerUtil {
         entities.removeIf(entity -> entity.getLocation().distanceSquared(location) > radius * radius);
 
         return entities;
+    }
+
+    public boolean isNearVehicle(final Player player) {
+        for (final Entity entity : getEntitiesWithinRadius(player.getLocation(), 2)) {
+            if (entity instanceof Vehicle) return true;
+        }
+
+        return false;
     }
 
     public int getPotionLevel(final Player player, final PotionEffectType effect) {
