@@ -6,7 +6,7 @@ import com.gladurbad.api.check.CheckInfo;
 import com.gladurbad.medusa.data.PlayerData;
 import com.gladurbad.medusa.exempt.type.ExemptType;
 import com.gladurbad.medusa.packet.Packet;
-import io.github.retrooper.packetevents.packetwrappers.in.useentity.WrappedPacketInUseEntity;
+import io.github.retrooper.packetevents.packetwrappers.play.in.useentity.WrappedPacketInUseEntity;
 import org.bukkit.Location;
 
 import java.text.DecimalFormat;
@@ -30,9 +30,9 @@ public class KillAuraD extends Check {
     public void handle(Packet packet) {
         if (packet.isUseEntity()) {
             final WrappedPacketInUseEntity wrapper = new WrappedPacketInUseEntity(packet.getRawPacket());
-            final float yaw = rotationInfo().getYaw() % 360F;
-            final float pitch = rotationInfo().getPitch();
-            final boolean isMoving = positionInfo().getDeltaXZ() != 0;
+            final float yaw = data.getRotationProcessor().getYaw() % 360F;
+            final float pitch = data.getRotationProcessor().getPitch();
+            final boolean isMoving = data.getPositionProcessor().getDeltaXZ() != 0;
             if (wrapper.getEntity() != null) {
                 if (lastLocation != null && lastYaw != null && lastPitch != null) {
                     if (wrapper.getEntity().getLocation().distance(lastLocation) > 0.1

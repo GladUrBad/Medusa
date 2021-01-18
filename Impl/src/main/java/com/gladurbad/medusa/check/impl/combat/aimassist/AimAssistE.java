@@ -22,18 +22,18 @@ public class AimAssistE extends Check {
     public void handle(final Packet packet) {
         if (packet.isRotation()) {
             if (isExempt(ExemptType.COMBAT)) {
-                final float yaw = rotationInfo().getYaw() % 360F;
-                final float lastYaw = rotationInfo().getLastYaw() % 360F;
+                final float yaw = data.getRotationProcessor().getYaw() % 360F;
+                final float lastYaw = data.getRotationProcessor().getLastYaw() % 360F;
 
-                final float pitch = rotationInfo().getPitch();
-                final float lastPitch = rotationInfo().getLastPitch();
+                final float pitch = data.getRotationProcessor().getPitch();
+                final float lastPitch = data.getRotationProcessor().getLastPitch();
 
-                final float deltaPitch = rotationInfo().getDeltaPitch();
-                final float lastDeltaPitch = rotationInfo().getLastDeltaPitch();
+                final float deltaPitch = data.getRotationProcessor().getDeltaPitch();
+                final float lastDeltaPitch = data.getRotationProcessor().getLastDeltaPitch();
 
                 final long gcd = MathUtil.getGcd((long) (deltaPitch * MathUtil.EXPANDER), (long) (lastDeltaPitch * MathUtil.EXPANDER));
 
-                final boolean cinematic = rotationInfo().isCinematic();
+                final boolean cinematic = data.getRotationProcessor().isCinematic();
                 final boolean check = yaw != lastYaw && pitch != lastPitch && !cinematic && deltaPitch < 20F;
 
                 if (check) {

@@ -19,16 +19,16 @@ public class SpeedA extends Check {
     @Override
     public void handle(final Packet packet) {
         if (packet.isPosition()) {
-            final double deltaXZ = positionInfo().getDeltaXZ();
-            final double lastDeltaXZ = positionInfo().getLastDeltaXZ();
+            final double deltaXZ = data.getPositionProcessor().getDeltaXZ();
+            final double lastDeltaXZ = data.getPositionProcessor().getLastDeltaXZ();
 
-            final double prediction = lastDeltaXZ * 0.91F + (actionInfo().isSprinting() ? 0.0263 : 0.02);
+            final double prediction = lastDeltaXZ * 0.91F + (data.getActionProcessor().isSprinting() ? 0.0263 : 0.02);
             final double difference = deltaXZ - prediction;
 
             final boolean invalid = difference > 1E-12 &&
-                    positionInfo().getAirTicks() > 2 &&
-                    !positionInfo().isFlying() &&
-                    !positionInfo().isNearBoat();
+                    data.getPositionProcessor().getAirTicks() > 2 &&
+                    !data.getPositionProcessor().isFlying() &&
+                    !data.getPositionProcessor().isNearBoat();
 
             if (invalid) {
                 if (++buffer > 2.5) {

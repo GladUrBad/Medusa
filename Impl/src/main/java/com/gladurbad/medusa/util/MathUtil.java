@@ -3,9 +3,6 @@ package com.gladurbad.medusa.util;
 import com.gladurbad.medusa.util.type.Pair;
 import com.google.common.collect.Lists;
 import lombok.experimental.UtilityClass;
-import net.minecraft.server.v1_8_R3.MathHelper;
-import org.bukkit.Location;
-import org.bukkit.util.Vector;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -154,14 +151,6 @@ public class MathUtil {
         }
     }
 
-    public boolean isExponentiallySmall(final Number number) {
-        return number.doubleValue() < 1 && Double.toString(number.doubleValue()).contains("E");
-    }
-
-    public boolean isExponentiallyLarge(final Number number) {
-        return number.doubleValue() > 10000 && Double.toString(number.doubleValue()).contains("E");
-    }
-
     public long getGcd(final long current, final long previous) {
         return (previous <= 16384L) ? current : getGcd(previous, current % previous);
     }
@@ -180,35 +169,6 @@ public class MathUtil {
 
     public double getCps(final Collection<? extends Number> data) {
         return (20 / getAverage(data)) * 50;
-    }
-
-    public int getDuplicates(final Collection<? extends Number> data) {
-        return (int)(data.size() - data.stream().distinct().count());
-    }
-
-    public int getDistinct(final Collection<? extends Number> data) {
-        return (int)data.stream().distinct().count();
-    }
-
-    public static Vector getDirection(final float yaw, final float pitch) {
-        Vector vector = new Vector();
-        float rotX = (float)Math.toRadians(yaw);
-        float rotY = (float)Math.toRadians(pitch);
-        vector.setY(-MathHelper.sin(rotY));
-        double xz = MathHelper.cos(rotY);
-        vector.setX(-xz * MathHelper.sin(rotX));
-        vector.setZ(xz * MathHelper.cos(rotX));
-        return vector;
-    }
-    
-    public static float[] getRotations(Location one, Location two) {
-        double diffX = two.getX() - one.getX();
-        double diffZ = two.getZ() - one.getZ();
-        double diffY = two.getY() + 2.0 - 0.4 - (one.getY() + 2.0);
-        double dist = Math.sqrt(diffX * diffX + diffZ * diffZ);
-        float yaw = (float) (Math.atan2(diffZ, diffX) * 180.0 / 3.141592653589793) - 90.0f;
-        float pitch = (float) (-Math.atan2(diffY, dist) * 180.0 / 3.141592653589793);
-        return new float[]{yaw, pitch};
     }
 
 }

@@ -25,10 +25,10 @@ public class AimAssistG extends Check {
     @Override
     public void handle(final Packet packet) {
         if (packet.isRotation() && isExempt(ExemptType.COMBAT)) {
-            final float yawAccel = rotationInfo().getYawAccel();
-            final float pitchAccel = rotationInfo().getPitchAccel();
+            final float yawAccel = data.getRotationProcessor().getYawAccel();
+            final float pitchAccel = data.getRotationProcessor().getPitchAccel();
 
-            final float deltaYaw = rotationInfo().getDeltaYaw() % 360F;
+            final float deltaYaw = data.getRotationProcessor().getDeltaYaw() % 360F;
 
             yawAccelSamples.add(yawAccel);
             pitchAccelSamples.add(pitchAccel);

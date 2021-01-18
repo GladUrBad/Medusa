@@ -9,7 +9,7 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>Impl</artifactId>
+    <artifactId>API</artifactId>
 
     <build>
         <plugins>
@@ -23,22 +23,6 @@
                     <compilerArgument>-XDignore.symbol.file</compilerArgument>
                 </configuration>
             </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-shade-plugin</artifactId>
-                <version>3.1.0</version>
-                <executions>
-                    <execution>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>shade</goal>
-                        </goals>
-                        <configuration>
-                            <minimizeJar>false</minimizeJar>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
         </plugins>
         <resources>
             <resource>
@@ -47,19 +31,5 @@
             </resource>
         </resources>
     </build>
-
-    <dependencies>
-        <dependency>
-            <groupId>com.gladurbad</groupId>
-            <artifactId>API</artifactId>
-            <version>${project.parent.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>com.github.retrooper</groupId>
-            <artifactId>packetevents</artifactId>
-            <version>dev-267480b563-1</version>
-        </dependency>
-    </dependencies>
-
 
 </project>

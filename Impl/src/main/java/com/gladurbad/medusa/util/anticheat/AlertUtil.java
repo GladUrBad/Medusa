@@ -3,6 +3,8 @@ package com.gladurbad.medusa.util.anticheat;
 import com.gladurbad.medusa.check.Check;
 import com.gladurbad.medusa.data.PlayerData;
 import com.gladurbad.medusa.util.ColorUtil;
+import com.gladurbad.medusa.util.PlayerUtil;
+import com.gladurbad.medusa.util.ServerUtil;
 import io.github.retrooper.packetevents.PacketEvents;
 import lombok.Getter;
 import com.gladurbad.medusa.config.Config;
@@ -12,6 +14,7 @@ import net.md_5.bungee.api.chat.ComponentBuilder;
 import net.md_5.bungee.api.chat.HoverEvent;
 import net.md_5.bungee.api.chat.TextComponent;
 
+import java.text.DecimalFormat;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -34,16 +37,21 @@ public class AlertUtil {
     public void handleAlert(final Check check, final PlayerData data, final String info) {
         TextComponent alertMessage = new TextComponent(ColorUtil.translate(Config.ALERT_FORMAT)
                 .replaceAll("%player%", data.getPlayer().getName())
-                .replaceAll("%check%", check.getCheckInfo().name())
+                .replaceAll("%uuid%", data.getPlayer().getUniqueId().toString())
+                .replaceAll("%checkName%", check.getJustTheName())
+                .replaceAll("%checkType%", Character.toString(check.getType()))
                 .replaceAll("%dev%", check.getCheckInfo().experimental() ? ColorUtil.translate("&7*") : "")
-                .replaceAll("%vl%", Integer.toString(check.getVl())));
+                .replaceAll("%vl%", Integer.toString(check.getVl()))
+                .replaceAll("%maxvl%", Integer.toString(check.getMaxVl()))
+                .replaceAll("%ping%", Integer.toString(PlayerUtil.getPing(data.getPlayer())))
+                .replaceAll("%tps%", new DecimalFormat("##.##").format(ServerUtil.getTPS())));
 
         alertMessage.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/tp " + data.getPlayer().getName()));
         alertMessage.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder(ColorUtil.translate(
                 Config.ACCENT_ONE + "Description: &7" + check.getCheckInfo().description() +
                         "\n" + Config.ACCENT_ONE + "Info: &7" + info +
-                        "\n" + Config.ACCENT_ONE + "Ping: &7" + PacketEvents.getAPI().getPlayerUtils().getPing(data.getPlayer()) +
-                        "\n" + Config.ACCENT_ONE + "TPS: &7" + String.format("%.2f", PacketEvents.getAPI().getServerUtils().getTPS()) +
+                        "\n" + Config.ACCENT_ONE + "Ping: &7" + PacketEvents.get().getPlayerUtils().getPing(data.getPlayer()) +
+                        "\n" + Config.ACCENT_ONE + "TPS: &7" + String.format("%.2f", PacketEvents.get().getServerUtils().getTPS()) +
                         "\n" + Config.ACCENT_TWO + "Click to teleport.")).create()));
 
         alerts.forEach(player -> player.getPlayer().spigot().sendMessage(alertMessage));

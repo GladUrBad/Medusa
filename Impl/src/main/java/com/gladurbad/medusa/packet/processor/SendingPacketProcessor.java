@@ -1,12 +1,12 @@
 package com.gladurbad.medusa.packet.processor;
 
 import com.gladurbad.medusa.data.PlayerData;
-import io.github.retrooper.packetevents.packetwrappers.out.entityteleport.WrappedPacketOutEntityTeleport;
-import io.github.retrooper.packetevents.packetwrappers.out.entityvelocity.WrappedPacketOutEntityVelocity;
+import io.github.retrooper.packetevents.packetwrappers.play.out.entityteleport.WrappedPacketOutEntityTeleport;
+import io.github.retrooper.packetevents.packetwrappers.play.out.entityvelocity.WrappedPacketOutEntityVelocity;
 import com.gladurbad.medusa.packet.Packet;
-import io.github.retrooper.packetevents.packetwrappers.out.explosion.WrappedPacketOutExplosion;
-import io.github.retrooper.packetevents.packetwrappers.out.position.WrappedPacketOutPosition;
-import io.github.retrooper.packetevents.packetwrappers.out.transaction.WrappedPacketOutTransaction;
+import io.github.retrooper.packetevents.packetwrappers.play.out.explosion.WrappedPacketOutExplosion;
+import io.github.retrooper.packetevents.packetwrappers.play.out.position.WrappedPacketOutPosition;
+import io.github.retrooper.packetevents.packetwrappers.play.out.transaction.WrappedPacketOutTransaction;
 import org.bukkit.Bukkit;
 
 public class SendingPacketProcessor  {

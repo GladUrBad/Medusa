@@ -16,6 +16,7 @@ import com.gladurbad.medusa.util.anticheat.AlertUtil;
 import com.gladurbad.medusa.packet.Packet;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 
@@ -26,7 +27,7 @@ import java.util.Objects;
 public abstract class Check implements MedusaCheck {
 
     //Data for check.
-    protected final PlayerData data;
+    public final PlayerData data;
 
     //Check data from config.
     private final boolean enabled;
@@ -40,6 +41,10 @@ public abstract class Check implements MedusaCheck {
     @Getter(AccessLevel.NONE) @Setter(AccessLevel.NONE)
     public double buffer;
 
+    //Because I'm lazy to change the annotation again.
+    public String justTheName;
+    public char type;
+
     public Check(final PlayerData data) {
         this.data = data;
 
@@ -48,12 +53,15 @@ public abstract class Check implements MedusaCheck {
         this.punishCommand = Config.PUNISH_COMMANDS.get(this.getClass().getSimpleName());
 
         this.checkType = CheckType.fromPackageName(this.getClass().getPackage().getName());
+
+        this.justTheName = this.getCheckInfo().name().split("\\(")[0].replace(" ", "");
+        this.type = this.getCheckInfo().name().split("\\(")[1].split("\\)")[0].replaceAll(" ", "").toCharArray()[0];
     }
 
     public abstract void handle(final Packet packet);
 
     public void fail(final Object info) {
-        final MedusaFlagEvent event = new MedusaFlagEvent(player(), this);
+        final MedusaFlagEvent event = new MedusaFlagEvent(data.getPlayer(), this);
         Bukkit.getScheduler().runTaskAsynchronously(Medusa.INSTANCE.getPlugin(), () -> Bukkit.getPluginManager().callEvent(event));
 
         if (!event.isCancelled()) {
@@ -85,34 +93,6 @@ public abstract class Check implements MedusaCheck {
 
     public void fail() {
         fail("No information.");
-    }
-
-    protected ActionProcessor actionInfo() {
-        return data.getActionProcessor();
-    }
-
-    protected ClickProcessor clickInfo() {
-        return data.getClickProcessor();
-    }
-
-    protected CombatProcessor combatInfo() {
-        return data.getCombatProcessor();
-    }
-
-    protected PositionProcessor positionInfo() {
-        return data.getPositionProcessor();
-    }
-
-    protected RotationProcessor rotationInfo() {
-        return data.getRotationProcessor();
-    }
-
-    protected VelocityProcessor velocityInfo() {
-        return data.getVelocityProcessor();
-    }
-
-    protected Player player() {
-        return data.getPlayer();
     }
 
     protected boolean isExempt(final ExemptType exemptType) {
@@ -168,6 +148,6 @@ public abstract class Check implements MedusaCheck {
     }
 
     public boolean isBridging() {
-        return player().getLocation().clone().subtract(0, 2, 0).getBlock().getType() == Material.AIR;
+        return data.getPlayer().getLocation().clone().subtract(0, 2, 0).getBlock().getType() == Material.AIR;
     }
 }

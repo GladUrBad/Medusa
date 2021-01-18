@@ -14,7 +14,8 @@ public class PunishUtil {
             Bukkit.getScheduler().runTask(Medusa.INSTANCE.getPlugin(), () ->
                     Bukkit.getServer().dispatchCommand(Bukkit.getServer().getConsoleSender(), check.getPunishCommand()
                             .replaceAll("%player%", data.getPlayer().getName())
-                            .replaceAll("%check%", check.getCheckInfo().name())));
+                            .replaceAll("%checkName%", check.getJustTheName())
+                            .replaceAll("%checkType", String.valueOf(check.getType()))));
         }
     }
 }

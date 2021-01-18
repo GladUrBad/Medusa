@@ -12,27 +12,45 @@ appearance:
   # Then, put $ and space after it (Ex: Medusa$ )
   #
   # After this, put the alert format and a $ after it,
-  # followed by a space (Ex: &aMedusa » &f%player% &7failed &f%check% &7(x%vl%)$ )
+  # followed by a space (Ex: &aMedusa » &f%player% &7failed &f%checkName% &7(x%vl%)$ )
   #
   # Then, put TWO (no more, no less, can be the same)
   # accent colours you want using the Minecraft colour code symbols (Ex: &a &c)
+  #
+  # Placeholders:
+  # %player% - Player's name
+  # %uuid% - Player's UUID
+  # %checkName% - Name of the check (e.g. Reach, AutoClicker, KillAura, Speed, Fly)
+  # %checkType% - ID of the check, just a letter like A, B, C.
+  # %dev% - Experimental status of the check, if the check has a "*" after it, it's experimental.
+  # %vl% - Current violation level of the check flagged.
+  # %maxvl% - Maximum violation level of the check flagged.
+  # %ping% - Latency of the player.
+  # %tps% - TPS of the server.
+
   themes:
-    - "Medusa$ &aMedusa » &f%player% &7failed &f%check% &7(x%vl%) &c%dev%$ &a &2"
-    - "Overflow$ &7[&cMedusa&7] %player% flagged &c%check% VL: &c%vl% %dev%$ &c &4"
-    - "Sparky$ &eMedusa &7> &6%player% &7has failed &6%check% &cx%vl%$ &6 &e"
-    - "Karhu$ &8[&b&lMedusa&r&8] &3%player% &8- &3%check% &f%dev% &3(&bx%vl%&3)$ &b &3"
-    - "Rock$ &8[&c!&8] &f%player% &7may be using &f%check% &c(%vl%)$ &c &c"
-    - "Vulcan$ &8[&c&l!&8] &c%player% &7failed &b%check% &7[VL: &c%vl%&7]$ &c &7"
+    - "Medusa$ &aMedusa » &f%player% &7failed &f%checkName% (%checkType%) &7(x%vl%) &c%dev%$ &a &2"
+    - "Overflow$ &7[&cMedusa&7] %player% flagged &c%checkName% (type %checkType%) VL: &c%vl% %dev%$ &c &4"
+    - "Sparky$ &eMedusa &7> &6%player% &7has failed &6%checkName% (%checkType%) &cx%vl%$ &6 &e"
+    - "Karhu$ &8[&b&lMedusa&r&8] &3%player% &8- &3%checkName% %checkType% &f%dev% &3(&bx%vl%&3)$ &b &3"
+    - "Rock$ &8[&c!&8] &f%player% &7may be using &f%checkName% &c(%vl%)$ &c &c"
+    - "Vulcan$ &8[&c&l!&8] &c%player% &7failed &b%checkName% (Type %checkType%) &7[VL: &c%vl%&7]$ &c &7"
+    - "VulcanNew$ &cMedusa &8/ &c%player% &7failed &b%checkName% &7(&bType %checkType%&7) (%vl%/%maxvl%)$ %b %3"
+    - "AAC$ &7[&6MEDUSA&7] &2[CONSOLE] &f%player% is suspected of using %checkName% (%ping%ms, %tps%TPS)$ %f %6"
+    - "Spartan$ &8[&2Medusa&8] &c%player% failed %checkName% (VL: %vl%) &8(&fPing: %ping%ms&8) (&fTPS: %tps%&8) (&freason: type %checkType%, hover for more info.&8)$ &a &2"
+    - "GodsEye$ &6Medusa >> &c%player% &7failed &c%checkName% &8[&fType%checkType%&8] [&fx%vl%&8]$ &6 &c"
+    - "Reflex$ &5Medusa &8» &7%player% &f%checkName% %checkType% &d%vl%/%maxvl% &7| ping: %ping% | tps: %tps%$ &d &5"
+    - "Iris$ &8[&b&lMedusa&r&8] &f%player% &7has failed &f%checkName% (%checkType%) &c(x%vl%)$ &7 &b"
   # Accent colours. Changes color look of aspects of Medusa.
   accents:
     accentOne: '&a'
     accentTwo: '&2'
 
 violations:
-  alert-format: '&aMedusa » &f%player% &7failed &f%check% &7(x%vl%) &c%dev%'
-  alert-cooldown: 2500
-  minimum-vl-to-alert: 5
-  clear-violations-delay: 10
+  alert-format: '&aMedusa » &f%player% &7failed &f%checkName% (%checkType%) &7(x%vl%) &c%dev%'
+  alert-cooldown: 2000
+  minimum-vl-to-alert: 0
+  clear-violations-delay: 5
 
 # Check configuration
 # enabled: Turns the check on/off.
@@ -44,15 +62,15 @@ checks:
       a:
         enabled: true
         max-violations: 10
-        punish-command: 'kick %player% Unfair Advantage - Cheat %check%'
+        punish-command: ''
       b:
         enabled: true
         max-violations: 10
-        punish-command: 'kick %player% Unfair Advantage - Cheat %check%'
+        punish-command: ''
       c:
         enabled: true
         max-violations: 10
-        punish-command: 'kick %player% Unfair Advantage - Cheat %check%'
+        punish-command: ''
       d:
         enabled: true
         max-violations: 0
@@ -60,20 +78,20 @@ checks:
       e:
         enabled: true
         max-violations: 10
-        punish-command: 'kick %player% Unfair Advantage - Cheat %check%'
+        punish-command: ''
       f:
         enabled: true
         max-violations: 1
-        punish-command: 'ban %player% Unfair Advantage - Cheat %check%'
+        punish-command: ''
       g:
         enabled: true
         max-violations: 25
-        punish-command: 'kick %player% Unfair Advantage - Cheat %check%'
+        punish-command: ''
     autoclicker:
       a:
         enabled: true
         max-violations: 10
-        punish-command: '%player% Unfair Advantage - Cheat %check%'
+        punish-command: ''
       b:
         enabled: true
         max-violations: 0
@@ -90,37 +108,38 @@ checks:
       a:
         enabled: true
         max-violations: 5
-        punish-command: 'ban %player% Unfair Advantage - Cheat %check%'
+        punish-command: ''
       b:
         enabled: true
         max-violations: 5
-        punish-command: 'ban %player% Unfair Advantage - Cheat %check%'
+        punish-command: ''
       c:
         enabled: true
         max-violations: 5
-        punish-command: 'ban %player% Unfair Advantage - Cheat %check%'
+        punish-command: ''
       d:
         enabled: true
         max-violations: 5
-        punish-command: 'kick %player% Unfair Advantage - Cheat %check%'
+        punish-command: ''
       e:
         enabled: true
         max-violations: 5
-        punish-command: 'ban %player% Unfair Advantage - Cheat %check%'
+        punish-command: ''
       f:
         enabled: true
         max-violations: 50
-        punish-command: 'kick %player% Unfair Advantage - Cheat %check%'
-    hitbox:
+        punish-command: ''
+    reach:
       a:
         enabled: true
         max-violations: 25
-        punish-command: 'ban %player% Unfair Advantage - Cheat %check%'
+        punish-command: ''
       b:
         enabled: true
         max-violations: 25
-        punish-command: 'ban %player% Unfair Advantage - Cheat %check%'
-      c:
+        punish-command: ''
+    hitbox:
+      a:
         enabled: true
         max-violations: 0
         punish-command: ''
@@ -138,74 +157,88 @@ checks:
       a:
         enabled: true
         max-violations: 5
-        punish-command: 'ban %player% Unfair Advantage - Cheat %check%'
+        punish-command: ''
     fly:
       a:
         enabled: true
         max-violations: 35
-        punish-command: 'ban %player% Unfair Advantage - Cheat %check%'
+        punish-command: ''
       b:
         enabled: true
         max-violations: 10
-        punish-command: 'ban %player% Unfair Advantage - Cheat %check%'
+        punish-command: ''
       c:
         enabled: true
         max-violations: 10
-        punish-command: 'ban %player% Unfair Advantage - Cheat %check%'
+        punish-command: ''
     jesus:
       a:
         enabled: true
         max-violations: 25
-        punish-command: 'ban %player% Unfair Advantage - Cheat %check%'
+        punish-command: ''
       b:
         enabled: true
         max-violations: 25
-        punish-command: 'ban %player% Unfair Advantage - Cheat %check%'
+        punish-command: ''
     motion:
       a:
         enabled: true
         max-violations: 5
-        punish-command: 'ban %player% Unfair Advantage - Cheat %check%'
+        punish-command: ''
       b:
         enabled: true
         max-violations: 5
-        punish-command: 'ban %player% Unfair Advantage - Cheat %check%'
+        punish-command: ''
       c:
         enabled: true
         max-violations: 25
-        punish-command: 'ban %player% Unfair Advantage - Cheat %check%'
+        punish-command: ''
       d:
         enabled: true
         max-violations: 5
-        punish-command: 'ban %player% Unfair Advantage - Cheat %check%'
+        punish-command: ''
+      e:
+        enabled: true
+        max-violations: 5
+        punish-command: ''
+    noslow:
+      a:
+        enabled: true
+        max-violations: 25
+        punish-command: ''
     speed:
       a:
         enabled: true
         max-violations: 25
-        punish-command: 'ban %player% Unfair Advantage - Cheat %check%'
+        punish-command: ''
       b:
         enabled: true
         max-violations: 50
-        punish-command: 'ban %player% Unfair Advantage - Cheat %check%'
+        punish-command: ''
       c:
         enabled: true
         max-violations: 10
-        punish-command: 'ban %player% Unfair Advantage - Cheat %check%'
+        punish-command: ''
   player:
     timer:
       a:
         enabled: true
         max-violations: 50
-        punish-command: 'kick %player% Unfair Advantage - Cheat %check%'
+        punish-command: ''
       b:
         enabled: true
         max-violations: 50
-        punish-command: 'kick %player% Unfair Advantage - Cheat %check%'
+        punish-command: ''
       c:
         enabled: true
         max-violations: 50
-        punish-command: 'kick %player% Unfair Advantage - Cheat %check%'
+        punish-command: ''
     hand:
+      a:
+        enabled: true
+        max-violations: 0
+        punish-command: ''
+    inventory:
       a:
         enabled: true
         max-violations: 0
@@ -213,54 +246,62 @@ checks:
       b:
         enabled: true
         max-violations: 15
-        punish-command: 'kick %player% Unfair Advantage - Cheat %check%'
-      c:
-        enabled: true
-        max-violations: 15
-        punish-command: 'kick %player% Unfair Advantage - Cheat %check%'
+        punish-command: ''
     protocol:
       a:
         enabled: true
         max-violations: 1
-        punish-command: 'ban %player% Unfair Advantage - Cheat %check%'
+        punish-command: ''
       b:
         enabled: true
         max-violations: 15
-        punish-command: 'ban %player% Unfair Advantage - Cheat %check%'
+        punish-command: ''
       c:
         enabled: true
         max-violations: 15
-        punish-command: 'ban %player% Unfair Advantage - Cheat %check%'
+        punish-command: ''
       d:
         enabled: true
         max-violations: 15
-        punish-command: 'ban %player% Unfair Advantage - Cheat %check%'
+        punish-command: ''
       e:
         enabled: true
         max-violations: 15
-        punish-command: 'ban %player% Unfair Advantage - Cheat %check%'
+        punish-command: ''
       f:
         enabled: true
         max-violations: 15
-        punish-command: 'ban %player% Unfair Advantage - Cheat %check%'
+        punish-command: ''
       g:
         enabled: true
         max-violations: 15
-        punish-command: 'ban %player% Unfair Advantage - Cheat %check%'
+        punish-command: ''
       h:
         enabled: true
         max-violations: 15
-        punish-command: 'ban %player% Unfair Advantage - Cheat %check%'
+        punish-command: ''
       i:
         enabled: true
         max-violations: 15
-        punish-command: 'ban %player% Unfair Advantage - Cheat %check%'
+        punish-command: ''
       j:
         enabled: true
         max-violations: 15
-        punish-command: 'ban %player% Unfair Advantage - Cheat %check%'
+        punish-command: ''
     scaffold:
       a:
         enabled: true
         max-violations: 10
-        punish-command: 'kick %player% Unfair Advantage - Cheat %check%'
+        punish-command: ''
+      b:
+        enabled: true
+        max-violations: 10
+        punish-command: ''
+      c:
+        enabled: true
+        max-violations: 10
+        punish-command: ''
+      d:
+        enabled: true
+        max-violations: 10
+        punish-command: ''

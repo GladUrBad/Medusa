@@ -5,7 +5,7 @@ import com.gladurbad.api.check.CheckInfo;
 import com.gladurbad.medusa.data.PlayerData;
 import com.gladurbad.medusa.exempt.type.ExemptType;
 import com.gladurbad.medusa.packet.Packet;
-import io.github.retrooper.packetevents.packetwrappers.in.flying.WrappedPacketInFlying;
+import io.github.retrooper.packetevents.packetwrappers.play.in.flying.WrappedPacketInFlying;
 
 /**
  * Created on 11/17/2020 Package com.gladurbad.medusa.check.impl.movement.fly by GladUrBad
@@ -32,7 +32,7 @@ public class FlyC extends Check {
             final boolean packetGround = wrapper.isOnGround();
 
             final boolean exempt = isExempt(ExemptType.BOAT, ExemptType.TELEPORT, ExemptType.CLIMBABLE,
-                    ExemptType.FLYING, ExemptType.JOINED);
+                    ExemptType.FLYING, ExemptType.JOINED, ExemptType.SLIME);
 
             if (!exempt && positionGround != packetGround) {
                 if (++buffer > 4) {

@@ -27,7 +27,7 @@ public class KillAuraA extends Check {
         } else if (packet.isFlying()) {
             if (usedEntity) {
                 final long delay = now() - lastUseEntityTime;
-                final boolean invalid = !actionInfo().isLagging() && delay > 15;
+                final boolean invalid = !data.getActionProcessor().isLagging() && delay > 15;
 
                 if (invalid) {
                     if (++buffer > 2) {

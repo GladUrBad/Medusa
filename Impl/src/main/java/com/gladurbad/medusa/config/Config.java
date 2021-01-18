@@ -19,6 +19,7 @@ public class Config {
     //Violations stuff
     public static String ALERT_FORMAT;
     public static long ALERT_COOLDOWN;
+    public static long SETBACK_COOLDOWN;
     public static int MIN_VL_TO_ALERT;
     public static int CLEAR_VIOLATIONS_DELAY;
 
@@ -34,6 +35,7 @@ public class Config {
             THEMES = getStringListFromConfig("appearance.themes");
             ACCENT_ONE = getStringFromConfig("appearance.accents.accentOne");
             ACCENT_TWO = getStringFromConfig("appearance.accents.accentTwo");
+            SETBACK_COOLDOWN = getLongFromConfig("checks.movement.setback-cooldown");
 
             //Violations
             ALERT_FORMAT = getStringFromConfig("violations.alert-format");

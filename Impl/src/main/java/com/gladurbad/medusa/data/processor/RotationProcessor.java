@@ -70,8 +70,8 @@ public class RotationProcessor {
         final boolean invalidYaw = yawAccelAccel < .05 && yawAccelAccel > 0;
         final boolean invalidPitch = pitchAccelAccel < .05 && pitchAccelAccel > 0;
 
-        final boolean exponentialYaw = MathUtil.isExponentiallySmall(yawAccelAccel);
-        final boolean exponentialPitch = MathUtil.isExponentiallySmall(pitchAccelAccel);
+        final boolean exponentialYaw = String.valueOf(yawAccelAccel).contains("E");
+        final boolean exponentialPitch = String.valueOf(pitchAccelAccel).contains("E");
 
         if (finalSensitivity < 100 && (exponentialYaw || exponentialPitch)) {
             cinematicTicks += 3.5;

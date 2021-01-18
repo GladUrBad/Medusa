@@ -4,7 +4,7 @@ import com.gladurbad.medusa.check.Check;
 import com.gladurbad.api.check.CheckInfo;
 import com.gladurbad.medusa.data.PlayerData;
 import com.gladurbad.medusa.packet.Packet;
-import io.github.retrooper.packetevents.packetwrappers.in.flying.WrappedPacketInFlying;
+import io.github.retrooper.packetevents.packetwrappers.play.in.flying.WrappedPacketInFlying;
 
 /**
  * Created on 11/14/2020 Package com.gladurbad.medusa.check.impl.player.Protocol by GladUrBad
@@ -25,7 +25,7 @@ public class ProtocolC extends Check {
         if (packet.isFlying()) {
             final WrappedPacketInFlying wrapper = new WrappedPacketInFlying(packet.getRawPacket());
 
-            if (wrapper.isPosition() || player().isInsideVehicle()) {
+            if (wrapper.isPosition() || data.getPlayer().isInsideVehicle()) {
                 streak = 0;
                 return;
             }

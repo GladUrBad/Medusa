@@ -19,7 +19,7 @@ public class ProtocolA extends Check {
     @Override
     public void handle(final Packet packet) {
         if (packet.isRotation()) {
-            final float pitch = rotationInfo().getPitch();
+            final float pitch = data.getRotationProcessor().getPitch();
 
             if (Math.abs(pitch) > 90) fail(String.format("pitch=%.2f", pitch));
         }

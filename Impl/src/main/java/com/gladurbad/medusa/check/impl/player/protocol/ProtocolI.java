@@ -4,7 +4,7 @@ import com.gladurbad.medusa.check.Check;
 import com.gladurbad.api.check.CheckInfo;
 import com.gladurbad.medusa.data.PlayerData;
 import com.gladurbad.medusa.packet.Packet;
-import io.github.retrooper.packetevents.packetwrappers.in.useentity.WrappedPacketInUseEntity;
+import io.github.retrooper.packetevents.packetwrappers.play.in.useentity.WrappedPacketInUseEntity;
 
 @CheckInfo(name = "Protocol (I)", experimental = true, description = "Validates block dig packets.")
 public class ProtocolI extends Check {
@@ -19,7 +19,7 @@ public class ProtocolI extends Check {
             final WrappedPacketInUseEntity wrapper = new WrappedPacketInUseEntity(packet.getRawPacket());
 
             if (wrapper.getAction() == WrappedPacketInUseEntity.EntityUseAction.ATTACK) {
-                final boolean invalid = actionInfo().isBlocking();
+                final boolean invalid = data.getActionProcessor().isBlocking();
 
                 if (invalid) {
                     fail();

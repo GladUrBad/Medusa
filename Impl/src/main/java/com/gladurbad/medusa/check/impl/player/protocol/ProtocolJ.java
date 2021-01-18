@@ -4,7 +4,7 @@ import com.gladurbad.medusa.check.Check;
 import com.gladurbad.api.check.CheckInfo;
 import com.gladurbad.medusa.data.PlayerData;
 import com.gladurbad.medusa.packet.Packet;
-import io.github.retrooper.packetevents.packetwrappers.in.useentity.WrappedPacketInUseEntity;
+import io.github.retrooper.packetevents.packetwrappers.play.in.useentity.WrappedPacketInUseEntity;
 
 @CheckInfo(name = "Protocol (J)", experimental = true, description = "Checks for attacking and digging.")
 public class ProtocolJ extends Check {
@@ -19,8 +19,8 @@ public class ProtocolJ extends Check {
             final WrappedPacketInUseEntity wrapper = new WrappedPacketInUseEntity(packet.getRawPacket());
 
             if (wrapper.getAction() == WrappedPacketInUseEntity.EntityUseAction.ATTACK) {
-                final boolean sword = player().getItemInHand().getType().toString().contains("SWORD");
-                final boolean invalid = actionInfo().isSendingDig();
+                final boolean sword = data.getPlayer().getItemInHand().getType().toString().contains("SWORD");
+                final boolean invalid = data.getActionProcessor().isSendingDig();
 
                 if (invalid && sword) {
                     if (++buffer > 5) {

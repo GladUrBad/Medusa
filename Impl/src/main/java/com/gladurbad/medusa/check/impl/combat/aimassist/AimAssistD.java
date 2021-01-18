@@ -32,8 +32,8 @@ public class AimAssistD extends Check {
     @Override
     public void handle(Packet packet) {
         if (packet.isRotation()) {
-            final float deltaYaw = rotationInfo().getDeltaYaw() % 360F;
-            final float deltaPitch = rotationInfo().getDeltaPitch();
+            final float deltaYaw = data.getRotationProcessor().getDeltaYaw() % 360F;
+            final float deltaPitch = data.getRotationProcessor().getDeltaPitch();
 
             final double divisorYaw = MathUtil.getGcd((long) (deltaYaw * MathUtil.EXPANDER), (long) (lastDeltaYaw * MathUtil.EXPANDER));
             final double divisorPitch = MathUtil.getGcd((long) (deltaPitch * MathUtil.EXPANDER), (long) (lastDeltaPitch * MathUtil.EXPANDER));

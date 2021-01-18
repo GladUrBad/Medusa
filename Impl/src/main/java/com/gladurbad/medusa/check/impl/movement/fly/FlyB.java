@@ -20,10 +20,10 @@ public class FlyB extends Check {
 
     @Override
     public void handle(Packet packet) {
-        if (packet.isPosition()) {
-            final double acceleration = positionInfo().getDeltaY() - positionInfo().getLastDeltaY();
-            final double airTicks = positionInfo().getAirTicks();
-            final double deltaY = positionInfo().getDeltaY();
+        if (packet.isPosition() && !isExempt(ExemptType.TELEPORT)) {
+            final double acceleration = data.getPositionProcessor().getDeltaY() - data.getPositionProcessor().getLastDeltaY();
+            final double airTicks = data.getPositionProcessor().getAirTicks();
+            final double deltaY = data.getPositionProcessor().getDeltaY();
 
             final boolean invalid = !this.isExempt(ExemptType.FLYING) &&
                     lastAcceleration <= 0 && acceleration > 0 && deltaY > 0;

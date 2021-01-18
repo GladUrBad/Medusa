@@ -25,6 +25,8 @@ public enum ExemptType {
 
     SLIME(data -> data.getPositionProcessor().getSinceSlimeTicks() < 30),
 
+    ICE(data -> data.getPositionProcessor().getSinceIceTicks() < 40),
+
     WEB(data -> data.getPositionProcessor().isInWeb()),
 
     CLIMBABLE(data -> data.getPositionProcessor().isOnClimbable()),

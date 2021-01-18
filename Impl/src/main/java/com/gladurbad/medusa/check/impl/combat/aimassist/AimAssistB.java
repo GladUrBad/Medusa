@@ -20,8 +20,8 @@ public class AimAssistB extends Check {
     @Override
     public void handle(Packet packet) {
         if (packet.isRotation() && !isExempt(ExemptType.TELEPORT)) {
-            final float deltaYaw = rotationInfo().getDeltaYaw() % 360F;
-            final float deltaPitch = rotationInfo().getDeltaPitch();
+            final float deltaYaw = data.getRotationProcessor().getDeltaYaw() % 360F;
+            final float deltaPitch = data.getRotationProcessor().getDeltaPitch();
 
             final boolean invalid = (deltaPitch % 1 == 0 || deltaYaw % 1 == 0) && deltaPitch != 0 && deltaYaw != 0;
 

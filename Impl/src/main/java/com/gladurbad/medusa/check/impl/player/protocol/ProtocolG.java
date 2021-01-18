@@ -27,7 +27,7 @@ public class ProtocolG extends Check {
         } else if (packet.isFlying()) {
             if (placedBlock) {
                 final long delay = now() - lastBlockPlace;
-                final boolean invalid = !actionInfo().isLagging() && delay > 15;
+                final boolean invalid = !data.getActionProcessor().isLagging() && delay > 25;
 
                 if (invalid) {
                     if (++buffer > 5) {

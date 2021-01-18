@@ -18,7 +18,7 @@ public class KillAuraC extends Check {
     @Override
     public void handle(Packet packet) {
         if (packet.isUseEntity()) {
-            if (combatInfo().getCurrentTargets() > 1) fail();
+            if (data.getCombatProcessor().getCurrentTargets() > 1) fail();
         }
     }
 }

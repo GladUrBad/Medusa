@@ -1,9 +1,8 @@
 package com.gladurbad.medusa.data.processor;
 
 import io.github.retrooper.packetevents.PacketEvents;
-import io.github.retrooper.packetevents.packetwrappers.in.transaction.WrappedPacketInTransaction;
-import io.github.retrooper.packetevents.packetwrappers.out.entityvelocity.WrappedPacketOutEntityVelocity;
-import io.github.retrooper.packetevents.packetwrappers.out.transaction.WrappedPacketOutTransaction;
+import io.github.retrooper.packetevents.packetwrappers.play.in.transaction.WrappedPacketInTransaction;
+import io.github.retrooper.packetevents.packetwrappers.play.out.transaction.WrappedPacketOutTransaction;
 import lombok.Getter;
 import com.gladurbad.medusa.Medusa;
 import com.gladurbad.medusa.data.PlayerData;
@@ -40,7 +39,7 @@ public class VelocityProcessor {
 
         this.velocityID = (short) ThreadLocalRandom.current().nextInt(32767);
         this.verifyingVelocity = true;
-        PacketEvents.getAPI().getPlayerUtils().sendPacket(data.getPlayer(), new WrappedPacketOutTransaction(0, velocityID, false));
+        PacketEvents.get().getPlayerUtils().sendPacket(data.getPlayer(), new WrappedPacketOutTransaction(0, velocityID, false));
     }
 
     public void handleTransaction(final WrappedPacketInTransaction wrapper) {
@@ -55,7 +54,7 @@ public class VelocityProcessor {
             transactionPing = System.currentTimeMillis() - transactionReply;
 
             transactionID = (short) ThreadLocalRandom.current().nextInt(32767);
-            PacketEvents.getAPI().getPlayerUtils().sendPacket(data.getPlayer(), new WrappedPacketOutTransaction(0, transactionID, false));
+            PacketEvents.get().getPlayerUtils().sendPacket(data.getPlayer(), new WrappedPacketOutTransaction(0, transactionID, false));
             transactionReply = System.currentTimeMillis();
         }
     }

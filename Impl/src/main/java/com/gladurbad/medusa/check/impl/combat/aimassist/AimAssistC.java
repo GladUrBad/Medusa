@@ -21,10 +21,10 @@ public class AimAssistC extends Check {
     @Override
     public void handle(Packet packet) {
         if (packet.isRotation() && !isExempt(ExemptType.TELEPORT)) {
-            final float deltaYaw = rotationInfo().getDeltaYaw();
-            final double yawAccel = rotationInfo().getYawAccel();
-            final float deltaPitch = rotationInfo().getDeltaPitch();
-            final double pitchAccel = rotationInfo().getPitchAccel();
+            final float deltaYaw = data.getRotationProcessor().getDeltaYaw();
+            final double yawAccel = data.getRotationProcessor().getYawAccel();
+            final float deltaPitch = data.getRotationProcessor().getDeltaPitch();
+            final double pitchAccel = data.getRotationProcessor().getPitchAccel();
 
             final boolean invalidYaw = yawAccel < 0.1 && Math.abs(deltaYaw) > 1.5F;
             final boolean invalidPitch = pitchAccel < 0.1 && Math.abs(deltaPitch) > 1.5F;

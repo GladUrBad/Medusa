@@ -1,6 +1,7 @@
 package com.gladurbad.medusa.util.type;
 
 import lombok.Getter;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.block.Block;
@@ -103,5 +104,48 @@ public final class BoundingBox {
         this.maxZ += maxZ;
 
         return this;
+    }
+
+    public double collidesD(RayTrace ray, double tmin, double tmax) {
+        for (int i = 0; i < 3; i++) {
+            double d = 1 / ray.direction(i);
+            double t0 = (min(i) - ray.origin(i)) * d;
+            double t1 = (max(i) - ray.origin(i)) * d;
+            if (d < 0) {
+                double t = t0;
+                t0 = t1;
+                t1 = t;
+            }
+            tmin = Math.max(t0, tmin);
+            tmax = Math.min(t1, tmax);
+            if (tmax <= tmin) return 10;
+        }
+        return tmin;
+    }
+
+    public double min(int i) {
+        switch (i) {
+            case 0:
+                return minX;
+            case 1:
+                return minY;
+            case 2:
+                return minZ;
+            default:
+                return 0;
+        }
+    }
+
+    public double max(int i) {
+        switch (i) {
+            case 0:
+                return maxX;
+            case 1:
+                return maxY;
+            case 2:
+                return maxZ;
+            default:
+                return 0;
+        }
     }
 }

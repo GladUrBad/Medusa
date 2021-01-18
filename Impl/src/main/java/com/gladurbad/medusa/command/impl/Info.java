@@ -29,7 +29,7 @@ public class Info extends MedusaCommand {
                     sendMessage(sender, ColorUtil.translate(Config.ACCENT_ONE + "Information for &c" + playerData.getPlayer().getName() + Config.ACCENT_ONE + "."));
                     sendRetardedNewLine(sender);
                     sendMessage(sender, ColorUtil.translate(Config.ACCENT_TWO + "&oGeneral information:"));
-                    sendMessage(sender, ColorUtil.translate(Config.ACCENT_ONE + "Latency → " + Config.ACCENT_TWO + PacketEvents.getAPI().getPlayerUtils().getPing(playerData.getPlayer())) + "ms");
+                    sendMessage(sender, ColorUtil.translate(Config.ACCENT_ONE + "Latency → " + Config.ACCENT_TWO + PacketEvents.get().getPlayerUtils().getPing(playerData.getPlayer())) + "ms");
                     sendMessage(sender, ColorUtil.translate(Config.ACCENT_ONE + "Checks amount → " + Config.ACCENT_TWO + playerData.getChecks().size()));
                     sendMessage(sender, ColorUtil.translate(Config.ACCENT_ONE + "Sensitivity → " + Config.ACCENT_TWO + playerData.getRotationProcessor().getSensitivity() + "%"));
                     final String clientBrand = playerData.getClientBrand() == null ? "&cCould not resolve client brand for this player." : playerData.getClientBrand();

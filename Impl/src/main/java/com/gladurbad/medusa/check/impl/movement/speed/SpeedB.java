@@ -8,7 +8,7 @@ import com.gladurbad.medusa.data.processor.VelocityProcessor;
 import com.gladurbad.medusa.exempt.type.ExemptType;
 import com.gladurbad.medusa.packet.Packet;
 import com.gladurbad.medusa.util.PlayerUtil;
-import io.github.retrooper.packetevents.packetwrappers.in.flying.WrappedPacketInFlying;
+import io.github.retrooper.packetevents.packetwrappers.play.in.flying.WrappedPacketInFlying;
 import org.bukkit.potion.PotionEffectType;
 
 /**
@@ -36,8 +36,8 @@ public class SpeedB extends Check {
             groundTicks = flying.isOnGround() ? groundTicks + 1 : 0;
             airTicks = !flying.isOnGround() ? airTicks + 1 : 0;
             
-            final PositionProcessor position = positionInfo();
-            final VelocityProcessor velocity = velocityInfo();
+            final PositionProcessor position = data.getPositionProcessor();
+            final VelocityProcessor velocity = data.getVelocityProcessor();
             
             final double deltaXZ = Math.abs(position.getDeltaXZ());
             final double deltaY = position.getDeltaY();
@@ -84,9 +84,9 @@ public class SpeedB extends Check {
                 speed = deltaXZ/maxGroundSpeed;
             }
 
-            //debug("buffer=" + buffer);
-
             final double shiftedSpeed = Math.round(speed * 100);
+
+            /*debug("buffer=" + buffer + " speed=" + shiftedSpeed);*/
 
             if (shiftedSpeed > 100) {
                 if ((buffer += shiftedSpeed > 150 ? 60 : 20) > 100 || shiftedSpeed > 1000) {
@@ -105,14 +105,14 @@ public class SpeedB extends Check {
 
     //Stolen from Artemis Client, could be quite inaccurate.
     private double getSpeed(double movement) {
-        if (PlayerUtil.getPotionLevel(player(), PotionEffectType.SPEED) > 0) {
-            movement *= 1.0D + 0.2D * (double)(PlayerUtil.getPotionLevel(player(), PotionEffectType.SPEED));
+        if (PlayerUtil.getPotionLevel(data.getPlayer(), PotionEffectType.SPEED) > 0) {
+            movement *= 1.0D + 0.2D * (double)(PlayerUtil.getPotionLevel(data.getPlayer(), PotionEffectType.SPEED));
         }
         return movement;
     }
 
     //Slightly inaccurate, maybe going to improve the math on this one more later.
     private double getAfterJumpSpeed() {
-        return 0.62 + 0.033 * (double) (PlayerUtil.getPotionLevel(player(), PotionEffectType.SPEED));
+        return 0.62 + 0.033 * (double) (PlayerUtil.getPotionLevel(data.getPlayer(), PotionEffectType.SPEED));
     }
 }

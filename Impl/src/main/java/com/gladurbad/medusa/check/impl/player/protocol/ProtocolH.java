@@ -4,7 +4,7 @@ import com.gladurbad.medusa.check.Check;
 import com.gladurbad.api.check.CheckInfo;
 import com.gladurbad.medusa.data.PlayerData;
 import com.gladurbad.medusa.packet.Packet;
-import io.github.retrooper.packetevents.packetwrappers.in.useentity.WrappedPacketInUseEntity;
+import io.github.retrooper.packetevents.packetwrappers.play.in.useentity.WrappedPacketInUseEntity;
 
 @CheckInfo(name = "Protocol (H)", experimental = true, description = "Checks for tick stack order in block hitting.")
 public class ProtocolH extends Check {
@@ -19,7 +19,7 @@ public class ProtocolH extends Check {
             final WrappedPacketInUseEntity wrapper = new WrappedPacketInUseEntity(packet.getRawPacket());
 
             if (wrapper.getAction() == WrappedPacketInUseEntity.EntityUseAction.ATTACK) {
-                final boolean invalid = actionInfo().isPlacing();
+                final boolean invalid = data.getActionProcessor().isPlacing();
 
                 if (invalid) {
                     fail();

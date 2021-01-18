@@ -1,12 +1,13 @@
 package com.gladurbad.medusa.packet.processor;
 
 import com.gladurbad.medusa.data.PlayerData;
-import io.github.retrooper.packetevents.packetwrappers.in.blockdig.WrappedPacketInBlockDig;
-import io.github.retrooper.packetevents.packetwrappers.in.clientcommand.WrappedPacketInClientCommand;
-import io.github.retrooper.packetevents.packetwrappers.in.entityaction.WrappedPacketInEntityAction;
-import io.github.retrooper.packetevents.packetwrappers.in.flying.WrappedPacketInFlying;
-import io.github.retrooper.packetevents.packetwrappers.in.transaction.WrappedPacketInTransaction;
-import io.github.retrooper.packetevents.packetwrappers.in.useentity.WrappedPacketInUseEntity;
+import io.github.retrooper.packetevents.packetwrappers.play.in.blockdig.WrappedPacketInBlockDig;
+import io.github.retrooper.packetevents.packetwrappers.play.in.clientcommand.WrappedPacketInClientCommand;
+import io.github.retrooper.packetevents.packetwrappers.play.in.entityaction.WrappedPacketInEntityAction;
+import io.github.retrooper.packetevents.packetwrappers.play.in.flying.WrappedPacketInFlying;
+import io.github.retrooper.packetevents.packetwrappers.play.in.helditemslot.WrappedPacketInHeldItemSlot;
+import io.github.retrooper.packetevents.packetwrappers.play.in.transaction.WrappedPacketInTransaction;
+import io.github.retrooper.packetevents.packetwrappers.play.in.useentity.WrappedPacketInUseEntity;
 import com.gladurbad.medusa.packet.Packet;
 
 public class ReceivingPacketProcessor  {
@@ -29,6 +30,11 @@ public class ReceivingPacketProcessor  {
         }
         if (packet.isBlockPlace()) {
             data.getActionProcessor().handleBlockPlace();
+        }
+        if (packet.isHeldItemSlot()) {
+            final WrappedPacketInHeldItemSlot wrapper = new WrappedPacketInHeldItemSlot(packet.getRawPacket());
+
+            data.getActionProcessor().handleHeldItemSlot(wrapper);
         }
         if (packet.isCloseWindow()) {
             data.getActionProcessor().handleCloseWindow();

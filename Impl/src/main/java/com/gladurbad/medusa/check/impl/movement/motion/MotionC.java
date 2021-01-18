@@ -24,16 +24,16 @@ public class MotionC extends Check {
     @Override
     public void handle(final Packet packet) {
         if (packet.isPosition()) {
-            final double deltaY = positionInfo().getDeltaY();
-            final double lastPosY = positionInfo().getLastY();
-            final boolean onGround = positionInfo().isOnGround();
+            final double deltaY = data.getPositionProcessor().getDeltaY();
+            final double lastPosY = data.getPositionProcessor().getLastY();
+            final boolean onGround = data.getPositionProcessor().isOnGround();
 
             final boolean step = MathUtil.mathOnGround(deltaY) && MathUtil.mathOnGround(lastPosY);
 
-            final double expectedJumpMotion = 0.42F + (double) ((float) PlayerUtil.getPotionLevel(player(), PotionEffectType.JUMP) * 0.1F);
+            final double expectedJumpMotion = 0.42F + (double) ((float) PlayerUtil.getPotionLevel(data.getPlayer(), PotionEffectType.JUMP) * 0.1F);
 
-            final double maxHighJump = 0.42F + (double) ((float) PlayerUtil.getPotionLevel(player(), PotionEffectType.JUMP) * 0.1F) +
-                    (velocityInfo().getTicksSinceVelocity() < 5 ? velocityInfo().getVelocityY() + 0.15 : 0);
+            final double maxHighJump = 0.42F + (double) ((float) PlayerUtil.getPotionLevel(data.getPlayer(), PotionEffectType.JUMP) * 0.1F) +
+                    (data.getVelocityProcessor().getTicksSinceVelocity() < 5 ? data.getVelocityProcessor().getVelocityY() + 0.15 : 0);
 
             final boolean jumped = deltaY > 0 && lastPosY % (1D/64) == 0 && !onGround && !step;
 
@@ -47,7 +47,7 @@ public class MotionC extends Check {
                 }
             }
 
-            if (!exempt && !step && !positionInfo().isNearSlab()) {
+            if (!exempt && !step && !data.getPositionProcessor().isNearSlab()) {
                 if (deltaY > maxHighJump) {
                     fail(String.format("highjump: dy=%.2f, max=%.2f", deltaY, expectedJumpMotion));
                 }

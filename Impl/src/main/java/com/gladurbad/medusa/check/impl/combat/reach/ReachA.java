@@ -1,4 +1,4 @@
-package com.gladurbad.medusa.check.impl.combat.hitbox;
+package com.gladurbad.medusa.check.impl.combat.reach;
 
 import com.gladurbad.api.check.CheckInfo;
 import com.gladurbad.medusa.Medusa;
@@ -6,26 +6,28 @@ import com.gladurbad.medusa.check.*;
 import com.gladurbad.medusa.data.PlayerData;
 import com.gladurbad.medusa.packet.Packet;
 import com.gladurbad.medusa.util.HitboxExpansion;
+import com.gladurbad.medusa.util.MathUtil;
 import com.gladurbad.medusa.util.type.BoundingBox;
 import com.gladurbad.medusa.util.type.RayTrace;
+import io.github.retrooper.packetevents.PacketEvents;
 import io.github.retrooper.packetevents.packetwrappers.play.in.useentity.WrappedPacketInUseEntity;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
-import org.bukkit.entity.Player;
-import org.bukkit.entity.Villager;
 import org.bukkit.util.NumberConversions;
 import org.bukkit.util.Vector;
 
 /**
  * Created on 10/26/2020 Package com.gladurbad.medusa.check.impl.combat.reach by GladUrBad
+ *
+ * Fix stupid HitboxExpansion using NMS.
  */
 
-@CheckInfo(name = "HitBox (A)", experimental = true, description = "Checks for the angle of the attack.")
-public class HitBoxA extends Check {
+@CheckInfo(name = "Reach (A)", description = "Checks for attacking distance.")
+public class ReachA extends Check {
 
-    public HitBoxA(PlayerData data) {
+    public ReachA(PlayerData data) {
         super(data);
     }
 
@@ -39,38 +41,33 @@ public class HitBoxA extends Check {
 
             if (wrapper.getAction() != WrappedPacketInUseEntity.EntityUseAction.ATTACK
                     || data.getPlayer().getGameMode() != GameMode.SURVIVAL
-                    || !(target instanceof Player || target instanceof Villager)
+                    || !(target instanceof LivingEntity)
                     || target != lastTarget
                     || !data.getTargetLocations().isFull()) return;
 
             final int ticks = Medusa.INSTANCE.getTickManager().getTicks();
             final int pingTicks = NumberConversions.floor(data.getActionProcessor().getPing() / 50.0) + 3;
 
-            final RayTrace rayTrace = RayTrace.from(data.getPlayer());
+            final Vector player = data.getPlayer().getLocation().toVector().setY(0);
 
-            final int collided = (int) data.getTargetLocations().stream()
+            final double distance = data.getTargetLocations().stream()
                     .filter(pair -> Math.abs(ticks - pair.getY() - pingTicks) < 3)
-                    .filter(pair -> {
-                        final Location location = pair.getX();
-                        final BoundingBox boundingBox = new BoundingBox(
-                                location.getX() - 0.4,
-                                location.getX() + 0.4,
-                                location.getY(),
-                                location.getY() + 1.9,
-                                location.getZ() - 0.4,
-                                location.getZ() + 0.4
-                        );
+                    .mapToDouble(pair -> {
+                        final Vector victim = pair.getX().toVector().setY(0);
+                        final double expansion = HitboxExpansion.getExpansion(target);
+                        return player.distance(victim) - expansion;
+                    }).min().orElse(0);
 
-                        return boundingBox.collidesD(rayTrace, 0, 6) != 10;
-                    }).count();
+            if (distance == 0) return;
 
-            if (collided < 2) {
-                if (++buffer > 10) {
-                    fail("collided=" + collided + " buffer=" + buffer);
+            if (distance > 3) {
+                if (++buffer > 3) {
+                    fail(String.format("reach=%.2f, buffer=%.2f", distance, buffer));
                 }
             } else {
-                buffer -= buffer > 0 ? 1 : 0;
+                buffer = Math.max(buffer - 0.1, 0);
             }
         }
     }
+
 }

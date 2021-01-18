@@ -5,6 +5,7 @@ import com.gladurbad.api.check.CheckInfo;
 import com.gladurbad.medusa.data.PlayerData;
 import com.gladurbad.medusa.exempt.type.ExemptType;
 import com.gladurbad.medusa.packet.Packet;
+import com.gladurbad.medusa.util.MathUtil;
 import com.gladurbad.medusa.util.type.EvictingList;
 
 /**
@@ -33,7 +34,7 @@ public class TimerA extends Check {
             }
 
             if (samples.isFull()) {
-                final double average = samples.stream().mapToDouble(value -> value).average().orElse(1);
+                final double average = MathUtil.getAverage(samples);
                 final double speed = 50 / average;
 
                 if (speed >= 1.02) {

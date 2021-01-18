@@ -5,6 +5,7 @@ import com.gladurbad.api.check.CheckInfo;
 import com.gladurbad.medusa.data.PlayerData;
 import com.gladurbad.medusa.data.processor.PositionProcessor;
 import com.gladurbad.medusa.packet.Packet;
+import com.gladurbad.medusa.util.PlayerUtil;
 import org.bukkit.Material;
 
 /**
@@ -20,25 +21,18 @@ public class JesusA extends Check {
 
     @Override
     public void handle(final Packet packet) {
-        if (packet.isPosition()) {
-            PositionProcessor movement = positionInfo();
-            final boolean check = movement.isInLiquid() && !movement.isOnSolidGround();
+        if (packet.isPosition() && data.getPositionProcessor().isInLiquid() && !data.getPositionProcessor().isOnSolidGround()) {
+            final boolean floating = data.getPositionProcessor().isCollidingAtLocation(
+                    0.1, material -> material == Material.AIR, PositionProcessor.CollisionType.ALL
+            ) && PlayerUtil.shouldCheckJesus(data);
 
-            if (check) {
-                player().isOnGround();
-                //So fucking ugly, going to fix this later.
-                final boolean onWater = movement.isCollidingAtLocation(-0.1, material -> material.toString().contains("WATER"), PositionProcessor.CollisionType.ALL) &&
-                        movement.isCollidingAtLocation(0.1, material -> material == Material.AIR, PositionProcessor.CollisionType.ALL)
-                        && !movement.isCollidingAtLocation(-0.001, material -> material == Material.CARPET || material == Material.WATER_LILY, PositionProcessor.CollisionType.ANY);
-
-                if (onWater) {
-                    if (++buffer > 10) {
-                        buffer /= 2;
-                        fail();
-                    }
-                } else {
-                    buffer = Math.max(buffer - 2, 0);
+            if (floating) {
+                if (++buffer > 10) {
+                    buffer /= 2;
+                    fail();
                 }
+            } else {
+                buffer = Math.max(buffer - 2, 0);
             }
         }
     }

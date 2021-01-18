@@ -57,17 +57,9 @@ public enum Medusa {
 
         Bukkit.getServer().getPluginManager().registerEvents(new BukkitEventListener(), plugin);
         Bukkit.getServer().getPluginManager().registerEvents(new ClientBrandListener(), plugin);
+        Bukkit.getServer().getPluginManager().registerEvents(new JoinQuitListener(), plugin);
 
-        PacketEvents.getSettings()
-                .injectAsync(true)
-                .ejectAsync(true)
-                .injectEarly(true)
-                .packetHandlingThreadCount(1)
-                .checkForUpdates(true)
-                .backupServerVersion(ServerVersion.v_1_8_8);
-
-        PacketEvents.getAPI().getEventManager().registerListener(new NetworkListener());
-        PacketEvents.getAPI().getEventManager().registerListener(new JoinQuitListener());
+        PacketEvents.get().registerListener(new NetworkListener());
     }
 
     public void stop(final MedusaPlugin plugin) {

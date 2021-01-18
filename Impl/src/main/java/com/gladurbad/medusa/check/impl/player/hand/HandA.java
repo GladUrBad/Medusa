@@ -1,42 +1,80 @@
 package com.gladurbad.medusa.check.impl.player.hand;
 
-import com.gladurbad.medusa.Medusa;
 import com.gladurbad.medusa.check.Check;
 import com.gladurbad.api.check.CheckInfo;
 import com.gladurbad.medusa.data.PlayerData;
 import com.gladurbad.medusa.packet.Packet;
-import org.bukkit.Bukkit;
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.Listener;
-import org.bukkit.event.block.BlockPlaceEvent;
-import org.bukkit.util.Vector;
+import io.github.retrooper.packetevents.enums.Direction;
+import io.github.retrooper.packetevents.packetwrappers.play.in.blockplace.WrappedPacketInBlockPlace;
+import org.bukkit.Location;
 
 /**
- * Created on 11/10/2020 Package com.gladurbad.medusa.check.impl.player.hand by GladUrBad
+ * Created on 1/18/2021 Package com.gladurbad.medusa.check.impl.player.hand by GladUrBad
  */
 
-@CheckInfo(name = "Hand (A)", experimental = true, description = "Checks for block interaction reach.")
-public class HandA extends Check implements Listener {
+@CheckInfo(name = "Hand (A)", experimental = true, description = "Checks for face occlusion when placing blocks.")
+public class HandA extends Check {
 
     public HandA(PlayerData data) {
         super(data);
-        Bukkit.getPluginManager().registerEvents(this, Medusa.INSTANCE.getPlugin());
     }
 
     @Override
     public void handle(Packet packet) {
+        if (packet.isBlockPlace()) {
+            final WrappedPacketInBlockPlace wrapper = new WrappedPacketInBlockPlace(packet.getRawPacket());
+
+            final Direction direction = wrapper.getDirection();
+
+            final Location blockLocation = new Location(
+                    data.getPlayer().getWorld(),
+                    wrapper.getX(),
+                    wrapper.getY(),
+                    wrapper.getZ()
+            );
+
+            final Location eyeLocation = data.getPlayer().getEyeLocation();
+            final Location blockAgainstLocation = getBlockAgainst(direction, blockLocation);
+
+            final boolean validInteraction = interactedCorrectly(blockAgainstLocation, eyeLocation, direction);
+
+            if (!validInteraction) fail("face=" + direction);
+        }
     }
 
-    @EventHandler
-    public void onBlockPlace(BlockPlaceEvent event) {
-        if (event.getPlayer() == player()) {
-            final Vector vec = event.getBlock().getLocation().toVector().setY(0);
-            final Vector playerVec = player().getLocation().toVector().setY(0);
-            final double distance = playerVec.distance(vec) - 0.5;
-
-            if (distance > 4.5) {
-                fail(String.format("dist=%.2f", distance));
-            }
+    private Location getBlockAgainst(final Direction direction, final Location blockLocation) {
+        switch (direction) {
+            case UP:
+                return blockLocation.clone().add(0, -1, 0);
+            case DOWN:
+                return blockLocation.clone().add(0, 1, 0);
+            case EAST:
+            case SOUTH:
+                return blockLocation;
+            case WEST:
+                return blockLocation.clone().add(1, 0, 0);
+            case NORTH:
+                return blockLocation.clone().add(0, 0, 1);
+            default:
+                return null;
+        }
+    }
+    private boolean interactedCorrectly(Location block, Location player, Direction face) {
+        switch (face) {
+            case UP:
+                return player.getY() > block.getY();
+            case DOWN:
+                return player.getY() < block.getY();
+            case WEST:
+                return player.getX() < block.getX();
+            case EAST:
+                return player.getX() > block.getX();
+            case NORTH:
+                return player.getZ() < block.getZ();
+            case SOUTH:
+                return player.getZ() > block.getZ();
+            default:
+                return true;
         }
     }
 }

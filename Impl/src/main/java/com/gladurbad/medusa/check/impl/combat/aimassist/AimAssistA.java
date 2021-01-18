@@ -26,9 +26,9 @@ public class AimAssistA extends Check {
     @Override
     public void handle(Packet packet) {
         if (packet.isRotation() && !isExempt(ExemptType.VEHICLE)) {
-            final float deltaPitch = Math.abs(rotationInfo().getDeltaPitch());
-            final float deltaYaw =  Math.abs(rotationInfo().getDeltaYaw() % 360F);
-            final float pitch = Math.abs(rotationInfo().getPitch());
+            final float deltaPitch = Math.abs(data.getRotationProcessor().getDeltaPitch());
+            final float deltaYaw =  Math.abs(data.getRotationProcessor().getDeltaYaw() % 360F);
+            final float pitch = Math.abs(data.getRotationProcessor().getPitch());
 
             final boolean invalidPitch = deltaPitch < 0.009 && validRotation.test(deltaYaw);
             final boolean invalidYaw = deltaYaw < 0.009 && validRotation.test(deltaPitch);
