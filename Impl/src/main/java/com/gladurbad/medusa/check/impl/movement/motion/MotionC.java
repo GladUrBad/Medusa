@@ -8,7 +8,6 @@ import com.gladurbad.medusa.packet.Packet;
 import com.gladurbad.medusa.util.MathUtil;
 import com.gladurbad.medusa.util.PlayerUtil;
 import org.bukkit.potion.PotionEffectType;
-import org.bukkit.util.Vector;
 
 /**
  * Created on 11/17/2020 Package com.gladurbad.medusa.check.impl.movement.motion by GladUrBad
@@ -37,9 +36,11 @@ public class MotionC extends Check {
 
             final boolean jumped = deltaY > 0 && lastPosY % (1D/64) == 0 && !onGround && !step;
 
-            final boolean exempt = isExempt(ExemptType.VEHICLE,
-                    ExemptType.FLYING, ExemptType.SLIME, ExemptType.UNDERBLOCK, ExemptType.PISTON,
-                    ExemptType.LIQUID, ExemptType.BOAT, ExemptType.TELEPORT, ExemptType.WEB, ExemptType.TRAPDOOR);
+            final boolean exempt = isExempt(
+                    ExemptType.VEHICLE, ExemptType.FLYING, ExemptType.SLIME, ExemptType.UNDER_BLOCK,
+                    ExemptType.PISTON, ExemptType.LIQUID, ExemptType.NEAR_VEHICLE, ExemptType.TELEPORT,
+                    ExemptType.WEB, ExemptType.TRAPDOOR
+            );
 
             if (jumped && !exempt && !isExempt(ExemptType.VELOCITY)) {
                 if (deltaY < expectedJumpMotion) {

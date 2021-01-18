@@ -28,7 +28,7 @@ public class SpeedA extends Check {
             final boolean invalid = difference > 1E-12 &&
                     data.getPositionProcessor().getAirTicks() > 2 &&
                     !data.getPositionProcessor().isFlying() &&
-                    !data.getPositionProcessor().isNearBoat();
+                    !data.getPositionProcessor().isNearVehicle();
 
             if (invalid) {
                 if (++buffer > 2.5) {

@@ -73,4 +73,14 @@ public class HitBoxA extends Check {
             }
         }
     }
+
+    // Fix this using a raytrace util
+    private static double getMaxAnglePerDistance(final double distance) {
+        if (distance < 1.5) return Double.POSITIVE_INFINITY;
+        if (distance > 1.5 && distance < 2) return 28D;
+        if (distance > 2 && distance < 2.5) return 20D;
+        if (distance > 2.5 && distance < 3) return 17D;
+        if (distance > 3) return 15D;
+        return Double.POSITIVE_INFINITY;
+    }
 }

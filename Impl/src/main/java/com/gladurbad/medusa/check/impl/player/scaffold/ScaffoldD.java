@@ -9,6 +9,7 @@ import com.gladurbad.medusa.packet.Packet;
 public class ScaffoldD extends Check {
 
     private int placedTicks;
+
     private double lastLastAccel, lastAccel;
 
     public ScaffoldD(final PlayerData data) {

@@ -21,7 +21,7 @@ public class AutoClickerC extends Check {
 
     @Override
     public void handle(final Packet packet) {
-        if (packet.isArmAnimation() && !isExempt(ExemptType.AUTOCLICKER)) {
+        if (packet.isArmAnimation() && !isExempt(ExemptType.AUTO_CLICKER)) {
 
            if (ticks < 4) {
                samples.add(ticks);

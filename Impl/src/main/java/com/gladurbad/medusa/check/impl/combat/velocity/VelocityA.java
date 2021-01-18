@@ -26,7 +26,7 @@ public class VelocityA extends Check {
                 final int percentage = (int) Math.round((deltaY * 100.0) / expectedDeltaY);
 
                 final boolean exempt = isExempt(ExemptType.LIQUID, ExemptType.PISTON, ExemptType.CLIMBABLE,
-                        ExemptType.UNDERBLOCK, ExemptType.TELEPORT, ExemptType.FLYING, ExemptType.WEB);
+                        ExemptType.UNDER_BLOCK, ExemptType.TELEPORT, ExemptType.FLYING, ExemptType.WEB);
 
                 final boolean invalid = !exempt && percentage != 100 && expectedDeltaY > 0;
 

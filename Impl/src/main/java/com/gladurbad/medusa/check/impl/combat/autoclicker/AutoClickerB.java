@@ -6,7 +6,6 @@ import com.gladurbad.medusa.data.PlayerData;
 import com.gladurbad.medusa.exempt.type.ExemptType;
 import com.gladurbad.medusa.packet.Packet;
 import com.gladurbad.medusa.util.MathUtil;
-import com.gladurbad.medusa.util.type.EvictingList;
 
 import java.util.ArrayDeque;
 
@@ -26,7 +25,7 @@ public class AutoClickerB extends Check {
 
     @Override
     public void handle(final Packet packet) {
-        if (packet.isArmAnimation() && !isExempt(ExemptType.AUTOCLICKER)) {
+        if (packet.isArmAnimation() && !isExempt(ExemptType.AUTO_CLICKER)) {
             if (ticks < 4) {
                 samples.add(ticks);
             }

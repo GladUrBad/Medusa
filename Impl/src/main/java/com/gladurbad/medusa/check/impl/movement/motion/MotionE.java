@@ -29,7 +29,7 @@ public class MotionE extends Check {
             final double absLastDeltaX = Math.abs(lastDeltaX);
             final double absLastDeltaZ = Math.abs(lastDeltaZ);
 
-            if (data.getPositionProcessor().getAirTicks() > 2 && !isExempt(ExemptType.VELOCITY, ExemptType.BOAT, ExemptType.TELEPORT, ExemptType.FLYING)) {
+            if (data.getPositionProcessor().getAirTicks() > 2 && !isExempt(ExemptType.VELOCITY, ExemptType.NEAR_VEHICLE, ExemptType.TELEPORT, ExemptType.FLYING)) {
                 final boolean xSwitched = (deltaX > 0 && lastDeltaX < 0) || (deltaX < 0 && lastDeltaX > 0);
                 final boolean zSwitched = (deltaZ > 0 && lastDeltaZ < 0) || (deltaZ < 0 && lastDeltaZ > 0);
 

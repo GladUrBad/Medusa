@@ -24,7 +24,7 @@ public class SpeedC extends Check {
 
             final boolean exempt = isExempt(
                     ExemptType.TELEPORT, ExemptType.JOINED, ExemptType.PISTON, ExemptType.VELOCITY,
-                    ExemptType.VEHICLE, ExemptType.FLYING, ExemptType.SLIME, ExemptType.UNDERBLOCK,
+                    ExemptType.VEHICLE, ExemptType.FLYING, ExemptType.SLIME, ExemptType.UNDER_BLOCK,
                     ExemptType.ICE
             );
 

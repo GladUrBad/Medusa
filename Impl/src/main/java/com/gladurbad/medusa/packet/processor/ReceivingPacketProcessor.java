@@ -61,7 +61,7 @@ public class ReceivingPacketProcessor  {
         }
         if (packet.isArmAnimation()) {
             data.getClickProcessor().handleArmAnimation();
-
+            data.getActionProcessor().handleArmAnimation();
             data.getCombatProcessor().handleArmAnimation();
         }
         if (packet.isIncomingTransaction()) {

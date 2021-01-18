@@ -22,7 +22,7 @@ public class AutoClickerA extends Check {
 
     @Override
     public void handle(Packet packet) {
-        if (packet.isFlying() && !isExempt(ExemptType.AUTOCLICKER)) {
+        if (packet.isFlying() && !isExempt(ExemptType.AUTO_CLICKER)) {
             if (++ticks >= 20) {
                 if (cps > 24) {
                     fail("cps=" + cps);

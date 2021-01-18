@@ -6,7 +6,6 @@ import com.gladurbad.medusa.data.PlayerData;
 import com.gladurbad.medusa.packet.Packet;
 import com.gladurbad.medusa.util.PlayerUtil;
 import io.github.retrooper.packetevents.packetwrappers.play.in.blockplace.WrappedPacketInBlockPlace;
-import org.bukkit.Location;
 import org.bukkit.potion.PotionEffectType;
 
 @CheckInfo(name = "Scaffold (B)", description = "Checks for tower hacks.", experimental = true)

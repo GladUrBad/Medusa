@@ -31,7 +31,7 @@ public class FlyC extends Check {
             final boolean positionGround = wrapper.getY() % ON_GROUND == 0;
             final boolean packetGround = wrapper.isOnGround();
 
-            final boolean exempt = isExempt(ExemptType.BOAT, ExemptType.TELEPORT, ExemptType.CLIMBABLE,
+            final boolean exempt = isExempt(ExemptType.NEAR_VEHICLE, ExemptType.TELEPORT, ExemptType.CLIMBABLE,
                     ExemptType.FLYING, ExemptType.JOINED, ExemptType.SLIME);
 
             if (!exempt && positionGround != packetGround) {

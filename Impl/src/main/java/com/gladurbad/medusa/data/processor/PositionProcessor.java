@@ -1,5 +1,6 @@
 package com.gladurbad.medusa.data.processor;
 
+import com.gladurbad.medusa.util.PlayerUtil;
 import com.gladurbad.medusa.util.type.BoundingBox;
 import lombok.Getter;
 import com.gladurbad.medusa.Medusa;
@@ -30,7 +31,7 @@ public class PositionProcessor {
             lastDeltaX, lastDeltaZ, lastDeltaY, lastDeltaXZ;
 
     private boolean flying, inVehicle, inLiquid, inAir, inWeb,
-            blockNearHead, onClimbable, onSolidGround, nearBoat, onSlime,
+            blockNearHead, onClimbable, onSolidGround, nearVehicle, onSlime,
             onIce, nearPiston, nearTrapdoor, nearSlab, nearStairs;
 
     private int airTicks, sinceVehicleTicks, sinceFlyingTicks,
@@ -114,7 +115,7 @@ public class PositionProcessor {
         }
 
         handleClimbableCollision();
-        handleOnBoat();
+        handleVehicle();
 
         inLiquid = blocks.stream().anyMatch(Block::isLiquid);
         inWeb = blocks.stream().anyMatch(block -> block.getType() == Material.WEB);
@@ -141,16 +142,8 @@ public class PositionProcessor {
     }
 
 
-    public void handleOnBoat() {
-        Bukkit.getScheduler().runTask(Medusa.INSTANCE.getPlugin(), () -> {
-            for (final Entity entity : data.getPlayer().getNearbyEntities(1.5, 1.5, 1.5)) {
-                if (entity instanceof Boat) {
-                    nearBoat = true;
-                    return;
-                }
-            }
-            nearBoat = false;
-        });
+    public void handleVehicle() {
+        nearVehicle = PlayerUtil.isNearVehicle(data.getPlayer());
     }
 
     public void handleTeleport() {

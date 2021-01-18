@@ -50,7 +50,7 @@ public class FlyA extends Check {
                     //Retarded collision processor makes me do dumb shit that could make bypasses like this.
                     !(data.getPositionProcessor().getY() % 0.5 == 0 && data.getPositionProcessor().isOnGround() && lastDeltaY < 0) &&
                     data.getPositionProcessor().isInAir() &&
-                    !data.getPositionProcessor().isNearBoat() &&
+                    !data.getPositionProcessor().isNearVehicle() &&
                     !isExempt(ExemptType.TELEPORT) &&
                     !data.getPlayer().isFlying() &&
                     !data.getPlayer().isInsideVehicle() &&

@@ -37,13 +37,13 @@ public enum ExemptType {
 
     PLACING(data -> Medusa.INSTANCE.getTickManager().getTicks() - data.getActionProcessor().getLastPlaceTick() < 10),
 
-    BOAT(data -> data.getPositionProcessor().isNearBoat()),
+    NEAR_VEHICLE(data -> data.getPositionProcessor().isNearVehicle()),
 
     VEHICLE(data -> data.getPositionProcessor().getSinceVehicleTicks() < 20),
 
     LIQUID(data -> data.getPositionProcessor().isInLiquid()),
 
-    UNDERBLOCK(data -> data.getPositionProcessor().isBlockNearHead()),
+    UNDER_BLOCK(data -> data.getPositionProcessor().isBlockNearHead()),
 
     PISTON(data -> data.getPositionProcessor().isNearPiston()),
 
@@ -53,7 +53,7 @@ public enum ExemptType {
 
     FLYING(data -> data.getPositionProcessor().getSinceFlyingTicks() < 40),
 
-    AUTOCLICKER(data -> data.getExemptProcessor().isExempt(ExemptType.PLACING, ExemptType.DIGGING, ExemptType.BLOCK_BREAK));
+    AUTO_CLICKER(data -> data.getExemptProcessor().isExempt(ExemptType.PLACING, ExemptType.DIGGING, ExemptType.BLOCK_BREAK));
 
     private final Function<PlayerData, Boolean> exception;
 
