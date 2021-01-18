@@ -3,6 +3,7 @@ package com.gladurbad.medusa.data.processor;
 import com.gladurbad.medusa.Medusa;
 import com.gladurbad.medusa.util.MathUtil;
 import com.gladurbad.medusa.util.type.EvictingList;
+import com.gladurbad.medusa.util.PlayerUtil;
 import io.github.retrooper.packetevents.PacketEvents;
 import io.github.retrooper.packetevents.packetwrappers.in.blockdig.WrappedPacketInBlockDig;
 import io.github.retrooper.packetevents.packetwrappers.in.clientcommand.WrappedPacketInClientCommand;
@@ -89,7 +90,14 @@ public class ActionProcessor {
     }
 
     public void handleArmAnimation() {
-        if (digging) lastDiggingTick = Medusa.INSTANCE.getTickManager().getTicks();
+        /*
+         This can be disabled if the client sends a dig packet then immediately start clicking
+         Which makes it so the player is immune to AutoClicker checks due to his Digging state.
+         Getting the looking block ensures that the player is not spoofing his digging state.
+         */
+        if (digging && PlayerUtil.getLookingBlock(data.getPlayer(), 5)) {
+            lastDiggingTick = Medusa.INSTANCE.getTickManager().getTicks();
+        }
     }
 
     public void handleInteract(final PlayerInteractEvent event) {
