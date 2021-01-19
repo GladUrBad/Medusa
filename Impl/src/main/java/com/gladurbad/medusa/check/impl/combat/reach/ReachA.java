@@ -3,10 +3,13 @@ package com.gladurbad.medusa.check.impl.combat.reach;
 import com.gladurbad.api.check.CheckInfo;
 import com.gladurbad.medusa.Medusa;
 import com.gladurbad.medusa.check.*;
+import com.gladurbad.medusa.config.Config;
+import com.gladurbad.medusa.config.ConfigValue;
 import com.gladurbad.medusa.data.PlayerData;
 import com.gladurbad.medusa.packet.Packet;
 import com.gladurbad.medusa.util.HitboxExpansion;
 import com.gladurbad.medusa.util.MathUtil;
+import com.gladurbad.medusa.util.PlayerUtil;
 import com.gladurbad.medusa.util.type.BoundingBox;
 import com.gladurbad.medusa.util.type.RayTrace;
 import io.github.retrooper.packetevents.PacketEvents;
@@ -27,6 +30,11 @@ import org.bukkit.util.Vector;
 @CheckInfo(name = "Reach (A)", description = "Checks for attacking distance.")
 public class ReachA extends Check {
 
+    private static final ConfigValue maxReach = new ConfigValue(ConfigValue.ValueType.DOUBLE, "max-reach");
+    private static final ConfigValue maxThreshold = new ConfigValue(ConfigValue.ValueType.DOUBLE, "max-threshold");
+    private static final ConfigValue thresholdDecay = new ConfigValue(ConfigValue.ValueType.DOUBLE, "threshold-decay");
+    private static final ConfigValue maxLatency = new ConfigValue(ConfigValue.ValueType.LONG, "max-latency");
+
     public ReachA(PlayerData data) {
         super(data);
     }
@@ -43,7 +51,8 @@ public class ReachA extends Check {
                     || data.getPlayer().getGameMode() != GameMode.SURVIVAL
                     || !(target instanceof LivingEntity)
                     || target != lastTarget
-                    || !data.getTargetLocations().isFull()) return;
+                    || !data.getTargetLocations().isFull()
+                    || PlayerUtil.getPing(data.getPlayer()) > (maxLatency.getLong() < 0 ? Integer.MAX_VALUE : maxLatency.getLong())) return;
 
             final int ticks = Medusa.INSTANCE.getTickManager().getTicks();
             final int pingTicks = NumberConversions.floor(data.getActionProcessor().getPing() / 50.0) + 3;
@@ -60,12 +69,12 @@ public class ReachA extends Check {
 
             if (distance == 0) return;
 
-            if (distance > 3) {
-                if (++buffer > 3) {
+            if (distance > maxReach.getDouble()) {
+                if (++buffer > maxThreshold.getDouble()) {
                     fail(String.format("reach=%.2f, buffer=%.2f", distance, buffer));
                 }
             } else {
-                buffer = Math.max(buffer - 0.1, 0);
+                buffer = Math.max(buffer - thresholdDecay.getDouble(), 0);
             }
         }
     }

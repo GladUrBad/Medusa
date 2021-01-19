@@ -25,8 +25,9 @@ public class FlyB extends Check {
             final double airTicks = data.getPositionProcessor().getAirTicks();
             final double deltaY = data.getPositionProcessor().getDeltaY();
 
-            final boolean invalid = !this.isExempt(ExemptType.FLYING) &&
-                    lastAcceleration <= 0 && acceleration > 0 && deltaY > 0;
+            final boolean invalid = !isExempt(
+                    ExemptType.FLYING, ExemptType.VELOCITY, ExemptType.VEHICLE, ExemptType.NEAR_VEHICLE
+            ) && lastAcceleration <= 0 && acceleration > 0 && deltaY > 0;
 
             if (airTicks > 10) {
                 if (invalid) {

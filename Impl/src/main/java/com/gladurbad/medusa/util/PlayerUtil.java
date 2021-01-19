@@ -57,14 +57,14 @@ public class PlayerUtil {
 
     public boolean shouldCheckJesus(final PlayerData data) {
         final boolean onWater = data.getPositionProcessor().isCollidingAtLocation(
-                -0.1,
+                -0.001,
                 material -> material.toString().contains("WATER"),
                 PositionProcessor.CollisionType.ANY
         );
 
         final boolean hasEdgeCases = data.getPositionProcessor().isCollidingAtLocation(
                 -0.001,
-                material -> material == Material.CARPET || material == Material.WATER_LILY,
+                material -> material == Material.CARPET || material == Material.WATER_LILY || material.isSolid(),
                 PositionProcessor.CollisionType.ANY
         );
 

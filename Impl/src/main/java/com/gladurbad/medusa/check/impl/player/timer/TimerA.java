@@ -1,7 +1,9 @@
 package com.gladurbad.medusa.check.impl.player.timer;
 
+import com.gladurbad.medusa.Medusa;
 import com.gladurbad.medusa.check.Check;
 import com.gladurbad.api.check.CheckInfo;
+import com.gladurbad.medusa.config.ConfigValue;
 import com.gladurbad.medusa.data.PlayerData;
 import com.gladurbad.medusa.exempt.type.ExemptType;
 import com.gladurbad.medusa.packet.Packet;
@@ -15,7 +17,7 @@ import com.gladurbad.medusa.util.type.EvictingList;
 @CheckInfo(name = "Timer (A)", description = "Checks for game speed which is too fast.")
 public class TimerA extends Check {
 
-
+    private static final ConfigValue maxTimerSpeed = new ConfigValue(ConfigValue.ValueType.DOUBLE, "max-timer-speed");
     private final EvictingList<Long> samples = new EvictingList<>(50);
     private long lastFlyingTime;
 
@@ -37,7 +39,7 @@ public class TimerA extends Check {
                 final double average = MathUtil.getAverage(samples);
                 final double speed = 50 / average;
 
-                if (speed >= 1.02) {
+                if (speed >= maxTimerSpeed.getDouble()) {
                     if (++buffer > 30) {
                         buffer = Math.min(buffer, 50);
                         fail(String.format("speed=%.4f, delta=%o, buffer=%.2f", speed, delta, buffer));

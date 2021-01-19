@@ -2,6 +2,7 @@ package com.gladurbad.medusa.exempt.type;
 
 import com.gladurbad.medusa.Medusa;
 import com.gladurbad.medusa.data.PlayerData;
+import com.gladurbad.medusa.util.PlayerUtil;
 import com.gladurbad.medusa.util.ServerUtil;
 import lombok.Getter;
 
@@ -53,7 +54,9 @@ public enum ExemptType {
 
     FLYING(data -> data.getPositionProcessor().getSinceFlyingTicks() < 40),
 
-    AUTO_CLICKER(data -> data.getExemptProcessor().isExempt(ExemptType.PLACING, ExemptType.DIGGING, ExemptType.BLOCK_BREAK));
+    AUTO_CLICKER(data -> data.getExemptProcessor().isExempt(ExemptType.PLACING, ExemptType.DIGGING, ExemptType.BLOCK_BREAK)),
+
+    DEPTH_STRIDER(data -> PlayerUtil.getDepthStriderLevel(data.getPlayer()) > 0);
 
     private final Function<PlayerData, Boolean> exception;
 

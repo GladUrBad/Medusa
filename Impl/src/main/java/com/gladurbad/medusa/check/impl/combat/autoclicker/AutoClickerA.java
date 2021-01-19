@@ -2,6 +2,7 @@ package com.gladurbad.medusa.check.impl.combat.autoclicker;
 
 import com.gladurbad.medusa.check.Check;
 import com.gladurbad.api.check.CheckInfo;
+import com.gladurbad.medusa.config.ConfigValue;
 import com.gladurbad.medusa.data.PlayerData;
 import com.gladurbad.medusa.exempt.type.ExemptType;
 import com.gladurbad.medusa.packet.Packet;
@@ -15,6 +16,7 @@ import io.github.retrooper.packetevents.packetwrappers.play.in.useentity.Wrapped
 public class AutoClickerA extends Check {
 
     private int ticks, cps;
+    private static final ConfigValue maxCps = new ConfigValue(ConfigValue.ValueType.INTEGER, "max-cps");
 
     public AutoClickerA(PlayerData data) {
         super(data);
@@ -24,7 +26,7 @@ public class AutoClickerA extends Check {
     public void handle(Packet packet) {
         if (packet.isFlying() && !isExempt(ExemptType.AUTO_CLICKER)) {
             if (++ticks >= 20) {
-                if (cps > 24) {
+                if (cps > maxCps.getInt()) {
                     fail("cps=" + cps);
                 }
                 ticks = cps = 0;

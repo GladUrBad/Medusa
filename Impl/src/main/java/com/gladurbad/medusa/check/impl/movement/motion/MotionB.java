@@ -23,7 +23,7 @@ public class MotionB extends Check {
             final double deltaY = data.getPositionProcessor().getDeltaY();
 
             final boolean invalid = deltaY < -3.92 &&
-                    !isExempt(ExemptType.TELEPORT);
+                    !isExempt(ExemptType.TELEPORT, ExemptType.FLYING);
 
             if (invalid) fail(String.format("dy=%.2f", deltaY));
         }

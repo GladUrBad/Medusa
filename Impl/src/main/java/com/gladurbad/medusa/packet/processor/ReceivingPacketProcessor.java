@@ -69,6 +69,8 @@ public class ReceivingPacketProcessor  {
 
             data.getVelocityProcessor().handleTransaction(wrapper);
         }
-        data.getChecks().forEach(check -> check.handle(packet));
+        if (!data.getPlayer().hasPermission("medusa.bypass")) {
+            data.getChecks().forEach(check -> check.handle(packet));
+        }
     }
 }

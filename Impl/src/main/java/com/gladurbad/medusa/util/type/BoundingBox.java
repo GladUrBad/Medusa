@@ -72,7 +72,7 @@ public final class BoundingBox {
         final double maxZ = this.maxZ;
 
         for (double x = minX; x <= maxX; x += (maxX - minX)) {
-            for (double y = minY; y <= maxY; y += (maxY - minY)) {
+            for (double y = minY; y <= maxY + 0.01; y += (maxY - minY)) {
                 for (double z = minZ; z <= maxZ; z += (maxZ - minZ)) {
                     final Block block = world.getBlockAt(new Location(world, x, y, z));
                     blockList.add(block);

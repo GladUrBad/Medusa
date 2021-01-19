@@ -3,9 +3,12 @@ package com.gladurbad.medusa.check.impl.combat.hitbox;
 import com.gladurbad.api.check.CheckInfo;
 import com.gladurbad.medusa.Medusa;
 import com.gladurbad.medusa.check.*;
+import com.gladurbad.medusa.config.Config;
+import com.gladurbad.medusa.config.ConfigValue;
 import com.gladurbad.medusa.data.PlayerData;
 import com.gladurbad.medusa.packet.Packet;
 import com.gladurbad.medusa.util.HitboxExpansion;
+import com.gladurbad.medusa.util.PlayerUtil;
 import com.gladurbad.medusa.util.type.BoundingBox;
 import com.gladurbad.medusa.util.type.RayTrace;
 import io.github.retrooper.packetevents.packetwrappers.play.in.useentity.WrappedPacketInUseEntity;
@@ -25,6 +28,11 @@ import org.bukkit.util.Vector;
 @CheckInfo(name = "HitBox (A)", experimental = true, description = "Checks for the angle of the attack.")
 public class HitBoxA extends Check {
 
+    private static final ConfigValue maxLatency = new ConfigValue(ConfigValue.ValueType.LONG, "max-latency");
+    private static final ConfigValue raytraceSensitivityLevel = new ConfigValue(
+            ConfigValue.ValueType.INTEGER, "raytrace-sensitivity-level"
+    );
+
     public HitBoxA(PlayerData data) {
         super(data);
     }
@@ -41,7 +49,8 @@ public class HitBoxA extends Check {
                     || data.getPlayer().getGameMode() != GameMode.SURVIVAL
                     || !(target instanceof Player || target instanceof Villager)
                     || target != lastTarget
-                    || !data.getTargetLocations().isFull()) return;
+                    || !data.getTargetLocations().isFull()
+                    || PlayerUtil.getPing(data.getPlayer()) > (maxLatency.getLong() < 0 ? Integer.MAX_VALUE : maxLatency.getLong())) return;
 
             final int ticks = Medusa.INSTANCE.getTickManager().getTicks();
             final int pingTicks = NumberConversions.floor(data.getActionProcessor().getPing() / 50.0) + 3;
@@ -64,7 +73,7 @@ public class HitBoxA extends Check {
                         return boundingBox.collidesD(rayTrace, 0, 6) != 10;
                     }).count();
 
-            if (collided < 2) {
+            if (collided <= raytraceSensitivityLevel.getInt()) {
                 if (++buffer > 10) {
                     fail("collided=" + collided + " buffer=" + buffer);
                 }
@@ -72,15 +81,5 @@ public class HitBoxA extends Check {
                 buffer -= buffer > 0 ? 1 : 0;
             }
         }
-    }
-
-    // Fix this using a raytrace util
-    private static double getMaxAnglePerDistance(final double distance) {
-        if (distance < 1.5) return Double.POSITIVE_INFINITY;
-        if (distance > 1.5 && distance < 2) return 28D;
-        if (distance > 2 && distance < 2.5) return 20D;
-        if (distance > 2.5 && distance < 3) return 17D;
-        if (distance > 3) return 15D;
-        return Double.POSITIVE_INFINITY;
     }
 }

@@ -2,6 +2,7 @@ package com.gladurbad.medusa.check.impl.player.timer;
 
 import com.gladurbad.medusa.check.Check;
 import com.gladurbad.api.check.CheckInfo;
+import com.gladurbad.medusa.config.ConfigValue;
 import com.gladurbad.medusa.data.PlayerData;
 import com.gladurbad.medusa.exempt.type.ExemptType;
 import com.gladurbad.medusa.packet.Packet;
@@ -15,6 +16,7 @@ import com.gladurbad.medusa.util.type.EvictingList;
 @CheckInfo(name = "Timer (B)",  description = "Checks for game speed which is too slow.", experimental = true)
 public class TimerB extends Check {
 
+    private static final ConfigValue minSpeed = new ConfigValue(ConfigValue.ValueType.DOUBLE, "minimum-timer-speed");
     private final EvictingList<Long> samples = new EvictingList<>(50);
     private long lastFlyingTime;
 
@@ -36,7 +38,7 @@ public class TimerB extends Check {
 
                 final double deviation = MathUtil.getStandardDeviation(samples);
 
-                if (speed <= 0.82 && deviation < 50.0) {
+                if (speed <= minSpeed.getDouble() && deviation < 50.0) {
                     if (++buffer > 35) {
                         fail(String.format("speed=%.2f deviation=%.2f", speed, deviation));
                     }

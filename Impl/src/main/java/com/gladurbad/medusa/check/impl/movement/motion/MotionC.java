@@ -31,8 +31,9 @@ public class MotionC extends Check {
 
             final double expectedJumpMotion = 0.42F + (double) ((float) PlayerUtil.getPotionLevel(data.getPlayer(), PotionEffectType.JUMP) * 0.1F);
 
+            // Fix false positive with jumping while on fire.
             final double maxHighJump = 0.42F + (double) ((float) PlayerUtil.getPotionLevel(data.getPlayer(), PotionEffectType.JUMP) * 0.1F) +
-                    (data.getVelocityProcessor().getTicksSinceVelocity() < 5 ? data.getVelocityProcessor().getVelocityY() + 0.15 : 0);
+                    (data.getVelocityProcessor().getTicksSinceVelocity() < 5 ? data.getVelocityProcessor().getVelocityY() > 0 ? data.getVelocityProcessor().getVelocityY() : 0 : 0);
 
             final boolean jumped = deltaY > 0 && lastPosY % (1D/64) == 0 && !onGround && !step;
 

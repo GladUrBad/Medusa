@@ -18,7 +18,6 @@ public class CommandManager implements CommandExecutor {
 
     public CommandManager(final MedusaPlugin plugin) {
         commands.add(new Alerts());
-        commands.add(new Checks());
         commands.add(new Info());
         commands.add(new Violations());
         commands.add(new Theme());

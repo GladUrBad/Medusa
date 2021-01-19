@@ -3,17 +3,17 @@ package com.gladurbad.medusa.check.impl.movement.jesus;
 import com.gladurbad.medusa.check.Check;
 import com.gladurbad.api.check.CheckInfo;
 import com.gladurbad.medusa.data.PlayerData;
-import com.gladurbad.medusa.data.processor.PositionProcessor;
+import com.gladurbad.medusa.exempt.type.ExemptType;
 import com.gladurbad.medusa.packet.Packet;
-import com.gladurbad.medusa.util.PlayerUtil;
 import org.bukkit.Material;
+import org.bukkit.block.Block;
 
-/**
- * Created on 11/20/2020 Package com.gladurbad.medusa.check.impl.movement.jesus by GladUrBad
- */
+import java.util.List;
 
-@CheckInfo(name = "Jesus (A)", description = "Checks for invalid movement in liquids.")
+@CheckInfo(name = "Jesus (A)", description = "Checks for water friction.", experimental = true)
 public class JesusA extends Check {
+
+    private int ticks;
 
     public JesusA(final PlayerData data) {
         super(data);
@@ -21,18 +21,30 @@ public class JesusA extends Check {
 
     @Override
     public void handle(final Packet packet) {
-        if (packet.isPosition() && data.getPositionProcessor().isInLiquid() && !data.getPositionProcessor().isOnSolidGround()) {
-            final boolean floating = data.getPositionProcessor().isCollidingAtLocation(
-                    0.1, material -> material == Material.AIR, PositionProcessor.CollisionType.ALL
-            ) && PlayerUtil.shouldCheckJesus(data);
+        if (packet.isPosition()) {
+            final List<Block> blocks = data.getPositionProcessor().getBlocks();
 
-            if (floating) {
-                if (++buffer > 10) {
-                    buffer /= 2;
-                    fail();
+            final boolean touchingLily = blocks.stream().anyMatch(block -> block.getType() == Material.WATER_LILY);
+            final boolean touchingWater = data.getPositionProcessor().isInLiquid();
+
+            final boolean exempt = isExempt(ExemptType.VELOCITY, ExemptType.FLYING, ExemptType.DEPTH_STRIDER)
+                    || touchingLily;
+
+            if (!exempt && touchingWater) {
+                if (++ticks > 10) {
+                    final double prediction = data.getPositionProcessor().getLastDeltaXZ() * 0.8F;
+                    final double difference = Math.abs(data.getPositionProcessor().getLastDeltaXZ() - prediction);
+
+                    if (difference > 0.03) {
+                        if (++buffer > 5) {
+                            fail("diff=" + difference);
+                        }
+                    } else {
+                        buffer = Math.max(buffer - 0.5, 0);
+                    }
                 }
             } else {
-                buffer = Math.max(buffer - 2, 0);
+                ticks = 0;
             }
         }
     }

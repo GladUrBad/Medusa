@@ -6,24 +6,24 @@ import com.gladurbad.medusa.Medusa;
 import com.gladurbad.medusa.data.PlayerData;
 
 import java.util.ArrayDeque;
+import java.util.Collection;
 
 @Getter
 public class RotationProcessor {
 
     private final PlayerData data;
+
     private float yaw, pitch, lastYaw, lastPitch,
-    deltaYaw, deltaPitch, lastDeltaYaw, lastDeltaPitch,
-    yawAccel, pitchAccel, lastYawAccel, lastPitchAccel, gcd;
+        deltaYaw, deltaPitch, lastDeltaYaw, lastDeltaPitch,
+        joltYaw, joltPitch, lastJoltYaw, lastJoltPitch;
 
-    private int mouseDeltaX, mouseDeltaY, lastMouseDeltaX, lastMouseDeltaY;
-
-    private double finalSensitivity, cinematicTicks;
+    private int sensitivity, lastCinematic, cinematicTicks;
 
     private final ArrayDeque<Integer> sensitivitySamples = new ArrayDeque<>();
 
-    private int sensitivity, lastCinematic;
-
     private boolean cinematic;
+    private double finalSensitivity;
+    private float gcd;
 
     public RotationProcessor(final PlayerData data) {
         this.data = data;
@@ -39,33 +39,25 @@ public class RotationProcessor {
         lastDeltaYaw = deltaYaw;
         lastDeltaPitch = deltaPitch;
 
-        deltaYaw = Math.abs(yaw - lastYaw);
+        deltaYaw = Math.abs(yaw - lastYaw) % 360F;
         deltaPitch = Math.abs(pitch - lastPitch);
 
-        lastPitchAccel = pitchAccel;
-        lastYawAccel = yawAccel;
+        lastJoltPitch = joltPitch;
+        lastJoltYaw = joltYaw;
 
-        yawAccel = Math.abs(deltaYaw - lastDeltaYaw);
-        pitchAccel = Math.abs(deltaPitch - lastDeltaPitch);
+        joltYaw = Math.abs(deltaYaw - lastDeltaYaw);
+        joltPitch = Math.abs(deltaPitch - lastDeltaPitch);
 
         processCinematic();
 
         if (deltaPitch > 0 && deltaPitch < 30) {
             processSensitivity();
         }
-
-        if (gcd != 0) {
-            lastMouseDeltaX = mouseDeltaX;
-            lastMouseDeltaY = mouseDeltaY;
-
-            this.mouseDeltaX = (int)(deltaYaw / gcd);
-            this.mouseDeltaY = (int)(deltaPitch / gcd);
-        }
     }
 
     private void processCinematic() {
-        final float yawAccelAccel = Math.abs(yawAccel - lastYawAccel);
-        final float pitchAccelAccel = Math.abs(pitchAccel - lastPitchAccel);
+        final float yawAccelAccel = Math.abs(joltYaw - lastJoltYaw);
+        final float pitchAccelAccel = Math.abs(joltPitch - lastJoltPitch);
 
         final boolean invalidYaw = yawAccelAccel < .05 && yawAccelAccel > 0;
         final boolean invalidPitch = pitchAccelAccel < .05 && pitchAccelAccel > 0;
@@ -73,20 +65,20 @@ public class RotationProcessor {
         final boolean exponentialYaw = String.valueOf(yawAccelAccel).contains("E");
         final boolean exponentialPitch = String.valueOf(pitchAccelAccel).contains("E");
 
-        if (finalSensitivity < 100 && (exponentialYaw || exponentialPitch)) {
-            cinematicTicks += 3.5;
+        if (sensitivity < 100 && (exponentialYaw || exponentialPitch)) {
+            cinematicTicks += 3;
         } else if (invalidYaw || invalidPitch) {
-            cinematicTicks += 1.75;
+            cinematicTicks += 1;
         } else {
-            if (cinematicTicks > 0) cinematicTicks -= .6;
+            if (cinematicTicks > 0) cinematicTicks--;
         }
         if (cinematicTicks > 20) {
-            cinematicTicks -= 1.5;
+            cinematicTicks--;
         }
 
-        cinematic = cinematicTicks > 7.5 || (Medusa.INSTANCE.getTickManager().getTicks() - lastCinematic < 120);
+        cinematic = cinematicTicks > 8 || (Medusa.INSTANCE.getTickManager().getTicks() - lastCinematic < 120);
 
-        if (cinematic && cinematicTicks > 7.5) {
+        if (cinematic && cinematicTicks > 8) {
             lastCinematic = Medusa.INSTANCE.getTickManager().getTicks();
         }
     }
@@ -94,7 +86,7 @@ public class RotationProcessor {
     private void processSensitivity() {
         final float gcd = (float) MathUtil.getGcd(deltaPitch, lastDeltaPitch);
         final double sensitivityModifier = Math.cbrt(0.8333 * gcd);
-        final double sensitivityStepTwo = (1.666 * sensitivityModifier) - 0.3333;
+        final double sensitivityStepTwo = (sensitivityModifier / 0.6) - 0.3333;
         final double finalSensitivity = sensitivityStepTwo * 200;
 
         this.finalSensitivity = finalSensitivity;

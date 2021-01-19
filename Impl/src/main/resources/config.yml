@@ -5,6 +5,7 @@
 # Appearance configuration.
 # If you want to change how Medusa looks, you can do it here.
 appearance:
+
   # Theme system.
   # How to make theme:
   # Split the string with dollar sign symbol ($)
@@ -46,10 +47,26 @@ appearance:
     accentOne: '&a'
     accentTwo: '&2'
 
+# Violation configuration section.
+# Placeholders:
+# %player% - Player's name
+# %uuid% - Player's UUID
+# %checkName% - Name of the check (e.g. Reach, AutoClicker, KillAura, Speed, Fly)
+# %checkType% - ID of the check, just a letter like A, B, C.
+# %dev% - Experimental status of the check, if the check has a "*" after it, it's experimental.
+# %vl% - Current violation level of the check flagged.
+# %maxvl% - Maximum violation level of the check flagged.
+# %ping% - Latency of the player.
+# %tps% - TPS of the server.
+# (VL = Violation Level = How many times a player has flagged the check)
 violations:
+  # Changes how Medusa's default notifications look.
   alert-format: '&aMedusa » &f%player% &7failed &f%checkName% (%checkType%) &7(x%vl%) &c%dev%'
+  # Time which has to be elapsed between notifications to prevent chat spam.
   alert-cooldown: 2000
+  # How much VL the check has to have in order to notify staff.
   minimum-vl-to-alert: 0
+  # Time in minutes for how ofter the violations for players will be reset.
   clear-violations-delay: 5
 
 # Check configuration
@@ -57,251 +74,366 @@ violations:
 # max-violations: Amount of times a player can flag before running the specified punish-command.
 # punish-command: Command ran by the server when a player exceeds the specified max-violations.
 checks:
+  # Combat Detections: Offers various checks designed to detect modules used to give a significant combat advantage.
   combat:
+    # AimAssist Detections: Capable of detecting some AimBot/AimAssist modules on various clients. May also detect
+    # some KillAura modules unintentionally. Not recommended to ban for these checks because of various ways players
+    # like to aim. The AimAssist checks enabled to punish by default are checks I feel are safe to ban for.
     aimassist:
+      # Checks for out-of-sync yaw/pitch changes. If the player is aiming more horizontally than vertically, flag.
       a:
         enabled: true
         max-violations: 10
         punish-command: ''
+      # Checks for rounded rotation changes. If the player is aiming with perfectly rounded values, flag.
       b:
         enabled: true
         max-violations: 10
         punish-command: ''
+      # Checks for aim consistency. If the player's rotation change is consistent over time, flag.
       c:
         enabled: true
         max-violations: 10
         punish-command: ''
+      # Checks for aim divisor changes. If the player's rotation change divisor changes in two rotations, flag.
       d:
         enabled: true
         max-violations: 0
         punish-command: ''
+      # Checks for too low aim divisor. If the player's rotation change divisor is too low, flag.
       e:
         enabled: true
         max-violations: 10
         punish-command: ''
+      # Checks for invalid aim changes. If the player sends a rotation change without rotating, flag.
       f:
         enabled: true
         max-violations: 1
         punish-command: ''
+      # Checks for aiming behaviour similar to blatant AimBot modules. If the player is aiming like an AimBot, flag.
       g:
         enabled: true
         max-violations: 25
         punish-command: ''
+    # AutoClicker Detections: Capable of detecting some AutoClicker modules on various clients/auto-clickers. Not
+    # recommended to ban for these checks since players click in more sophisticated ways which may flag these checks,
+    # only use them as a hint that the player could be cheating. If you want to enforce a maximum CPS to ban for, use
+    # AutoClicker A detection.
     autoclicker:
+      # Checks for extremely fast clicking. If the player clicks faster than the set CPS threshold, flag.
       a:
         enabled: true
         max-violations: 10
         punish-command: ''
+        # max-cps: How much CPS the player can click before being flagged.
+        max-cps: 24
+      # Unspecified AutoClicker detection heuristic B.
       b:
         enabled: true
         max-violations: 0
         punish-command: ''
+      # Unspecified AutoClicker detection heuristic C.
       c:
         enabled: true
         max-violations: 0
         punish-command: ''
+      # Unspecified AutoClicker detection heuristic D.
       d:
         enabled: true
         max-violations: 0
         punish-command: ''
+    # HitBox Detections: Capable of detecting hitting outside of the combat hit-box.
+    hitbox:
+      # The HitBox check uses a RayTracing method which may impact performance. If you have performance issues with
+      # Medusa, disable this check.
+      a:
+        enabled: true
+        max-violations: 0
+        punish-command: ''
+        # raytrace-sensitivity-level: (Range: 0-2) 0 indicates a low sensitivity level for this check, it will offer
+        # little to no false positives, with slower detection. 2 indicates a high sensitivity level, it will offer the
+        # best detection, however you will have some false positives.
+        # max-latency: How much ping (in milliseconds) the player can have before they do not get flagged by the check.
+        # -1 is default and means there is no limit.
+        raytrace-sensitivity-level: 1
+        max-latency:
+    # KillAura Detections: Capable of detecting some KillAura modules on various clients. Recommended to ban for these
+    # checks, however use at your own risk.
     killaura:
+      # Checks for packet order flaw found in some KillAura modules.
       a:
         enabled: true
         max-violations: 5
         punish-command: ''
+      # Checks for sprint movement flaw found in most KillAura modules.
       b:
         enabled: true
         max-violations: 5
         punish-command: ''
+      # Checks for hitting multiple entities at once. (MultiAura Detection)
       c:
         enabled: true
         max-violations: 5
         punish-command: ''
+      # Checks for an improbable accuracy. If the player is very accurate in fights, flag.
       d:
         enabled: true
         max-violations: 5
         punish-command: ''
+      # Checks for attacking without swinging. (NoSwing Detection for combat)
       e:
         enabled: true
         max-violations: 5
         punish-command: ''
+      # Checks for hitting through walls. (AttackOcclusion Detection)
       f:
         enabled: true
         max-violations: 50
         punish-command: ''
+    # Reach Detections: Capable of detecting hit reach modifications.
     reach:
+      # Reach A: Sophisticated reach check based on the concept of backtracking.
+      # (This check can be bypassed using FakeLag/PingSpoof)
+      # Reach B: Simple reach check that can avoid fake lag or ping spoof exploits, needs higher threshold.
       a:
         enabled: true
         max-violations: 25
         punish-command: ''
+        # max-reach: How low reach this check should detect.
+        # max-threshold: How many reach hits this player needs to be flagged.
+        # threshold-decay: How much the threshold should decrease if there is not a reach hit.
+        # max-latency: How much ping (in milliseconds) the player can have before they do not get flagged by the check.
+        # -1 is default and means there is no limit.
+        max-reach: 3.0
+        max-threshold: 3.0
+        threshold-decay: 0.1
+        max-latency: -1
       b:
         enabled: true
         max-violations: 25
         punish-command: ''
-    hitbox:
-      a:
-        enabled: true
-        max-violations: 0
-        punish-command: ''
+        # max-reach: How low reach this check should detect. (Recommended: No lower than 3.5)
+        # max-latency: How much ping (in milliseconds) the player can have before they do not get flagged by the check.
+        # -1 is default and means there is no limit.
+        max-reach: 3.5
+        max-latency: -1
+    # Velocity Detections: Capable of detecting some movement modifications when taking knock-back.
     velocity:
+      # The Velocity check offers detection for Vertical Velocity only (horizontal in the near future).
       a:
         enabled: true
         max-violations: 0
         punish-command: ''
-      b:
-        enabled: true
-        max-violations: 0
-        punish-command: ''
+        # minimum-velocity-percentage: How low the velocity of the player can be before being flagged.
+        # maximum-velocity-percentage: How high the velocity of the player can be before being flagged.
+        minimum-velocity-percentage: 100
+        maximum-velocity-percentage: 100
+  # Movement Detections: Offers various checks designed to detect blatant movement advantages.
   movement:
+    # FastClimb Detection: Checks if the player moves too quickly on ladders.
     fastclimb:
+      # Checks if the player moves too quickly vertically on ladders.
       a:
         enabled: true
         max-violations: 5
         punish-command: ''
+    # Fly Detections: Capable of detecting most fly hacks.
     fly:
+      # Checks if the player follows Minecraft's gravity rule.
       a:
         enabled: true
         max-violations: 35
         punish-command: ''
+      # Checks if the player jumps while in air.
       b:
         enabled: true
         max-violations: 10
         punish-command: ''
+      # Checks if the player claims to be on ground while in air.
       c:
         enabled: true
         max-violations: 10
         punish-command: ''
+    # Jesus Detections: (WIP) Capable of detecting some movement modifications in water.
     jesus:
+      # Checks for correct horizontal movement while in/on water.
       a:
         enabled: true
         max-violations: 25
         punish-command: ''
-      b:
-        enabled: true
-        max-violations: 25
-        punish-command: ''
+    # Motion Detections: Capable of detecting various less significant movement modules.
     motion:
+      # Checks if the player moves at a constant rate vertically.
       a:
         enabled: true
         max-violations: 5
         punish-command: ''
+      # Checks if the player falls too fast.
       b:
         enabled: true
         max-violations: 5
         punish-command: ''
+      # Checks if the player travels vertically at the correct speed.
       c:
         enabled: true
         max-violations: 25
         punish-command: ''
+      # Checks if the player is not sprinting sideways or backwards.
       d:
         enabled: true
         max-violations: 5
         punish-command: ''
+      # Checks if the player switches directions while in air.
       e:
         enabled: true
         max-violations: 5
         punish-command: ''
+    # NoSlow Detections: Capable of detecting Vanilla NoSlow. Other NoSlow modules are covered by other checks.
     noslow:
+      # Checks if the player is blocking and sprinting simultaneously.
       a:
         enabled: true
         max-violations: 25
         punish-command: ''
+    # Speed Detections: Capable of detecting Speed modules that offer a significant advantage.
     speed:
+      # Checks if the player is decreasing speed in air at a valid rate.
       a:
         enabled: true
         max-violations: 25
         punish-command: ''
+      # Checks if the player is moving at a correct speed. If player is moving too fast, flag.
       b:
-        enabled: true
+        enabled: true      # Unspecified AutoClicker detection heuristic B.
         max-violations: 50
         punish-command: ''
+      # Checks if the player is moving at a correct speed. This check is more lenient than Speed B.
       c:
         enabled: true
         max-violations: 10
         punish-command: ''
+  # Player Detections: Offers various checks to detect miscellaneous cheats not covered by the other categories.
   player:
-    timer:
-      a:
-        enabled: true
-        max-violations: 50
-        punish-command: ''
-      b:
-        enabled: true
-        max-violations: 50
-        punish-command: ''
-      c:
-        enabled: true
-        max-violations: 50
-        punish-command: ''
+    # Hand Detections: (WIP) Capable of detecting interaction hacks.
     hand:
+      # Checks if the player interacts with a block they cannot see.
       a:
         enabled: true
         max-violations: 0
         punish-command: ''
+    # Inventory Detections: Checks for various cheats related to inventory (InventoryWalk, ChestSteal)
     inventory:
+      # Checks if the player is moving while in their inventory.
       a:
         enabled: true
         max-violations: 0
         punish-command: ''
+      # Checks if the player moves items in an inventory too quickly.
       b:
         enabled: true
         max-violations: 15
         punish-command: ''
+    # Protocol Detections: Checks for various flaws in Minecraft's networking protocol hacked clients may have.
     protocol:
+      # Checks if the player looks too far up or down.
       a:
         enabled: true
         max-violations: 1
         punish-command: ''
+      # Checks if the player is attempting to force the server into thinking they are flying.
       b:
         enabled: true
         max-violations: 15
         punish-command: ''
+      # Checks if the player follows the correct sequence for Update Packets (C03PacketPlayer or PacketPlayInFlying).
       c:
         enabled: true
         max-violations: 15
         punish-command: ''
+      # Checks if the player is forcing the server to move a vehicle incorrectly.
       d:
         enabled: true
         max-violations: 15
         punish-command: ''
+      # Checks if the player moves the slot in their inventory correctly.
       e:
         enabled: true
         max-violations: 15
         punish-command: ''
+      # Checks if the player is forcing the server into thinking they are in a fake vehicle.
       f:
         enabled: true
         max-violations: 15
         punish-command: ''
+      # Checks if the player follows the correct packet sequence for placing blocks.
       g:
         enabled: true
         max-violations: 15
         punish-command: ''
+      # Checks if the player is attacking and placing blocks at the same time.
       h:
         enabled: true
         max-violations: 15
         punish-command: ''
+      # Checks if the player is attacking and blocking at the same time.
       i:
         enabled: true
         max-violations: 15
         punish-command: ''
+      # Checks if the player is attacking and digging at the same time.
       j:
         enabled: true
         max-violations: 15
         punish-command: ''
+    # Scaffold Detections: Capable of detecting "auto-bridging" modules in various clients.
     scaffold:
+      # Checks if the player turns their head suspiciously while bridging.
       a:
         enabled: true
         max-violations: 10
         punish-command: ''
+      # Checks if the player is bridging vertically too quickly.
       b:
         enabled: true
         max-violations: 10
         punish-command: ''
+      # Checks if the player placed blocks under themselves through another block.
       c:
         enabled: true
         max-violations: 10
         punish-command: ''
+      # Checks if the player is using SafeWalk (prevents player from walking off the edge of blocks) to aid
+      # them in bridging.
       d:
         enabled: true
         max-violations: 10
         punish-command: ''
+    # Timer Detections: Capable of detecting if the player is intentionally changing how fast their game runs.
+    timer:
+      # Normal method capable of detecting as low as 1.02 timer.
+      a:
+        enabled: true
+        max-violations: 50
+        punish-command: ''
+        # max-timer-speed: Normal speed is 1.0, however lag and other quirks may make it higher (around 1.02). If you
+        # experience false positives, make this value slightly higher.
+        max-timer-speed: 1.02
+      # Method to detect slow timer (found in some movement modules and disablers)
+      b:
+        enabled: true
+        max-violations: 50
+        punish-command: ''
+        # minimum-timer-speed: Normal speed is 1.0, however lag and other quirks may make it lower (around 0.75). If you
+        # experience false positives, make this value slightly lower. (Does not work properly on 1.9+)
+        minimum-timer-speed: 0.75
+      # Sophisticated method capable of detecting any timer speed increase (1.00001x and more).
+      c:
+        enabled: true
+        max-violations: 50
+        punish-command: ''
+        # maximum-balance: 0 by default, if you have some false positives set this higher.
+        # balance-reset: -50 by default, if you have some false positives set this lower. Do not go above your maximum-balance.
+        # balance-subtraction-on-teleport: 50 by default, if you have teleportation false positives lower this.
+        maximum-balance: 0
+        balance-reset: -50
+        balance-subtraction-on-teleport: 50

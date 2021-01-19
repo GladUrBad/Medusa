@@ -4,10 +4,7 @@ import com.gladurbad.medusa.util.type.Pair;
 import com.google.common.collect.Lists;
 import lombok.experimental.UtilityClass;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 @UtilityClass
 public class MathUtil {
@@ -126,7 +123,7 @@ public class MathUtil {
         return efficiencyFirst * (varianceSquared / Math.pow(variance / sum, 2.0)) - efficiencySecond;
     }
 
-    public static int getMode(Collection<? extends Number> array) {
+    public int getMode(Collection<? extends Number> array) {
         int mode = (int) array.toArray()[0];
         int maxCount = 0;
         for (Number value : array) {
@@ -140,6 +137,27 @@ public class MathUtil {
                 }
             }
         }
+        return mode;
+    }
+
+    public Number getModeUsingMaps(Collection<? extends Number> samples) {
+        final Map<Number, Integer> occurenceMap = new HashMap<>();
+
+        for (Number entry : samples) {
+            if (!occurenceMap.containsKey(entry)) occurenceMap.put(entry, 1);
+            else occurenceMap.put(entry, occurenceMap.get(entry) + 1);
+        }
+
+        Number mode = null;
+        int occurences = 0;
+
+        for (Map.Entry<Number, Integer> entry : occurenceMap.entrySet()) {
+            if (entry.getValue() > occurences) {
+                occurences = entry.getValue();
+                mode = entry.getKey();
+            }
+        }
+
         return mode;
     }
 

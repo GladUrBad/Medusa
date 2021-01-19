@@ -11,13 +11,11 @@ import com.gladurbad.medusa.check.impl.combat.hitbox.HitBoxA;
 import com.gladurbad.medusa.check.impl.combat.reach.ReachB;
 import com.gladurbad.medusa.check.impl.combat.killaura.*;
 import com.gladurbad.medusa.check.impl.combat.velocity.VelocityA;
-import com.gladurbad.medusa.check.impl.combat.velocity.VelocityB;
 import com.gladurbad.medusa.check.impl.movement.fastclimb.FastClimbA;
 import com.gladurbad.medusa.check.impl.movement.fly.FlyA;
 import com.gladurbad.medusa.check.impl.movement.fly.FlyB;
 import com.gladurbad.medusa.check.impl.movement.fly.FlyC;
 import com.gladurbad.medusa.check.impl.movement.jesus.JesusA;
-import com.gladurbad.medusa.check.impl.movement.jesus.JesusB;
 import com.gladurbad.medusa.check.impl.movement.motion.*;
 import com.gladurbad.medusa.check.impl.movement.noslow.NoSlowA;
 import com.gladurbad.medusa.check.impl.movement.speed.*;
@@ -65,13 +63,11 @@ public class CheckManager {
             HitBoxA.class,
             ReachB.class,
             VelocityA.class,
-            VelocityB.class,
             FastClimbA.class,
             FlyA.class,
             FlyB.class,
             FlyC.class,
             JesusA.class,
-            JesusB.class,
             MotionA.class,
             MotionB.class,
             MotionC.class,

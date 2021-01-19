@@ -26,6 +26,8 @@ public class SendingPacketProcessor  {
         if (packet.isTeleport()) {
             data.getPositionProcessor().handleTeleport();
         }
-        data.getChecks().forEach(check -> check.handle(packet));
+        if (!data.getPlayer().hasPermission("medusa.bypass")) {
+            data.getChecks().forEach(check -> check.handle(packet));
+        }
     }
 }

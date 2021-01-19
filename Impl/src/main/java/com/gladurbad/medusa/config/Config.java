@@ -71,7 +71,7 @@ public class Config {
                                 value.setValue(getIntegerFromConfig("checks." + checkType + "." + getPathFromCheckName(checkInfo.name()) + "." + name));
                                 break;
                             case DOUBLE:
-                                value.setValue(getDoubleFromConfig("checks." + checkType + "." + getPathFromCheckName(checkInfo.name())) + "." + name);
+                                value.setValue(getDoubleFromConfig("checks." + checkType + "." + getPathFromCheckName(checkInfo.name()) + "." + name));
                                 break;
                             case STRING:
                                 value.setValue(getStringFromConfig("checks." + checkType + "." + getPathFromCheckName(checkInfo.name()) + "." + name));
@@ -114,7 +114,7 @@ public class Config {
         return Medusa.INSTANCE.getPlugin().getConfig().getInt(string);
     }
 
-    private static double getDoubleFromConfig(String string) {
+    public static double getDoubleFromConfig(String string) {
         return Medusa.INSTANCE.getPlugin().getConfig().getDouble(string);
     }
 
@@ -126,7 +126,7 @@ public class Config {
         return Medusa.INSTANCE.getPlugin().getConfig().getLong(string);
     }
 
-    private static String getPathFromCheckName(String name) {
+    public static String getPathFromCheckName(String name) {
         return name.toLowerCase().replaceFirst("[(]", ".").replaceAll("[ ()]", "");
     }
 }
