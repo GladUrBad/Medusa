@@ -6,6 +6,7 @@ import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
+import org.bukkit.util.Vector;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -38,6 +39,17 @@ public final class BoundingBox {
             this.minZ = maxZ;
             this.maxZ = minZ;
         }
+    }
+
+    public BoundingBox(final Vector min, final Vector max) {
+
+        this.minX = min.getX();
+        this.minY = min.getY();
+        this.minZ = min.getZ();
+
+        this.maxX = max.getX();
+        this.maxY = max.getY();
+        this.maxZ = max.getZ();
     }
 
     public BoundingBox(final Player player) {

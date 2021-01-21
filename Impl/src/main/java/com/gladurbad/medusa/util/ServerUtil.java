@@ -18,4 +18,8 @@ public class ServerUtil {
     public boolean isLowerThan1_8() {
         return getServerVersion().isLowerThan(ServerVersion.v_1_8);
     }
+
+    public boolean isHigherThan1_13_2() {
+        return getServerVersion().isHigherThan(ServerVersion.v_1_13_2);
+    }
 }
