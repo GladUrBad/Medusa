@@ -32,12 +32,12 @@ public class FlyA extends Check {
 
     private final Predicate<Double> onGround = posY -> posY % 1D/64 == 0;
 
-    public FlyA(PlayerData data) {
+    public FlyA(final PlayerData data) {
         super(data);
     }
 
     @Override
-    public void handle(Packet packet) {
+    public void handle(final Packet packet) {
         if (packet.isPosition()) {
             final double deltaY = data.getPositionProcessor().getDeltaY();
             final double lastDeltaY = data.getPositionProcessor().getLastDeltaY();

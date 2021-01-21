@@ -15,15 +15,15 @@ public class RotationProcessor {
 
     private float yaw, pitch, lastYaw, lastPitch,
         deltaYaw, deltaPitch, lastDeltaYaw, lastDeltaPitch,
-        joltYaw, joltPitch, lastJoltYaw, lastJoltPitch;
+        joltYaw, joltPitch, lastJoltYaw, lastJoltPitch, gcd;
 
     private int sensitivity, lastCinematic, cinematicTicks;
 
     private final ArrayDeque<Integer> sensitivitySamples = new ArrayDeque<>();
 
     private boolean cinematic;
+
     private double finalSensitivity;
-    private float gcd;
 
     public RotationProcessor(final PlayerData data) {
         this.data = data;

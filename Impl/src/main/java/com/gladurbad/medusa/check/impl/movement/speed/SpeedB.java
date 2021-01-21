@@ -20,12 +20,12 @@ public class SpeedB extends Check {
 
     private int groundTicks, airTicks;
 
-    public SpeedB(PlayerData data) {
+    public SpeedB(final PlayerData data) {
         super(data);
     }
 
     @Override
-    public void handle(Packet packet) {
+    public void handle(final Packet packet) {
         if (packet.isPosition() && !isExempt(ExemptType.TELEPORT, ExemptType.FLYING)) {
             final WrappedPacketInFlying flying = new WrappedPacketInFlying(packet.getRawPacket());
 

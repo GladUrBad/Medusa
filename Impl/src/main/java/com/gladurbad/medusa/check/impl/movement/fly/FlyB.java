@@ -14,12 +14,13 @@ import com.gladurbad.medusa.packet.Packet;
 public class FlyB extends Check {
 
     private double lastAcceleration;
-    public FlyB(PlayerData data) {
+
+    public FlyB(final PlayerData data) {
         super(data);
     }
 
     @Override
-    public void handle(Packet packet) {
+    public void handle(final Packet packet) {
         if (packet.isPosition() && !isExempt(ExemptType.TELEPORT)) {
             final double acceleration = data.getPositionProcessor().getDeltaY() - data.getPositionProcessor().getLastDeltaY();
             final double airTicks = data.getPositionProcessor().getAirTicks();

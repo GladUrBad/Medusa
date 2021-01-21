@@ -105,7 +105,7 @@ public class PositionProcessor {
         final double maxZ = boundingBox.getMaxZ();
 
         for (double x = minX; x <= maxX; x += (maxX - minX)) {
-            for (double y = minY; y <= maxY + 0.01; y += (maxY - minY) / 5) { //Expand max by 0.01 to compensate shortly for precision issues due to FP.
+            for (double y = minY; y <= maxY + 0.01; y += (maxY - minY) / 5) { // Expand max by 0.01 to compensate shortly for precision issues due to FP.
                 for (double z = minZ; z <= maxZ; z += (maxZ - minZ)) {
                     final Location location = new Location(data.getPlayer().getWorld(), x, y, z);
                     final Block block = this.getBlock(location);

@@ -10,32 +10,33 @@ import org.bukkit.entity.Entity;
 public class CombatProcessor {
 
     private final PlayerData data;
+
     private int hitTicks, swings, hits, currentTargets;
+
     private double hitMissRatio, distance;
+
     private Entity target, lastTarget;
 
-    public CombatProcessor(PlayerData data) {
+    public CombatProcessor(final PlayerData data) {
         this.data = data;
     }
 
     public void handleUseEntity(final WrappedPacketInUseEntity wrapper) {
-        if (wrapper.getAction() != WrappedPacketInUseEntity.EntityUseAction.ATTACK) {
+        if (wrapper.getAction() != WrappedPacketInUseEntity.EntityUseAction.ATTACK || wrapper.getEntity() == null) {
             return;
         }
 
-        if (wrapper.getEntity() != null) {
-            lastTarget = target == null ? wrapper.getEntity() : target;
-            target = wrapper.getEntity();
+        lastTarget = target == null ? wrapper.getEntity() : target;
+        target = wrapper.getEntity();
 
-            distance = data.getPlayer().getLocation().toVector().setY(0).distance(target.getLocation().toVector().setY(0)) - .42;
+        distance = data.getPlayer().getLocation().toVector().setY(0).distance(target.getLocation().toVector().setY(0)) - .42;
 
-            ++hits;
+        ++hits;
 
-            hitTicks = 0;
+        hitTicks = 0;
 
-            if (target != lastTarget) {
-                ++currentTargets;
-            }
+        if (target != lastTarget) {
+            ++currentTargets;
         }
     }
 
