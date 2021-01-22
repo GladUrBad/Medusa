@@ -28,15 +28,10 @@ public class ActionProcessor {
 
     @Setter private boolean inventory;
 
-    private int heldItemSlot, lastHeldItemSlot;
+    private int heldItemSlot, lastHeldItemSlot, lastDiggingTick, lastPlaceTick, lastBreakTick,
+            sprintingTicks, sneakingTicks;
 
-    private int lastDiggingTick, lastPlaceTick, lastBreakTick;
-
-    private int sprintingTicks, sneakingTicks;
-
-    private long lastFlyingTime;
-
-    private long ping;
+    private long lastFlyingTime, ping;
 
     public ActionProcessor(final PlayerData data) {
         this.data = data;

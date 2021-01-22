@@ -15,7 +15,9 @@ public final class NetworkListener extends PacketListenerDynamic {
     public void onPacketPlayReceive(final PacketPlayReceiveEvent event) {
         final PlayerData data = Medusa.INSTANCE.getPlayerDataManager().getPlayerData(event.getPlayer());
 
-        if (data != null) {
+        handle: {
+            if (data == null) break handle;
+
             Medusa.INSTANCE.getPacketExecutor().execute(() -> Medusa.INSTANCE.getReceivingPacketProcessor()
                     .handle(data, new Packet(Packet.Direction.RECEIVE, event.getNMSPacket(), event.getPacketId())));
         }
@@ -25,7 +27,9 @@ public final class NetworkListener extends PacketListenerDynamic {
     public void onPacketPlaySend(final PacketPlaySendEvent event) {
         final PlayerData data = Medusa.INSTANCE.getPlayerDataManager().getPlayerData(event.getPlayer());
 
-        if (data != null) {
+        handle: {
+            if (data == null) break handle;
+
             Medusa.INSTANCE.getPacketExecutor().execute(() -> Medusa.INSTANCE.getSendingPacketProcessor()
                     .handle(data, new Packet(Packet.Direction.SEND, event.getNMSPacket(), event.getPacketId())));
         }

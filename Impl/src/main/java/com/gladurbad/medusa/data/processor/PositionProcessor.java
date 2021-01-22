@@ -184,7 +184,7 @@ public class PositionProcessor {
             Bukkit.getScheduler().runTask(Medusa.INSTANCE.getPlugin(), futureTask);
             try {
                 return futureTask.get();
-            } catch (Exception exception) {
+            } catch (final Exception exception) {
                 exception.printStackTrace();
             }
             return null;

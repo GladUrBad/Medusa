@@ -26,7 +26,6 @@ public class KillAuraF extends Check {
 
             if (target == null || attacker == null ) return;
 
-            final Location targetLocation = target.getLocation();
             final Location attackerLocation = attacker.getLocation();
 
             final float yaw = data.getRotationProcessor().getYaw() % 360F;

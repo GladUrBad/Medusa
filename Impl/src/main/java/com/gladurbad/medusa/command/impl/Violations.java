@@ -24,12 +24,12 @@ public class Violations extends MedusaCommand {
 
                 if (playerData != null) {
                     sendRetardedNewLine(sender);
-                    sendMessage(sender, ColorUtil.translate(Config.ACCENT_ONE + "Violations for &c" + playerData.getPlayer().getName() + Config.ACCENT_ONE + "."));
+                    sendMessage(sender, Config.ACCENT_ONE + "Violations for &c" + playerData.getPlayer().getName() + Config.ACCENT_ONE + ".");
                     sendRetardedNewLine(sender);
-                    sendMessage(sender, ColorUtil.translate(Config.ACCENT_ONE + "Total check violations → " + Config.ACCENT_TWO + playerData.getTotalViolations()));
-                    sendMessage(sender, ColorUtil.translate(Config.ACCENT_ONE + "Combat check violations → " + Config.ACCENT_TWO + playerData.getCombatViolations()));
-                    sendMessage(sender, ColorUtil.translate(Config.ACCENT_ONE + "Movement check violations → " + Config.ACCENT_TWO + playerData.getMovementViolations()));
-                    sendMessage(sender, ColorUtil.translate(Config.ACCENT_ONE + "Player check violations → " + Config.ACCENT_TWO + playerData.getPlayerViolations()));
+                    sendMessage(sender, Config.ACCENT_ONE + "Total check violations → " + Config.ACCENT_TWO + playerData.getTotalViolations());
+                    sendMessage(sender, Config.ACCENT_ONE + "Combat check violations → " + Config.ACCENT_TWO + playerData.getCombatViolations());
+                    sendMessage(sender, Config.ACCENT_ONE + "Movement check violations → " + Config.ACCENT_TWO + playerData.getMovementViolations());
+                    sendMessage(sender, Config.ACCENT_ONE + "Player check violations → " + Config.ACCENT_TWO + playerData.getPlayerViolations());
                     sendRetardedNewLine(sender);
                     return true;
                 }

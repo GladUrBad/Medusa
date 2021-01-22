@@ -39,5 +39,4 @@ public class ClientBrandListener implements PluginMessageListener, Listener {
             e.printStackTrace();
         }
     }
-
 }

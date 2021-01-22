@@ -79,7 +79,7 @@ public class PlayerUtil {
      * @return The block in the given distance, otherwise null
      */
     public Block getLookingBlock(final Player player, final int distance) {
-        Location loc = player.getEyeLocation();
+        final Location loc = player.getEyeLocation();
 
         final Vector v = loc.getDirection().normalize();
 

@@ -61,33 +61,13 @@ public abstract class Check implements MedusaCheck {
     public abstract void handle(final Packet packet);
 
     public void fail(final Object info) {
-        final MedusaFlagEvent event = new MedusaFlagEvent(data.getPlayer(), this);
-        Bukkit.getScheduler().runTaskAsynchronously(Medusa.INSTANCE.getPlugin(), () -> Bukkit.getPluginManager().callEvent(event));
+        if (System.currentTimeMillis() - lastFlagTime > Config.ALERT_COOLDOWN && vl >= Config.MIN_VL_TO_ALERT) {
+            AlertUtil.handleAlert(this, data, Objects.toString(info));
+            this.lastFlagTime = System.currentTimeMillis();
+        }
 
-        if (!event.isCancelled()) {
-            ++vl;
-            data.setTotalViolations(data.getTotalViolations() + 1);
-
-            switch (checkType) {
-                case COMBAT:
-                    data.setCombatViolations(data.getCombatViolations() + 1);
-                    break;
-                case MOVEMENT:
-                    data.setMovementViolations(data.getMovementViolations() + 1);
-                    break;
-                case PLAYER:
-                    data.setPlayerViolations(data.getPlayerViolations() + 1);
-                    break;
-            }
-
-            if (System.currentTimeMillis() - lastFlagTime > Config.ALERT_COOLDOWN && vl >= Config.MIN_VL_TO_ALERT) {
-                AlertUtil.handleAlert(this, data, Objects.toString(info));
-                this.lastFlagTime = System.currentTimeMillis();
-            }
-
-            if (vl > maxVl) {
-                PunishUtil.punish(this, data);
-            }
+        if (vl > maxVl) {
+            PunishUtil.punish(this, data);
         }
     }
 
@@ -117,7 +97,7 @@ public abstract class Check implements MedusaCheck {
     }
 
     public void debug(final Object... objects) {
-        for (Object object : objects) {
+        for (final Object object : objects) {
             Bukkit.broadcastMessage(ChatColor.GREEN + "[Medusa-Debug] " + ChatColor.GRAY + object);
         }
     }

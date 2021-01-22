@@ -12,7 +12,7 @@ import org.bukkit.event.player.PlayerInteractEvent;
 public class BukkitEventListener implements Listener {
 
     @EventHandler
-    public void onBlockBreak(BlockBreakEvent event) {
+    public void onBlockBreak(final BlockBreakEvent event) {
         final PlayerData data = Medusa.INSTANCE.getPlayerDataManager().getPlayerData(event.getPlayer());
         if (data != null) {
             data.getActionProcessor().handleBukkitBlockBreak();
@@ -20,7 +20,7 @@ public class BukkitEventListener implements Listener {
     }
 
     @EventHandler
-    public void onPlayerInteract(PlayerInteractEvent event) {
+    public void onPlayerInteract(final PlayerInteractEvent event) {
         final PlayerData data = Medusa.INSTANCE.getPlayerDataManager().getPlayerData(event.getPlayer());
         if (data != null) {
             data.getActionProcessor().handleInteract(event);
@@ -28,7 +28,7 @@ public class BukkitEventListener implements Listener {
     }
 
     @EventHandler
-    public void onBlockPlace(BlockPlaceEvent event) {
+    public void onBlockPlace(final BlockPlaceEvent event) {
         final PlayerData data = Medusa.INSTANCE.getPlayerDataManager().getPlayerData(event.getPlayer());
         if (data != null) {
             data.getActionProcessor().handleBukkitPlace();
