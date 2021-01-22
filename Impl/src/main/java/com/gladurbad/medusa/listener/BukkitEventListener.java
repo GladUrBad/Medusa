@@ -14,10 +14,7 @@ public class BukkitEventListener implements Listener {
     @EventHandler
     public void onBlockBreak(final BlockBreakEvent event) {
         final PlayerData data = Medusa.INSTANCE.getPlayerDataManager().getPlayerData(event.getPlayer());
-
-        handle: {
-            if (data == null) break handle;
-
+        if (data != null) {
             data.getActionProcessor().handleBukkitBlockBreak();
         }
     }
@@ -25,10 +22,7 @@ public class BukkitEventListener implements Listener {
     @EventHandler
     public void onPlayerInteract(final PlayerInteractEvent event) {
         final PlayerData data = Medusa.INSTANCE.getPlayerDataManager().getPlayerData(event.getPlayer());
-
-        handle: {
-            if (data == null) break handle;
-
+        if (data != null) {
             data.getActionProcessor().handleInteract(event);
         }
     }
@@ -36,10 +30,7 @@ public class BukkitEventListener implements Listener {
     @EventHandler
     public void onBlockPlace(final BlockPlaceEvent event) {
         final PlayerData data = Medusa.INSTANCE.getPlayerDataManager().getPlayerData(event.getPlayer());
-
-        handle: {
-            if (data == null) break handle;
-
+        if (data != null) {
             data.getActionProcessor().handleBukkitPlace();
         }
     }
