@@ -39,9 +39,14 @@ public final class MathUtil {
         return Math.sqrt(variance);
     }
 
+    public boolean isScientificNotation(final Number num) {
+        return (num.toString().contains("E"));
+    }
+
     public boolean mathOnGround(final double posY) {
         return posY % 0.015625 == 0;
     }
+
     public Pair<List<Double>, List<Double>> getOutliers(final Collection<? extends Number> collection) {
         final List<Double> values = new ArrayList<>();
 
