@@ -8,6 +8,7 @@ import com.gladurbad.medusa.packet.Packet;
 /**
  * Created on 10/24/2020 Package com.gladurbad.medusa.check.impl.combat.killaura by GladUrBad
  */
+ 
 @CheckInfo(name = "KillAura (C)", description = "Checks for multi-aura.")
 public final class KillAuraC extends Check {
 
