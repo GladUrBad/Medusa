@@ -16,9 +16,9 @@ import com.gladurbad.medusa.check.impl.movement.fly.FlyA;
 import com.gladurbad.medusa.check.impl.movement.fly.FlyB;
 import com.gladurbad.medusa.check.impl.movement.fly.FlyC;
 import com.gladurbad.medusa.check.impl.movement.jesus.JesusA;
+import com.gladurbad.medusa.check.impl.movement.jesus.JesusB;
 import com.gladurbad.medusa.check.impl.movement.motion.*;
 import com.gladurbad.medusa.check.impl.movement.noslow.NoSlowA;
-import com.gladurbad.medusa.check.impl.movement.noslow.NoSlowB;
 import com.gladurbad.medusa.check.impl.movement.speed.*;
 import com.gladurbad.medusa.check.impl.movement.speed.SpeedC;
 import com.gladurbad.medusa.check.impl.player.hand.HandA;
@@ -42,7 +42,7 @@ import java.util.List;
 
 public class CheckManager {
 
-    public static final Class[] CHECKS = new Class[] {
+    public static final Class<?>[] CHECKS = new Class[] {
             AimAssistA.class,
             AimAssistB.class,
             AimAssistC.class,
@@ -69,6 +69,7 @@ public class CheckManager {
             FlyB.class,
             FlyC.class,
             JesusA.class,
+            JesusB.class,
             MotionA.class,
             MotionB.class,
             MotionC.class,
@@ -78,7 +79,6 @@ public class CheckManager {
             MotionE.class,
             SpeedC.class,
             NoSlowA.class,
-            NoSlowB.class,
             TimerA.class,
             TimerB.class,
             TimerC.class,
@@ -117,7 +117,7 @@ public class CheckManager {
     }
 
     public static void setup() {
-        for (Class clazz : CHECKS) {
+        for (Class<?> clazz : CHECKS) {
             if (Config.ENABLED_CHECKS.contains(clazz.getSimpleName())) {
                 try {
                     CONSTRUCTORS.add(clazz.getConstructor(PlayerData.class));
