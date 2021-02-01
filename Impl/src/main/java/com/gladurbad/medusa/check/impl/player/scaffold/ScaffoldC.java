@@ -4,11 +4,11 @@ import com.gladurbad.api.check.CheckInfo;
 import com.gladurbad.medusa.check.Check;
 import com.gladurbad.medusa.data.PlayerData;
 import com.gladurbad.medusa.packet.Packet;
-import io.github.retrooper.packetevents.enums.Direction;
 import io.github.retrooper.packetevents.packetwrappers.play.in.blockplace.WrappedPacketInBlockPlace;
+import io.github.retrooper.packetevents.utils.player.Direction;
 
 @CheckInfo(name = "Scaffold (C)", description = "Checks for downwards scaffold.", experimental = true)
-public class ScaffoldC extends Check {
+public final class ScaffoldC extends Check {
 
     public ScaffoldC(final PlayerData data) {
         super(data);

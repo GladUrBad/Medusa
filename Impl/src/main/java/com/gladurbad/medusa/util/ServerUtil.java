@@ -5,7 +5,7 @@ import io.github.retrooper.packetevents.utils.server.ServerVersion;
 import lombok.experimental.UtilityClass;
 
 @UtilityClass
-public class ServerUtil {
+public final class ServerUtil {
 
     public double getTPS() {
         return PacketEvents.get().getServerUtils().getTPS();

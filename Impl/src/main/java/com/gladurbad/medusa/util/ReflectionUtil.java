@@ -1,16 +1,16 @@
-package main.java.com.gladurbad.medusa.util;
+package com.gladurbad.medusa.util;
 
+import lombok.experimental.UtilityClass;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Entity;
 import org.bukkit.util.Vector;
-import com.gladurbad.medusa.util.ServerUtil;
 import com.gladurbad.medusa.util.type.BoundingBox;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
 @UtilityClass
-public class ReflectionUtil {
+public final class ReflectionUtil {
 
     /**
      * We can make a caching system for this in order to be somewhat more efficient.

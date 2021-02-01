@@ -6,7 +6,7 @@ import com.gladurbad.medusa.data.PlayerData;
 import com.gladurbad.medusa.packet.Packet;
 
 @CheckInfo(name = "Scaffold (D)", description = "Checks for SafeWalk scaffold.", experimental = true)
-public class ScaffoldD extends Check {
+public final class ScaffoldD extends Check {
 
     private int placedTicks;
 
@@ -22,6 +22,7 @@ public class ScaffoldD extends Check {
             if (++placedTicks < 5 && isBridging() && !data.getActionProcessor().isSneaking()) {
                 final double accel = data.getPositionProcessor().getDeltaXZ() - data.getPositionProcessor().getLastDeltaXZ();
 
+                debug("accel=" + accel);
                 if (accel < 0.0001 && lastAccel > 0.05 && lastLastAccel < 0.0001) {
                     if (++buffer > 3) {
                         fail();

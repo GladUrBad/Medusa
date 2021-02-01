@@ -17,7 +17,7 @@ import java.util.List;
  */
 
 @CheckInfo(name = "AutoClicker (D)", experimental = true, description = "Checks for consistency.")
-public class AutoClickerD extends Check {
+public final class AutoClickerD extends Check {
 
     private final ArrayDeque<Integer> samples = new ArrayDeque<>();
     private int ticks;
@@ -39,9 +39,11 @@ public class AutoClickerD extends Check {
                 final int outliers = outlierPair.getX().size() + outlierPair.getY().size();
                 final int duplicates = (int) (samples.size() - samples.stream().distinct().count());
 
+                debug("outliers=" + outliers + " dupl=" + duplicates);
+
                 if (outliers < 2 && duplicates > 16) {
                     if ((buffer += 10) > 50) {
-                        fail();
+                        fail("outliers=" + outliers + " dupl=" + duplicates);
                     }
                 } else {
                     buffer = Math.max(buffer - 8, 0);

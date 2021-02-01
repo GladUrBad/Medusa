@@ -12,15 +12,15 @@ import org.bukkit.entity.EntityType;
  * Created on 10/24/2020 Package com.gladurbad.medusa.check.impl.combat.killaura by GladUrBad
  */
 
-@CheckInfo(name = "KillAura (B)", experimental = true, description = "Checks for KeepSprint modules.")
-public class KillAuraB extends Check {
+@CheckInfo(name = "KillAura (B)", description = "Checks for KeepSprint modules.")
+public final class KillAuraB extends Check {
 
-    public KillAuraB(PlayerData data) {
+    public KillAuraB(final PlayerData data) {
         super(data);
     }
 
     @Override
-    public void handle(Packet packet) {
+    public void handle(final Packet packet) {
         if (packet.isPosLook()) {
             if (data.getExemptProcessor().isExempt(ExemptType.COMBAT)) {
                 final boolean sprinting = data.getActionProcessor().isSprinting();
@@ -29,16 +29,15 @@ public class KillAuraB extends Check {
 
                 final double acceleration = Math.abs(deltaXZ - lastDeltaXZ);
                 final long clickDelay = data.getClickProcessor().getDelay();
-                final boolean onGround = data.getPositionProcessor().isMathematicallyOnGround();
                 final Entity target = data.getCombatProcessor().getTarget();
 
                 final boolean invalid = acceleration < 0.0025 &&
                         deltaXZ > 0.22 &&
-                        onGround &&
                         sprinting &&
                         clickDelay < 250 &&
                         target.getType() == EntityType.PLAYER;
 
+                debug("a=" + acceleration + " dxz=" + deltaXZ + " cd=" + clickDelay);
                 if (invalid) {
                     if (++buffer > 5) {
                         fail(String.format("acceleration=%.6f", acceleration));

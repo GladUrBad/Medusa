@@ -9,7 +9,7 @@ import com.gladurbad.medusa.exempt.type.ExemptType;
 import com.gladurbad.medusa.packet.Packet;
 
 @CheckInfo(name = "Timer (C)", description = "Balance based timer check.", experimental = true)
-public class TimerC extends Check {
+public final class TimerC extends Check {
 
     private static final ConfigValue maxBal = new ConfigValue(ConfigValue.ValueType.LONG, "maximum-balance");
     private static final ConfigValue balReset = new ConfigValue(ConfigValue.ValueType.LONG, "balance-reset");
@@ -36,7 +36,7 @@ public class TimerC extends Check {
                 }
             }
             lastFlyingTime = now();
-        } else if (packet.isTeleport()) {
+        } else if (packet.isOutPosition()) {
             balance -= balSubOnTp.getLong();
         }
     }

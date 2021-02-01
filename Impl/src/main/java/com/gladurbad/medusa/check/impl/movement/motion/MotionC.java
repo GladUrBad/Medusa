@@ -14,7 +14,7 @@ import org.bukkit.potion.PotionEffectType;
  */
 
 @CheckInfo(name = "Motion (C)", description = "Checks for jump height/vertical movement threshold.")
-public class MotionC extends Check {
+public final class MotionC extends Check {
 
     public MotionC(final PlayerData data) {
         super(data);
@@ -31,33 +31,40 @@ public class MotionC extends Check {
 
             final double expectedJumpMotion = 0.42F + (double) ((float) PlayerUtil.getPotionLevel(data.getPlayer(), PotionEffectType.JUMP) * 0.1F);
 
-            // Fix false positive with jumping while on fire.
             final double maxHighJump = 0.42F + (double) ((float) PlayerUtil.getPotionLevel(data.getPlayer(), PotionEffectType.JUMP) * 0.1F) +
                     (data.getVelocityProcessor().getTicksSinceVelocity() < 5 ? data.getVelocityProcessor().getVelocityY() > 0 ? data.getVelocityProcessor().getVelocityY() : 0 : 0);
 
             final boolean jumped = deltaY > 0 && lastPosY % (1D/64) == 0 && !onGround && !step;
 
             final boolean exempt = isExempt(
-                    ExemptType.VEHICLE, ExemptType.FLYING, ExemptType.SLIME, ExemptType.UNDER_BLOCK,
+                    ExemptType.INSIDE_VEHICLE, ExemptType.FLYING, ExemptType.SLIME, ExemptType.UNDER_BLOCK,
                     ExemptType.PISTON, ExemptType.LIQUID, ExemptType.NEAR_VEHICLE, ExemptType.TELEPORT,
                     ExemptType.WEB, ExemptType.TRAPDOOR
             );
 
+            debug("deltaY" + deltaY + " ejm=" + expectedJumpMotion + " mhj=" + maxHighJump + " step=" + step);
+            //Mini-jump check.
             if (jumped && !exempt && !isExempt(ExemptType.VELOCITY)) {
                 if (deltaY < expectedJumpMotion) {
-                    fail(String.format("lowhop: dy=%.2f, expected=%.2f", deltaY, expectedJumpMotion));
+                    fail(String.format("ASC-L: %.2f < %.2f", deltaY, expectedJumpMotion));
                 }
             }
 
-            if (!exempt && !step && !data.getPositionProcessor().isNearSlab()) {
-                if (deltaY > maxHighJump) {
-                    fail(String.format("highjump: dy=%.2f, max=%.2f", deltaY, expectedJumpMotion));
+            //High-jump check.
+            if (!exempt && !step) {
+                //Patch for mid-air step glitch.
+                if (deltaY > (data.getPositionProcessor().isOnGround() ? 0.6 : maxHighJump)) {
+                    fail(String.format(
+                            "ASC-H: %.2f > %.2f, onGround=%b",
+                            deltaY, expectedJumpMotion, data.getPositionProcessor().isOnGround()
+                    ));
                 }
             }
 
+            //Generic step check.
             if (step && !isExempt(ExemptType.TELEPORT)) {
                 if (deltaY > 0.6F) {
-                    fail(String.format("step: dy=%.2f, max=0.6", deltaY));
+                    fail(String.format("ASC-S: %.2f > 0.6", deltaY));
                 }
             }
         }

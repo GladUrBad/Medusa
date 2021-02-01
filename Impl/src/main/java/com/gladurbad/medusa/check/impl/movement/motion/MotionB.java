@@ -11,7 +11,7 @@ import com.gladurbad.medusa.packet.Packet;
  */
 
 @CheckInfo(name = "Motion (B)", description = "Checks for fast-fall cheats.")
-public class MotionB extends Check {
+public final class MotionB extends Check {
 
     public MotionB(final PlayerData data) {
         super(data);
@@ -22,6 +22,7 @@ public class MotionB extends Check {
         if (packet.isPosition()) {
             final double deltaY = data.getPositionProcessor().getDeltaY();
 
+            debug("deltaY=" + deltaY);
             final boolean invalid = deltaY < -3.92 &&
                     !isExempt(ExemptType.TELEPORT, ExemptType.FLYING);
 

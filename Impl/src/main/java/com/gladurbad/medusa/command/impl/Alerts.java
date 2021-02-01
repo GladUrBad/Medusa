@@ -14,7 +14,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 @CommandInfo(name = "alerts", purpose = "Toggles cheat alerts.")
-public class Alerts extends MedusaCommand {
+public final class Alerts extends MedusaCommand {
 
     @Override
     protected boolean handle(CommandSender sender, Command command, String label, String[] args) {

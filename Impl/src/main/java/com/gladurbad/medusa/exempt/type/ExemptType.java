@@ -16,7 +16,7 @@ public enum ExemptType {
 
     TPS(data -> ServerUtil.getTPS() < 18.5D),
 
-    TELEPORT(data -> data.getPositionProcessor().getTeleportTicks() < 30),
+    TELEPORT(data -> data.getPositionProcessor().isTeleporting() || System.currentTimeMillis() - data.getJoinTime() < 2000L),
 
     VELOCITY(data -> data.getVelocityProcessor().isTakingVelocity()),
 
@@ -24,9 +24,17 @@ public enum ExemptType {
 
     TRAPDOOR(data -> data.getPositionProcessor().isNearTrapdoor()),
 
+    STEPPED(data -> data.getPositionProcessor().isOnGround() && data.getPositionProcessor().getDeltaY() > 0),
+
+    CINEMATIC(data -> data.getRotationProcessor().isCinematic()),
+
     SLIME(data -> data.getPositionProcessor().getSinceSlimeTicks() < 30),
 
     ICE(data -> data.getPositionProcessor().getSinceIceTicks() < 40),
+
+    SLAB(data -> data.getPositionProcessor().isNearSlab()),
+
+    STAIRS(data -> data.getPositionProcessor().isNearStairs()),
 
     WEB(data -> data.getPositionProcessor().isInWeb()),
 
@@ -40,13 +48,13 @@ public enum ExemptType {
 
     NEAR_VEHICLE(data -> data.getPositionProcessor().isNearVehicle()),
 
-    VEHICLE(data -> data.getPositionProcessor().getSinceVehicleTicks() < 20),
+    INSIDE_VEHICLE(data -> data.getPositionProcessor().getSinceVehicleTicks() < 20),
 
     LIQUID(data -> data.getPositionProcessor().isInLiquid()),
 
     UNDER_BLOCK(data -> data.getPositionProcessor().isBlockNearHead()),
 
-    PISTON(data -> data.getPositionProcessor().isNearPiston()),
+    PISTON(data -> data.getPositionProcessor().getSinceNearPistonTicks() < 50),
 
     VOID(data -> data.getPlayer().getLocation().getY() < 4),
 

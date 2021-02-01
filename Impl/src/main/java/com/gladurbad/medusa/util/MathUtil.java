@@ -7,7 +7,7 @@ import lombok.experimental.UtilityClass;
 import java.util.*;
 
 @UtilityClass
-public class MathUtil {
+public final class MathUtil {
 
     public final double EXPANDER = Math.pow(2, 24);
 

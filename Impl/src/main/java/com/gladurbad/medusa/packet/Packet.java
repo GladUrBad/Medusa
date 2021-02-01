@@ -5,7 +5,7 @@ import io.github.retrooper.packetevents.packetwrappers.NMSPacket;
 import lombok.Getter;
 
 @Getter
-public class Packet {
+public final class Packet {
 
     private final Direction direction;
     private final NMSPacket rawPacket;
@@ -97,8 +97,16 @@ public class Packet {
         return isSending() && packetId == PacketType.Play.Server.TRANSACTION;
     }
 
+    public boolean isAcceptingTeleport() {
+        return isReceiving() && packetId == PacketType.Play.Client.TELEPORT_ACCEPT;
+    }
+    public boolean isTeleport() {
+        return isSending() && packetId == PacketType.Play.Server.ENTITY_TELEPORT;
+    }
 
-    public boolean isTeleport() { return isSending() && packetId == PacketType.Play.Server.POSITION; }
+    public boolean isOutPosition() {
+        return isSending() && packetId == PacketType.Play.Server.POSITION;
+    }
 
     public boolean isVelocity() {
         return isSending() && packetId == PacketType.Play.Server.ENTITY_VELOCITY;

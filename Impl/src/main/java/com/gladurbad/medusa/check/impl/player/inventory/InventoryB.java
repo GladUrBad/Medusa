@@ -7,7 +7,7 @@ import com.gladurbad.medusa.packet.Packet;
 import io.github.retrooper.packetevents.packetwrappers.play.in.windowclick.WrappedPacketInWindowClick;
 
 @CheckInfo(name = "Inventory (B)", description = "Checks for moving inventory items too quickly.", experimental = true)
-public class InventoryB extends Check {
+public final class InventoryB extends Check {
 
     private int movements;
 

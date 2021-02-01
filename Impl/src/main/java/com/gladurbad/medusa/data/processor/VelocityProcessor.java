@@ -12,7 +12,7 @@ import org.bukkit.util.Vector;
 import java.util.concurrent.ThreadLocalRandom;
 
 @Getter
-public class VelocityProcessor {
+public final class VelocityProcessor {
 
     private final PlayerData data;
     private double velocityX, velocityY, velocityZ, lastVelocityX, lastVelocityY, lastVelocityZ;

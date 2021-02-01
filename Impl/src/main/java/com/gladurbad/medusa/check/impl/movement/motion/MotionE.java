@@ -9,8 +9,8 @@ import com.gladurbad.medusa.packet.Packet;
 /**
  * Created on 11/17/2020 Package com.gladurbad.medusa.check.impl.movement.speed by GladUrBad
  */
-@CheckInfo(name = "Motion (E)", description = "Checks for switching direction mid-air.", experimental = true)
-public class MotionE extends Check {
+@CheckInfo(name = "Motion (E)", description = "Checks for switching direction mid-air.")
+public final class MotionE extends Check {
 
     public MotionE(final PlayerData data) {
         super(data);

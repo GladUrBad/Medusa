@@ -14,7 +14,7 @@ import com.gladurbad.medusa.util.type.EvictingList;
  */
 
 @CheckInfo(name = "Timer (B)",  description = "Checks for game speed which is too slow.", experimental = true)
-public class TimerB extends Check {
+public final class TimerB extends Check {
 
     private static final ConfigValue minSpeed = new ConfigValue(ConfigValue.ValueType.DOUBLE, "minimum-timer-speed");
     private final EvictingList<Long> samples = new EvictingList<>(50);

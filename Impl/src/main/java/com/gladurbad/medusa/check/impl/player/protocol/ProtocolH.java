@@ -6,8 +6,8 @@ import com.gladurbad.medusa.data.PlayerData;
 import com.gladurbad.medusa.packet.Packet;
 import io.github.retrooper.packetevents.packetwrappers.play.in.useentity.WrappedPacketInUseEntity;
 
-@CheckInfo(name = "Protocol (H)", experimental = true, description = "Checks for tick stack order in block hitting.")
-public class ProtocolH extends Check {
+@CheckInfo(name = "Protocol (H)", description = "Checks for tick stack order in block hitting.")
+public final class ProtocolH extends Check {
 
     public ProtocolH(final PlayerData data) {
         super(data);

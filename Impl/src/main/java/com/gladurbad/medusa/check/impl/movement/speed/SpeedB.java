@@ -16,7 +16,7 @@ import org.bukkit.potion.PotionEffectType;
  */
 
 @CheckInfo(name = "Speed (B)", description = "Checks for movement speed.")
-public class SpeedB extends Check {
+public final class SpeedB extends Check {
 
     private int groundTicks, airTicks;
 
@@ -43,7 +43,7 @@ public class SpeedB extends Check {
             final double deltaY = position.getDeltaY();
 
             //Return here to prevent it from running the calculations pointlessly.
-            if (deltaXZ == 0) return;
+            if (deltaXZ == 0 || isExempt(ExemptType.PISTON)) return;
 
             double maxGroundSpeed = getSpeed(0.287D);
             double maxAirSpeed = getSpeed(0.362D);
@@ -86,8 +86,7 @@ public class SpeedB extends Check {
 
             final double shiftedSpeed = Math.round(speed * 100);
 
-            /*debug("buffer=" + buffer + " speed=" + shiftedSpeed);*/
-
+            debug("speed=" + shiftedSpeed + " buffer=" + buffer + " velocity=" + isExempt(ExemptType.VELOCITY));
             if (shiftedSpeed > 100) {
                 if ((buffer += shiftedSpeed > 150 ? 60 : 20) > 100 || shiftedSpeed > 1000) {
                     fail(String.format(

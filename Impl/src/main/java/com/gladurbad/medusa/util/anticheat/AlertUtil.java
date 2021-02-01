@@ -1,6 +1,7 @@
 package com.gladurbad.medusa.util.anticheat;
 
 import com.gladurbad.api.listener.MedusaFlagEvent;
+import com.gladurbad.api.listener.MedusaSendAlertEvent;
 import com.gladurbad.medusa.Medusa;
 import com.gladurbad.medusa.check.Check;
 import com.gladurbad.medusa.data.PlayerData;
@@ -23,7 +24,7 @@ import java.util.Set;
 
 @Getter
 @UtilityClass
-public class AlertUtil {
+public final class AlertUtil {
 
     private final Set<PlayerData> alerts = new HashSet<>();
 
@@ -38,26 +39,6 @@ public class AlertUtil {
     }
 
     public void handleAlert(final Check check, final PlayerData data, final String info) {
-        final MedusaFlagEvent event = new MedusaFlagEvent(data.getPlayer(), check);
-        Bukkit.getScheduler().runTaskAsynchronously(Medusa.INSTANCE.getPlugin(), () -> Bukkit.getPluginManager().callEvent(event));
-        if (event.isCancelled()) return;
-
-        check.setVl(check.getVl() + 1);
-
-        switch (check.getCheckType()) {
-            case COMBAT:
-                data.setCombatViolations(data.getCombatViolations() + 1);
-                break;
-            case MOVEMENT:
-                data.setMovementViolations(data.getMovementViolations() + 1);
-                break;
-            case PLAYER:
-                data.setPlayerViolations(data.getPlayerViolations() + 1);
-                break;
-        }
-
-        data.setTotalViolations(data.getTotalViolations() + 1);
-
         final TextComponent alertMessage = new TextComponent(ColorUtil.translate(Config.ALERT_FORMAT)
                 .replaceAll("%player%", data.getPlayer().getName())
                 .replaceAll("%uuid%", data.getPlayer().getUniqueId().toString())
@@ -78,7 +59,12 @@ public class AlertUtil {
                         "\n" + Config.ACCENT_ONE + "TPS: &7" + String.format("%.2f", PacketEvents.get().getServerUtils().getTPS()) +
                         "\n" + Config.ACCENT_TWO + "Click to teleport.")).create()));
 
-        alerts.forEach(player -> player.getPlayer().spigot().sendMessage(alertMessage));
+        final MedusaSendAlertEvent event = new MedusaSendAlertEvent(alertMessage, data.getPlayer(), check, info);
+        Bukkit.getPluginManager().callEvent(event);
+
+        if (event.isCancelled()) return;
+
+        alerts.forEach(data1 -> data1.getPlayer().spigot().sendMessage(alertMessage));
     }
 
     public enum ToggleAlertType {

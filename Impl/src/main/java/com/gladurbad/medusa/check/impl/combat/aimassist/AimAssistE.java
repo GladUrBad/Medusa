@@ -11,8 +11,8 @@ import com.gladurbad.medusa.util.MathUtil;
  * Created 12/06/2020 Package com.gladurbad.medusa.check.impl.combat.aimassist by GladUrBad
  */
 
-@CheckInfo(name = "AimAssist (E)", description = "Checks for a valid sensitivity in the rotation.", experimental = true)
-public class AimAssistE extends Check {
+@CheckInfo(name = "AimAssist (E)", description = "Checks for a valid sensitivity in the rotation.")
+public final class AimAssistE extends Check {
 
     public AimAssistE(final PlayerData data) {
         super(data);
@@ -21,32 +21,26 @@ public class AimAssistE extends Check {
     @Override
     public void handle(final Packet packet) {
         if (packet.isRotation()) {
-            if (isExempt(ExemptType.COMBAT)) {
-                final float yaw = data.getRotationProcessor().getYaw() % 360F;
-                final float lastYaw = data.getRotationProcessor().getLastYaw() % 360F;
+            final float deltaPitch = data.getRotationProcessor().getDeltaPitch();
+            final float lastDeltaPitch = data.getRotationProcessor().getLastDeltaPitch();
 
-                final float pitch = data.getRotationProcessor().getPitch();
-                final float lastPitch = data.getRotationProcessor().getLastPitch();
+            final long expandedDeltaPitch = (long) (deltaPitch * MathUtil.EXPANDER);
+            final long expandedLastDeltaPitch = (long) (lastDeltaPitch * MathUtil.EXPANDER);
 
-                final float deltaPitch = data.getRotationProcessor().getDeltaPitch();
-                final float lastDeltaPitch = data.getRotationProcessor().getLastDeltaPitch();
+            final long gcd = MathUtil.getGcd(expandedDeltaPitch, expandedLastDeltaPitch);
 
-                final long gcd = MathUtil.getGcd((long) (deltaPitch * MathUtil.EXPANDER), (long) (lastDeltaPitch * MathUtil.EXPANDER));
+            final boolean exempt = deltaPitch == 0
+                    || lastDeltaPitch == 0
+                    || isExempt(ExemptType.CINEMATIC);
 
-                final boolean cinematic = data.getRotationProcessor().isCinematic();
-                final boolean check = yaw != lastYaw && pitch != lastPitch && !cinematic && deltaPitch < 20F;
+            debug("gcd=" + gcd + " cinematic=" + isExempt(ExemptType.CINEMATIC) + " buf=" + buffer);
 
-                if (check) {
-                    //131072L is the minimum rotation divisor you can get in Minecraft (except for Cinematic camera).
-                    if (gcd < 131072L) {
-                        if (++buffer > 10) {
-                            buffer = 10;
-                            fail("gcd=" + gcd + " buffer=" + buffer);
-                        }
-                    } else {
-                        buffer = Math.max(0, buffer - 1);
-                    }
+            if (!exempt && gcd < 131072L) {
+                if (++buffer > 10) {
+                    fail("gcd=" + gcd + " buffer=" + buffer);
                 }
+            } else {
+                buffer = Math.max(0, buffer - 1);
             }
         }
     }

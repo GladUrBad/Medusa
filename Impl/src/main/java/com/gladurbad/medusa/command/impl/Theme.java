@@ -9,7 +9,7 @@ import org.bukkit.command.CommandSender;
 
 
 @CommandInfo(name = "theme", syntax = "<name>", purpose = "Changes the theme.")
-public class Theme extends MedusaCommand {
+public final class Theme extends MedusaCommand {
     @Override
     protected boolean handle(final CommandSender sender, final Command command, final String label, final String[] args) {
         if (args.length == 2) {

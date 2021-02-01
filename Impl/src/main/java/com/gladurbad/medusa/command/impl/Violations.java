@@ -13,7 +13,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 @CommandInfo(name = "violations", syntax = "<player>", purpose = "Describes violations for the player.")
-public class Violations extends MedusaCommand {
+public final class Violations extends MedusaCommand {
     @Override
     protected boolean handle(final CommandSender sender, final Command command, final String label, final String[] args) {
         if (args.length == 2) {

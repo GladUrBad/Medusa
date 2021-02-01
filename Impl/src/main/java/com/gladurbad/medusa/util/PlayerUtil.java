@@ -23,7 +23,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 @UtilityClass
-public class PlayerUtil {
+public final class PlayerUtil {
 
     public ClientVersion getClientVersion(final Player player) {
         return PacketEvents.get().getPlayerUtils().getClientVersion(player);

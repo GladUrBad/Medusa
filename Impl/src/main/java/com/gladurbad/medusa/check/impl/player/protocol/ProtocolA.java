@@ -10,7 +10,7 @@ import com.gladurbad.medusa.packet.Packet;
  */
 
 @CheckInfo(name = "Protocol (A)", description = "Checks for invalid pitch rotation.")
-public class ProtocolA extends Check {
+public final class ProtocolA extends Check {
 
     public ProtocolA(final PlayerData data) {
         super(data);

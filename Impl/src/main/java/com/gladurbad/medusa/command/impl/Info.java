@@ -15,7 +15,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 @CommandInfo(name = "info", syntax = "<player>", purpose = "Returns information about the players client.")
-public class Info extends MedusaCommand {
+public final class Info extends MedusaCommand {
     @Override
     protected boolean handle(final CommandSender sender, final Command command, final String label, final String[] args) {
         if (args.length == 2) {

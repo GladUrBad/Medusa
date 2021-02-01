@@ -9,7 +9,7 @@ import java.util.ArrayDeque;
 import java.util.Collection;
 
 @Getter
-public class RotationProcessor {
+public final class RotationProcessor {
 
     private final PlayerData data;
 

@@ -8,7 +8,7 @@ import org.bukkit.util.Vector;
 
 @Getter
 @Setter
-public class CustomLocation {
+public final class CustomLocation {
 
     private World world;
     private double x, y, z;

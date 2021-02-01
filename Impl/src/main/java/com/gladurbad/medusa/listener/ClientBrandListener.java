@@ -12,7 +12,7 @@ import org.bukkit.plugin.messaging.PluginMessageListener;
 import java.io.UnsupportedEncodingException;
 import java.lang.reflect.InvocationTargetException;
 
-public class ClientBrandListener implements PluginMessageListener, Listener {
+public final class ClientBrandListener implements PluginMessageListener, Listener {
 
     @Override
     public void onPluginMessageReceived(final String channel, final Player player, final byte[] msg) {

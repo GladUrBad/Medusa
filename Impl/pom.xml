@@ -52,12 +52,12 @@
         <dependency>
             <groupId>com.gladurbad</groupId>
             <artifactId>API</artifactId>
-            <version>${project.parent.version}</version>
+            <version>1.1.6</version>
         </dependency>
         <dependency>
             <groupId>com.github.retrooper</groupId>
             <artifactId>packetevents</artifactId>
-            <version>dev-267480b563-1</version>
+            <version>1.8-PRE-1</version>
         </dependency>
     </dependencies>
 

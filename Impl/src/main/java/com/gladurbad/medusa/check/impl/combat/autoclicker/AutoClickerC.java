@@ -10,7 +10,7 @@ import com.gladurbad.medusa.util.MathUtil;
 import java.util.ArrayDeque;
 
 @CheckInfo(name = "AutoClicker (C)", experimental = true, description = "Checks for rounded(ish) CPS.")
-public class AutoClickerC extends Check {
+public final class AutoClickerC extends Check {
 
     private final ArrayDeque<Integer> samples = new ArrayDeque<>();
     private int ticks;
@@ -28,8 +28,11 @@ public class AutoClickerC extends Check {
            }
 
            if (samples.size() == 50) {
+
                final double cps = MathUtil.getCps(samples);
                final double difference = Math.abs(Math.round(cps) - cps);
+
+               debug("diff=" + difference + " cps=" + cps + " buf=" + buffer);
 
                if (difference < 0.001) {
                    if ((buffer += 10) > 25) {

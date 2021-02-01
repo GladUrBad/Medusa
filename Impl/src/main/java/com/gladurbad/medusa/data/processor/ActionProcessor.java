@@ -17,7 +17,7 @@ import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 
 @Getter
-public class ActionProcessor {
+public final class ActionProcessor {
 
     private final PlayerData data;
 

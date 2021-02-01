@@ -20,8 +20,8 @@ public final class MedusaPlugin extends JavaPlugin {
 
     @Override
     public void onEnable() {
-        Medusa.INSTANCE.start(this);
         PacketEvents.get().init(this);
+        Medusa.INSTANCE.start(this);
     }
 
     @Override

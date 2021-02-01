@@ -3,7 +3,7 @@ package com.gladurbad.medusa.util.type;
 import org.bukkit.entity.Player;
 import org.bukkit.util.Vector;
 
-public class RayTrace {
+public final class RayTrace {
 
     private final Vector origin;
     private final Vector direction;
@@ -13,8 +13,9 @@ public class RayTrace {
         this.direction = direction;
     }
 
-    public static RayTrace from(final Player player) {
-        return new RayTrace(player.getEyeLocation().toVector(), player.getEyeLocation().getDirection());
+    public RayTrace(final Player player) {
+        this.origin = player.getEyeLocation().toVector();
+        this.direction = player.getEyeLocation().getDirection();
     }
 
     public double origin(int i) {

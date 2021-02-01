@@ -10,7 +10,7 @@ import com.gladurbad.medusa.packet.Packet;
  */
 
 @CheckInfo(name = "Scaffold (A)",  description = "Checks for movement/rotations that are related to scaffold modules.")
-public class ScaffoldA extends Check {
+public final class ScaffoldA extends Check {
 
     private boolean placedBlock;
 
@@ -19,7 +19,7 @@ public class ScaffoldA extends Check {
     }
 
     @Override
-    public void handle(Packet packet) {
+    public void handle(final Packet packet) {
         if (packet.isFlying()) {
             if (placedBlock && isBridging()) {
                 final double deltaXz = data.getPositionProcessor().getDeltaXZ();

@@ -7,7 +7,7 @@ import org.bukkit.entity.Entity;
 
 
 @Getter
-public class CombatProcessor {
+public final class CombatProcessor {
 
     private final PlayerData data;
 

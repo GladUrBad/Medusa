@@ -13,14 +13,14 @@ import org.bukkit.potion.PotionEffectType;
  */
 
 @CheckInfo(name = "FastClimb (A)", description = "Checks if the player exceeds maximum ladder movement speed.")
-public class FastClimbA extends Check {
+public final class FastClimbA extends Check {
 
-    public FastClimbA(PlayerData data) {
+    public FastClimbA(final PlayerData data) {
         super(data);
     }
 
     @Override
-    public void handle(Packet packet) {
+    public void handle(final Packet packet) {
         if (packet.isPosition() && !isExempt(ExemptType.TELEPORT)) {
             final boolean onGround = data.getPositionProcessor().isOnSolidGround();
             final boolean onLadder = data.getPositionProcessor().isOnClimbable();
@@ -36,6 +36,8 @@ public class FastClimbA extends Check {
             * This check should flag on the first tick. If you do not flag on the first tick, you run
             * the risk of insanely fast FastClimb bypasses. FIX THIS.
             */
+
+            debug("dy=" + deltaY);
             if (invalid) {
                 if (++buffer > 2) {
                     fail(String.format("dy=%.2f > 0.1176", deltaY));

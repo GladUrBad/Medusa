@@ -118,6 +118,25 @@ public final class BoundingBox {
         return this;
     }
 
+    //Copied from MCP 1.8.8
+    public BoundingBox union(final BoundingBox other) {
+        final double minX = Math.min(this.minX, other.minX);
+        final double minY = Math.min(this.minY, other.minY);
+        final double minZ = Math.min(this.minZ, other.minZ);
+        final double maxX = Math.max(this.maxX, other.maxX);
+        final double maxY = Math.max(this.maxY, other.maxY);
+        final double maxZ = Math.max(this.maxZ, other.maxZ);
+
+        return new BoundingBox(minX, maxX, minY, maxY, minZ, maxZ);
+    }
+
+    public double getSize() {
+        final Vector min = new Vector(minX, minY, minZ);
+        final Vector max = new Vector(maxX, maxY, maxZ);
+
+        return min.distance(max);
+    }
+
     public double collidesD(RayTrace ray, double tmin, double tmax) {
         for (int i = 0; i < 3; i++) {
             double d = 1 / ray.direction(i);

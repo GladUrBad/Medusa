@@ -28,19 +28,19 @@ import org.bukkit.util.Vector;
  */
 
 @CheckInfo(name = "Reach (A)", description = "Checks for attacking distance.")
-public class ReachA extends Check {
+public final class ReachA extends Check {
 
     private static final ConfigValue maxReach = new ConfigValue(ConfigValue.ValueType.DOUBLE, "max-reach");
     private static final ConfigValue maxThreshold = new ConfigValue(ConfigValue.ValueType.DOUBLE, "max-threshold");
     private static final ConfigValue thresholdDecay = new ConfigValue(ConfigValue.ValueType.DOUBLE, "threshold-decay");
     private static final ConfigValue maxLatency = new ConfigValue(ConfigValue.ValueType.LONG, "max-latency");
 
-    public ReachA(PlayerData data) {
+    public ReachA(final PlayerData data) {
         super(data);
     }
 
     @Override
-    public void handle(Packet packet) {
+    public void handle(final Packet packet) {
         if (packet.isUseEntity()) {
             final WrappedPacketInUseEntity wrapper = new WrappedPacketInUseEntity(packet.getRawPacket());
 
@@ -69,6 +69,7 @@ public class ReachA extends Check {
 
             if (distance == 0) return;
 
+            debug("dist=" + distance + " buffer=" + buffer + " pt=" + pingTicks);
             if (distance > maxReach.getDouble()) {
                 if (++buffer > maxThreshold.getDouble()) {
                     fail(String.format("reach=%.2f, buffer=%.2f", distance, buffer));

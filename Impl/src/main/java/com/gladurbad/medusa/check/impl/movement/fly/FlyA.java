@@ -16,21 +16,8 @@ import java.util.function.Predicate;
  * Created on 11/17/2020 Package com.gladurbad.medusa.check.impl.movement.fly by GladUrBad
  */
 
-/**
- * Exempt list:
- *
- * Ladders/other climbable blocks (vines)
- * Water
- * Under blocks
- * Velocity (Velocity A will handle any discrepancies.)
- * Teleports (fix your shitty teleport manager)
- * Webs (handle web movement in Fly A?)
- */
-
 @CheckInfo(name = "Fly (A)", description = "Checks for gravity.")
-public class FlyA extends Check {
-
-    private final Predicate<Double> onGround = posY -> posY % 1D/64 == 0;
+public final class FlyA extends Check {
 
     public FlyA(final PlayerData data) {
         super(data);
@@ -42,28 +29,33 @@ public class FlyA extends Check {
             final double deltaY = data.getPositionProcessor().getDeltaY();
             final double lastDeltaY = data.getPositionProcessor().getLastDeltaY();
 
-            double prediction = (lastDeltaY - 0.08) * 0.98F;
-            if (Math.abs(prediction) < 0.005) prediction = 0;
+            final boolean onGround = data.getPositionProcessor().getAirTicks() <= 5;
+
+            final double prediction = Math.abs((lastDeltaY - 0.08) * 0.98F) < 0.005 ? 0 : (lastDeltaY - 0.08) * 0.98F;
             final double difference = Math.abs(deltaY - prediction);
 
-            final boolean invalid = difference > 0.001D &&
-                    //Retarded collision processor makes me do dumb shit that could make bypasses like this.
-                    !(data.getPositionProcessor().getY() % 0.5 == 0 && data.getPositionProcessor().isOnGround() && lastDeltaY < 0) &&
-                    data.getPositionProcessor().isInAir() &&
-                    !data.getPositionProcessor().isNearVehicle() &&
-                    !isExempt(ExemptType.TELEPORT) &&
-                    !data.getPlayer().isFlying() &&
-                    !data.getPlayer().isInsideVehicle() &&
-                    data.getPositionProcessor().getAirTicks() > 5 &&
-                    !data.getVelocityProcessor().isTakingVelocity();
+            final boolean exempt = isExempt(
+                    ExemptType.TELEPORT, ExemptType.NEAR_VEHICLE, ExemptType.FLYING,
+                    ExemptType.INSIDE_VEHICLE, ExemptType.VELOCITY
+            );
 
+            final boolean invalid = !exempt
+                    && difference > 0.001D
+                    && !(data.getPositionProcessor().getY() % 0.5 == 0 && data.getPositionProcessor().isOnGround() && lastDeltaY < 0);
+
+            debug("posY=" + data.getPositionProcessor().getY() + " dY=" + deltaY + " at=" + data.getPositionProcessor().getAirTicks());
             if (invalid) {
-                buffer += buffer < 5 ? 1 : 0;
-                if (buffer > 3) {
-                    fail(String.format("diff=%.4f, buffer=%.2f", difference, buffer));
+                if (!onGround) {
+                    buffer += buffer < 50 ? 10 : 0;
+                    if (buffer > 30) {
+                        fail(String.format(
+                                "diff=%.4f, buffer=%.2f, at=%o",
+                                difference, buffer, data.getPositionProcessor().getAirTicks()
+                        ));
+                    }
                 }
             } else {
-                buffer = Math.max(buffer - 0.1, 0);
+                buffer = Math.max(buffer - 0.75, 0);
             }
         }
     }

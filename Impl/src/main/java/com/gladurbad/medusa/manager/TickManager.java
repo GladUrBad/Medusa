@@ -8,7 +8,7 @@ import org.bukkit.Location;
 import org.bukkit.entity.Entity;
 import org.bukkit.scheduler.BukkitTask;
 
-public class TickManager implements Runnable {
+public final class TickManager implements Runnable {
 
     @Getter
     private int ticks;

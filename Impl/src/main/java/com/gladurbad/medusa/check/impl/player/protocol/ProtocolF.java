@@ -12,7 +12,7 @@ import io.github.retrooper.packetevents.packetwrappers.play.in.steervehicle.Wrap
 
 
 @CheckInfo(name = "Protocol (F)", description = "Checks for a common exploit in disabler modules.")
-public class ProtocolF extends Check {
+public final class ProtocolF extends Check {
 
     public ProtocolF(final PlayerData data) {
         super(data);
@@ -29,7 +29,7 @@ public class ProtocolF extends Check {
 
             if (invalid) {
                 if (++buffer > 8) {
-                    fail();
+                    fail("buffer=" + buffer);
                     buffer /= 2;
                 }
             } else {

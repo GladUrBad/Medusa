@@ -4,7 +4,7 @@ import lombok.Getter;
 import com.gladurbad.medusa.data.PlayerData;
 
 @Getter
-public class ClickProcessor {
+public final class ClickProcessor {
 
     private final PlayerData data;
     private long lastSwing = -1;

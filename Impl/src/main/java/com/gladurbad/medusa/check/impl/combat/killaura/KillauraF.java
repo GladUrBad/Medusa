@@ -9,7 +9,7 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 
 @CheckInfo(name = "KillAura (F)", experimental = true, description = "Checks for hit occlusion (wallhit).")
-public class KillAuraF extends Check {
+public final class KillAuraF extends Check {
 
     private Location lastAttackerLocation;
     private float lastYaw, lastPitch;
@@ -24,7 +24,8 @@ public class KillAuraF extends Check {
             final Entity target = data.getCombatProcessor().getTarget();
             final Player attacker = data.getPlayer();
 
-            if (target == null || attacker == null ) return;
+            if (target == null || attacker == null) return;
+            if (target.getWorld() != attacker.getWorld()) return;
 
             final Location attackerLocation = attacker.getLocation();
 
@@ -36,9 +37,11 @@ public class KillAuraF extends Check {
                         pitch != lastPitch &&
                         attackerLocation.distance(lastAttackerLocation) > 0.1;
 
+                debug("buffer=" + buffer);
+
                 if (check && !attacker.hasLineOfSight(target)) {
                     if ((buffer += 10) > 50) {
-                        fail();
+                        fail("buffer=" + buffer);
                     }
                 } else {
                     buffer = Math.max(buffer - 20, 0);

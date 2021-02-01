@@ -9,20 +9,21 @@ import io.github.retrooper.packetevents.packetwrappers.play.in.useentity.Wrapped
 /**
  * Created on 07/01/2020 Package luna.anticheat.checks.player.badpackets by GladUrBad
  */
-@CheckInfo(name = "KillAura (E)", experimental = true, description = "Checks for no swing modules.")
-public class KillAuraE extends Check {
+@CheckInfo(name = "KillAura (E)", description = "Checks for no swing modules.")
+public final class KillAuraE extends Check {
 
     private int hits;
 
-    public KillAuraE(PlayerData data) {
+    public KillAuraE(final PlayerData data) {
         super(data);
     }
 
     @Override
-    public void handle(Packet packet) {
+    public void handle(final Packet packet) {
         if (packet.isUseEntity()) {
             final WrappedPacketInUseEntity wrapper = new WrappedPacketInUseEntity(packet.getRawPacket());
             if (wrapper.getAction() == WrappedPacketInUseEntity.EntityUseAction.ATTACK) {
+                debug("hits=" + hits);
                 if (++hits > 2) {
                     fail("ticks=" + hits);
                 }
