@@ -15,25 +15,25 @@ import io.github.retrooper.packetevents.packetwrappers.play.in.flying.WrappedPac
  * is the way to go here to be more stable.
  */
 
-@CheckInfo(name = "Fly (C)", experimental = true, description = "Checks for ground-spoof.")
-public class FlyC extends Check {
+@CheckInfo(name = "Fly (C)", description = "Checks for ground-spoof.")
+public final class FlyC extends Check {
 
-    public FlyC(PlayerData data) {
+    public FlyC(final PlayerData data) {
         super(data);
     }
 
     @Override
-    public void handle(Packet packet) {
+    public void handle(final Packet packet) {
         if (packet.isPosition()) {
             final WrappedPacketInFlying wrapper = new WrappedPacketInFlying(packet.getRawPacket());
 
-            final double ON_GROUND = 1 / 64D;
-            final boolean positionGround = wrapper.getY() % ON_GROUND == 0;
+            final boolean positionGround = wrapper.getY() % 0.015625 == 0;
             final boolean packetGround = wrapper.isOnGround();
 
             final boolean exempt = isExempt(ExemptType.NEAR_VEHICLE, ExemptType.TELEPORT, ExemptType.CLIMBABLE,
                     ExemptType.FLYING, ExemptType.JOINED, ExemptType.SLIME);
 
+            debug(positionGround + " " + packetGround + " pos/packet");
             if (!exempt && positionGround != packetGround) {
                 if (++buffer > 4) {
                     fail();

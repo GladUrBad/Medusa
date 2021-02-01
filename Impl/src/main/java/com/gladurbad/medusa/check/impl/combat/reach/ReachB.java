@@ -12,7 +12,7 @@ import org.bukkit.GameMode;
 import org.bukkit.util.Vector;
 
 @CheckInfo(name = "Reach (B)", experimental = true, description = "A basic verbose reach check.")
-public class ReachB extends Check {
+public final class ReachB extends Check {
 
     private static final ConfigValue maxLatency = new ConfigValue(ConfigValue.ValueType.LONG, "max-latency");
     private static final ConfigValue maxReach = new ConfigValue(ConfigValue.ValueType.DOUBLE, "max-reach");
@@ -36,6 +36,7 @@ public class ReachB extends Check {
                 final double expansion = HitboxExpansion.getExpansion(data.getCombatProcessor().getTarget());
                 final double distance = attacker.distance(victim) - expansion;
 
+                debug("dist=" + distance + " buf=" + buffer);
                 if (distance > maxReach.getDouble()) {
                     if (++buffer > 20) {
                         buffer = 20;

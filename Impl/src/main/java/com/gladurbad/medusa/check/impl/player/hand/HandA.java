@@ -4,8 +4,8 @@ import com.gladurbad.medusa.check.Check;
 import com.gladurbad.api.check.CheckInfo;
 import com.gladurbad.medusa.data.PlayerData;
 import com.gladurbad.medusa.packet.Packet;
-import io.github.retrooper.packetevents.enums.Direction;
 import io.github.retrooper.packetevents.packetwrappers.play.in.blockplace.WrappedPacketInBlockPlace;
+import io.github.retrooper.packetevents.utils.player.Direction;
 import org.bukkit.Location;
 
 /**
@@ -13,14 +13,14 @@ import org.bukkit.Location;
  */
 
 @CheckInfo(name = "Hand (A)", experimental = true, description = "Checks for face occlusion when placing blocks.")
-public class HandA extends Check {
+public final class HandA extends Check {
 
-    public HandA(PlayerData data) {
+    public HandA(final PlayerData data) {
         super(data);
     }
 
     @Override
-    public void handle(Packet packet) {
+    public void handle(final Packet packet) {
         if (packet.isBlockPlace()) {
             final WrappedPacketInBlockPlace wrapper = new WrappedPacketInBlockPlace(packet.getRawPacket());
 
@@ -38,43 +38,41 @@ public class HandA extends Check {
 
             final boolean validInteraction = interactedCorrectly(blockAgainstLocation, eyeLocation, direction);
 
-            if (!validInteraction) fail("face=" + direction);
+            if (!validInteraction) {
+                assert direction != null;
+                fail("face=" + direction.getValue());
+            }
         }
     }
 
     private Location getBlockAgainst(final Direction direction, final Location blockLocation) {
-        switch (direction) {
-            case UP:
-                return blockLocation.clone().add(0, -1, 0);
-            case DOWN:
-                return blockLocation.clone().add(0, 1, 0);
-            case EAST:
-            case SOUTH:
-                return blockLocation;
-            case WEST:
-                return blockLocation.clone().add(1, 0, 0);
-            case NORTH:
-                return blockLocation.clone().add(0, 0, 1);
-            default:
-                return null;
+        if (Direction.UP.equals(direction)) {
+            return blockLocation.clone().add(0, -1, 0);
+        } else if (Direction.DOWN.equals(direction)) {
+            return blockLocation.clone().add(0, 1, 0);
+        } else if (Direction.EAST.equals(direction) || Direction.SOUTH.equals(direction)) {
+            return blockLocation;
+        } else if (Direction.WEST.equals(direction)) {
+            return blockLocation.clone().add(1, 0, 0);
+        } else if (Direction.NORTH.equals(direction)) {
+            return blockLocation.clone().add(0, 0, 1);
         }
+        return null;
     }
     private boolean interactedCorrectly(Location block, Location player, Direction face) {
-        switch (face) {
-            case UP:
-                return player.getY() > block.getY();
-            case DOWN:
-                return player.getY() < block.getY();
-            case WEST:
-                return player.getX() < block.getX();
-            case EAST:
-                return player.getX() > block.getX();
-            case NORTH:
-                return player.getZ() < block.getZ();
-            case SOUTH:
-                return player.getZ() > block.getZ();
-            default:
-                return true;
+        if (Direction.UP.equals(face)) {
+            return player.getY() > block.getY();
+        } else if (Direction.DOWN.equals(face)) {
+            return player.getY() < block.getY();
+        } else if (Direction.WEST.equals(face)) {
+            return player.getX() < block.getX();
+        } else if (Direction.EAST.equals(face)) {
+            return player.getX() > block.getX();
+        } else if (Direction.NORTH.equals(face)) {
+            return player.getZ() < block.getZ();
+        } else if (Direction.SOUTH.equals(face)) {
+            return player.getZ() > block.getZ();
         }
+        return true;
     }
 }

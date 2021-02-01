@@ -4,7 +4,7 @@ import com.gladurbad.exampleapi.listener.ExampleListener;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 
-public class ExamplePlugin extends JavaPlugin {
+public final class ExamplePlugin extends JavaPlugin {
 
     @Override
     public void onEnable() {

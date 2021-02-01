@@ -8,7 +8,7 @@ import org.bukkit.ChatColor;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ThemeManager {
+public final class ThemeManager {
 
     public static final List<Theme> themes = new ArrayList<>();
 

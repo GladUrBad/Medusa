@@ -8,7 +8,7 @@ import io.github.retrooper.packetevents.PacketEvents;
 import io.github.retrooper.packetevents.packetwrappers.play.out.helditemslot.WrappedPacketOutHeldItemSlot;
 
 @CheckInfo(name = "NoSlow (A)", description = "Checks for NoSlow modules.", experimental = true)
-public class NoSlowA extends Check {
+public final class NoSlowA extends Check {
 
     public NoSlowA(final PlayerData data) {
         super(data);
@@ -18,8 +18,9 @@ public class NoSlowA extends Check {
     public void handle(final Packet packet) {
         if (packet.isPosition()) {
             if (data.getActionProcessor().isSprinting() && data.getPlayer().isBlocking()) {
+                debug("buffer=" + buffer);
                 if (++buffer > 10) {
-                    fail();
+                    fail("buffer=" + buffer);
                     final int slot = data.getActionProcessor().getHeldItemSlot() == 8 ? 1 : 8;
                     final WrappedPacketOutHeldItemSlot wrapper = new WrappedPacketOutHeldItemSlot(slot);
                     PacketEvents.get().getPlayerUtils().sendPacket(data.getPlayer(), wrapper);

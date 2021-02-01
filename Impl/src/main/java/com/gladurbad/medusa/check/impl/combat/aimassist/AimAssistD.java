@@ -21,16 +21,16 @@ import com.gladurbad.medusa.util.MathUtil;
  */
 
 @CheckInfo(name = "AimAssist (D)", description = "Checks for a divisor in the rotation.")
-public class AimAssistD extends Check {
+public final class AimAssistD extends Check {
 
     private float lastDeltaYaw, lastDeltaPitch;
 
-    public AimAssistD(PlayerData data) {
+    public AimAssistD(final PlayerData data) {
         super(data);
     }
 
     @Override
-    public void handle(Packet packet) {
+    public void handle(final Packet packet) {
         if (packet.isRotation()) {
             final float deltaYaw = data.getRotationProcessor().getDeltaYaw() % 360F;
             final float deltaPitch = data.getRotationProcessor().getDeltaPitch();
@@ -57,15 +57,19 @@ public class AimAssistD extends Check {
                 final boolean invalidX = moduloX > 90.d && floorModuloX > 0.1;
                 final boolean invalidY = moduloY > 90.d && floorModuloY > 0.1;
 
+                final String info = String.format(
+                        "mx=%.2f, my=%.2f, fmx=%.2f, fmy=%.2f",
+                        moduloX, moduloY, floorModuloX, floorModuloY
+                );
+
+                debug(info);
+
                 if (invalidX && invalidY) {
                     if (++buffer > 6) {
-                        fail(String.format(
-                                "mx=%.2f, my=%.2f, fmx=%.2f, fmy=%.2f",
-                                moduloX, moduloY, floorModuloX, floorModuloY
-                        ));
+                        fail(info);
                     }
                 } else {
-                    buffer = Math.max(0, buffer - 0.25);
+                    buffer -= buffer > 0 ? 1 : 0;
                 }
             }
             this.lastDeltaYaw = deltaYaw;

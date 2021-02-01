@@ -26,24 +26,25 @@ import org.bukkit.util.Vector;
  */
 
 @CheckInfo(name = "HitBox (A)", experimental = true, description = "Checks for the angle of the attack.")
-public class HitBoxA extends Check {
+public final class HitBoxA extends Check {
 
     private static final ConfigValue maxLatency = new ConfigValue(ConfigValue.ValueType.LONG, "max-latency");
     private static final ConfigValue raytraceSensitivityLevel = new ConfigValue(
             ConfigValue.ValueType.INTEGER, "raytrace-sensitivity-level"
     );
 
-    public HitBoxA(PlayerData data) {
+    public HitBoxA(final PlayerData data) {
         super(data);
     }
 
     @Override
-    public void handle(Packet packet) {
+    public void handle(final Packet packet) {
         if (packet.isUseEntity()) {
             final WrappedPacketInUseEntity wrapper = new WrappedPacketInUseEntity(packet.getRawPacket());
 
             final Entity target = data.getCombatProcessor().getTarget();
             final Entity lastTarget = data.getCombatProcessor().getLastTarget();
+
 
             if (wrapper.getAction() != WrappedPacketInUseEntity.EntityUseAction.ATTACK
                     || data.getPlayer().getGameMode() != GameMode.SURVIVAL
@@ -55,7 +56,7 @@ public class HitBoxA extends Check {
             final int ticks = Medusa.INSTANCE.getTickManager().getTicks();
             final int pingTicks = NumberConversions.floor(data.getActionProcessor().getPing() / 50.0) + 3;
 
-            final RayTrace rayTrace = RayTrace.from(data.getPlayer());
+            final RayTrace rayTrace = new RayTrace(data.getPlayer());
 
             final int collided = (int) data.getTargetLocations().stream()
                     .filter(pair -> Math.abs(ticks - pair.getY() - pingTicks) < 3)
@@ -73,7 +74,11 @@ public class HitBoxA extends Check {
                         return boundingBox.collidesD(rayTrace, 0, 6) != 10;
                     }).count();
 
-            if (collided <= raytraceSensitivityLevel.getInt()) {
+            final int sensitivity = raytraceSensitivityLevel.getInt();
+
+            debug("collided=" + collided + " sens=" + sensitivity + " buf=" + buffer);
+
+            if (collided <= sensitivity) {
                 if (++buffer > 10) {
                     fail("collided=" + collided + " buffer=" + buffer);
                 }

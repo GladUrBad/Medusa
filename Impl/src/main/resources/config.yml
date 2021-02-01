@@ -63,7 +63,7 @@ violations:
   # Changes how Medusa's default notifications look.
   alert-format: '&aMedusa » &f%player% &7failed &f%checkName% (%checkType%) &7(x%vl%) &c%dev%'
   # Time which has to be elapsed between notifications to prevent chat spam.
-  alert-cooldown: 2000
+  alert-cooldown: 0
   # How much VL the check has to have in order to notify staff.
   minimum-vl-to-alert: 0
   # Time in minutes for how ofter the violations for players will be reset.
@@ -115,6 +115,16 @@ checks:
         enabled: true
         max-violations: 25
         punish-command: ''
+      # Checks for a generic flaw related to aim assistance tools.
+      h:
+        enabled: true
+        max-violations: 25
+        punish-command: ''
+      # Checks for snappy rotations.
+      i:
+        enabled: true
+        max-violations: 25
+        punish-command: ''
     # AutoClicker Detections: Capable of detecting some AutoClicker modules on various clients/auto-clickers. Not
     # recommended to ban for these checks since players click in more sophisticated ways which may flag these checks,
     # only use them as a hint that the player could be cheating. If you want to enforce a maximum CPS to ban for, use
@@ -150,13 +160,13 @@ checks:
         enabled: true
         max-violations: 0
         punish-command: ''
-        # raytrace-sensitivity-level: (Range: 0-2) 0 indicates a low sensitivity level for this check, it will offer
+        # raytrace-sensitivity-level: (Range: 0-5) 0 indicates a low sensitivity level for this check, it will offer
         # little to no false positives, with slower detection. 2 indicates a high sensitivity level, it will offer the
         # best detection, however you will have some false positives.
         # max-latency: How much ping (in milliseconds) the player can have before they do not get flagged by the check.
         # -1 is default and means there is no limit.
-        raytrace-sensitivity-level: 1
-        max-latency:
+        raytrace-sensitivity-level: 2
+        max-latency: -1
     # KillAura Detections: Capable of detecting some KillAura modules on various clients. Recommended to ban for these
     # checks, however use at your own risk.
     killaura:
@@ -187,6 +197,11 @@ checks:
         punish-command: ''
       # Checks for hitting through walls. (AttackOcclusion Detection)
       f:
+        enabled: true
+        max-violations: 50
+        punish-command: ''
+      # Checks for large head movements without slowing down.
+      g:
         enabled: true
         max-violations: 50
         punish-command: ''
@@ -293,6 +308,12 @@ checks:
       # Checks if the player is blocking and sprinting simultaneously.
       a:
         enabled: true
+        max-violations: 25
+        punish-command: ''
+    # Phase Detections: Capable of detecting when a player attempts to move through a wall.
+    phase:
+      a:
+        enabled: false
         max-violations: 25
         punish-command: ''
     # Speed Detections: Capable of detecting Speed modules that offer a significant advantage.

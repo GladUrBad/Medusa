@@ -6,6 +6,7 @@ import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
+import org.bukkit.util.Vector;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -38,6 +39,17 @@ public final class BoundingBox {
             this.minZ = maxZ;
             this.maxZ = minZ;
         }
+    }
+
+    public BoundingBox(final Vector min, final Vector max) {
+
+        this.minX = min.getX();
+        this.minY = min.getY();
+        this.minZ = min.getZ();
+
+        this.maxX = max.getX();
+        this.maxY = max.getY();
+        this.maxZ = max.getZ();
     }
 
     public BoundingBox(final Player player) {
@@ -104,6 +116,25 @@ public final class BoundingBox {
         this.maxZ += maxZ;
 
         return this;
+    }
+
+    //Copied from MCP 1.8.8
+    public BoundingBox union(final BoundingBox other) {
+        final double minX = Math.min(this.minX, other.minX);
+        final double minY = Math.min(this.minY, other.minY);
+        final double minZ = Math.min(this.minZ, other.minZ);
+        final double maxX = Math.max(this.maxX, other.maxX);
+        final double maxY = Math.max(this.maxY, other.maxY);
+        final double maxZ = Math.max(this.maxZ, other.maxZ);
+
+        return new BoundingBox(minX, maxX, minY, maxY, minZ, maxZ);
+    }
+
+    public double getSize() {
+        final Vector min = new Vector(minX, minY, minZ);
+        final Vector max = new Vector(maxX, maxY, maxZ);
+
+        return min.distance(max);
     }
 
     public double collidesD(RayTrace ray, double tmin, double tmax) {

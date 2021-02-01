@@ -12,7 +12,7 @@ import io.github.retrooper.packetevents.packetwrappers.play.in.abilities.Wrapped
 
 
 @CheckInfo(name = "Protocol (B)", description = "Checks for spoofed abilities packets.")
-public class ProtocolB extends Check {
+public final class ProtocolB extends Check {
 
     public ProtocolB(final PlayerData data) {
         super(data);

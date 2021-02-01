@@ -5,7 +5,7 @@ import io.github.retrooper.packetevents.utils.server.ServerVersion;
 import lombok.experimental.UtilityClass;
 
 @UtilityClass
-public class ServerUtil {
+public final class ServerUtil {
 
     public double getTPS() {
         return PacketEvents.get().getServerUtils().getTPS();
@@ -17,5 +17,9 @@ public class ServerUtil {
 
     public boolean isLowerThan1_8() {
         return getServerVersion().isLowerThan(ServerVersion.v_1_8);
+    }
+
+    public boolean isHigherThan1_13_2() {
+        return getServerVersion().isHigherThan(ServerVersion.v_1_13_2);
     }
 }

@@ -19,10 +19,11 @@ import org.bukkit.util.Vector;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.LinkedList;
 import java.util.List;
 
 @UtilityClass
-public class PlayerUtil {
+public final class PlayerUtil {
 
     public ClientVersion getClientVersion(final Player player) {
         return PacketEvents.get().getPlayerUtils().getClientVersion(player);
@@ -79,7 +80,7 @@ public class PlayerUtil {
      * @return The block in the given distance, otherwise null
      */
     public Block getLookingBlock(final Player player, final int distance) {
-        Location loc = player.getEyeLocation();
+        final Location loc = player.getEyeLocation();
 
         final Vector v = loc.getDirection().normalize();
 
@@ -123,17 +124,25 @@ public class PlayerUtil {
 
         final World world = location.getWorld();
 
-        List<Entity> entities = new ArrayList<>();
+        List<Entity> entities = new LinkedList<>();
 
         for (int xVal = minX; xVal <= maxX; xVal++) {
+
             for (int zVal = minZ; zVal <= maxZ; zVal++) {
-                if (world.isChunkLoaded(xVal, zVal)) {
-                    entities.addAll(Arrays.asList(world.getChunkAt(xVal, zVal).getEntities()));
+
+                if (!world.isChunkLoaded(xVal, zVal)) continue;
+
+                for (Entity entity : world.getChunkAt(xVal, zVal).getEntities()) {
+                    //We have to do this due to stupidness
+                    if (entity == null) continue;
+
+                    //Make sure the entity is within the radius specified
+                    if (entity.getLocation().distanceSquared(location) > radius * radius) continue;
+
+                    entities.add(entity);
                 }
             }
         }
-
-        entities.removeIf(entity -> entity.getLocation().distanceSquared(location) > radius * radius);
 
         return entities;
     }
@@ -145,6 +154,5 @@ public class PlayerUtil {
 
         return false;
     }
-
 
 }

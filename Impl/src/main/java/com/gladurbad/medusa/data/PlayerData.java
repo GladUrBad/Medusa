@@ -15,7 +15,7 @@ import java.util.List;
 
 @Getter
 @Setter
-public class PlayerData {
+public final class PlayerData {
 
     private final Player player;
     private String clientBrand;

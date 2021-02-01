@@ -15,18 +15,18 @@ import com.gladurbad.medusa.util.type.EvictingList;
  */
 
 @CheckInfo(name = "Timer (A)", description = "Checks for game speed which is too fast.")
-public class TimerA extends Check {
+public final class TimerA extends Check {
 
     private static final ConfigValue maxTimerSpeed = new ConfigValue(ConfigValue.ValueType.DOUBLE, "max-timer-speed");
     private final EvictingList<Long> samples = new EvictingList<>(50);
     private long lastFlyingTime;
 
-    public TimerA(PlayerData data) {
+    public TimerA(final PlayerData data) {
         super(data);
     }
 
     @Override
-    public void handle(Packet packet) {
+    public void handle(final Packet packet) {
         if (packet.isFlying() && !isExempt(ExemptType.TPS)) {
             final long now = now();
             final long delta = now - lastFlyingTime;
@@ -39,6 +39,8 @@ public class TimerA extends Check {
                 final double average = MathUtil.getAverage(samples);
                 final double speed = 50 / average;
 
+                debug(String.format("speed=%.4f, delta=%o, buffer=%.2f", speed, delta, buffer));
+
                 if (speed >= maxTimerSpeed.getDouble()) {
                     if (++buffer > 30) {
                         buffer = Math.min(buffer, 50);
@@ -50,7 +52,7 @@ public class TimerA extends Check {
             }
 
             lastFlyingTime = now;
-        } else if (packet.isTeleport()) {
+        } else if (packet.isOutPosition()) {
             samples.add(135L); //Magic value. 100L doesn't completely fix it for some reason.
         }
     }

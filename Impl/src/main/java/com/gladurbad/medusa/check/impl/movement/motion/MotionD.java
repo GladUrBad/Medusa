@@ -12,7 +12,7 @@ import org.bukkit.util.Vector;
  */
 
 @CheckInfo(name = "Motion (D)", description = "Checks for sprint direction.")
-public class MotionD extends Check {
+public final class MotionD extends Check {
 
     private int teleportTicks;
     private int offGroundTicks;
@@ -53,6 +53,7 @@ public class MotionD extends Check {
                         && offGroundTicks < 8
                         && !isExempt(ExemptType.TELEPORT, ExemptType.VELOCITY);
 
+                debug("angle=" + angle + " dxz=" + data.getPositionProcessor().getDeltaXZ() + " buffer=" + buffer);
                 if (invalid) {
                     if (++buffer >= 8) {
                         fail(String.format("angle=%.2f, buffer=%.2f", angle, buffer));

@@ -4,21 +4,19 @@ import com.gladurbad.api.check.CheckInfo;
 import com.gladurbad.api.check.MedusaCheck;
 import com.gladurbad.api.listener.MedusaFlagEvent;
 import com.gladurbad.medusa.config.Config;
-import com.gladurbad.medusa.data.processor.*;
 import com.gladurbad.medusa.util.anticheat.PunishUtil;
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.Setter;
-import com.gladurbad.medusa.Medusa;
 import com.gladurbad.medusa.data.PlayerData;
 import com.gladurbad.medusa.exempt.type.ExemptType;
 import com.gladurbad.medusa.util.anticheat.AlertUtil;
 import com.gladurbad.medusa.packet.Packet;
+
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.Setter;
+
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
-import org.bukkit.Location;
 import org.bukkit.Material;
-import org.bukkit.entity.Player;
 
 import java.util.Objects;
 
@@ -38,6 +36,7 @@ public abstract class Check implements MedusaCheck {
     private int vl;
     private long lastFlagTime;
     private CheckType checkType;
+    private boolean debugging;
     @Getter(AccessLevel.NONE) @Setter(AccessLevel.NONE)
     public double buffer;
 
@@ -62,37 +61,37 @@ public abstract class Check implements MedusaCheck {
 
     public void fail(final Object info) {
         final MedusaFlagEvent event = new MedusaFlagEvent(data.getPlayer(), this);
-        Bukkit.getScheduler().runTaskAsynchronously(Medusa.INSTANCE.getPlugin(), () -> Bukkit.getPluginManager().callEvent(event));
+        Bukkit.getPluginManager().callEvent(event);
+        if (event.isCancelled()) return;
 
-        if (!event.isCancelled()) {
-            ++vl;
-            data.setTotalViolations(data.getTotalViolations() + 1);
+        vl++;
 
-            switch (checkType) {
-                case COMBAT:
-                    data.setCombatViolations(data.getCombatViolations() + 1);
-                    break;
-                case MOVEMENT:
-                    data.setMovementViolations(data.getMovementViolations() + 1);
-                    break;
-                case PLAYER:
-                    data.setPlayerViolations(data.getPlayerViolations() + 1);
-                    break;
-            }
+        switch (this.getCheckType()) {
+            case COMBAT:
+                data.setCombatViolations(data.getCombatViolations() + 1);
+                break;
+            case MOVEMENT:
+                data.setMovementViolations(data.getMovementViolations() + 1);
+                break;
+            case PLAYER:
+                data.setPlayerViolations(data.getPlayerViolations() + 1);
+                break;
+        }
 
-            if (System.currentTimeMillis() - lastFlagTime > Config.ALERT_COOLDOWN && vl >= Config.MIN_VL_TO_ALERT) {
-                AlertUtil.handleAlert(this, data, Objects.toString(info));
-                this.lastFlagTime = System.currentTimeMillis();
-            }
+        data.setTotalViolations(data.getTotalViolations() + 1);
 
-            if (vl > maxVl) {
-                PunishUtil.punish(this, data);
-            }
+        if (System.currentTimeMillis() - lastFlagTime > Config.ALERT_COOLDOWN && vl >= Config.MIN_VL_TO_ALERT) {
+            AlertUtil.handleAlert(this, data, Objects.toString(info));
+            this.lastFlagTime = System.currentTimeMillis();
+        }
+
+        if (vl > maxVl) {
+            PunishUtil.punish(this, data);
         }
     }
 
     public void fail() {
-        fail("No information.");
+        fail("No info");
     }
 
     protected boolean isExempt(final ExemptType exemptType) {
@@ -117,8 +116,18 @@ public abstract class Check implements MedusaCheck {
     }
 
     public void debug(final Object... objects) {
-        for (Object object : objects) {
-            Bukkit.broadcastMessage(ChatColor.GREEN + "[Medusa-Debug] " + ChatColor.GRAY + object);
+        if (isDebugging()) {
+            for (final Object object : objects) {
+                data.getPlayer().sendMessage(ChatColor.GREEN + "[Medusa-Debug] " + ChatColor.GRAY + object);
+            }
+        }
+    }
+
+    public void debugToConsole(final Object... objects) {
+        if (isDebugging()) {
+            for (final Object object : objects) {
+                System.out.println(ChatColor.GREEN + "[Medusa-Debug] " + ChatColor.GRAY + object);
+            }
         }
     }
 

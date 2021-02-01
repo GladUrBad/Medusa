@@ -8,7 +8,7 @@ import org.bukkit.Bukkit;
 import java.lang.reflect.Field;
 import java.util.*;
 
-public class Config {
+public final class Config {
 
     //Make this an enum, please just rewrite it.
     //Appearance stuff

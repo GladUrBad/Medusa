@@ -9,7 +9,7 @@ import io.github.retrooper.packetevents.packetwrappers.play.in.blockplace.Wrappe
 import org.bukkit.potion.PotionEffectType;
 
 @CheckInfo(name = "Scaffold (B)", description = "Checks for tower hacks.", experimental = true)
-public class ScaffoldB extends Check {
+public final class ScaffoldB extends Check {
 
     private int movements;
     private int lastX, lastY, lastZ;

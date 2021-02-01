@@ -13,20 +13,21 @@ import io.github.retrooper.packetevents.packetwrappers.play.in.useentity.Wrapped
  */
 
 @CheckInfo(name = "AutoClicker (A)", description = "Checks for attack speed.")
-public class AutoClickerA extends Check {
+public final class AutoClickerA extends Check {
 
     private int ticks, cps;
     private static final ConfigValue maxCps = new ConfigValue(ConfigValue.ValueType.INTEGER, "max-cps");
 
-    public AutoClickerA(PlayerData data) {
+    public AutoClickerA(final PlayerData data) {
         super(data);
     }
 
     @Override
-    public void handle(Packet packet) {
-        if (packet.isFlying() && !isExempt(ExemptType.AUTO_CLICKER)) {
+    public void handle(final Packet packet) {
+        if (packet.isFlying()) {
             if (++ticks >= 20) {
-                if (cps > maxCps.getInt()) {
+                debug("cps=" + cps);
+                if (cps > maxCps.getInt() && !isExempt(ExemptType.AUTO_CLICKER)) {
                     fail("cps=" + cps);
                 }
                 ticks = cps = 0;

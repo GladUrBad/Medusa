@@ -6,8 +6,8 @@ import com.gladurbad.medusa.data.PlayerData;
 import com.gladurbad.medusa.packet.Packet;
 import io.github.retrooper.packetevents.packetwrappers.play.in.useentity.WrappedPacketInUseEntity;
 
-@CheckInfo(name = "Protocol (I)", experimental = true, description = "Validates block dig packets.")
-public class ProtocolI extends Check {
+@CheckInfo(name = "Protocol (I)", description = "Validates block dig packets.")
+public final class ProtocolI extends Check {
 
     public ProtocolI(final PlayerData data) {
         super(data);

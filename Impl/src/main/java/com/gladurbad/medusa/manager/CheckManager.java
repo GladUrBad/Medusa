@@ -6,6 +6,7 @@ import com.gladurbad.medusa.check.impl.combat.autoclicker.AutoClickerA;
 import com.gladurbad.medusa.check.impl.combat.autoclicker.AutoClickerB;
 import com.gladurbad.medusa.check.impl.combat.autoclicker.AutoClickerC;
 import com.gladurbad.medusa.check.impl.combat.autoclicker.AutoClickerD;
+import com.gladurbad.medusa.check.impl.combat.killaura.KillAuraF;
 import com.gladurbad.medusa.check.impl.combat.reach.ReachA;
 import com.gladurbad.medusa.check.impl.combat.hitbox.HitBoxA;
 import com.gladurbad.medusa.check.impl.combat.reach.ReachB;
@@ -18,6 +19,7 @@ import com.gladurbad.medusa.check.impl.movement.fly.FlyC;
 import com.gladurbad.medusa.check.impl.movement.jesus.JesusA;
 import com.gladurbad.medusa.check.impl.movement.motion.*;
 import com.gladurbad.medusa.check.impl.movement.noslow.NoSlowA;
+import com.gladurbad.medusa.check.impl.movement.phase.PhaseA;
 import com.gladurbad.medusa.check.impl.movement.speed.*;
 import com.gladurbad.medusa.check.impl.movement.speed.SpeedC;
 import com.gladurbad.medusa.check.impl.player.hand.HandA;
@@ -39,7 +41,7 @@ import java.lang.reflect.Constructor;
 import java.util.ArrayList;
 import java.util.List;
 
-public class CheckManager {
+public final class CheckManager {
 
     public static final Class[] CHECKS = new Class[] {
             AimAssistA.class,
@@ -49,6 +51,8 @@ public class CheckManager {
             AimAssistE.class,
             AimAssistF.class,
             AimAssistG.class,
+            AimAssistH.class,
+            AimAssistI.class,
             AutoClickerA.class,
             AutoClickerB.class,
             AutoClickerC.class,
@@ -59,6 +63,7 @@ public class CheckManager {
             KillAuraD.class,
             KillAuraE.class,
             KillAuraF.class,
+            KillAuraG.class,
             ReachA.class,
             HitBoxA.class,
             ReachB.class,
@@ -77,6 +82,7 @@ public class CheckManager {
             MotionE.class,
             SpeedC.class,
             NoSlowA.class,
+            PhaseA.class,
             TimerA.class,
             TimerB.class,
             TimerC.class,
@@ -101,7 +107,7 @@ public class CheckManager {
 
     private static final List<Constructor<?>> CONSTRUCTORS = new ArrayList<>();
 
-    public static List<Check> loadChecks(PlayerData data) {
+    public static List<Check> loadChecks(final PlayerData data) {
         final List<Check> checkList = new ArrayList<>();
         for (Constructor<?> constructor : CONSTRUCTORS) {
             try {

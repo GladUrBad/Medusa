@@ -10,17 +10,17 @@ import com.gladurbad.medusa.packet.Packet;
  */
 
 @CheckInfo(name = "KillAura (A)", description = "Checks for packet order.")
-public class KillAuraA extends Check {
+public final class KillAuraA extends Check {
 
     private boolean usedEntity;
     private long lastUseEntityTime;
 
-    public KillAuraA(PlayerData data) {
+    public KillAuraA(final PlayerData data) {
         super(data);
     }
 
     @Override
-    public void handle(Packet packet) {
+    public void handle(final Packet packet) {
         if (packet.isUseEntity()) {
             usedEntity = true;
             lastUseEntityTime = now();
@@ -29,6 +29,7 @@ public class KillAuraA extends Check {
                 final long delay = now() - lastUseEntityTime;
                 final boolean invalid = !data.getActionProcessor().isLagging() && delay > 15;
 
+                debug("delay=" + delay);
                 if (invalid) {
                     if (++buffer > 2) {
                         fail(String.format("delay=%d", delay));

@@ -12,7 +12,7 @@ import io.github.retrooper.packetevents.packetwrappers.play.in.helditemslot.Wrap
 
 
 @CheckInfo(name = "Protocol (E)", description = "Checks for flaws in scaffold/auto-tool hacks.")
-public class ProtocolE extends Check {
+public final class ProtocolE extends Check {
 
     private int lastSlot = -1;
 

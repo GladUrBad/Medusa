@@ -12,11 +12,10 @@ import org.bukkit.util.Vector;
 import java.util.concurrent.ThreadLocalRandom;
 
 @Getter
-public class VelocityProcessor {
+public final class VelocityProcessor {
 
     private final PlayerData data;
-    private double velocityX, velocityY, velocityZ;
-    private double lastVelocityX, lastVelocityY, lastVelocityZ;
+    private double velocityX, velocityY, velocityZ, lastVelocityX, lastVelocityY, lastVelocityZ;
     private int maxVelocityTicks, velocityTicks, ticksSinceVelocity;
     private short transactionID, velocityID;
     private long transactionPing, transactionReply;
@@ -39,6 +38,7 @@ public class VelocityProcessor {
 
         this.velocityID = (short) ThreadLocalRandom.current().nextInt(32767);
         this.verifyingVelocity = true;
+
         PacketEvents.get().getPlayerUtils().sendPacket(data.getPlayer(), new WrappedPacketOutTransaction(0, velocityID, false));
     }
 

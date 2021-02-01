@@ -7,7 +7,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 
-public class ExampleListener implements Listener {
+public final class ExampleListener implements Listener {
     @EventHandler
     public void onMedusaFlag(final MedusaFlagEvent event) {
         final Player player = event.getPlayer();

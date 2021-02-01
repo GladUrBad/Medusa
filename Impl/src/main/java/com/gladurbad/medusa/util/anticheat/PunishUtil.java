@@ -7,7 +7,7 @@ import lombok.experimental.UtilityClass;
 import org.bukkit.Bukkit;
 
 @UtilityClass
-public class PunishUtil {
+public final class PunishUtil {
 
     public void punish(final Check check, final PlayerData data) {
         if (!check.getPunishCommand().isEmpty()) {

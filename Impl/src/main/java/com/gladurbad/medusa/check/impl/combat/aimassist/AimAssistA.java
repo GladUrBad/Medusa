@@ -15,17 +15,17 @@ import java.util.function.Predicate;
  */
 
 @CheckInfo(name = "AimAssist (A)", description = "Checks for irregular movements in the rotation.")
-public class AimAssistA extends Check {
+public final class AimAssistA extends Check {
 
-    private final Predicate<Float> validRotation = rotation -> rotation > 2F && rotation < 35F;
+    private final Predicate<Float> validRotation = rotation -> rotation > 3F && rotation < 35F;
 
-    public AimAssistA(PlayerData data) {
+    public AimAssistA(final PlayerData data) {
         super(data);
     }
 
     @Override
-    public void handle(Packet packet) {
-        if (packet.isRotation() && !isExempt(ExemptType.VEHICLE)) {
+    public void handle(final Packet packet) {
+        if (packet.isRotation()) {
             final float deltaPitch = Math.abs(data.getRotationProcessor().getDeltaPitch());
             final float deltaYaw =  Math.abs(data.getRotationProcessor().getDeltaYaw() % 360F);
             final float pitch = Math.abs(data.getRotationProcessor().getPitch());
@@ -33,14 +33,18 @@ public class AimAssistA extends Check {
             final boolean invalidPitch = deltaPitch < 0.009 && validRotation.test(deltaYaw);
             final boolean invalidYaw = deltaYaw < 0.009 && validRotation.test(deltaPitch);
 
-            final boolean invalid = (invalidPitch || invalidYaw) && pitch < 89F;
+            final boolean exempt = isExempt(ExemptType.INSIDE_VEHICLE);
+
+            final boolean invalid = !exempt && (invalidPitch || invalidYaw) && pitch < 89F;
+
+            debug(String.format("deltaYaw=%.2f, deltaPitch=%.2f", deltaYaw, deltaPitch));
 
             if (invalid) {
-                if (++buffer > 10) {
+                if (++buffer > 20) {
                     fail(String.format("deltaYaw=%.2f, deltaPitch=%.2f", deltaYaw, deltaPitch));
                 }
             } else {
-                buffer = Math.max(0, buffer - 1);
+                buffer -= buffer > 0 ? 1 : 0;
             }
         }
     }

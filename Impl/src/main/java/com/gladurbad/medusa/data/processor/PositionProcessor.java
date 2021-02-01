@@ -1,27 +1,29 @@
 package com.gladurbad.medusa.data.processor;
 
+import com.gladurbad.medusa.exempt.type.ExemptType;
 import com.gladurbad.medusa.util.PlayerUtil;
 import com.gladurbad.medusa.util.type.BoundingBox;
-import lombok.Getter;
 import com.gladurbad.medusa.Medusa;
 import com.gladurbad.medusa.data.PlayerData;
+import io.github.retrooper.packetevents.packetwrappers.play.in.flying.WrappedPacketInFlying;
+import io.github.retrooper.packetevents.packetwrappers.play.out.position.WrappedPacketOutPosition;
+import lombok.Getter;
+import lombok.Setter;
 import org.bukkit.*;
 import org.bukkit.block.Block;
-import org.bukkit.entity.Boat;
-import org.bukkit.entity.Entity;
-import org.bukkit.entity.Player;
 import org.bukkit.material.Stairs;
 import org.bukkit.material.Step;
 import org.bukkit.util.NumberConversions;
+import org.bukkit.util.Vector;
 
-import java.lang.reflect.Array;
+import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.FutureTask;
 import java.util.function.Predicate;
 
 @Getter
-public class PositionProcessor {
+public final class PositionProcessor {
 
     private final PlayerData data;
 
@@ -32,11 +34,14 @@ public class PositionProcessor {
 
     private boolean flying, inVehicle, inLiquid, inAir, inWeb,
             blockNearHead, onClimbable, onSolidGround, nearVehicle, onSlime,
-            onIce, nearPiston, nearTrapdoor, nearSlab, nearStairs;
+            onIce, nearPiston, nearTrapdoor, nearSlab, nearStairs, teleporting;
 
     private int airTicks, sinceVehicleTicks, sinceFlyingTicks,
-            groundTicks, teleportTicks, sinceSlimeTicks, solidGroundTicks,
-            iceTicks, sinceIceTicks, blockNearHeadTicks, sinceBlockNearHeadTicks;
+            groundTicks, sinceSlimeTicks, solidGroundTicks,
+            iceTicks, sinceIceTicks, blockNearHeadTicks, sinceBlockNearHeadTicks,
+            sinceNearPistonTicks, tpBandaidFixTicks;
+
+    private final ArrayDeque<Vector> teleports = new ArrayDeque<>();
 
     private BoundingBox boundingBox;
 
@@ -49,6 +54,18 @@ public class PositionProcessor {
     }
 
     public void handle(final double x, final double y, final double z, final boolean onGround) {
+        //FIX THIS TELEPORT SYSTEM.
+        if (teleports.size() > 0) {
+            tpBandaidFixTicks = 2;
+            teleporting = true;
+        }
+
+        if (teleports.size() == 0) {
+            if (--tpBandaidFixTicks < 0) {
+                teleporting = false;
+            }
+        }
+
         lastX = this.x;
         lastY = this.y;
         lastZ = this.z;
@@ -71,15 +88,29 @@ public class PositionProcessor {
         deltaZ = this.z - lastZ;
         deltaXZ = Math.hypot(deltaX, deltaZ);
 
+        if (teleports.size() > 150) {
+            teleports.remove(0);
+        }
+
+        for (Vector vector : teleports) {
+            final double dx = Math.abs(x - vector.getX());
+            final double dy = Math.abs(y - vector.getY());
+            final double dz = Math.abs(z - vector.getZ());
+
+            if (dx == 0 && dy == 0 && dz == 0) {
+                teleports.remove(vector);
+            }
+        }
+
         mathematicallyOnGround = y % 0.015625 == 0.0;
     }
 
     public void handleTicks() {
         groundTicks = onGround && mathematicallyOnGround ? groundTicks + 1 : 0;
         blockNearHeadTicks = blockNearHead ? blockNearHeadTicks + 1 : 0;
+        sinceNearPistonTicks = nearPiston ? 0 : sinceNearPistonTicks + 1;
         sinceBlockNearHeadTicks = blockNearHead ? 0 : sinceBlockNearHeadTicks + 1;
         airTicks = inAir ? airTicks + 1 : 0;
-        ++teleportTicks;
         inVehicle = data.getPlayer().isInsideVehicle();
         sinceVehicleTicks = inVehicle ? 0 : sinceVehicleTicks + 1;
         iceTicks = onIce ? iceTicks + 1 : 0;
@@ -146,8 +177,14 @@ public class PositionProcessor {
         nearVehicle = PlayerUtil.isNearVehicle(data.getPlayer());
     }
 
-    public void handleTeleport() {
-        teleportTicks = 0;
+    public void handleServerPosition(final WrappedPacketOutPosition wrapper) {
+        final Vector teleportVector = new Vector(
+                wrapper.getX(),
+                wrapper.getY(),
+                wrapper.getZ()
+        );
+
+        teleports.add(teleportVector);
     }
 
     public boolean isColliding(CollisionType collisionType, Material blockType) {
@@ -184,7 +221,7 @@ public class PositionProcessor {
             Bukkit.getScheduler().runTask(Medusa.INSTANCE.getPlugin(), futureTask);
             try {
                 return futureTask.get();
-            } catch (Exception exception) {
+            } catch (final Exception exception) {
                 exception.printStackTrace();
             }
             return null;

@@ -12,7 +12,7 @@ import io.github.retrooper.packetevents.packetwrappers.play.in.flying.WrappedPac
 
 
 @CheckInfo(name = "Protocol (C)", description = "Checks for flying packet sequence.")
-public class ProtocolC extends Check {
+public final class ProtocolC extends Check {
 
     private int streak;
 

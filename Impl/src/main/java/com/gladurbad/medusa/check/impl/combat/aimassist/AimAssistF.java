@@ -10,8 +10,8 @@ import com.gladurbad.medusa.packet.Packet;
  * Created 11/14/2020 Package com.gladurbad.medusa.check.impl.combat.aim by GladUrBad
  */
 
-@CheckInfo(name = "AimAssist (F)", description = "Checks for impossible rotation.")
-public class AimAssistF extends Check {
+@CheckInfo(name = "AimAssist (F)", description = "Checks for impossible rotation.", experimental = true)
+public final class AimAssistF extends Check {
 
     public AimAssistF(final PlayerData data) {
         super(data);
@@ -19,11 +19,13 @@ public class AimAssistF extends Check {
 
     @Override
     public void handle(final Packet packet) {
-        if (packet.isRotation() && !isExempt(ExemptType.TELEPORT)) {
+        if (packet.isRotation()) {
             final float deltaYaw = data.getRotationProcessor().getDeltaYaw();
             final float deltaPitch = data.getRotationProcessor().getDeltaPitch();
 
-            if (deltaPitch == 0 && deltaYaw == 0) {
+            debug("tp=" + isExempt(ExemptType.TELEPORT));
+
+            if (deltaPitch == 0 && deltaYaw == 0 && !isExempt(ExemptType.TELEPORT)) {
                 fail();
             }
         }

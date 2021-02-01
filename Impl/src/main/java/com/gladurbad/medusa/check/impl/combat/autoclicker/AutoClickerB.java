@@ -13,7 +13,7 @@ import java.util.ArrayDeque;
  * Created on 12/30/2020 Package com.gladurbad.medusa.check.impl.combat.autoclicker by GladUrBad
  */
 @CheckInfo(name = "AutoClicker (B)", description = "Simple change in statistics check.")
-public class AutoClickerB extends Check {
+public final class AutoClickerB extends Check {
 
     private int ticks;
     private double lastDev, lastSkew, lastKurt;
@@ -38,6 +38,8 @@ public class AutoClickerB extends Check {
                 final double deltaDeviation = Math.abs(deviation - lastDev);
                 final double deltaSkewness = Math.abs(skewness - lastSkew);
                 final double deltaKurtosis = Math.abs(kurtosis - lastKurt);
+
+                debug("dd=" + deltaDeviation + " ds=" + deltaSkewness + " dk=" + deltaKurtosis);
 
                 if (deltaDeviation < 0.01 || deltaSkewness < 0.01 || deltaKurtosis < 0.01) {
                     if ((buffer += 10) > 50) {

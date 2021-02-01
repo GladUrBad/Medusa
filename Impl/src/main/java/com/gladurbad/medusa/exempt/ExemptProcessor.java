@@ -8,7 +8,7 @@ import java.util.Arrays;
 import java.util.function.Function;
 
 @RequiredArgsConstructor
-public class ExemptProcessor {
+public final class ExemptProcessor {
 
     private final PlayerData data;
 

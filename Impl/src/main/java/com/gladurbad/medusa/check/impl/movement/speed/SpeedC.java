@@ -8,8 +8,8 @@ import com.gladurbad.medusa.packet.Packet;
 import com.gladurbad.medusa.util.PlayerUtil;
 import org.bukkit.potion.PotionEffectType;
 
-@CheckInfo(name = "Speed (C)", description = "Basic verbose speed check.")
-public class SpeedC extends Check {
+@CheckInfo(name = "Speed (C)", description = "Basic verbose speed check.", experimental = true)
+public final class SpeedC extends Check {
 
     public SpeedC(final PlayerData data) {
         super(data);
@@ -24,10 +24,11 @@ public class SpeedC extends Check {
 
             final boolean exempt = isExempt(
                     ExemptType.TELEPORT, ExemptType.JOINED, ExemptType.PISTON, ExemptType.VELOCITY,
-                    ExemptType.VEHICLE, ExemptType.FLYING, ExemptType.SLIME, ExemptType.UNDER_BLOCK,
+                    ExemptType.INSIDE_VEHICLE, ExemptType.FLYING, ExemptType.SLIME, ExemptType.UNDER_BLOCK,
                     ExemptType.ICE
             );
 
+            debug("dxz-ms" + (deltaXZ-maxSpeed) + " buffer=" + buffer);
             if (deltaXZ > maxSpeed && !exempt) {
                 buffer += buffer < 15 ? 1 : 0;
                 if (buffer > 10) {

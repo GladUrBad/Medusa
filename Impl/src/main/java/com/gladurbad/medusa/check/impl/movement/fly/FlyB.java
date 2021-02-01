@@ -11,24 +11,26 @@ import com.gladurbad.medusa.packet.Packet;
  */
 
 @CheckInfo(name = "Fly (B)", description = "Checks for jumping mid-air.")
-public class FlyB extends Check {
+public final class FlyB extends Check {
 
     private double lastAcceleration;
-    public FlyB(PlayerData data) {
+
+    public FlyB(final PlayerData data) {
         super(data);
     }
 
     @Override
-    public void handle(Packet packet) {
+    public void handle(final Packet packet) {
         if (packet.isPosition() && !isExempt(ExemptType.TELEPORT)) {
             final double acceleration = data.getPositionProcessor().getDeltaY() - data.getPositionProcessor().getLastDeltaY();
             final double airTicks = data.getPositionProcessor().getAirTicks();
             final double deltaY = data.getPositionProcessor().getDeltaY();
 
             final boolean invalid = !isExempt(
-                    ExemptType.FLYING, ExemptType.VELOCITY, ExemptType.VEHICLE, ExemptType.NEAR_VEHICLE
+                    ExemptType.FLYING, ExemptType.VELOCITY, ExemptType.INSIDE_VEHICLE, ExemptType.NEAR_VEHICLE
             ) && lastAcceleration <= 0 && acceleration > 0 && deltaY > 0;
 
+            debug("airTicks=" + airTicks + " accel=" + acceleration);
             if (airTicks > 10) {
                 if (invalid) {
                     fail(String.format("accel=%.2f, at=%.2f", acceleration, airTicks));

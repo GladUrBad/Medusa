@@ -10,7 +10,7 @@ import com.gladurbad.medusa.packet.Packet;
  */
 
 @CheckInfo(name = "Protocol (G)", description = "Checks for packet order.")
-public class ProtocolG extends Check {
+public final class ProtocolG extends Check {
 
     private long lastBlockPlace;
     private boolean placedBlock;

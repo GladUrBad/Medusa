@@ -1,5 +1,8 @@
 package com.gladurbad.medusa.util.anticheat;
 
+import com.gladurbad.api.listener.MedusaFlagEvent;
+import com.gladurbad.api.listener.MedusaSendAlertEvent;
+import com.gladurbad.medusa.Medusa;
 import com.gladurbad.medusa.check.Check;
 import com.gladurbad.medusa.data.PlayerData;
 import com.gladurbad.medusa.util.ColorUtil;
@@ -13,6 +16,7 @@ import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.ComponentBuilder;
 import net.md_5.bungee.api.chat.HoverEvent;
 import net.md_5.bungee.api.chat.TextComponent;
+import org.bukkit.Bukkit;
 
 import java.text.DecimalFormat;
 import java.util.HashSet;
@@ -20,7 +24,7 @@ import java.util.Set;
 
 @Getter
 @UtilityClass
-public class AlertUtil {
+public final class AlertUtil {
 
     private final Set<PlayerData> alerts = new HashSet<>();
 
@@ -35,10 +39,11 @@ public class AlertUtil {
     }
 
     public void handleAlert(final Check check, final PlayerData data, final String info) {
-        TextComponent alertMessage = new TextComponent(ColorUtil.translate(Config.ALERT_FORMAT)
+        final TextComponent alertMessage = new TextComponent(ColorUtil.translate(Config.ALERT_FORMAT)
                 .replaceAll("%player%", data.getPlayer().getName())
                 .replaceAll("%uuid%", data.getPlayer().getUniqueId().toString())
                 .replaceAll("%checkName%", check.getJustTheName())
+                .replaceAll("%ping%", Integer.toString(PlayerUtil.getPing(data.getPlayer())))
                 .replaceAll("%checkType%", Character.toString(check.getType()))
                 .replaceAll("%dev%", check.getCheckInfo().experimental() ? ColorUtil.translate("&7*") : "")
                 .replaceAll("%vl%", Integer.toString(check.getVl()))
@@ -50,11 +55,16 @@ public class AlertUtil {
         alertMessage.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder(ColorUtil.translate(
                 Config.ACCENT_ONE + "Description: &7" + check.getCheckInfo().description() +
                         "\n" + Config.ACCENT_ONE + "Info: &7" + info +
-                        "\n" + Config.ACCENT_ONE + "Ping: &7" + PacketEvents.get().getPlayerUtils().getPing(data.getPlayer()) +
+                        "\n" + Config.ACCENT_ONE + "Ping: &7" + PlayerUtil.getPing(data.getPlayer()) +
                         "\n" + Config.ACCENT_ONE + "TPS: &7" + String.format("%.2f", PacketEvents.get().getServerUtils().getTPS()) +
                         "\n" + Config.ACCENT_TWO + "Click to teleport.")).create()));
 
-        alerts.forEach(player -> player.getPlayer().spigot().sendMessage(alertMessage));
+        final MedusaSendAlertEvent event = new MedusaSendAlertEvent(alertMessage, data.getPlayer(), check, info);
+        Bukkit.getPluginManager().callEvent(event);
+
+        if (event.isCancelled()) return;
+
+        alerts.forEach(data1 -> data1.getPlayer().spigot().sendMessage(alertMessage));
     }
 
     public enum ToggleAlertType {
