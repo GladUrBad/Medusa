@@ -9,12 +9,9 @@ public final class MedusaPlugin extends JavaPlugin {
     @Override
     public void onLoad() {
         PacketEvents.create(this).getSettings()
-                .injectAsync(true)
-                .ejectAsync(true)
-                .injectEarly(true)
+                .compatInjector(true)
                 .checkForUpdates(true)
                 .backupServerVersion(ServerVersion.v_1_8_8);
-
         PacketEvents.get().load();
     }
 
@@ -26,7 +23,7 @@ public final class MedusaPlugin extends JavaPlugin {
 
     @Override
     public void onDisable() {
-        PacketEvents.get().stop();
+        PacketEvents.get().terminate();
         Medusa.INSTANCE.stop(this);
     }
 }
