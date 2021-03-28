@@ -5,12 +5,6 @@ import com.gladurbad.medusa.check.Check;
 import com.gladurbad.medusa.data.PlayerData;
 import com.gladurbad.medusa.exempt.type.ExemptType;
 import com.gladurbad.medusa.packet.Packet;
-import com.gladurbad.medusa.util.MathUtil;
-import com.gladurbad.medusa.util.PlayerUtil;
-import org.bukkit.Material;
-import org.bukkit.potion.PotionEffectType;
-
-import java.util.function.Predicate;
 
 /**
  * Created on 11/17/2020 Package com.gladurbad.medusa.check.impl.movement.fly by GladUrBad
@@ -31,7 +25,7 @@ public final class FlyA extends Check {
 
             final boolean onGround = data.getPositionProcessor().getAirTicks() <= 5;
 
-            final double prediction = Math.abs((lastDeltaY - 0.08) * 0.98F) < 0.005 ? 0 : (lastDeltaY - 0.08) * 0.98F;
+            final double prediction = Math.abs((lastDeltaY - 0.08) * 0.98F) < 0.005 ? (-0.08) * 0.98F : (lastDeltaY - 0.08) * 0.98F;
             final double difference = Math.abs(deltaY - prediction);
 
             final boolean exempt = isExempt(

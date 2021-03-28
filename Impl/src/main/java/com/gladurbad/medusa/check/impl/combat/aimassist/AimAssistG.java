@@ -34,10 +34,12 @@ public final class AimAssistG extends Check {
             if (yawAccelSamples.isFull() && pitchAccelSamples.isFull()) {
                 final double yawAccelAverage = MathUtil.getAverage(yawAccelSamples);
                 final double pitchAccelAverage = MathUtil.getAverage(pitchAccelSamples);
+
                 final double yawAccelDeviation = MathUtil.getStandardDeviation(yawAccelSamples);
                 final double pitchAccelDeviation = MathUtil.getStandardDeviation(pitchAccelSamples);
 
                 final boolean exemptRotation = data.getRotationProcessor().getDeltaYaw() < 1.5F;
+
                 final boolean averageInvalid = yawAccelAverage < 1 || pitchAccelAverage < 1 && !exemptRotation;
                 final boolean deviationInvalid = yawAccelDeviation < 5 && pitchAccelDeviation > 5 && !exemptRotation;
 

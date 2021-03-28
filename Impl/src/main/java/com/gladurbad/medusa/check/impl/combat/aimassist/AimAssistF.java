@@ -25,9 +25,7 @@ public final class AimAssistF extends Check {
 
             debug("tp=" + isExempt(ExemptType.TELEPORT));
 
-            if (deltaPitch == 0 && deltaYaw == 0 && !isExempt(ExemptType.TELEPORT)) {
-                fail();
-            }
+            if (deltaPitch == 0 && deltaYaw == 0 && !isExempt(ExemptType.TELEPORT)) fail();
         }
     }
 }

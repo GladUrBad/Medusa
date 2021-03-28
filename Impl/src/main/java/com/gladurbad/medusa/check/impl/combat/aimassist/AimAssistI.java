@@ -4,10 +4,6 @@ import com.gladurbad.api.check.CheckInfo;
 import com.gladurbad.medusa.check.Check;
 import com.gladurbad.medusa.data.PlayerData;
 import com.gladurbad.medusa.packet.Packet;
-import com.gladurbad.medusa.util.MathUtil;
-
-import java.util.ArrayDeque;
-import java.util.Arrays;
 
 @CheckInfo(name = "AimAssist (I)", description = "Checks for snappy rotations.", experimental = true)
 public class AimAssistI extends Check {
@@ -27,6 +23,7 @@ public class AimAssistI extends Check {
             if (deltaYaw < 5F && lastDeltaYaw > 20F && lastLastDeltaYaw < 5F) {
                 final double low = (deltaYaw + lastLastDeltaYaw) / 2;
                 final double high = lastDeltaYaw;
+
                 fail(String.format("low=%.2f, high=%.2f", low, high));
             }
 

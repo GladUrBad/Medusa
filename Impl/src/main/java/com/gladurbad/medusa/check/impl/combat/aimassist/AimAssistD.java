@@ -32,6 +32,8 @@ public final class AimAssistD extends Check {
     @Override
     public void handle(final Packet packet) {
         if (packet.isRotation()) {
+            if (data.getRotationProcessor().isCinematic()) return;
+
             final float deltaYaw = data.getRotationProcessor().getDeltaYaw() % 360F;
             final float deltaPitch = data.getRotationProcessor().getDeltaPitch();
 
@@ -72,6 +74,7 @@ public final class AimAssistD extends Check {
                     buffer -= buffer > 0 ? 1 : 0;
                 }
             }
+
             this.lastDeltaYaw = deltaYaw;
             this.lastDeltaPitch = deltaPitch;
         }

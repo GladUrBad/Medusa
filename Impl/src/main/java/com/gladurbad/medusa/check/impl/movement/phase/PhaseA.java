@@ -5,12 +5,10 @@ import com.gladurbad.medusa.check.Check;
 import com.gladurbad.medusa.data.PlayerData;
 import com.gladurbad.medusa.data.processor.PositionProcessor;
 import com.gladurbad.medusa.packet.Packet;
-import com.gladurbad.medusa.util.ReflectionUtil;
 import com.gladurbad.medusa.util.type.BoundingBox;
 import org.bukkit.block.Block;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @CheckInfo(name = "Phase (A)", description = "Checks if the player moves through unpassable blocks", experimental = true)
 public class PhaseA extends Check {
@@ -43,8 +41,6 @@ public class PhaseA extends Check {
             final List<Block> collidedBlocks = unionBox.getBlocks(data.getPlayer().getWorld());
 
             final int size = (int) collidedBlocks.stream().filter(block -> block.getType().isSolid()).count();
-
-            ReflectionUtil.
 
             if (size >= 4) {
                 fail("collided=" + size);
