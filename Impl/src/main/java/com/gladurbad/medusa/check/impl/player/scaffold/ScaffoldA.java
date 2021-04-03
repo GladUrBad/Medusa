@@ -22,9 +22,10 @@ public final class ScaffoldA extends Check {
     public void handle(final Packet packet) {
         if (packet.isFlying()) {
             if (placedBlock && isBridging()) {
-                final double deltaXz = data.getPositionProcessor().getDeltaXZ();
-                final double lastDeltaXz = data.getPositionProcessor().getLastDeltaXZ();
-                final double accel = Math.abs(deltaXz - lastDeltaXz);
+                final double deltaXZ = data.getPositionProcessor().getDeltaXZ();
+                final double lastDeltaXZ = data.getPositionProcessor().getLastDeltaXZ();
+
+                final double accel = Math.abs(deltaXZ - lastDeltaXZ);
 
                 final float deltaYaw = data.getRotationProcessor().getDeltaYaw() % 360F;
                 final float deltaPitch = data.getRotationProcessor().getDeltaPitch();

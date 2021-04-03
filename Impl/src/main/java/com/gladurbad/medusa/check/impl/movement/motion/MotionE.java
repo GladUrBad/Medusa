@@ -21,11 +21,13 @@ public final class MotionE extends Check {
         if (packet.isPosition()) {
             final double deltaX = data.getPositionProcessor().getDeltaX();
             final double lastDeltaX = data.getPositionProcessor().getLastDeltaX();
+
             final double deltaZ = data.getPositionProcessor().getDeltaZ();
             final double lastDeltaZ = data.getPositionProcessor().getLastDeltaZ();
 
             final double absDeltaX = Math.abs(deltaX);
             final double absDeltaZ = Math.abs(deltaZ);
+
             final double absLastDeltaX = Math.abs(lastDeltaX);
             final double absLastDeltaZ = Math.abs(lastDeltaZ);
 

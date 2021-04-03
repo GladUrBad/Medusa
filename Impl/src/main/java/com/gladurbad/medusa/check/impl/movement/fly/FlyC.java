@@ -34,6 +34,7 @@ public final class FlyC extends Check {
                     ExemptType.FLYING, ExemptType.JOINED, ExemptType.SLIME);
 
             debug(positionGround + " " + packetGround + " pos/packet");
+
             if (!exempt && positionGround != packetGround) {
                 if (++buffer > 4) {
                     fail();
