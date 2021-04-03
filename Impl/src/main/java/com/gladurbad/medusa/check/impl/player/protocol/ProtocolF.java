@@ -23,7 +23,7 @@ public final class ProtocolF extends Check {
         if (packet.isSteerVehicle()) {
             final WrappedPacketInSteerVehicle wrapper = new WrappedPacketInSteerVehicle(packet.getRawPacket());
 
-            final boolean unmount = wrapper.isUnmount();
+            final boolean unmount = wrapper.isDismount();
 
             final boolean invalid = data.getPlayer().getVehicle() == null && !unmount;
 

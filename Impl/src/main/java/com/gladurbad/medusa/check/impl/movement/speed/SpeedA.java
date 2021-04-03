@@ -22,7 +22,7 @@ public final class SpeedA extends Check {
             final double deltaXZ = data.getPositionProcessor().getDeltaXZ();
             final double lastDeltaXZ = data.getPositionProcessor().getLastDeltaXZ();
 
-            final double prediction = lastDeltaXZ * 0.91F + (data.getActionProcessor().isSprinting() ? 0.0263 : 0.02);
+            final double prediction = lastDeltaXZ * 0.91F + (data.getActionProcessor().isSprinting() ? 0.026 : 0.02);
             final double difference = deltaXZ - prediction;
 
             final boolean invalid = difference > 1e-12 &&

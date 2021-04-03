@@ -28,9 +28,9 @@ public final class HandA extends Check {
 
             final Location blockLocation = new Location(
                     data.getPlayer().getWorld(),
-                    wrapper.getX(),
-                    wrapper.getY(),
-                    wrapper.getZ()
+                    wrapper.getBlockPosition().getX(),
+                    wrapper.getBlockPosition().getY(),
+                    wrapper.getBlockPosition().getZ()
             );
 
             final Location eyeLocation = data.getPlayer().getEyeLocation();
@@ -40,7 +40,7 @@ public final class HandA extends Check {
 
             if (!validInteraction) {
                 assert direction != null;
-                fail("face=" + direction.getValue());
+                fail("face=" + direction.getFaceValue());
             }
         }
     }

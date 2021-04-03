@@ -25,9 +25,9 @@ public final class ScaffoldB extends Check {
             if (PlayerUtil.getPotionLevel(data.getPlayer(), PotionEffectType.JUMP) > 0) return;
             if (data.getPositionProcessor().getDeltaY() <= 0) return;
 
-            if (!(wrapper.getX() == 1 && wrapper.getY() == 1 && wrapper.getZ() != 1)) {
+            if (!(wrapper.getBlockPosition().getX() == 1 && wrapper.getBlockPosition().getY() == 1 && wrapper.getBlockPosition().getZ() != 1)) {
                 if (data.getPlayer().getItemInHand().getType().isBlock()) {
-                    if (lastX == wrapper.getX() && wrapper.getY() > lastY && lastZ == wrapper.getZ()) {
+                    if (lastX == wrapper.getBlockPosition().getX() && wrapper.getBlockPosition().getY() > lastY && lastZ == wrapper.getBlockPosition().getZ()) {
                         if (movements < 7) {
                             if (++buffer > 2) {
                                 fail("ticks=" + movements);
@@ -37,9 +37,9 @@ public final class ScaffoldB extends Check {
                         }
                         movements = 0;
                     }
-                    lastX = wrapper.getX();
-                    lastY = wrapper.getY();
-                    lastZ = wrapper.getZ();
+                    lastX = wrapper.getBlockPosition().getX();
+                    lastY = wrapper.getBlockPosition().getY();
+                    lastZ = wrapper.getBlockPosition().getZ();
                 }
             }
         } else if (packet.isFlying()) {

@@ -1,11 +1,10 @@
 package com.gladurbad.medusa.check.impl.movement.motion;
 
-import com.gladurbad.medusa.check.Check;
 import com.gladurbad.api.check.CheckInfo;
+import com.gladurbad.medusa.check.Check;
 import com.gladurbad.medusa.data.PlayerData;
 import com.gladurbad.medusa.exempt.type.ExemptType;
 import com.gladurbad.medusa.packet.Packet;
-import org.bukkit.util.Vector;
 
 /**
  * Created on 11/17/2020 Package com.gladurbad.medusa.check.impl.movement.motion by GladUrBad
@@ -21,8 +20,11 @@ public final class MotionA extends Check {
     @Override
     public void handle(final Packet packet) {
         if (packet.isPosition()) {
+            final boolean ground = data.getPositionProcessor().isInAir();
+
             final double deltaY = data.getPositionProcessor().getDeltaY();
             final double lastDeltaY = data.getPositionProcessor().getLastDeltaY();
+
             final double acceleration = Math.abs(deltaY - lastDeltaY);
 
             final boolean exempt = isExempt(
@@ -32,9 +34,7 @@ public final class MotionA extends Check {
                     ExemptType.UNDER_BLOCK, ExemptType.SLAB, ExemptType.STAIRS
             );
 
-            debug("buf=" + buffer + " exempt=" + exempt + " accel=" + acceleration);
-
-            if (acceleration == 0 && !exempt) {
+            if (acceleration == 0.0 && !ground && !exempt) {
                 if ((buffer += 4) > 16) {
                     fail(String.format("dy=%.2f", deltaY));
                 }

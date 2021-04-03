@@ -19,10 +19,10 @@ public final class ScaffoldC extends Check {
         if (packet.isBlockPlace()) {
             final WrappedPacketInBlockPlace wrapper = new WrappedPacketInBlockPlace(packet.getRawPacket());
 
-            if (!(wrapper.getX() == 1 && wrapper.getY() == 1 && wrapper.getZ() == 1)) {
+            if (!(wrapper.getBlockPosition().getX() == 1 && wrapper.getBlockPosition().getY() == 1 && wrapper.getBlockPosition().getZ() == 1)) {
                 if (data.getPlayer().getItemInHand().getType().isBlock()) {
                     if (wrapper.getDirection() == Direction.DOWN) {
-                        if (wrapper.getY() < data.getPositionProcessor().getY()) fail();
+                        if (wrapper.getBlockPosition().getY() < data.getPositionProcessor().getY()) fail();
                     }
                 }
             }

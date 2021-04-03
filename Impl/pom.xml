@@ -35,6 +35,13 @@
                         </goals>
                         <configuration>
                             <minimizeJar>false</minimizeJar>
+                            <finalName>Medusa</finalName>
+                            <relocations>
+                                <relocation>
+                                    <pattern>io.github.retrooper.packetevents</pattern>
+                                    <shadedPattern>com.gladurbad.medusa.packetevents</shadedPattern>
+                                </relocation>
+                            </relocations>
                         </configuration>
                     </execution>
                 </executions>
@@ -57,7 +64,7 @@
         <dependency>
             <groupId>com.github.retrooper</groupId>
             <artifactId>packetevents</artifactId>
-            <version>1.8-PRE-1</version>
+            <version>1.8-pre-9</version>
         </dependency>
     </dependencies>
 
