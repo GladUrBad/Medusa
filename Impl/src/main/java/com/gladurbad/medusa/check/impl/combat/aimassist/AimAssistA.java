@@ -3,10 +3,8 @@ package com.gladurbad.medusa.check.impl.combat.aimassist;
 import com.gladurbad.api.check.CheckInfo;
 import com.gladurbad.medusa.check.Check;
 import com.gladurbad.medusa.data.PlayerData;
-import com.gladurbad.medusa.data.processor.RotationProcessor;
 import com.gladurbad.medusa.exempt.type.ExemptType;
 import com.gladurbad.medusa.packet.Packet;
-import com.gladurbad.medusa.util.MathUtil;
 
 import java.util.function.Predicate;
 
@@ -28,13 +26,13 @@ public final class AimAssistA extends Check {
         if (packet.isRotation()) {
             final float deltaPitch = Math.abs(data.getRotationProcessor().getDeltaPitch());
             final float deltaYaw =  Math.abs(data.getRotationProcessor().getDeltaYaw() % 360F);
+
             final float pitch = Math.abs(data.getRotationProcessor().getPitch());
 
             final boolean invalidPitch = deltaPitch < 0.009 && validRotation.test(deltaYaw);
             final boolean invalidYaw = deltaYaw < 0.009 && validRotation.test(deltaPitch);
 
             final boolean exempt = isExempt(ExemptType.INSIDE_VEHICLE);
-
             final boolean invalid = !exempt && (invalidPitch || invalidYaw) && pitch < 89F;
 
             debug(String.format("deltaYaw=%.2f, deltaPitch=%.2f", deltaYaw, deltaPitch));

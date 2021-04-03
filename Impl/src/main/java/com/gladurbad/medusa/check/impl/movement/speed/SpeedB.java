@@ -1,7 +1,7 @@
 package com.gladurbad.medusa.check.impl.movement.speed;
 
-import com.gladurbad.medusa.check.Check;
 import com.gladurbad.api.check.CheckInfo;
+import com.gladurbad.medusa.check.Check;
 import com.gladurbad.medusa.data.PlayerData;
 import com.gladurbad.medusa.data.processor.PositionProcessor;
 import com.gladurbad.medusa.data.processor.VelocityProcessor;
@@ -35,10 +35,10 @@ public final class SpeedB extends Check {
 
             groundTicks = flying.isOnGround() ? groundTicks + 1 : 0;
             airTicks = !flying.isOnGround() ? airTicks + 1 : 0;
-            
+
             final PositionProcessor position = data.getPositionProcessor();
             final VelocityProcessor velocity = data.getVelocityProcessor();
-            
+
             final double deltaXZ = Math.abs(position.getDeltaXZ());
             final double deltaY = position.getDeltaY();
 
@@ -47,7 +47,7 @@ public final class SpeedB extends Check {
 
             double maxGroundSpeed = getSpeed(0.287D);
             double maxAirSpeed = getSpeed(0.362D);
-            double maxAfterJumpAirSpeed = getAfterJumpSpeed();
+            final double maxAfterJumpAirSpeed = getAfterJumpSpeed();
 
             final int sinceIceTicks = position.getSinceIceTicks();
             final int sinceSlimeTicks = position.getSinceSlimeTicks();
@@ -64,7 +64,7 @@ public final class SpeedB extends Check {
 
             //Handle jumping speed increase.
             if (deltaY > 0.4199 && airTicks == 1) {
-                speed = deltaXZ/maxAfterJumpAirSpeed;
+                speed = deltaXZ / maxAfterJumpAirSpeed;
             }
 
             //Handle max air speed checking. (airTicks > 1 because of jumping increase first tick)
@@ -72,7 +72,7 @@ public final class SpeedB extends Check {
             if (airTicks > 1 || (airTicks > 0 && deltaY < 0.4199)) {
                 if (sinceUnderBlockTicks <= 15) maxAirSpeed += 0.3;
                 if (sinceIceTicks <= 15 || sinceSlimeTicks <= 10) maxAirSpeed += 0.25;
-                speed = deltaXZ/maxAirSpeed;
+                speed = deltaXZ / maxAirSpeed;
             }
 
             //Handle max ground speed checking. (groundTicks > 1 because of landing speed increase)
@@ -81,7 +81,7 @@ public final class SpeedB extends Check {
                 if (groundTicks < 7) maxGroundSpeed += 0.17;
                 if (sinceUnderBlockTicks <= 15) maxGroundSpeed += 0.15;
                 if (sinceIceTicks <= 15 || sinceSlimeTicks <= 10) maxGroundSpeed += 0.2;
-                speed = deltaXZ/maxGroundSpeed;
+                speed = deltaXZ / maxGroundSpeed;
             }
 
             final double shiftedSpeed = Math.round(speed * 100);
@@ -105,7 +105,7 @@ public final class SpeedB extends Check {
     //Stolen from Artemis Client, could be quite inaccurate.
     private double getSpeed(double movement) {
         if (PlayerUtil.getPotionLevel(data.getPlayer(), PotionEffectType.SPEED) > 0) {
-            movement *= 1.0D + 0.2D * (double)(PlayerUtil.getPotionLevel(data.getPlayer(), PotionEffectType.SPEED));
+            movement *= 1.0D + 0.2D * (double) (PlayerUtil.getPotionLevel(data.getPlayer(), PotionEffectType.SPEED));
         }
         return movement;
     }

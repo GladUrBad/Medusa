@@ -13,6 +13,7 @@ public class AimAssistI extends Check {
     public AimAssistI(final PlayerData data) {
         super(data);
     }
+
     @Override
     public void handle(final Packet packet) {
         if (packet.isRotation()) {
