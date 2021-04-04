@@ -20,7 +20,7 @@ public final class MotionA extends Check {
     @Override
     public void handle(final Packet packet) {
         if (packet.isPosition()) {
-            final boolean ground = data.getPositionProcessor().isInAir();
+            final boolean inAir = data.getPositionProcessor().isInAir();
 
             final double deltaY = data.getPositionProcessor().getDeltaY();
             final double lastDeltaY = data.getPositionProcessor().getLastDeltaY();
@@ -34,7 +34,7 @@ public final class MotionA extends Check {
                     ExemptType.UNDER_BLOCK, ExemptType.SLAB, ExemptType.STAIRS
             );
 
-            if (acceleration == 0.0 && !ground && !exempt) {
+            if (acceleration == 0.0 && inAir && !exempt) {
                 if ((buffer += 4) > 16) {
                     fail(String.format("dy=%.2f", deltaY));
                 }

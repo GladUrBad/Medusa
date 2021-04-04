@@ -34,7 +34,7 @@ public final class Packet {
     }
 
     public boolean isExplosion() {
-        return isReceiving() && packetId == PacketType.Play.Server.EXPLOSION;
+        return isSending() && packetId == PacketType.Play.Server.EXPLOSION;
     }
 
     public boolean isRotation() {
