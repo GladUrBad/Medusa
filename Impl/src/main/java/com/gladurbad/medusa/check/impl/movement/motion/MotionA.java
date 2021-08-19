@@ -31,7 +31,8 @@ public final class MotionA extends Check {
                     ExemptType.JOINED, ExemptType.TRAPDOOR, ExemptType.VELOCITY,
                     ExemptType.FLYING, ExemptType.WEB, ExemptType.TELEPORT,
                     ExemptType.LIQUID, ExemptType.SLIME, ExemptType.CLIMBABLE,
-                    ExemptType.UNDER_BLOCK, ExemptType.SLAB, ExemptType.STAIRS
+                    ExemptType.UNDER_BLOCK, ExemptType.SLAB, ExemptType.STAIRS,
+                    ExemptType.NEAR_VEHICLE
             );
 
             if (acceleration == 0.0 && inAir && !exempt) {

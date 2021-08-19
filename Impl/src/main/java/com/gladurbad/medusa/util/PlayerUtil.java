@@ -17,10 +17,7 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.util.Vector;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 
 @UtilityClass
 public final class PlayerUtil {
@@ -155,4 +152,18 @@ public final class PlayerUtil {
         return false;
     }
 
+    //stolen from FlappyAC. originally located in FlappyAnticheat/Utils/PlayerUtil
+    public static Set<Block> getNearbyBlocks(Location location, int radiusX, int radiusY, int radiusZ) {
+        Set<Block> blocks = new HashSet<>();
+
+        for(int x = location.getBlockX() - radiusX; x <= location.getBlockX() + radiusX; x++) {
+            for(int y = location.getBlockY() - radiusY; y <= location.getBlockY() + radiusY; y++) {
+                for(int z = location.getBlockZ() - radiusZ; z <= location.getBlockZ() + radiusZ; z++) {
+                    blocks.add(location.getWorld().getBlockAt(x, y, z));
+                }
+            }
+        }
+
+        return blocks;
+    }
 }

@@ -3,6 +3,7 @@ package com.gladurbad.medusa.data.processor;
 import io.github.retrooper.packetevents.PacketEvents;
 import io.github.retrooper.packetevents.packetwrappers.play.in.transaction.WrappedPacketInTransaction;
 import io.github.retrooper.packetevents.packetwrappers.play.out.transaction.WrappedPacketOutTransaction;
+import io.github.retrooper.packetevents.utils.vector.Vector3d;
 import lombok.Getter;
 import com.gladurbad.medusa.Medusa;
 import com.gladurbad.medusa.data.PlayerData;
@@ -15,7 +16,7 @@ import java.util.concurrent.ThreadLocalRandom;
 public final class VelocityProcessor {
 
     private final PlayerData data;
-    private double velocityX, velocityY, velocityZ, lastVelocityX, lastVelocityY, lastVelocityZ;
+    private double velocityX, velocityY, velocityZ, velocityXZ, lastVelocityX, lastVelocityY, lastVelocityZ, lastVelocityXZ;
     private int maxVelocityTicks, velocityTicks, ticksSinceVelocity;
     private short transactionID, velocityID;
     private long transactionPing, transactionReply;
@@ -25,16 +26,19 @@ public final class VelocityProcessor {
         this.data = data;
     }
 
-    public void handle(final double velocityX, final double velocityY, final double velocityZ) {
+    public void handle(final Vector3d velocity) {
         this.ticksSinceVelocity = 0;
 
         lastVelocityX = this.velocityX;
         lastVelocityY = this.velocityY;
         lastVelocityZ = this.velocityZ;
+        lastVelocityXZ = velocityXZ;
 
-        this.velocityX = velocityX;
-        this.velocityY = velocityY;
-        this.velocityZ = velocityZ;
+        this.velocityX = velocity.getX();
+        this.velocityY = velocity.getY();
+        this.velocityZ = velocity.getZ();
+        velocityXZ = Math.hypot(velocityX, velocityZ);
+
 
         this.velocityID = (short) ThreadLocalRandom.current().nextInt(32767);
         this.verifyingVelocity = true;

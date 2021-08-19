@@ -18,7 +18,7 @@ import org.bukkit.potion.PotionEffectType;
 @CheckInfo(name = "Speed (B)", description = "Checks for movement speed.")
 public final class SpeedB extends Check {
 
-    private int groundTicks, airTicks;
+    private int airTicks;
 
     public SpeedB(final PlayerData data) {
         super(data);
@@ -27,14 +27,12 @@ public final class SpeedB extends Check {
     @Override
     public void handle(final Packet packet) {
         if (packet.isPosition() && !isExempt(ExemptType.TELEPORT, ExemptType.FLYING)) {
-            final WrappedPacketInFlying flying = new WrappedPacketInFlying(packet.getRawPacket());
-
             //We make this because the flag method of this check works a little bit differently.
             //This helps me avoid if else chains for flags/nested ternary operators.
             double speed = 0.0D;
 
-            groundTicks = flying.isOnGround() ? groundTicks + 1 : 0;
-            airTicks = !flying.isOnGround() ? airTicks + 1 : 0;
+            int groundTicks = data.getPositionProcessor().getGroundTicks();
+            airTicks = !data.getPositionProcessor().isOnGround() ? airTicks + 1 : 0;
 
             final PositionProcessor position = data.getPositionProcessor();
             final VelocityProcessor velocity = data.getVelocityProcessor();
@@ -89,10 +87,10 @@ public final class SpeedB extends Check {
             debug("speed=" + shiftedSpeed + " buffer=" + buffer + " velocity=" + isExempt(ExemptType.VELOCITY));
             if (shiftedSpeed > 100) {
                 if ((buffer += shiftedSpeed > 150 ? 60 : 20) > 100 || shiftedSpeed > 1000) {
-                    fail(String.format(
-                            "speed=%o%%, buffer=%.2f",
-                            Math.round(speed * 100), buffer
-                    ));
+                    fail("speed=" + Math.round(speed * 100) + " buffer=" + buffer + " dxz=" +
+                            deltaXZ + " vxz=" + data.getVelocityProcessor().getVelocityXZ() + " tst=" +
+                            data.getPositionProcessor().getSinceTeleportTicks()
+                    );
                     //Prevents the buffer from going too high and becoming redundant.
                     buffer = Math.min(350, buffer);
                 }

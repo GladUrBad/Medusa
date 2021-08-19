@@ -32,15 +32,14 @@ public final class MotionC extends Check {
             final double expectedJumpMotion = 0.42F + (double) ((float) PlayerUtil.getPotionLevel(data.getPlayer(), PotionEffectType.JUMP) * 0.1F);
 
             final double maxHighJump = 0.42F + (double) ((float) PlayerUtil.getPotionLevel(data.getPlayer(), PotionEffectType.JUMP) * 0.1F) +
-                    (data.getVelocityProcessor().getTicksSinceVelocity() < 5 ? data.getVelocityProcessor().getVelocityY() > 0 ? data.getVelocityProcessor().getVelocityY() : 0 : 0);
+                    (data.getVelocityProcessor().getTicksSinceVelocity() < 10 ? data.getVelocityProcessor().getVelocityY() > 0 ? data.getVelocityProcessor().getVelocityY() : 0 : 0);
 
             final boolean jumped = deltaY > 0 && lastPosY % (1D/64) == 0 && !onGround && !step;
 
             final boolean exempt = isExempt(
                     ExemptType.INSIDE_VEHICLE, ExemptType.FLYING, ExemptType.SLIME, ExemptType.UNDER_BLOCK,
                     ExemptType.PISTON, ExemptType.LIQUID, ExemptType.NEAR_VEHICLE, ExemptType.TELEPORT,
-                    ExemptType.WEB, ExemptType.TRAPDOOR
-            );
+                    ExemptType.WEB, ExemptType.TRAPDOOR, ExemptType.CLIMBABLE) || data.getPositionProcessor().isOnSlime();
 
             debug("deltaY" + deltaY + " ejm=" + expectedJumpMotion + " mhj=" + maxHighJump + " step=" + step);
             //Mini-jump check.

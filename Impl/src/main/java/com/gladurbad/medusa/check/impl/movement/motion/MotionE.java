@@ -5,9 +5,15 @@ import com.gladurbad.api.check.CheckInfo;
 import com.gladurbad.medusa.data.PlayerData;
 import com.gladurbad.medusa.exempt.type.ExemptType;
 import com.gladurbad.medusa.packet.Packet;
+import com.gladurbad.medusa.util.PlayerUtil;
+import org.bukkit.Location;
+import org.bukkit.block.Block;
 
 /**
- * Created on 11/17/2020 Package com.gladurbad.medusa.check.impl.movement.speed by GladUrBad
+ * Created by Spiriten.
+ *
+ * Completely redid the air movement check.
+ *
  */
 @CheckInfo(name = "Motion (E)", description = "Checks for switching direction mid-air.")
 public final class MotionE extends Check {
@@ -19,40 +25,65 @@ public final class MotionE extends Check {
     @Override
     public void handle(final Packet packet) {
         if (packet.isPosition()) {
-            final double deltaX = data.getPositionProcessor().getDeltaX();
-            final double lastDeltaX = data.getPositionProcessor().getLastDeltaX();
 
-            final double deltaZ = data.getPositionProcessor().getDeltaZ();
-            final double lastDeltaZ = data.getPositionProcessor().getLastDeltaZ();
+            //can false on velocity and piston, so just return
+            if (isExempt(ExemptType.VELOCITY, ExemptType.PISTON, ExemptType.PLACING, ExemptType.STEPPED,
+                    ExemptType.NEAR_VEHICLE, ExemptType.FLYING)) return;
 
-            final double absDeltaX = Math.abs(deltaX);
-            final double absDeltaZ = Math.abs(deltaZ);
+            //declare our booleans and set their default value
+            boolean midAirSwitchX = false, midAirSwitchZ = false;
 
-            final double absLastDeltaX = Math.abs(lastDeltaX);
-            final double absLastDeltaZ = Math.abs(lastDeltaZ);
+            //check if the player has an air block below them and arent clipping a block/placing blocks (can false if they
+            //place below them usually)
+            if (data.getPositionProcessor().isInAir()) {
+                //check if their deltaX is less than or higher than their previous
+                midAirSwitchX = data.getPositionProcessor().getDeltaX() != data.getPositionProcessor().getLastDeltaX();
+                //check if their deltaZ is less than or higher than their previous
+                midAirSwitchZ = data.getPositionProcessor().getDeltaZ() != data.getPositionProcessor().getLastDeltaZ();
+            }
 
-            if (data.getPositionProcessor().getAirTicks() > 2 && !isExempt(ExemptType.VELOCITY, ExemptType.NEAR_VEHICLE, ExemptType.TELEPORT, ExemptType.FLYING)) {
-                final boolean xSwitched = (deltaX > 0 && lastDeltaX < 0) || (deltaX < 0 && lastDeltaX > 0);
-                final boolean zSwitched = (deltaZ > 0 && lastDeltaZ < 0) || (deltaZ < 0 && lastDeltaZ > 0);
+            //declare our fenceBelow boolean
+            boolean fenceBelow = false;
 
-                if (xSwitched) {
-                    if (Math.abs(absDeltaX - absLastDeltaX) > 0.05) {
-                        if (++buffer > 1.25) {
-                            fail();
-                        }
+            //the util is slightly intensive, so only run when weve triggered out midAirSwitchX/Z
+            if (midAirSwitchX || midAirSwitchZ) {
+                //check if the player has a fence/wall below them. can cause falses, wont deal with it.
+                for (Block block : PlayerUtil.getNearbyBlocks(new Location(data.getPlayer().getWorld(), data.getPlayer().getLocation().getX(),
+                        data.getPlayer().getLocation().getY() - 2, data.getPlayer().getLocation().getZ()), 1, 0, 1)) {
+                    if ((block.getType().toString().contains("FENCE")) || (block.getType().toString().contains("WALL"))) {
+                        fenceBelow = true;
                     }
-                } else {
-                    buffer = Math.max(buffer - 0.05, 0);
                 }
-                if (zSwitched) {
-                    if (Math.abs(absDeltaZ - absLastDeltaZ) > 0.05) {
-                        if (++buffer > 1.25) {
-                            fail();
-                        }
-                    }
-                } else {
-                    buffer = Math.max(buffer - 0.05, 0);
+            }
+
+            double differenceDeltaX = (Math.abs(data.getPositionProcessor().getDeltaX()) -
+                    Math.abs(data.getPositionProcessor().getLastDeltaX()));
+
+            //check if they meet our criteria of: midAirSwitchX, higher deltaX than previous deltaX (absolute), and
+            //check if the deltaX is higher than lastDeltaX a certain amount. this is all necessary to prevent falses
+            if (midAirSwitchX && (Math.abs(data.getPositionProcessor().getDeltaX()) >
+                    Math.abs(data.getPositionProcessor().getLastDeltaX())) && !fenceBelow &&
+                    differenceDeltaX > 0.024 && Math.abs(data.getPositionProcessor().getLastDeltaX()) > 0.003) {
+                if (++buffer > 3) {
+                    fail("2 " + differenceDeltaX + " " + data.getPositionProcessor().getLastDeltaZ());
                 }
+            } else {
+                buffer = Math.max(buffer - 0.1, 0);
+            }
+
+            double differenceDeltaZ = (Math.abs(data.getPositionProcessor().getDeltaZ()) -
+                    Math.abs(data.getPositionProcessor().getLastDeltaZ()));
+
+            //check if they meet our criteria of: midAirSwitchZ, higher deltaZ than previous deltaZ (absolute), and
+            //check if the deltaZ is higher than lastDeltaZ a certain amount. this is all necessary to prevent falses
+            if (midAirSwitchZ && (Math.abs(data.getPositionProcessor().getDeltaZ()) >
+                    Math.abs(data.getPositionProcessor().getLastDeltaZ())) && !fenceBelow &&
+                    differenceDeltaZ > 0.024 && Math.abs(data.getPositionProcessor().getLastDeltaZ()) > 0.003) {
+                if (++buffer > 3) {
+                    fail("3 " + differenceDeltaZ + " " + data.getPositionProcessor().getLastDeltaZ());
+                }
+            } else {
+                buffer = Math.max(buffer - 0.1, 0);
             }
         }
     }

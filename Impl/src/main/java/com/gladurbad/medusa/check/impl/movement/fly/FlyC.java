@@ -15,7 +15,7 @@ import io.github.retrooper.packetevents.packetwrappers.play.in.flying.WrappedPac
  * is the way to go here to be more stable.
  */
 
-@CheckInfo(name = "Fly (C)", description = "Checks for ground-spoof.")
+@CheckInfo(name = "Fly (C)", description = "Checks for spoofing onground value.")
 public final class FlyC extends Check {
 
     public FlyC(final PlayerData data) {
@@ -27,7 +27,7 @@ public final class FlyC extends Check {
         if (packet.isPosition()) {
             final WrappedPacketInFlying wrapper = new WrappedPacketInFlying(packet.getRawPacket());
 
-            final boolean positionGround = wrapper.getY() % 0.015625 == 0;
+            final boolean positionGround = data.getPositionProcessor().isMathematicallyOnGround();
             final boolean packetGround = wrapper.isOnGround();
 
             final boolean exempt = isExempt(ExemptType.NEAR_VEHICLE, ExemptType.TELEPORT, ExemptType.CLIMBABLE,
@@ -35,12 +35,19 @@ public final class FlyC extends Check {
 
             debug(positionGround + " " + packetGround + " pos/packet");
 
-            if (!exempt && positionGround != packetGround) {
+            if (!exempt && data.getPositionProcessor().getSinceTeleportTicks() > 0 && positionGround != packetGround) {
                 if (++buffer > 4) {
-                    fail();
+                    fail("1 | tst=" + data.getPositionProcessor().getSinceTeleportTicks());
+                    //override their onGround value to false since we know they're faking it
+                    wrapper.setOnGround(false);
                 }
             } else {
                buffer = Math.max(buffer - 0.15, 0);
+               //while its not too likely to be the only one that'll flag, there shouldnt be a way to false this.
+               //check for mathematical onGround, air block below, and packet onGround. again, it shouldnt false
+            } if (!positionGround && data.getPositionProcessor().isInAir() && packetGround &&
+                !isExempt(ExemptType.NEAR_VEHICLE)) {
+                fail("2");
             }
         }
     }

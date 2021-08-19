@@ -45,10 +45,10 @@ public final class ReceivingPacketProcessor  {
             data.getVelocityProcessor().handleFlying();
             data.getCombatProcessor().handleFlying();
 
-            if (wrapper.isPosition()) {
-                data.getPositionProcessor().handle(wrapper.getX(), wrapper.getY(), wrapper.getZ(), wrapper.isOnGround());
+            if (wrapper.isMoving()) {
+                data.getPositionProcessor().handle(wrapper.getPosition(), wrapper.isOnGround());
             }
-            if (wrapper.isLook()) {
+            if (wrapper.isRotating()) {
                 data.getRotationProcessor().handle(wrapper.getYaw(), wrapper.getPitch());
             }
         } else if (packet.isArmAnimation()) {

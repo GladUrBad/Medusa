@@ -1,43 +1,51 @@
 package com.gladurbad.medusa.check.impl.movement.fly;
 
-import com.gladurbad.medusa.check.Check;
 import com.gladurbad.api.check.CheckInfo;
+import com.gladurbad.medusa.check.Check;
 import com.gladurbad.medusa.data.PlayerData;
 import com.gladurbad.medusa.exempt.type.ExemptType;
 import com.gladurbad.medusa.packet.Packet;
 
 /**
- * Created on 11/17/2020 Package com.gladurbad.medusa.check.impl.movement.fly by GladUrBad
+ * Created by Spiriten.
  */
 
-@CheckInfo(name = "Fly (B)", description = "Checks for jumping mid-air.")
+@CheckInfo(name = "Fly (B)", description = "Checks for air jump.")
 public final class FlyB extends Check {
-
-    private double lastAcceleration;
 
     public FlyB(final PlayerData data) {
         super(data);
     }
 
+    private double lastLastDeltaY;
+    private boolean wentDown;
+
     @Override
     public void handle(final Packet packet) {
-        if (packet.isPosition() && !isExempt(ExemptType.TELEPORT)) {
-            final double acceleration = data.getPositionProcessor().getDeltaY() - data.getPositionProcessor().getLastDeltaY();
-            final double airTicks = data.getPositionProcessor().getAirTicks();
-            final double deltaY = data.getPositionProcessor().getDeltaY();
+        if (packet.isPosition()) {
 
-            final boolean invalid = !isExempt(
-                    ExemptType.FLYING, ExemptType.VELOCITY, ExemptType.INSIDE_VEHICLE, ExemptType.NEAR_VEHICLE
-            ) && lastAcceleration <= 0 && acceleration > 0 && deltaY > 0;
+            //handle our exemptions
+            boolean isExempt = isExempt(ExemptType.PLACING, ExemptType.CLIMBABLE, ExemptType.STEPPED,
+                    ExemptType.LIQUID, ExemptType.SLIME, ExemptType.WEB, ExemptType.TELEPORT,
+                    ExemptType.VELOCITY, ExemptType.PISTON);
 
-            debug("airTicks=" + airTicks + " accel=" + acceleration);
-            if (airTicks > 10) {
-                if (invalid) {
-                    fail(String.format("accel=%.2f, at=%.2f", acceleration, airTicks));
+            //check if their deltaY is less than previous, and set our wentDown boolean to true if so.
+            if (data.getPositionProcessor().isInAir() && !data.getPositionProcessor().isOnGround()
+                    && !data.getPlayer().isFlying() && !isExempt) {
+                if (data.getPositionProcessor().getDeltaY() < data.getPositionProcessor().getLastDeltaY()) wentDown = true;
+            } else wentDown = false;
+
+            //check if theyre heading back up after previous going down. dont run if theyre placing blocks (can false)
+            if (data.getPositionProcessor().getDeltaY() > data.getPositionProcessor().getLastDeltaY() &&
+                    wentDown && data.getPositionProcessor().getDeltaY() > lastLastDeltaY) {
+                if (++buffer > 1.25) {
+                    fail();
                 }
+            } else {
+                buffer = Math.max(buffer - 0.1, 0);
             }
 
-            lastAcceleration = acceleration;
+            lastLastDeltaY = data.getPositionProcessor().getLastDeltaY();
         }
     }
 }

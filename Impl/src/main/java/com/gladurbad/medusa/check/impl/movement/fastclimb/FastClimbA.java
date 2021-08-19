@@ -46,7 +46,16 @@ public final class FastClimbA extends Check {
                 buffer = Math.max(buffer - 0.5, 0);
             }
 
-            if (fuckOff) fail(String.format("dy=%.2f > %.2f", deltaY, maximumNonBufferDeltaY));
+            //it seems like on ladders the players velocity is the deltaY he puts out. not fully tested
+            if (data.getVelocityProcessor().isTakingVelocity()) {
+
+                double velocityDiff = Math.abs(deltaY - data.getVelocityProcessor().getVelocityY());
+
+              if (velocityDiff > 0.0000001 && fuckOff) {
+                  fail("dy=" + deltaY + " mnbdy=" + maximumNonBufferDeltaY + " vy=" + data.getVelocityProcessor().getVelocityY() +
+                          " vd=" + velocityDiff);
+              }
+            } else if (fuckOff) fail("dy=" + deltaY + " mnbdy=" + maximumNonBufferDeltaY + " vy=" + data.getVelocityProcessor().getVelocityY());
         }
     }
 }

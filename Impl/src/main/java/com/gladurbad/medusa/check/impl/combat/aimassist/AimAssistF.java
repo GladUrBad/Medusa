@@ -23,9 +23,12 @@ public final class AimAssistF extends Check {
             final float deltaYaw = data.getRotationProcessor().getDeltaYaw();
             final float deltaPitch = data.getRotationProcessor().getDeltaPitch();
 
-            debug("tp=" + isExempt(ExemptType.TELEPORT));
+            debug("tp=" + isExempt(ExemptType.TELEPORT, ExemptType.INSIDE_VEHICLE));
 
-            if (deltaPitch == 0 && deltaYaw == 0 && !isExempt(ExemptType.TELEPORT)) fail();
+            if (deltaPitch == 0 && deltaYaw == 0 && !isExempt(ExemptType.TELEPORT, ExemptType.INSIDE_VEHICLE) &&
+            data.getPositionProcessor().getSinceTeleportTicks() > 0) fail(
+                    " tst=" + data.getPositionProcessor().getSinceTeleportTicks()
+            );
         }
     }
 }

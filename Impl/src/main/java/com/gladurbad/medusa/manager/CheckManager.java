@@ -12,10 +12,12 @@ import com.gladurbad.medusa.check.impl.combat.hitbox.HitBoxA;
 import com.gladurbad.medusa.check.impl.combat.reach.ReachB;
 import com.gladurbad.medusa.check.impl.combat.killaura.*;
 import com.gladurbad.medusa.check.impl.combat.velocity.VelocityA;
+import com.gladurbad.medusa.check.impl.combat.velocity.VelocityB;
 import com.gladurbad.medusa.check.impl.movement.fastclimb.FastClimbA;
 import com.gladurbad.medusa.check.impl.movement.fly.FlyA;
 import com.gladurbad.medusa.check.impl.movement.fly.FlyB;
 import com.gladurbad.medusa.check.impl.movement.fly.FlyC;
+import com.gladurbad.medusa.check.impl.movement.fly.FlyD;
 import com.gladurbad.medusa.check.impl.movement.jesus.JesusA;
 import com.gladurbad.medusa.check.impl.movement.jesus.JesusB;
 import com.gladurbad.medusa.check.impl.movement.motion.*;
@@ -24,6 +26,7 @@ import com.gladurbad.medusa.check.impl.movement.phase.PhaseA;
 import com.gladurbad.medusa.check.impl.movement.speed.*;
 import com.gladurbad.medusa.check.impl.movement.speed.SpeedC;
 import com.gladurbad.medusa.check.impl.player.hand.HandA;
+import com.gladurbad.medusa.check.impl.player.hand.HandB;
 import com.gladurbad.medusa.check.impl.player.inventory.InventoryA;
 import com.gladurbad.medusa.check.impl.player.inventory.InventoryB;
 import com.gladurbad.medusa.check.impl.player.protocol.*;
@@ -69,10 +72,12 @@ public final class CheckManager {
             HitBoxA.class,
             ReachB.class,
             VelocityA.class,
+            VelocityB.class,
             FastClimbA.class,
             FlyA.class,
             FlyB.class,
             FlyC.class,
+            FlyD.class,
             JesusA.class,
             JesusB.class,
             MotionA.class,
@@ -89,6 +94,7 @@ public final class CheckManager {
             TimerB.class,
             TimerC.class,
             HandA.class,
+            HandB.class,
             InventoryA.class,
             InventoryB.class,
             ScaffoldA.class,
@@ -104,7 +110,8 @@ public final class CheckManager {
             ProtocolG.class,
             ProtocolH.class,
             ProtocolI.class,
-            ProtocolJ.class
+            ProtocolJ.class,
+            ProtocolK.class
     };
 
     private static final List<Constructor<?>> CONSTRUCTORS = new ArrayList<>();

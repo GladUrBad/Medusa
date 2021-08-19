@@ -3,10 +3,12 @@ package com.gladurbad.medusa.check.impl.movement.speed;
 import com.gladurbad.medusa.check.Check;
 import com.gladurbad.api.check.CheckInfo;
 import com.gladurbad.medusa.data.PlayerData;
+import com.gladurbad.medusa.exempt.type.ExemptType;
 import com.gladurbad.medusa.packet.Packet;
 
 /**
- * Created on 11/17/2020 Package com.gladurbad.medusa.check.impl.movement.speed by GladUrBad
+ * Created by Spiriten.
+ * added since Medusa's previous would just exempt on velocity. This allowed for long jump bypasses.
  */
 
 @CheckInfo(name = "Speed (A)", description = "Checks for horizontal friction.")
@@ -19,24 +21,40 @@ public final class SpeedA extends Check {
     @Override
     public void handle(final Packet packet) {
         if (packet.isPosition()) {
-            final double deltaXZ = data.getPositionProcessor().getDeltaXZ();
-            final double lastDeltaXZ = data.getPositionProcessor().getLastDeltaXZ();
+            if (!data.getPositionProcessor().isOnGround() && !data.getPositionProcessor().isLastOnGround()) {
 
-            final double prediction = lastDeltaXZ * 0.91F + (data.getActionProcessor().isSprinting() ? 0.026 : 0.02);
-            final double difference = deltaXZ - prediction;
+                //stole the if Y thing is same as last from hades. it seems to prevent some niche false positives.
+                if (data.getPlayer().isFlying() || (data.getPositionProcessor().getY() == data.getPositionProcessor().getLastY())
+                        || isExempt(ExemptType.WEB, ExemptType.TELEPORT, ExemptType.CLIMBABLE, ExemptType.TELEPORT)) return;
 
-            final boolean invalid = difference > 1e-12 &&
-                    data.getPositionProcessor().getAirTicks() > 2 &&
-                    !data.getPositionProcessor().isFlying() &&
-                    !data.getPositionProcessor().isNearVehicle();
+                //afaik this is actually the first tick after teleport. it can false with teleport spam
+                if (data.getPositionProcessor().getSinceTeleportTicks() < 2) return;
 
-            debug("diff=" + difference);
-            if (invalid) {
-                if ((buffer += buffer < 100 ? 5 : 0) > 40) {
-                    fail(String.format("diff=%.4f", difference));
-                }
-            } else {
-                buffer = Math.max(buffer - 1, 0);
+                //0.0259 is probably not entirely accurate, but thats the closest i got from debugging
+                //while in the air the deltaXZ should reduce by 0.91x each packet. the 0.0259 is whats leftover from debugging
+                //made it a floating point as Izibane likes to yell at me to make all minecraft variables them
+                double prediction = data.getPositionProcessor().getLastDeltaXZ() * 0.91F + 0.0259F;
+                double accuracy = (data.getPositionProcessor().getDeltaXZ() - prediction);
+
+                //i could try to go for higher accuracy, but knowing me id mess something up and need a buffer. having no
+                //buffer is better than accuracy for this type of check imo.
+                if (accuracy > 0.001 && data.getPositionProcessor().getDeltaXZ() > 0.1) {
+                    //if the player isnt taking knockback and doesnt meet our accuracy, then flag
+                    if (!data.getVelocityProcessor().isTakingVelocity()) {
+                        if (++buffer > 1.5) {
+                            fail("exp=" + prediction + " got=" + data.getPositionProcessor().getDeltaXZ() + " tst="
+                                    + data.getPositionProcessor().getSinceTeleportTicks());
+                            //if the player is taking knockback, we have to account that into it. when in the air you only
+                            //take the knockback, it resets all momentum as far as i know. so compare our velocityXZ to our
+                            //deltaXZ. from my testing it can be off by about 0.04, so check if the margin is greater than that.
+                        }
+                    } else if (Math.abs(data.getVelocityProcessor().getVelocityXZ() -
+                            data.getPositionProcessor().getDeltaXZ()) > 0.04 && data.getVelocityProcessor().isTakingVelocity()) {
+                        fail("exp=" + prediction + " got=" + data.getPositionProcessor().getDeltaXZ() + " vel=" +
+                                data.getVelocityProcessor().getVelocityXZ() + " tst="
+                                + data.getPositionProcessor().getSinceTeleportTicks());
+                    } else buffer = Math.max(buffer - 0.1, 0);
+                } else buffer = Math.max(buffer - 0.1, 0);
             }
         }
     }

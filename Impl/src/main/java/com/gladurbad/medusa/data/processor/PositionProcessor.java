@@ -7,6 +7,7 @@ import com.gladurbad.medusa.Medusa;
 import com.gladurbad.medusa.data.PlayerData;
 import io.github.retrooper.packetevents.packetwrappers.play.in.flying.WrappedPacketInFlying;
 import io.github.retrooper.packetevents.packetwrappers.play.out.position.WrappedPacketOutPosition;
+import io.github.retrooper.packetevents.utils.vector.Vector3d;
 import lombok.Getter;
 import lombok.Setter;
 import org.bukkit.*;
@@ -32,16 +33,18 @@ public final class PositionProcessor {
             deltaX, deltaY, deltaZ, deltaXZ,
             lastDeltaX, lastDeltaZ, lastDeltaY, lastDeltaXZ;
 
-    private boolean flying, inVehicle, inLiquid, inAir, inWeb,
-            blockNearHead, onClimbable, onSolidGround, nearVehicle, onSlime,
+    private boolean flying, inVehicle, inLiquid, inAir, inWeb, onWallOrFence,
+            blockNearHead, onClimbable, onSolidGround, nearVehicle, onSlime, lastInAir,
             onIce, nearPiston, nearTrapdoor, nearSlab, nearStairs, teleporting;
 
     private int airTicks, sinceVehicleTicks, sinceFlyingTicks,
             groundTicks, sinceSlimeTicks, solidGroundTicks,
             iceTicks, sinceIceTicks, blockNearHeadTicks, sinceBlockNearHeadTicks,
-            sinceNearPistonTicks, tpBandaidFixTicks;
+            sinceNearPistonTicks, sinceTeleportTicks;
 
     private final ArrayDeque<Vector> teleports = new ArrayDeque<>();
+
+    private Vector newTeleportingVec;
 
     private BoundingBox boundingBox;
 
@@ -53,27 +56,15 @@ public final class PositionProcessor {
         this.data = data;
     }
 
-    public void handle(final double x, final double y, final double z, final boolean onGround) {
-        //FIX THIS TELEPORT SYSTEM.
-        if (teleports.size() > 0) {
-            tpBandaidFixTicks = 2;
-            teleporting = true;
-        }
-
-        if (teleports.size() == 0) {
-            if (--tpBandaidFixTicks < 0) {
-                teleporting = false;
-            }
-        }
-
+    public void handle(final Vector3d position, final boolean onGround) {
         lastX = this.x;
         lastY = this.y;
         lastZ = this.z;
         this.lastOnGround = this.onGround;
 
-        this.x = x;
-        this.y = y;
-        this.z = z;
+        this.x = position.getX();
+        this.y = position.getY();
+        this.z = position.getZ();
         this.onGround = onGround;
 
         handleCollisions();
@@ -88,24 +79,25 @@ public final class PositionProcessor {
         deltaZ = this.z - lastZ;
         deltaXZ = Math.hypot(deltaX, deltaZ);
 
-        if (teleports.size() > 150) {
-            teleports.remove(0);
-        }
-
-        for (Vector vector : teleports) {
-            final double dx = Math.abs(x - vector.getX());
-            final double dy = Math.abs(y - vector.getY());
-            final double dz = Math.abs(z - vector.getZ());
-
-            if (dx == 0 && dy == 0 && dz == 0) {
-                teleports.remove(vector);
-            }
-        }
+        //in order to not run uselessly we have to check if we havent set the teleporting vector to null
+        //this allows us to also not have any of that random code that was used in the previous teleport manager
+        if (newTeleportingVec != null) {
+            //the players packet response to the teleport should be sending the same coordinates back what it accepted.
+            //if its not, then they are not actually teleporting
+            if (newTeleportingVec.getX() == x && newTeleportingVec.getY() == y && newTeleportingVec.getZ() == z) {
+                //set teleporting to true and set it to null so it wont run
+                teleporting = true;
+                newTeleportingVec = null;
+                //if they did not resend the coordinates they were sent, its safe to say that they did not teleport
+            } else teleporting = false;
+            //if the teleporting vector is set to null, then its not been set by teleporting
+        } else teleporting = false;
 
         mathematicallyOnGround = y % 0.015625 == 0.0;
     }
 
     public void handleTicks() {
+        sinceTeleportTicks = teleporting ? 0 : sinceTeleportTicks + 1;
         groundTicks = onGround && mathematicallyOnGround ? groundTicks + 1 : 0;
         blockNearHeadTicks = blockNearHead ? blockNearHeadTicks + 1 : 0;
         sinceNearPistonTicks = nearPiston ? 0 : sinceNearPistonTicks + 1;
@@ -148,6 +140,8 @@ public final class PositionProcessor {
         handleClimbableCollision();
         handleVehicle();
 
+        lastInAir = inAir;
+
         inLiquid = blocks.stream().anyMatch(Block::isLiquid);
         inWeb = blocks.stream().anyMatch(block -> block.getType() == Material.WEB);
         inAir = blocks.stream().allMatch(block -> block.getType() == Material.AIR);
@@ -156,10 +150,17 @@ public final class PositionProcessor {
         nearSlab = blocks.stream().anyMatch(block -> block.getType().getData() == Step.class);
         nearStairs = blocks.stream().anyMatch(block -> block.getType().getData() == Stairs.class);
         nearTrapdoor = this.isCollidingAtLocation(1.801, material -> material == Material.TRAP_DOOR, CollisionType.ANY);
-        blockNearHead = blocks.stream().filter(block -> block.getLocation().getY() - data.getPositionProcessor().getY() > 1.5)
-                .anyMatch(block -> block.getType() != Material.AIR) || nearTrapdoor;
+        //block near head may look like an overcomplicated shitfest now, but it works :shrug:
+        //it should prevent all of those jumping under a trapdoor falses
+        blockNearHead = blocks.stream().filter(block -> block.getLocation().getY() - data.getPositionProcessor().getY() > 1.7)
+                .anyMatch(block -> block.getType() != Material.AIR)
+                || this.isCollidingAtLocation(1.801, material -> material == Material.TRAP_DOOR, CollisionType.ANY)
+                || this.isCollidingAtLocation(1.801, material -> material == Material.IRON_TRAPDOOR, CollisionType.ANY)
+                || this.isCollidingAtLocation(2, material -> material != Material.AIR, CollisionType.ANY);
         onSlime = blocks.stream().anyMatch(block -> block.getType().toString().equalsIgnoreCase("SLIME_BLOCK"));
         nearPiston = blocks.stream().anyMatch(block -> block.getType().toString().contains("PISTON"));
+        onWallOrFence = blocks.stream().anyMatch(block -> block.getType().toString().contains("WALL"))
+                || blocks.stream().anyMatch(block -> block.getType().toString().contains("FENCE"));
         handleTicks();
     }
 
@@ -178,13 +179,9 @@ public final class PositionProcessor {
     }
 
     public void handleServerPosition(final WrappedPacketOutPosition wrapper) {
-        final Vector teleportVector = new Vector(
-                wrapper.getX(),
-                wrapper.getY(),
-                wrapper.getZ()
-        );
-
-        teleports.add(teleportVector);
+        //set our teleport vec to save our teleport location
+        newTeleportingVec = new Vector(wrapper.getPosition().getX(), wrapper.getPosition().getY(),
+                wrapper.getPosition().getZ());
     }
 
     public boolean isColliding(CollisionType collisionType, Material blockType) {

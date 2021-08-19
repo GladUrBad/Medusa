@@ -16,7 +16,7 @@ public enum ExemptType {
 
     TPS(data -> ServerUtil.getTPS() < 18.5D),
 
-    TELEPORT(data -> data.getPositionProcessor().isTeleporting() || System.currentTimeMillis() - data.getJoinTime() < 2000L),
+    TELEPORT(data -> System.currentTimeMillis() - data.getJoinTime() < 2000L || data.getPositionProcessor().isTeleporting()),
 
     VELOCITY(data -> data.getVelocityProcessor().isTakingVelocity()),
 

@@ -1,6 +1,7 @@
 package com.gladurbad.medusa.data.processor;
 
 import com.gladurbad.medusa.util.MathUtil;
+import io.github.retrooper.packetevents.packetwrappers.play.out.position.WrappedPacketOutPosition;
 import lombok.Getter;
 import com.gladurbad.medusa.Medusa;
 import com.gladurbad.medusa.data.PlayerData;
@@ -15,7 +16,8 @@ public final class RotationProcessor {
 
     private float yaw, pitch, lastYaw, lastPitch,
         deltaYaw, deltaPitch, lastDeltaYaw, lastDeltaPitch,
-        joltYaw, joltPitch, lastJoltYaw, lastJoltPitch, gcd;
+        joltYaw, joltPitch, lastJoltYaw, lastJoltPitch, gcd,
+        teleportYaw, teleportPitch;
 
     private int sensitivity, lastCinematic, cinematicTicks;
 
@@ -101,5 +103,10 @@ public final class RotationProcessor {
 
             sensitivitySamples.clear();
         }
+    }
+
+    public void handleServerRotation(WrappedPacketOutPosition wrapper) {
+        teleportPitch = wrapper.getPitch();
+        teleportYaw = wrapper.getYaw();
     }
 }

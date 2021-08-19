@@ -31,6 +31,7 @@ appearance:
 
   themes:
     - "Medusa$ &aMedusa » &f%player% &7failed &f%checkName% (%checkType%) &7(x%vl%) &c%dev%$ &a &2"
+    - "Skidusa$ &4&lSkidusa&r&7 » &4%player%&7 flagged &4%checkName% &7(&4%checkType%&7) (&4x%vl%&7) &4%dev%$ &c &4"
     - "Overflow$ &7[&cMedusa&7] %player% flagged &c%checkName% (type %checkType%) VL: &c%vl% %dev%$ &c &4"
     - "Sparky$ &eMedusa &7> &6%player% &7has failed &6%checkName% (%checkType%) &cx%vl%$ &6 &e"
     - "Karhu$ &8[&b&lMedusa&r&8] &3%player% &8- &3%checkName% %checkType% &f%dev% &3(&bx%vl%&3)$ &b &3"
@@ -243,6 +244,11 @@ checks:
         # maximum-velocity-percentage: How high the velocity of the player can be before being flagged.
         minimum-velocity-percentage: 100
         maximum-velocity-percentage: 100
+      # WIP higher accuracy vertical velocity check.
+      b:
+        enabled: false
+        max-violations: 0
+        punish-command: ''
   # Movement Detections: Offers various checks designed to detect blatant movement advantages.
   movement:
     # FastClimb Detection: Checks if the player moves too quickly on ladders.
@@ -266,6 +272,11 @@ checks:
         punish-command: ''
       # Checks if the player claims to be on ground while in air.
       c:
+        enabled: true
+        max-violations: 10
+        punish-command: ''
+      # Checks if the player claims to be on ground while in air.
+      d:
         enabled: true
         max-violations: 10
         punish-command: ''
@@ -342,6 +353,11 @@ checks:
         enabled: true
         max-violations: 0
         punish-command: ''
+      # Checks for fast place tendencies.
+      b:
+        enabled: true
+        max-violations: 10
+        punish-command: ''
     # Inventory Detections: Checks for various cheats related to inventory (InventoryWalk, ChestSteal)
     inventory:
       # Checks if the player is moving while in their inventory.
@@ -403,6 +419,11 @@ checks:
         punish-command: ''
       # Checks if the player is attacking and digging at the same time.
       j:
+        enabled: true
+        max-violations: 15
+        punish-command: ''
+      # Checks if the player does not obey teleport rotation.
+      k:
         enabled: true
         max-violations: 15
         punish-command: ''
