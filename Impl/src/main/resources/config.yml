@@ -30,18 +30,67 @@ appearance:
   # %tps% - TPS of the server.
 
   themes:
-    - "Medusa$ &aMedusa » &f%player% &7failed &f%checkName% (%checkType%) &7(x%vl%) &c%dev%$ &a &2"
-    - "Overflow$ &7[&cMedusa&7] %player% flagged &c%checkName% (type %checkType%) VL: &c%vl% %dev%$ &c &4"
-    - "Sparky$ &eMedusa &7> &6%player% &7has failed &6%checkName% (%checkType%) &cx%vl%$ &6 &e"
-    - "Karhu$ &8[&b&lMedusa&r&8] &3%player% &8- &3%checkName% %checkType% &f%dev% &3(&bx%vl%&3)$ &b &3"
-    - "Rock$ &8[&c!&8] &f%player% &7may be using &f%checkName% &c(%vl%)$ &c &c"
-    - "Vulcan$ &8[&c&l!&8] &c%player% &7failed &b%checkName% (Type %checkType%) &7[VL: &c%vl%&7]$ &c &7"
-    - "VulcanNew$ &cMedusa &8/ &c%player% &7failed &b%checkName% &7(&bType %checkType%&7) (%vl%/%maxvl%)$ %b %3"
-    - "AAC$ &7[&6MEDUSA&7] &2[CONSOLE] &f%player% is suspected of using %checkName% (%ping%ms, %tps%TPS)$ %f %6"
-    - "Spartan$ &8[&2Medusa&8] &c%player% failed %checkName% (VL: %vl%) &8(&fPing: %ping%ms&8) (&fTPS: %tps%&8) (&freason: type %checkType%, hover for more info.&8)$ &a &2"
-    - "GodsEye$ &6Medusa >> &c%player% &7failed &c%checkName% &8[&fType%checkType%&8] [&fx%vl%&8]$ &6 &c"
-    - "Reflex$ &5Medusa &8» &7%player% &f%checkName% %checkType% &d%vl%/%maxvl% &7| ping: %ping% | tps: %tps%$ &d &5"
-    - "Iris$ &8[&b&lMedusa&r&8] &f%player% &7has failed &f%checkName% (%checkType%) &c(x%vl%)$ &7 &b"
+    Medusa:
+      message: 'Medusa » &f%player% &7failed &f%checkName% (%checkType%) &7(x%vl%) &c%dev%'
+      colors:
+        - '&a'
+        - '&2'
+    Overflow:
+      message: '&7[&cMedusa&7] %player% flagged &c%checkName% (type %checkType%) VL: &c%vl% %dev%'
+      colors:
+        - '&c'
+        - '&4'
+    Sparky:
+      message: '&eMedusa &7> &6%player% &7has failed &6%checkName% (%checkType%) &cx%vl%'
+      colors:
+        - '&6'
+        - '&e'
+    Karhu:
+      message: '&8[&b&lMedusa&r&8] &3%player% &8- &3%checkName% %checkType% &f%dev% &3(&bx%vl%&3)'
+      colors:
+        - '&b'
+        - '&3'
+    Rock:
+      message: '&8[&c!&8] &f%player% &7may be using &f%checkName% &c(%vl%)'
+      colors:
+        - '&c'
+        - '&c'
+    Vulcan:
+      message: '&8[&c&l!&8] &c%player% &7failed &b%checkName% (Type %checkType%) &7[VL: &c%vl%&7]'
+      colors:
+        - '&c'
+        - '&7'
+    VulcanNew:
+      message: '&cMedusa &8/ &c%player% &7failed &b%checkName% &7(&bType %checkType%&7) (%vl%/%maxvl%)'
+      colors:
+        - '&b'
+        - '&3'
+    AAC:
+      message: '&7[&6MEDUSA&7] &2[CONSOLE] &f%player% is suspected of using %checkName% (%ping%ms, %tps%TPS)'
+      colors:
+        - '&f'
+        - '&6'
+    Spartan:
+      message: '&8[&2Medusa&8] &c%player% failed %checkName% (VL: %vl%) &8(&fPing: %ping%ms&8) (&fTPS: %tps%&8) (&freason: type %checkType%, hover for more info.&8)'
+      colors:
+        - '&a'
+        - '&2'
+    GodsEye:
+      message: '&6Medusa >> &c%player% &7failed &c%checkName% &8[&fType%checkType%&8] [&fx%vl%&8]'
+      colors:
+        - '&6'
+        - '&c'
+    Reflex:
+      message: '&5Medusa &8» &7%player% &f%checkName% %checkType% &d%vl%/%maxvl% &7| ping: %ping% | tps: %tps%'
+      colors:
+        - '&d'
+        - '&5'
+    Iris:
+      message: '&8[&b&lMedusa&r&8] &f%player% &7has failed &f%checkName% (%checkType%) &c(x%vl%)'
+      colors:
+        - '&7'
+        - '&b'
+
   # Accent colours. Changes color look of aspects of Medusa.
   accents:
     accentOne: '&a'

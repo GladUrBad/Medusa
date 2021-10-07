@@ -1,5 +1,6 @@
 package com.gladurbad.medusa.manager;
 
+import com.gladurbad.medusa.Medusa;
 import com.gladurbad.medusa.config.Config;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -12,18 +13,18 @@ public final class ThemeManager {
 
     public static final List<Theme> themes = new ArrayList<>();
 
-    //This is so jank, maybe I will rewrite it in the future.
     public static void setup() {
         for (String str : Config.THEMES) {
-            final String[] themePieces = str.split("\\$ ");
-            final String[] accentColourCodes = themePieces[2].split(" ");
+            final String message = Medusa.INSTANCE.getPlugin().getConfig().getString("appearance.themes." + str + ".message");
+            final List<String> colors = Medusa.INSTANCE.getPlugin().getConfig().getStringList("appearance.themes." + str + ".colors");
 
             final List<ChatColor> accentColourList = new ArrayList<>();
 
-            for (String string : accentColourCodes) {
+            for (String string : colors) {
                 accentColourList.add(ChatColor.getByChar(string.charAt(1)));
             }
-            final Theme theme = new Theme(themePieces[0], themePieces[1], accentColourList);
+
+            final Theme theme = new Theme(str, message, accentColourList);
             themes.add(theme);
         }
     }

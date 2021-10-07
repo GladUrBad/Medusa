@@ -45,7 +45,6 @@ public final class HitBoxA extends Check {
             final Entity target = data.getCombatProcessor().getTarget();
             final Entity lastTarget = data.getCombatProcessor().getLastTarget();
 
-
             if (wrapper.getAction() != WrappedPacketInUseEntity.EntityUseAction.ATTACK
                     || data.getPlayer().getGameMode() != GameMode.SURVIVAL
                     || !(target instanceof Player || target instanceof Villager)
