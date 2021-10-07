@@ -1,24 +1,9 @@
 # Medusa Anticheat
-This anticheat (formerly known as AntiMoveHack) started because I got bored. 
-Now, I've decided to make it a free anticheat on Spigot.
-Medusa is very young, I started it late August 2020. As such, it will have lots of mistakes and lots of code for you to cringe at, just because I wanted to get something working for fun.
 
-I will be adding some extra combat checks soon, and some better movement checks, as the current ones are quite lacking.
+Anticheat for Spigot (and *some* related forks) servers.
 
-Contributors: 
+Supports 1.7/1.8 primarily, 1.9-1.12 support is experimental and will be fully implemented soon.
 
-Frep & Tecnio (took some things from our private ac) and Keepsprint check from Frep
+https://www.spigotmc.org/resources/medusa-anticheat-fast-and-reliable-detections-3-2-reach-detection.83345/
 
-Pirro - some random fixes
-
-Toon - helped me understand some things I can do better
-
-Elevated (Killaura D)
-
-Sms_Gamer (Multiple fixes, Killaura F, new com.gladurbad.medusa.config system)
-
-Dawson (Funkemunky) - Added API system, restructured project
-
-rbuh (Inventory B)
-
-True-CC - some random improvements
+https://www.mc-market.org/resources/18684/

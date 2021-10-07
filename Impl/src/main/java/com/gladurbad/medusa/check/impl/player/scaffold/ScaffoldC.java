@@ -1,40 +1,30 @@
 package com.gladurbad.medusa.check.impl.player.scaffold;
 
-import com.gladurbad.medusa.check.Check;
 import com.gladurbad.api.check.CheckInfo;
-import com.gladurbad.medusa.network.Packet;
-import com.gladurbad.medusa.playerdata.PlayerData;
-import io.github.retrooper.packetevents.packettype.PacketType;
+import com.gladurbad.medusa.check.Check;
+import com.gladurbad.medusa.data.PlayerData;
+import com.gladurbad.medusa.packet.Packet;
+import io.github.retrooper.packetevents.packetwrappers.play.in.blockplace.WrappedPacketInBlockPlace;
+import io.github.retrooper.packetevents.utils.player.Direction;
 
-@CheckInfo(name = "Scaffold", type = "C", dev = true)
-public class ScaffoldC extends Check {
+@CheckInfo(name = "Scaffold (C)", description = "Checks for downwards scaffold.", experimental = true)
+public final class ScaffoldC extends Check {
 
-    private double lastDeltaY;
-
-    public ScaffoldC(PlayerData data) {
+    public ScaffoldC(final PlayerData data) {
         super(data);
     }
 
     @Override
-    public void handle(Packet packet) {
-        if (packet.isReceiving()) {
-            if (packet.getPacketId() == PacketType.Client.BLOCK_PLACE) {
-                if (!data.getPlayer().getItemInHand().getType().isBlock()) return;
-                final double deltaY = data.getDeltaY();
-                final double acceleration = Math.abs(deltaY - lastDeltaY);
+    public void handle(final Packet packet) {
+        if (packet.isBlockPlace()) {
+            final WrappedPacketInBlockPlace wrapper = new WrappedPacketInBlockPlace(packet.getRawPacket());
 
-                if (deltaY > 0) {
-                    if (acceleration == 0.0) {
-                        increaseBuffer();
-                        if (buffer > 8) {
-                            fail();
-                        }
-                    } else {
-                        decreaseBufferBy(2);
+            if (!(wrapper.getBlockPosition().getX() == 1 && wrapper.getBlockPosition().getY() == 1 && wrapper.getBlockPosition().getZ() == 1)) {
+                if (data.getPlayer().getItemInHand().getType().isBlock()) {
+                    if (wrapper.getDirection() == Direction.DOWN) {
+                        if (wrapper.getBlockPosition().getY() < data.getPositionProcessor().getY()) fail();
                     }
                 }
-
-                lastDeltaY = deltaY;
             }
         }
     }

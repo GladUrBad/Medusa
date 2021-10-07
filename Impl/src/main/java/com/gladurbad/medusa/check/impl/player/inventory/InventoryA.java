@@ -1,40 +1,34 @@
 package com.gladurbad.medusa.check.impl.player.inventory;
 
-import com.gladurbad.medusa.check.Check;
 import com.gladurbad.api.check.CheckInfo;
-import com.gladurbad.medusa.network.Packet;
-import com.gladurbad.medusa.playerdata.PlayerData;
-import io.github.retrooper.packetevents.packettype.PacketType;
+import com.gladurbad.medusa.check.Check;
+import com.gladurbad.medusa.data.PlayerData;
+import com.gladurbad.medusa.packet.Packet;
 
-@CheckInfo(name = "Inventory", type = "A")
+@CheckInfo(name = "Inventory (A)", description = "Checks for sprinting in inventory.", experimental = true)
+public final class InventoryA extends Check {
 
-public class InventoryA extends Check {
-
-    private int clickTicks, lastClickTicks;
-
-    public InventoryA(PlayerData data) {
+    public InventoryA(final PlayerData data) {
         super(data);
     }
 
     @Override
-    public void handle(Packet packet) {
-        if (packet.isReceiving() && packet.getPacketId() == PacketType.Client.WINDOW_CLICK) {
-            //debug(clickTicks);
-
-            if (clickTicks == 1 || (lastClickTicks == 1 && clickTicks == 0)) {
-                increaseBuffer();
-                if (buffer > 5) {
-                    fail();
-                    buffer /= 2;
+    public void handle(final Packet packet) {
+        if (packet.isPosition()) {
+            if (data.getActionProcessor().isInventory()) {
+                if (data.getActionProcessor().isSprinting()) {
+                    if (++buffer > 5) {
+                        fail();
+                        if (buffer >= 20) {
+                            data.getPlayer().closeInventory();
+                            buffer = 0;
+                            data.getActionProcessor().setInventory(false);
+                        }
+                    }
+                } else {
+                    buffer -= buffer > 0 ? 1 : 0;
                 }
-            } else {
-                decreaseBufferBy(2);
             }
-
-            lastClickTicks = clickTicks;
-            clickTicks = 0;
-        } else if (packet.isReceiving() && packet.isFlying()) {
-            ++clickTicks;
         }
     }
 }

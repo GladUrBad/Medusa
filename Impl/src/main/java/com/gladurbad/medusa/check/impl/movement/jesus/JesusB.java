@@ -1,37 +1,64 @@
 package com.gladurbad.medusa.check.impl.movement.jesus;
 
-import com.gladurbad.medusa.check.Check;
 import com.gladurbad.api.check.CheckInfo;
-import com.gladurbad.medusa.network.Packet;
-import com.gladurbad.medusa.playerdata.PlayerData;
-import com.gladurbad.medusa.util.CollisionUtil;
+import com.gladurbad.medusa.check.Check;
+import com.gladurbad.medusa.data.PlayerData;
+import com.gladurbad.medusa.exempt.type.ExemptType;
+import com.gladurbad.medusa.packet.Packet;
+import com.gladurbad.medusa.util.MathUtil;
+import com.gladurbad.medusa.util.PlayerUtil;
+import io.github.retrooper.packetevents.utils.player.ClientVersion;
 import org.bukkit.Material;
-import org.bukkit.entity.Player;
+import org.bukkit.block.Block;
 
-@CheckInfo(name = "Jesus", type = "B")
+import java.util.List;
+
+@CheckInfo(name = "Jesus (B)", description = "Checks for irregular swimming accelerations.")
 public class JesusB extends Check {
+    public JesusB(PlayerData data) {
+        super(data);
+    }
 
-	public JesusB(PlayerData data) {
-		super(data);
-	}
+    private double lastAccel;
 
-	@Override
-	public void handle(Packet packet) {
-		if (packet.isFlying()) {
-			final Player player = data.getPlayer();
+    @Override
+    public void handle(Packet packet) {
+        if (packet.isPosition()) {
+            final List<Block> blocks = data.getPositionProcessor().getBlocks();
 
-			final boolean invalid = CollisionUtil.isOnChosenBlock(player, 0.1, Material.WATER, Material.STATIONARY_WATER) &&
-					!CollisionUtil.isOnSolid(player) && data.getDeltaY() == 0.0D;
+            final boolean touchingLily = blocks.stream().anyMatch(block -> block.getType() == Material.WATER_LILY);
+            final boolean touchingWater = data.getPositionProcessor().isInLiquid();
+            final boolean nearGround = data.getPositionProcessor().isOnSolidGround();
 
-			if (invalid) {
-				increaseBuffer();
-				if (buffer > 10) {
-					fail();
-				}
-			} else {
-				decreaseBuffer();
-				setLastLegitLocation(player.getLocation());
-			}
-		}
-	}
+            final boolean exempt = isExempt(ExemptType.VELOCITY, ExemptType.FLYING, ExemptType.DEPTH_STRIDER)
+                    || touchingLily
+                    || nearGround;
+
+            final double deltaY = data.getPositionProcessor().getDeltaY();
+            final double lastDeltaY = data.getPositionProcessor().getLastDeltaY();
+
+            final double accel = Math.abs(deltaY - lastDeltaY);
+            final double lastAccel = this.lastAccel;
+
+            this.lastAccel = accel;
+
+            final double diff = Math.abs(accel - lastAccel);
+
+            final ClientVersion clientVersion = PlayerUtil.getClientVersion(data.getPlayer());
+
+            final boolean invalidAccel = diff == 0
+                    && clientVersion.isLowerThanOrEquals(ClientVersion.v_1_12_2)
+                    && Math.abs(deltaY) <= 0.05;
+
+            final double deltaMax = clientVersion.isHigherThanOrEquals(ClientVersion.v_1_13) ? 0.45 : 0.101;
+
+            final boolean invalidDelta = deltaY == 0 || MathUtil.isScientificNotation(deltaY) || deltaY > deltaMax;
+
+            if (!exempt && touchingWater && (invalidAccel || invalidDelta)) {
+                if (++buffer > 15) fail("dY= " + deltaY + " diff= " + diff);
+            } else {
+                buffer = Math.max(buffer - 0.5, 0);
+            }
+        }
+    }
 }

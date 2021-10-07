@@ -1,75 +1,81 @@
 package com.gladurbad.medusa.check.impl.combat.reach;
 
 import com.gladurbad.api.check.CheckInfo;
+import com.gladurbad.medusa.Medusa;
 import com.gladurbad.medusa.check.*;
+import com.gladurbad.medusa.config.Config;
 import com.gladurbad.medusa.config.ConfigValue;
-import com.gladurbad.medusa.network.Packet;
-import com.gladurbad.medusa.playerdata.PlayerData;
+import com.gladurbad.medusa.data.PlayerData;
+import com.gladurbad.medusa.packet.Packet;
+import com.gladurbad.medusa.util.HitboxExpansion;
 import com.gladurbad.medusa.util.MathUtil;
-import com.gladurbad.medusa.util.customtype.EvictingList;
-
-import com.gladurbad.medusa.util.customtype.Pair;
+import com.gladurbad.medusa.util.PlayerUtil;
+import com.gladurbad.medusa.util.type.BoundingBox;
+import com.gladurbad.medusa.util.type.RayTrace;
 import io.github.retrooper.packetevents.PacketEvents;
-import io.github.retrooper.packetevents.packetwrappers.in.useentity.WrappedPacketInUseEntity;
-
-import org.bukkit.Bukkit;
+import io.github.retrooper.packetevents.packetwrappers.play.in.useentity.WrappedPacketInUseEntity;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.LivingEntity;
+import org.bukkit.util.NumberConversions;
 import org.bukkit.util.Vector;
 
-import java.util.ArrayDeque;
+/**
+ * Created on 10/26/2020 Package com.gladurbad.medusa.check.impl.combat.reach by GladUrBad
+ *
+ * Fix stupid HitboxExpansion using NMS.
+ */
 
+@CheckInfo(name = "Reach (A)", description = "Checks for attacking distance.")
+public final class ReachA extends Check {
 
-@CheckInfo(name = "Reach", type = "A")
-public class ReachA extends Check {
-
-    private static final ConfigValue reachMaxLatency = new ConfigValue(ConfigValue.ValueType.LONG, "reach-maxlatency");
-    private static final ConfigValue reachSensitivity = new ConfigValue(ConfigValue.ValueType.INTEGER, "reach-sensitivity");
     private static final ConfigValue maxReach = new ConfigValue(ConfigValue.ValueType.DOUBLE, "max-reach");
-    private static final ConfigValue bufferDecay = new ConfigValue(ConfigValue.ValueType.DOUBLE, "buffer-decay");
-    private static int REACH_BUFFER = -1;
+    private static final ConfigValue maxThreshold = new ConfigValue(ConfigValue.ValueType.DOUBLE, "max-threshold");
+    private static final ConfigValue thresholdDecay = new ConfigValue(ConfigValue.ValueType.DOUBLE, "threshold-decay");
+    private static final ConfigValue maxLatency = new ConfigValue(ConfigValue.ValueType.LONG, "max-latency");
 
-    private Entity attacked, lastAttacked;
-    private final EvictingList<Pair<Long, Location>> historyLocations = new EvictingList<>(20 );
-
-    public ReachA(PlayerData data) {
+    public ReachA(final PlayerData data) {
         super(data);
-        if (REACH_BUFFER == -1) {
-            REACH_BUFFER = (5 - reachSensitivity.getInt()) * 2;
-        }
     }
 
     @Override
-    public void handle(Packet packet) {
+    public void handle(final Packet packet) {
         if (packet.isUseEntity()) {
-            final WrappedPacketInUseEntity useEntity = new WrappedPacketInUseEntity(packet.getRawPacket());
-            attacked = useEntity.getEntity();
+            final WrappedPacketInUseEntity wrapper = new WrappedPacketInUseEntity(packet.getRawPacket());
 
-            if (data.getPlayer().getGameMode() == GameMode.CREATIVE) return;
+            final Entity target = data.getCombatProcessor().getTarget();
+            final Entity lastTarget = data.getCombatProcessor().getLastTarget();
 
-            if (historyLocations.size() == 20 && PacketEvents.getAPI().getPlayerUtils().getPing(data.getPlayer()) < reachMaxLatency.getLong()) {
-                final double distance = historyLocations.stream()
-                        .filter(pair -> Math.abs(now() - pair.getX() - PacketEvents.getAPI().getPlayerUtils().getPing(data.getPlayer())) < 200)
-                        .mapToDouble(pair -> {
-                            final Vector playerLoc = data.getPlayer().getLocation().toVector().setY(0);
-                            final Vector victimLoc = pair.getY().toVector().setY(0);
+            if (wrapper.getAction() != WrappedPacketInUseEntity.EntityUseAction.ATTACK
+                    || data.getPlayer().getGameMode() != GameMode.SURVIVAL
+                    || !(target instanceof LivingEntity)
+                    || target != lastTarget
+                    || !data.getTargetLocations().isFull()
+                    || PlayerUtil.getPing(data.getPlayer()) > (maxLatency.getLong() < 0 ? Integer.MAX_VALUE : maxLatency.getLong())) return;
 
-                            return playerLoc.distance(victimLoc) - 0.57D;
-                        }).min().orElse(0.0);
+            final int ticks = Medusa.INSTANCE.getTickManager().getTicks();
+            final int pingTicks = NumberConversions.floor(data.getActionProcessor().getPing() / 50.0) + 3;
 
-                if (distance > maxReach.getDouble()) {
-                    if (increaseBuffer() > REACH_BUFFER) {
-                        fail();
-                    }
-                } else {
-                    decreaseBufferBy(bufferDecay.getDouble());
+            final Vector player = data.getPlayer().getLocation().toVector().setY(0);
+
+            final double distance = data.getTargetLocations().stream()
+                    .filter(pair -> Math.abs(ticks - pair.getY() - pingTicks) < 3)
+                    .mapToDouble(pair -> {
+                        final Vector victim = pair.getX().toVector().setY(0);
+                        final double expansion = HitboxExpansion.getExpansion(target);
+                        return player.distance(victim) - expansion;
+                    }).min().orElse(0);
+
+            if (distance == 0) return;
+
+            debug("dist=" + distance + " buffer=" + buffer + " pt=" + pingTicks);
+            if (distance > maxReach.getDouble()) {
+                if (++buffer > maxThreshold.getDouble()) {
+                    fail(String.format("reach=%.2f, buffer=%.2f", distance, buffer));
                 }
-            }
-            lastAttacked = attacked;
-        } else if (packet.isFlying()) {
-            if (attacked != null && lastAttacked != null) {
-                historyLocations.add(new Pair<>(now(), attacked.getLocation()));
+            } else {
+                buffer = Math.max(buffer - thresholdDecay.getDouble(), 0);
             }
         }
     }

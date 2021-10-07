@@ -1,5 +1,5 @@
-name: Medample
-main: dev.funkemunky.medample.ExamplePlugin
-version: "?"
-softdepend: [Medusa]
-authors: [funkemunky, GladUrBad]
+name: ExampleAPI
+version: 1.0
+main: com.gladurbad.exampleapi.ExamplePlugin
+authors: [GladUrBad]
+description: API usage example of Medusa Anticheat API

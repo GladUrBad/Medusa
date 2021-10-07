@@ -1,68 +1,59 @@
 package com.gladurbad.medusa.check.impl.player.timer;
 
+import com.gladurbad.medusa.Medusa;
 import com.gladurbad.medusa.check.Check;
 import com.gladurbad.api.check.CheckInfo;
 import com.gladurbad.medusa.config.ConfigValue;
-import com.gladurbad.medusa.network.Packet;
-import com.gladurbad.medusa.playerdata.PlayerData;
+import com.gladurbad.medusa.data.PlayerData;
+import com.gladurbad.medusa.exempt.type.ExemptType;
+import com.gladurbad.medusa.packet.Packet;
+import com.gladurbad.medusa.util.MathUtil;
+import com.gladurbad.medusa.util.type.EvictingList;
 
-import io.github.retrooper.packetevents.packettype.PacketType;
+/**
+ * Created on 11/13/2020 Package com.gladurbad.medusa.check.impl.player.timer by GladUrBad
+ */
 
-import java.util.ArrayDeque;
-
-@CheckInfo(name = "Timer", type = "A")
-public class TimerA extends Check {
-
-    private long lastTime;
-    private long lastDelay;
-
-    private final ArrayDeque<Long> samples = new ArrayDeque<>();
+@CheckInfo(name = "Timer (A)", description = "Checks for game speed which is too fast.")
+public final class TimerA extends Check {
 
     private static final ConfigValue maxTimerSpeed = new ConfigValue(ConfigValue.ValueType.DOUBLE, "max-timer-speed");
-    private static final ConfigValue minTimerSpeed = new ConfigValue(ConfigValue.ValueType.DOUBLE, "min-timer-speed");
-    private static final ConfigValue customBuffer = new ConfigValue(ConfigValue.ValueType.DOUBLE, "max-buffer");
-    private static final ConfigValue sampleSize = new ConfigValue(ConfigValue.ValueType.INTEGER, "sample-size");
-    private static final ConfigValue bufferDecay = new ConfigValue(ConfigValue.ValueType.DOUBLE, "buffer-decay");
-    private static final ConfigValue resetBufferOnFlag = new ConfigValue(ConfigValue.ValueType.BOOLEAN, "reset-buffer-on-flag");
+    private final EvictingList<Long> samples = new EvictingList<>(50);
+    private long lastFlyingTime;
 
-
-    public TimerA(PlayerData data) {
+    public TimerA(final PlayerData data) {
         super(data);
     }
 
     @Override
-    public void handle(Packet packet) {
-        if (packet.isFlying()) {
-            final long time = now();
-            final long delay = time - lastTime;
+    public void handle(final Packet packet) {
+        if (packet.isFlying() && !isExempt(ExemptType.TPS)) {
+            final long now = now();
+            final long delta = now - lastFlyingTime;
 
-            if (now() - data.getLastSetbackTime() < 1000L ||
-                    Math.abs(delay - lastDelay) > 75) samples.clear();
+            if (delta > 1) {
+                samples.add(delta);
+            }
 
-            samples.add(delay);
-            if (samples.size() >= sampleSize.getInt()) {
-                double timerAverage = samples.parallelStream().mapToDouble(value -> value).average().orElse(0.0D);
-                double timerSpeed = 50 / timerAverage;
+            if (samples.isFull()) {
+                final double average = MathUtil.getAverage(samples);
+                final double speed = 50 / average;
 
-                if (timerSpeed > maxTimerSpeed.getDouble() || timerSpeed < minTimerSpeed.getDouble()) {
-                    if (increaseBuffer() > customBuffer.getDouble()) {
-                        fail();
-                        if (resetBufferOnFlag.getBoolean()) {
-                            setBuffer(0);
-                        }
+                debug(String.format("speed=%.4f, delta=%o, buffer=%.2f", speed, delta, buffer));
+
+                if (speed >= maxTimerSpeed.getDouble()) {
+                    if (++buffer > 30) {
+                        buffer = Math.min(buffer, 50);
+                        fail(String.format("speed=%.4f, delta=%o, buffer=%.2f", speed, delta, buffer));
                     }
                 } else {
-                    decreaseBufferBy(bufferDecay.getDouble());
+                    buffer = Math.max(0, buffer - 1);
                 }
-
-                samples.clear();
             }
-            lastTime = time;
-            lastDelay = delay;
-        } else if (packet.isSending() && packet.getPacketId() == PacketType.Server.POSITION) {
-            samples.clear();
-        } else if (packet.isReceiving() && packet.getPacketId() == PacketType.Client.STEER_VEHICLE) {
-            samples.clear();
+
+            lastFlyingTime = now;
+        } else if (packet.isOutPosition()) {
+            samples.add(135L); //Magic value. 100L doesn't completely fix it for some reason.
         }
     }
 }

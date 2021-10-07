@@ -1,54 +1,46 @@
 package com.gladurbad.medusa.check.impl.movement.motion;
 
-import com.gladurbad.medusa.check.Check;
 import com.gladurbad.api.check.CheckInfo;
-import com.gladurbad.medusa.network.Packet;
-import com.gladurbad.medusa.playerdata.PlayerData;
-import com.gladurbad.medusa.util.CollisionUtil;
-import com.gladurbad.medusa.util.PlayerUtil;
-import io.github.retrooper.packetevents.PacketEvents;
-import io.github.retrooper.packetevents.enums.ServerVersion;
-import io.github.retrooper.packetevents.packettype.PacketType;
-import org.bukkit.Material;
-import org.bukkit.potion.PotionEffectType;
+import com.gladurbad.medusa.check.Check;
+import com.gladurbad.medusa.data.PlayerData;
+import com.gladurbad.medusa.exempt.type.ExemptType;
+import com.gladurbad.medusa.packet.Packet;
 
-@CheckInfo(name = "Motion", type = "A", dev = true)
-public class MotionA extends Check {
+/**
+ * Created on 11/17/2020 Package com.gladurbad.medusa.check.impl.movement.motion by GladUrBad
+ */
 
-    private int teleportedTicks;
-    private boolean slime;
+@CheckInfo(name = "Motion (A)", description = "Checks for constant vertical movement.")
+public final class MotionA extends Check {
 
-    public MotionA(PlayerData data) {
+    public MotionA(final PlayerData data) {
         super(data);
     }
 
     @Override
-    public void handle(Packet packet) {
+    public void handle(final Packet packet) {
         if (packet.isPosition()) {
-            if (++teleportedTicks > 10) {
-                double expectedJumpMotion = 0.42F + (double) ((float) PlayerUtil.getPotionLevel(data.getPlayer(), PotionEffectType.JUMP) * 0.1F);
+            final boolean inAir = data.getPositionProcessor().isInAir();
 
-                final boolean jumped = data.getLastLocation().isOnGround() &&
-                        !data.getLocation().isOnGround() && data.getDeltaY() > 0;
+            final double deltaY = data.getPositionProcessor().getDeltaY();
+            final double lastDeltaY = data.getPositionProcessor().getLastDeltaY();
 
-                final boolean notVelocity = data.getTicksSinceVelocity() > data.getMaxVelocityTicks();
+            final double acceleration = Math.abs(deltaY - lastDeltaY);
 
-                if (PacketEvents.getAPI().getServerUtils().getVersion().isLowerThan(ServerVersion.v_1_7_10)) {
-                    slime = CollisionUtil.isOnChosenBlock(data.getPlayer(), -0.7, Material.SLIME_BLOCK);
+            final boolean exempt = isExempt(
+                    ExemptType.JOINED, ExemptType.TRAPDOOR, ExemptType.VELOCITY,
+                    ExemptType.FLYING, ExemptType.WEB, ExemptType.TELEPORT,
+                    ExemptType.LIQUID, ExemptType.SLIME, ExemptType.CLIMBABLE,
+                    ExemptType.UNDER_BLOCK, ExemptType.SLAB, ExemptType.STAIRS
+            );
+
+            if (acceleration == 0.0 && inAir && !exempt) {
+                if ((buffer += 4) > 16) {
+                    fail(String.format("dy=%.2f", deltaY));
                 }
-
-                final boolean invalid = jumped &&
-                        Math.abs(data.getDeltaY() - expectedJumpMotion) > 0.03 &&
-                        !CollisionUtil.blockNearHead(data.getPlayer().getLocation()) &&
-                        notVelocity &&
-                        !slime;
-
-                if (invalid) {
-                    fail();
-                }
+            } else {
+                buffer = Math.max(buffer - 1, 0);
             }
-        } else if (packet.isSending() && packet.getPacketId() == PacketType.Server.POSITION) {
-            teleportedTicks = 0;
         }
     }
 }

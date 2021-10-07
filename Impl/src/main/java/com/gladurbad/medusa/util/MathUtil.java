@@ -1,584 +1,197 @@
 package com.gladurbad.medusa.util;
 
-import com.google.common.util.concurrent.AtomicDouble;
-
+import com.gladurbad.medusa.util.type.Pair;
+import com.google.common.collect.Lists;
 import lombok.experimental.UtilityClass;
-import org.bukkit.Location;
-import org.bukkit.entity.LivingEntity;
-import org.bukkit.entity.Player;
-import org.bukkit.potion.PotionEffectType;
-import org.bukkit.util.Vector;
 
-import java.math.BigDecimal;
-import java.math.RoundingMode;
-import java.text.DecimalFormat;
 import java.util.*;
 
 @UtilityClass
-public class MathUtil {
-    public long GCD_OFFSET;
+public final class MathUtil {
+
     public final double EXPANDER = Math.pow(2, 24);
 
-    public double offset(Vector from, Vector to) {
-        from.setY(0);
-        to.setY(0);
+    public double getVariance(final Collection<? extends Number> data) {
+        int count = 0;
 
-        return to.subtract(from).length();
-    }
+        double sum = 0.0;
+        double variance = 0.0;
 
-    public boolean playerMoved(Location from, Location to) {
-        return playerMoved(from.toVector(), to.toVector());
-    }
+        double average;
 
-    public byte getByte(int num) {
-        if (num > Byte.MAX_VALUE || num < Byte.MIN_VALUE) {
-            throw new NumberFormatException("Integer " + num + " too large to cast to data format byte!"
-                    + " (max=" + Byte.MAX_VALUE + " min=" + Byte.MIN_VALUE + ")");
+        for (final Number number : data) {
+            sum += number.doubleValue();
+            ++count;
         }
 
-        return (byte) num;
-    }
+        average = sum / count;
 
-    public short getShort(int num) {
-        if (num > Short.MAX_VALUE || num < Short.MIN_VALUE) {
-            throw new NumberFormatException("Integer " + num + " too large to cast to data format short!"
-                    + " (max=" + Short.MAX_VALUE + " min=" + Short.MIN_VALUE + ")");
-        }
-        return (short) num;
-    }
-
-
-    public boolean approxEquals(double accuracy, double equalTo, double... equals) {
-        return Arrays.stream(equals).allMatch(equal -> MathUtil.getDelta(equalTo, equal) < accuracy);
-    }
-
-    public boolean approxEquals(double accuracy, int equalTo, int... equals) {
-        return Arrays.stream(equals).allMatch(equal -> MathUtil.getDelta(equalTo, equal) < accuracy);
-    }
-
-    public boolean approxEquals(double accuracy, long equalTo, long... equals) {
-        return Arrays.stream(equals).allMatch(equal -> MathUtil.getDelta(equalTo, equal) < accuracy);
-    }
-
-
-    //Returns -1 if fails.
-    public <T extends Number> T tryParse(String string) {
-        try {
-            return (T) (Number) Double.parseDouble(string);
-        } catch (NumberFormatException e) {
-
-        }
-        return (T) (Number) (-1);
-    }
-
-    //A lighter version of the Java hypotenuse function.
-    public double hypot(double... value) {
-        double total = 0;
-
-        for (double val : value) {
-            total += (val * val);
+        for (final Number number : data) {
+            variance += Math.pow(number.doubleValue() - average, 2.0);
         }
 
-        return Math.sqrt(total);
+        return variance;
     }
 
-    public float hypot(float... value) {
-        float total = 0;
+    public double getStandardDeviation(final Collection<? extends Number> data) {
+        final double variance = getVariance(data);
 
-        for (float val : value) {
-            total += (val * val);
+        return Math.sqrt(variance);
+    }
+
+    public boolean isScientificNotation(final Number num) {
+        return (num.toString().contains("E"));
+    }
+
+    public boolean mathOnGround(final double posY) {
+        return posY % 0.015625 == 0;
+    }
+
+    public Pair<List<Double>, List<Double>> getOutliers(final Collection<? extends Number> collection) {
+        final List<Double> values = new ArrayList<>();
+
+        for (final Number number : collection) {
+            values.add(number.doubleValue());
         }
 
-        return (float) Math.sqrt(total);
-    }
+        final double q1 = getMedian(values.subList(0, values.size() / 2));
+        final double q3 = getMedian(values.subList(values.size() / 2, values.size()));
 
-    public double get3DDistance(Vector one, Vector two) {
-        return hypot(one.getX() - two.getX(), one.getY() - two.getY(), one.getZ() - two.getZ());
-    }
+        final double iqr = Math.abs(q1 - q3);
+        final double lowThreshold = q1 - 1.5 * iqr, highThreshold = q3 + 1.5 * iqr;
 
-    public boolean playerMoved(Vector from, Vector to) {
-        return from.distance(to) > 0;
-    }
+        final Pair<List<Double>, List<Double>> tuple = new Pair<>(new ArrayList<>(), new ArrayList<>());
 
-    public boolean playerLooked(Location from, Location to) {
-        return (from.getYaw() - to.getYaw() != 0) || (from.getPitch() - to.getPitch() != 0);
-    }
-
-    public boolean elapsed(long time, long needed) {
-        return Math.abs(System.currentTimeMillis() - time) >= needed;
-    }
-
-    //Euclid's algorithm
-    public long gcd(long a, long b) {
-        while (b > 0) {
-            long temp = b;
-            b = a % b; // % is remainder
-            a = temp;
+        for (final Double value : values) {
+            if (value < lowThreshold) {
+                tuple.getX().add(value);
+            }
+            else if (value > highThreshold) {
+                tuple.getY().add(value);
+            }
         }
-        return a;
+
+        return tuple;
     }
 
-    //Euclid's algorithm
-    public double gcd(long... input) {
-        long result = input[0];
-        for (int i = 1; i < input.length; i++) result = gcd(result, input[i]);
-        return result;
+    public double getSkewness(final Collection<? extends Number> data) {
+        double sum = 0;
+        int count = 0;
+
+        final List<Double> numbers = Lists.newArrayList();
+
+        for (final Number number : data) {
+            sum += number.doubleValue();
+            ++count;
+
+            numbers.add(number.doubleValue());
+        }
+
+        Collections.sort(numbers);
+
+        final double mean =  sum / count;
+        final double median = (count % 2 != 0) ? numbers.get(count / 2) : (numbers.get((count - 1) / 2) + numbers.get(count / 2)) / 2;
+        final double variance = getVariance(data);
+
+        return 3 * (mean - median) / variance;
     }
 
-    //From Frequency - by Elevated/Gson
+    public double getAverage(final Collection<? extends Number> data) {
+        return data.stream().mapToDouble(Number::doubleValue).average().orElse(0D);
+    }
+
+    public double getKurtosis(final Collection<? extends Number> data) {
+        double sum = 0.0;
+        int count = 0;
+
+        for (Number number : data) {
+            sum += number.doubleValue();
+            ++count;
+        }
+
+        if (count < 3.0) {
+            return 0.0;
+        }
+
+        final double efficiencyFirst = count * (count + 1.0) / ((count - 1.0) * (count - 2.0) * (count - 3.0));
+        final double efficiencySecond = 3.0 * Math.pow(count - 1.0, 2.0) / ((count - 2.0) * (count - 3.0));
+        final double average = sum / count;
+
+        double variance = 0.0;
+        double varianceSquared = 0.0;
+
+        for (final Number number : data) {
+            variance += Math.pow(average - number.doubleValue(), 2.0);
+            varianceSquared += Math.pow(average - number.doubleValue(), 4.0);
+        }
+
+        return efficiencyFirst * (varianceSquared / Math.pow(variance / sum, 2.0)) - efficiencySecond;
+    }
+
+    public int getMode(Collection<? extends Number> array) {
+        int mode = (int) array.toArray()[0];
+        int maxCount = 0;
+        for (Number value : array) {
+            int count = 1;
+            for (Number i : array) {
+                if (i.equals(value))
+                    count++;
+                if (count > maxCount) {
+                    mode = (int) value;
+                    maxCount = count;
+                }
+            }
+        }
+        return mode;
+    }
+
+    public Number getModeUsingMaps(Collection<? extends Number> samples) {
+        final Map<Number, Integer> occurenceMap = new HashMap<>();
+
+        for (Number entry : samples) {
+            if (!occurenceMap.containsKey(entry)) occurenceMap.put(entry, 1);
+            else occurenceMap.put(entry, occurenceMap.get(entry) + 1);
+        }
+
+        Number mode = null;
+        int occurences = 0;
+
+        for (Map.Entry<Number, Integer> entry : occurenceMap.entrySet()) {
+            if (entry.getValue() > occurences) {
+                occurences = entry.getValue();
+                mode = entry.getKey();
+            }
+        }
+
+        return mode;
+    }
+
+    private double getMedian(final List<Double> data) {
+        if (data.size() % 2 == 0) {
+            return (data.get(data.size() / 2) + data.get(data.size() / 2 - 1)) / 2;
+        } else {
+            return data.get(data.size() / 2);
+        }
+    }
+
     public long getGcd(final long current, final long previous) {
         return (previous <= 16384L) ? current : getGcd(previous, current % previous);
     }
 
+    public double getGcd(final double a, final double b) {
+        if (a < b) {
+            return getGcd(b, a);
+        }
 
-    public double gcf(long a, long b) {
-        if (b == 0) {
+        if (Math.abs(b) < 0.001) {
             return a;
         } else {
-            return (gcf(b, a % b));
+            return getGcd(b, a - Math.floor(a / b) * b);
         }
     }
 
-    // Returns the absolute value of n-mid*mid*mid
-     double diff(double n, double mid) {
-        if (n > (mid * mid * mid))
-            return (n - (mid * mid * mid));
-        else
-            return ((mid * mid * mid) - n);
-    }
-
-    // Returns cube root of a no n
-    public double cbrt(double n) {
-        // Set start and end for binary search
-        double start = 0, end = n;
-
-        // Set precision
-        double e = 0.0000001;
-
-        double mid = -1;
-        double error = 1000;
-
-        long ticks = 0;
-        while (error > e) {
-            mid = (start + end) / 2;
-            error = diff(n, mid);
-
-            // If error is less than e then mid is
-            // our answer so return mid
-
-            // If mid*mid*mid is greater than n set
-            // end = mid
-            if ((mid * mid * mid) > n)
-                end = mid;
-
-                // If mid*mid*mid is less than n set
-                // start = mid
-            else
-                start = mid;
-
-            if (error > e && ticks++ > 3E4) {
-                return -1;
-            }
-        }
-        return mid;
-    }
-
-    //A much lighter but very slightly less accurate Math.sqrt.
-    public double sqrt(double number) {
-        if (number == 0) return 0;
-        double t;
-        double squareRoot = number / 2;
-
-        do {
-            t = squareRoot;
-            squareRoot = (t + (number / t)) / 2;
-        } while ((t - squareRoot) != 0);
-
-        return squareRoot;
-    }
-
-    public Vector getDirection(double yaw, double pitch) {
-        Vector vector = new Vector();
-        vector.setY(-Math.sin(Math.toRadians(pitch)));
-        double xz = Math.cos(Math.toRadians(pitch));
-        vector.setX(-xz * Math.sin(Math.toRadians(yaw)));
-        vector.setZ(xz * Math.cos(Math.toRadians(yaw)));
-        return vector;
-    }
-
-    public float sqrt(float number) {
-        if (number == 0) return 0;
-        float t;
-
-        float squareRoot = number / 2;
-
-        do {
-            t = squareRoot;
-            squareRoot = (t + (number / t)) / 2;
-        } while ((t - squareRoot) != 0);
-
-        return squareRoot;
-    }
-
-    public float normalizeAngle(float yaw) {
-        return yaw % 360;
-    }
-
-    public double normalizeAngle(double yaw) {
-        return yaw % 360;
-    }
-
-    public float getAngleDelta(float one, float two) {
-        float delta = getDelta(one, two) % 360f;
-
-        if (delta > 180) delta = 360 - delta;
-        return delta;
-    }
-
-    //Euclid's algorithim
-    public long lcm(long a, long b) {
-        return a * (b / gcd(a, b));
-    }
-
-    //Euclid's algorithim
-    public long lcm(long... input) {
-        long result = input[0];
-        for (int i = 1; i < input.length; i++) result = lcm(result, input[i]);
-        return result;
-    }
-
-    public float getDelta(float one, float two) {
-        return Math.abs(one - two);
-    }
-
-    public double getDelta(double one, double two) {
-        return Math.abs(one - two);
-    }
-
-    public long getDelta(long one, long two) {
-        return Math.abs(one - two);
-    }
-
-    public long getDelta(int one, int two) {
-        return Math.abs(one - two);
-    }
-
-    public long elapsed(long time) {
-        return Math.abs(System.currentTimeMillis() - time);
-    }
-
-    public double getHorizontalDistance(Location from, Location to) {
-        double deltaX = to.getX() - from.getX(), deltaZ = to.getZ() - from.getZ();
-        return sqrt(deltaX * deltaX + deltaZ * deltaZ);
-    }
-
-    public double stdev(Collection<Double> list) {
-        double sum = 0.0;
-        double mean;
-        double num = 0.0;
-        double numi;
-        double deno = 0.0;
-
-        for (double i : list) {
-            sum += i;
-        }
-        mean = sum / list.size();
-
-        for (double i : list) {
-            numi = Math.pow(i - mean, 2);
-            num += numi;
-        }
-
-        return sqrt(num / list.size());
-    }
-
-    public int millisToTicks(long millis) {
-        return (int) Math.ceil(millis / 50D);
-    }
-
-    public double getVerticalDistance(Location from, Location to) {
-        return Math.abs(from.getY() - to.getY());
-    }
-
-
-    public double trim(int degree, double d) {
-        String format = "#.#";
-        for (int i = 1; i < degree; ++i) {
-            format = String.valueOf(format) + "#";
-        }
-        DecimalFormat twoDForm = new DecimalFormat(format);
-        return Double.parseDouble(twoDForm.format(d).replaceAll(",", "."));
-    }
-
-    public float trimFloat(int degree, float d) {
-        String format = "#.#";
-        for (int i = 1; i < degree; ++i) {
-            format = String.valueOf(format) + "#";
-        }
-        DecimalFormat twoDForm = new DecimalFormat(format);
-        return Float.parseFloat(twoDForm.format(d).replaceAll(",", "."));
-    }
-
-    public double getYawDifference(Location one, Location two) {
-        return Math.abs(one.getYaw() - two.getYaw());
-    }
-
-    public double round(double value, int places) {
-        if (places < 0) {
-            throw new IllegalArgumentException();
-        }
-        BigDecimal bd = new BigDecimal(value);
-        bd = bd.setScale(places, RoundingMode.HALF_UP);
-        return bd.doubleValue();
-    }
-
-    public double round(double value, int places, RoundingMode mode) {
-        if (places < 0) {
-            throw new IllegalArgumentException();
-        }
-        BigDecimal bd = new BigDecimal(value);
-        bd = bd.setScale(places, mode);
-        return bd.doubleValue();
-    }
-
-    public double round(double value) {
-        BigDecimal bd = new BigDecimal(value);
-        bd = bd.setScale(0, RoundingMode.UP);
-        return bd.doubleValue();
-    }
-
-    public float round(float value, int places) {
-        if (places < 0) {
-            throw new IllegalArgumentException();
-        }
-        BigDecimal bd = new BigDecimal(value);
-        bd = bd.setScale(places, RoundingMode.HALF_UP);
-        return bd.floatValue();
-    }
-
-    public float round(float value, int places, RoundingMode mode) {
-        if (places < 0) {
-            throw new IllegalArgumentException();
-        }
-        BigDecimal bd = new BigDecimal(value);
-        bd = bd.setScale(places, mode);
-        return bd.floatValue();
-    }
-
-    public float round(float value) {
-        BigDecimal bd = new BigDecimal(value);
-        bd = bd.setScale(0, RoundingMode.UP);
-        return bd.floatValue();
-    }
-
-    public int floor(double var0) {
-        int var2 = (int) var0;
-        return var0 < var2 ? var2 - 1 : var2;
-    }
-
-    public float yawTo180F(float flub) {
-        if ((flub %= 360.0f) >= 180.0f) {
-            flub -= 360.0f;
-        }
-        if (flub < -180.0f) {
-            flub += 360.0f;
-        }
-        return flub;
-    }
-
-    public double yawTo180D(double dub) {
-        if ((dub %= 360.0) >= 180.0) {
-            dub -= 360.0;
-        }
-        if (dub < -180.0) {
-            dub += 360.0;
-        }
-        return dub;
-    }
-
-    public double getDirectionOld(Location from, Location to) {
-        if (from == null || to == null) {
-            return 0.0D;
-        }
-        double difX = to.getX() - from.getX();
-        double difZ = to.getZ() - from.getZ();
-
-        return (float) ((Math.atan2(difZ, difX) * 180.0D / Math.PI) - 90.0F);
-    }
-
-    public double getDirection(Location from, Location to) {
-        if (from == null || to == null) {
-            return 0.0;
-        }
-        double difX = to.getX() - from.getX();
-        double difZ = to.getZ() - from.getZ();
-        return MathUtil.yawTo180F((float) (Math.atan2(difZ, difX) * 180.0 / 3.141592653589793) - 90.0f);
-    }
-
-    public float[] getRotations(Location one, Location two) {
-        double diffX = two.getX() - one.getX();
-        double diffZ = two.getZ() - one.getZ();
-        double diffY = two.getY() + 2.0 - 0.4 - (one.getY() + 2.0);
-        double dist = sqrt(diffX * diffX + diffZ * diffZ);
-        float yaw = (float) (Math.atan2(diffZ, diffX) * 180.0 / 3.141592653589793) - 90.0f;
-        float pitch = (float) (-Math.atan2(diffY, dist) * 180.0 / 3.141592653589793);
-        return new float[]{yaw, pitch};
-    }
-
-    public float[] getRotations(LivingEntity origin, LivingEntity point) {
-        Location two = point.getLocation(), one = origin.getLocation();
-        double diffX = two.getX() - one.getX();
-        double diffZ = two.getZ() - one.getZ();
-        double diffY = two.getY() + 2.0 - 0.4 - (one.getY() + 2.0);
-        double dist = sqrt(diffX * diffX + diffZ * diffZ);
-        float yaw = (float) (Math.atan2(diffZ, diffX) * 180.0 / 3.141592653589793) - 90.0f;
-        float pitch = (float) (-Math.atan2(diffY, dist) * 180.0 / 3.141592653589793);
-        return new float[]{yaw, pitch};
-    }
-
-    public boolean isLookingTowardsEntity(Location from, Location to, LivingEntity entity) {
-        float[] rotFrom = getRotations(from, entity.getLocation()), rotTo = getRotations(to, entity.getLocation());
-        float deltaOne = getDelta(from.getYaw(), rotTo[0]), deltaTwo = getDelta(to.getYaw(), rotTo[1]);
-        float offsetFrom = getDelta(yawTo180F(from.getYaw()), yawTo180F(rotFrom[0])), offsetTo = getDelta(yawTo180F(to.getYaw()), yawTo180F(rotTo[0]));
-
-        return (deltaOne > deltaTwo && offsetTo > 15) || (MathUtil.getDelta(offsetFrom, offsetTo) < 1 && offsetTo < 10);
-    }
-
-    public double[] getOffsetFromEntity(Player player, LivingEntity entity) {
-        double yawOffset = Math.abs(MathUtil.yawTo180F(player.getEyeLocation().getYaw()) - MathUtil.yawTo180F(MathUtil.getRotations(player.getLocation(), entity.getLocation())[0]));
-        double pitchOffset = Math.abs(Math.abs(player.getEyeLocation().getPitch()) - Math.abs(MathUtil.getRotations(player.getLocation(), entity.getLocation())[1]));
-        return new double[]{yawOffset, pitchOffset};
-    }
-
-    public double[] getOffsetFromLocation(Location one, Location two) {
-        double yaw = MathUtil.getRotations(one, two)[0];
-        double pitch = MathUtil.getRotations(one, two)[1];
-        double yawOffset = Math.abs(yaw - MathUtil.yawTo180F(one.getYaw()));
-        double pitchOffset = Math.abs(pitch - one.getPitch());
-        return new double[]{yawOffset, pitchOffset};
-    }
-
-    public float getBaseSpeed(Player player) {
-        return 0.34f + (PlayerUtil.getPotionLevel(player, PotionEffectType.SPEED) * 0.062f) + ((player.getWalkSpeed() - 0.2f) * 1.6f);
-    }
-
-    public float getBaseGroundSpeed(Player player) {
-        return 0.29f + (PlayerUtil.getPotionLevel(player, PotionEffectType.SPEED) * 0.062f) + ((player.getWalkSpeed() - 0.2f) * 1.6f);
-    }
-
-    public float getBaseSpeed(Player player, float limit) {
-        return limit + (PlayerUtil.getPotionLevel(player, PotionEffectType.SPEED) * 0.062F) + ((player.getWalkSpeed() - 0.2F) * 1.6F);
-    }
-
-    //Not fully accurate bc mc coders like long numbers but whatever good enough.
-
-    public double getStandardDeviation(long[] numberArray) {
-        double sum = 0.0, deviation = 0.0;
-        int length = numberArray.length;
-        for (double num : numberArray)
-            sum += num;
-        double mean = sum / length;
-        for (double num : numberArray)
-            deviation += Math.pow(num - mean, 2);
-
-        return Math.sqrt(deviation / length);
-    }
-
-    public double get2DDistance(double x1, double z1, double x2, double z2) {
-        return Math.sqrt((Math.abs(z2 - z1) * Math.abs(z2 - z1)) + (Math.abs(x2 - x1) * Math.abs(x2 - x1)));
-    }
-
-    public double getStandardDeviation(Deque<Float> numberArray) {
-        double sum = 0.0, deviation = 0.0;
-        int length = numberArray.size();
-        for (double num : numberArray)
-            sum += num;
-        double mean = sum / length;
-        for (double num : numberArray)
-            deviation += Math.pow(num - mean, 2);
-
-        return Math.sqrt(deviation / length);
-    }
-
-
-    public double getStandardDeviation(Collection<Double> numberArray) {
-        double sum = 0.0, deviation = 0.0;
-        int length = numberArray.size();
-        for (double num : numberArray)
-            sum += num;
-        double mean = sum / length;
-        for (double num : numberArray)
-            deviation += Math.pow(num - mean, 2);
-
-        return Math.sqrt(deviation / length);
-    }
-
-    public float getAngleDiff(float a, float b) {
-        float diff = Math.abs(a - b);
-        float altDiff = b + 360 - a;
-        float altAltDiff = a + 360 - b;
-        if (altDiff < diff) diff = altDiff;
-        if (altAltDiff < diff) diff = altAltDiff;
-        return diff;
-    }
-
-    public int getInTicks(long a) {
-        return MathUtil.floor(a / 50.);
-    }
-
-    public double getStandardDeviation(double[] numberArray) {
-        double sum = 0.0, deviation = 0.0;
-        int length = numberArray.length;
-        for (double num : numberArray)
-            sum += num;
-        double mean = sum / length;
-        for (double num : numberArray)
-            deviation += Math.pow(num - mean, 2);
-
-        return Math.sqrt(deviation / length);
-    }
-
-    public double getKurtosis(Collection<Double> values) {
-        double n = values.size();
-
-        if (n < 3) return Double.NaN;
-
-        double average = values.stream().mapToDouble(d -> d).average().getAsDouble();
-        double deviation = getStandardDeviation(values.stream().mapToDouble(d -> d).toArray());
-
-        AtomicDouble accum = new AtomicDouble(0D);
-
-        values.forEach(d -> accum.getAndAdd(Math.pow(d.doubleValue() - average, 4D)));
-
-        return n * (n + 1) / ((n - 1) * (n - 2) * (n - 3)) *
-                (accum.get() / Math.pow(deviation, 4D)) - 3 *
-                Math.pow(n - 1, 2D) / ((n - 2) * (n - 3));
-    }
-
-    public Vector getVectorForRotation(float pitch, float yaw) {
-        float f = (float) Math.cos(-yaw * 0.017453292F - (float) Math.PI);
-        float f1 = (float) Math.sin(-yaw * 0.017453292F - (float) Math.PI);
-        float f2 = (float) -Math.cos(-pitch * 0.017453292F);
-        float f3 = (float) Math.sin(-pitch * 0.017453292F);
-        return new Vector((double) (f1 * f2), (double) f3, (double) (f * f2));
-    }
-
-    public double getRotationSmoothness(float deltaRotation, float lastDeltaRotation) {
-        return Math.abs(deltaRotation - lastDeltaRotation) * 0.5;
-    }
-
-    public double getDistanceBetweenAngles360(double angle1, double angle2) {
-        double distance = Math.abs(angle1 % 360.0 - angle2 % 360.0);
-        distance = Math.min(360.0 - distance, distance);
-        return Math.abs(distance);
-    }
-
-    static {
-        GCD_OFFSET = (long) Math.pow(2, 24);
-    }
-
-    public boolean isScientificNotation(double d) {
-        return Double.toString(d).contains("E");
+    public double getCps(final Collection<? extends Number> data) {
+        return (20 / getAverage(data)) * 50;
     }
 
 }

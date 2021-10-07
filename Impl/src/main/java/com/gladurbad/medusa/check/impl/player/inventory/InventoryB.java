@@ -2,30 +2,45 @@ package com.gladurbad.medusa.check.impl.player.inventory;
 
 import com.gladurbad.api.check.CheckInfo;
 import com.gladurbad.medusa.check.Check;
-import com.gladurbad.medusa.network.Packet;
-import com.gladurbad.medusa.playerdata.PlayerData;
-import io.github.retrooper.packetevents.packettype.PacketType;
-import io.github.retrooper.packetevents.packetwrappers.in.flying.WrappedPacketInFlying;
+import com.gladurbad.medusa.data.PlayerData;
+import com.gladurbad.medusa.packet.Packet;
+import io.github.retrooper.packetevents.packetwrappers.play.in.windowclick.WrappedPacketInWindowClick;
 
-@CheckInfo(name = "Inventory", type = "B", dev = true)
+@CheckInfo(name = "Inventory (B)", description = "Checks for moving inventory items too quickly.", experimental = true)
+public final class InventoryB extends Check {
 
-public class InventoryB extends Check {
-    public InventoryB(PlayerData data) { super(data); }
+    private int movements;
+
+    public InventoryB(final PlayerData data) {
+        super(data);
+    }
 
     @Override
-    public void handle(Packet packet) {
-        if (packet.isFlying()) {
-            if (data.getDeltaXZ() > 0.14) {
-                if (data.isInInventory() && (System.currentTimeMillis() - data.getTimeInInventory()) > 1500) {
-                    increaseBuffer();
-                    if (buffer > 2) {
-                        fail();
-                        buffer /= 2;
+    public void handle(final Packet packet) {
+        if (packet.isWindowClick()) {
+            final WrappedPacketInWindowClick wrapper = new WrappedPacketInWindowClick(packet.getRawPacket());
+
+            if (wrapper.getMode() == 1) {
+                if (movements <= 1) {
+                    if (++buffer > 5) {
+                        fail("ticks=" + movements + " mode=1");
                     }
                 } else {
-                    decreaseBufferBy(3);
+                    buffer -= buffer > 0 ? 0.5 : 0;
+                }
+            } else if (wrapper.getMode() == 4) {
+                if (movements == 0) {
+                    if (++buffer > 5) {
+                        fail("ticks=" + movements + " mode=4");
+                    }
+                } else {
+                    buffer -= buffer > 0 ? 0.5 : 0;
                 }
             }
+
+            movements = 0;
+        } else if (packet.isFlying()) {
+            ++movements;
         }
     }
 }

@@ -2,34 +2,48 @@ package com.gladurbad.medusa.check.impl.player.scaffold;
 
 import com.gladurbad.medusa.check.Check;
 import com.gladurbad.api.check.CheckInfo;
-import com.gladurbad.medusa.network.Packet;
-import com.gladurbad.medusa.playerdata.PlayerData;
-import io.github.retrooper.packetevents.packettype.PacketType;
+import com.gladurbad.medusa.data.PlayerData;
+import com.gladurbad.medusa.packet.Packet;
 
-@CheckInfo(name = "Scaffold", type = "A", dev = true)
-public class ScaffoldA extends Check {
+/**
+ * Created on 11/10/2020 Package com.gladurbad.medusa.check.impl.player.scaffold by GladUrBad
+ */
 
-    private long flyingTime, placementTime;
+@CheckInfo(name = "Scaffold (A)",  description = "Checks for movement/rotations that are related to scaffold modules.")
+public final class ScaffoldA extends Check {
 
-    public ScaffoldA(PlayerData data) {
+    private boolean placedBlock;
+
+    public ScaffoldA(final PlayerData data) {
         super(data);
     }
 
     @Override
-    public void handle(Packet packet) {
-        if (packet.isReceiving()) {
-            if (packet.isFlying()) {
-                flyingTime = now();
-            } else if (packet.getPacketId() == PacketType.Client.BLOCK_PLACE) {
-                if (!data.getPlayer().getItemInHand().getType().isBlock()) return;
+    public void handle(final Packet packet) {
+        if (packet.isFlying()) {
+            if (placedBlock && isBridging()) {
+                final double deltaXZ = data.getPositionProcessor().getDeltaXZ();
+                final double lastDeltaXZ = data.getPositionProcessor().getLastDeltaXZ();
 
-                placementTime = now();
+                final double accel = Math.abs(deltaXZ - lastDeltaXZ);
 
-                final long timeDifference = placementTime - flyingTime;
+                final float deltaYaw = data.getRotationProcessor().getDeltaYaw() % 360F;
+                final float deltaPitch = data.getRotationProcessor().getDeltaPitch();
 
-                if (timeDifference == 0) {
-                    fail();
+                final boolean invalid = deltaYaw > 75F && deltaPitch > 15F && accel < 0.15;
+
+                if (invalid) {
+                    if (++buffer > 3) {
+                        fail(String.format("accel=%.2f, deltaYaw=%.2f, deltaPitch=%.2f", accel, deltaYaw, deltaPitch));
+                    }
+                } else {
+                    buffer = Math.max(buffer - 0.5, 0);
                 }
+            }
+            placedBlock = false;
+        } else if (packet.isBlockPlace()) {
+            if (data.getPlayer().getItemInHand().getType().isBlock()) {
+                placedBlock = true;
             }
         }
     }

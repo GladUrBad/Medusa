@@ -3,55 +3,57 @@ package com.gladurbad.medusa.check.impl.combat.velocity;
 import com.gladurbad.medusa.check.Check;
 import com.gladurbad.api.check.CheckInfo;
 import com.gladurbad.medusa.config.ConfigValue;
-import com.gladurbad.medusa.network.Packet;
-import com.gladurbad.medusa.playerdata.PlayerData;
-import com.gladurbad.medusa.util.CollisionUtil;
+import com.gladurbad.medusa.data.PlayerData;
+import com.gladurbad.medusa.exempt.type.ExemptType;
+import com.gladurbad.medusa.packet.Packet;
+import io.github.retrooper.packetevents.PacketEvents;
+import org.bukkit.craftbukkit.v1_8_R3.block.CraftBlock;
 
-import java.util.ArrayDeque;
+/**
+ * Created on 11/23/2020 Package com.gladurbad.medusa.check.impl.combat.velocity by GladUrBad
+ */
+@CheckInfo(name = "Velocity (A)", experimental = true, description = "Checks for vertical velocity.")
+public final class VelocityA extends Check {
 
+    private static final ConfigValue minVelPct = new ConfigValue(
+            ConfigValue.ValueType.INTEGER, "minimum-velocity-percentage"
+    );
+    private static final ConfigValue maxVelPct = new ConfigValue(
+            ConfigValue.ValueType.INTEGER, "maximum-velocity-percentage"
+    );
 
-@CheckInfo(name = "Velocity", type = "A", dev = true)
-public class VelocityA extends Check {
-
-    private ArrayDeque<Double> samples = new ArrayDeque<>();
-    private int weirdTicks;
-
-    private static final ConfigValue maxBuffer = new ConfigValue(ConfigValue.ValueType.DOUBLE, "max-buffer");
-    private static final ConfigValue bufferDecay = new ConfigValue(ConfigValue.ValueType.DOUBLE, "buffer-decay");
-
-    public VelocityA(PlayerData data) {
+    public VelocityA(final PlayerData data) {
         super(data);
     }
 
     @Override
-    public void handle(Packet packet) {
+    public void handle(final Packet packet) {
         if (packet.isFlying()) {
-            if (data.getTicksSinceVelocity() < 5) {
-                final double taken = data.getDeltaY();
-                final double expected = data.getLastVelocity().getY() * 0.99F;
-                double percentage = (taken * 100) / expected;
+            if (data.getVelocityProcessor().getTicksSinceVelocity() < 5) {
+                final double deltaY = data.getPositionProcessor().getDeltaY();
+                final double velocityY = data.getVelocityProcessor().getVelocityY();
 
-                final boolean invalid = CollisionUtil.isCollidingWithClimbable(data.getPlayer()) ||
-                        CollisionUtil.isInLiquid(data.getPlayer()) ||
-                        CollisionUtil.blockNearHead(data.getPlayer().getLocation());
+                debug("dy=" + deltaY + " vy=" + velocityY);
+                if (velocityY > 0) {
+                    final int percentage = (int) Math.round((deltaY * 100.0) / velocityY);
 
-                if (invalid) {
-                    weirdTicks = 0;
-                } else {
-                    ++weirdTicks;
-                }
+                    final boolean exempt = isExempt(
+                            ExemptType.LIQUID, ExemptType.PISTON, ExemptType.CLIMBABLE,
+                            ExemptType.UNDER_BLOCK, ExemptType.TELEPORT, ExemptType.FLYING,
+                            ExemptType.WEB, ExemptType.STEPPED
+                    );
 
-                samples.add(percentage);
+                    final boolean invalid = !exempt
+                            && (percentage < minVelPct.getInt() || percentage > maxVelPct.getInt());
 
-                if (samples.size() >= 5 && weirdTicks > 20) {
-                    if (samples.stream().mapToDouble(value -> value).max().orElse(0) < 100) {
-                        if (increaseBuffer() > maxBuffer.getDouble()) {
-                            fail();
+                    if (invalid) {
+                        if (++buffer > 5) {
+                            buffer = 0;
+                            fail("vy=" + velocityY + " pct=" + percentage);
                         }
                     } else {
-                        decreaseBufferBy(bufferDecay.getDouble());
+                        buffer = 0;
                     }
-                    samples.clear();
                 }
             }
         }

@@ -2,40 +2,58 @@ package com.gladurbad.medusa.check.impl.movement.motion;
 
 import com.gladurbad.medusa.check.Check;
 import com.gladurbad.api.check.CheckInfo;
-import com.gladurbad.medusa.network.Packet;
-import com.gladurbad.medusa.playerdata.PlayerData;
-import com.gladurbad.medusa.util.CollisionUtil;
-import io.github.retrooper.packetevents.packettype.PacketType;
+import com.gladurbad.medusa.data.PlayerData;
+import com.gladurbad.medusa.exempt.type.ExemptType;
+import com.gladurbad.medusa.packet.Packet;
 
-@CheckInfo(name = "Motion", type = "E")
-public class MotionE extends Check {
+/**
+ * Created on 11/17/2020 Package com.gladurbad.medusa.check.impl.movement.speed by GladUrBad
+ */
+@CheckInfo(name = "Motion (E)", description = "Checks for switching direction mid-air.")
+public final class MotionE extends Check {
 
-    private static final double STEP_HEIGHT = 0.6F;
-    private int teleportedTicks;
-
-    public MotionE(PlayerData data) {
+    public MotionE(final PlayerData data) {
         super(data);
     }
 
     @Override
-    public void handle(Packet packet) {
-        if (packet.isFlying()) {
-            if (++teleportedTicks > 5) {
-                final boolean colliding = data.getLastLocation().isOnGround()
-                        && data.getLocation().isOnGround();
+    public void handle(final Packet packet) {
+        if (packet.isPosition()) {
+            final double deltaX = data.getPositionProcessor().getDeltaX();
+            final double lastDeltaX = data.getPositionProcessor().getLastDeltaX();
 
-                if (colliding) {
-                    if (data.getDeltaY() > STEP_HEIGHT) {
-                        fail();
-                    } else {
-                        setLastLegitLocation(data.getBukkitLocation());
+            final double deltaZ = data.getPositionProcessor().getDeltaZ();
+            final double lastDeltaZ = data.getPositionProcessor().getLastDeltaZ();
+
+            final double absDeltaX = Math.abs(deltaX);
+            final double absDeltaZ = Math.abs(deltaZ);
+
+            final double absLastDeltaX = Math.abs(lastDeltaX);
+            final double absLastDeltaZ = Math.abs(lastDeltaZ);
+
+            if (data.getPositionProcessor().getAirTicks() > 2 && !isExempt(ExemptType.VELOCITY, ExemptType.NEAR_VEHICLE, ExemptType.TELEPORT, ExemptType.FLYING)) {
+                final boolean xSwitched = (deltaX > 0 && lastDeltaX < 0) || (deltaX < 0 && lastDeltaX > 0);
+                final boolean zSwitched = (deltaZ > 0 && lastDeltaZ < 0) || (deltaZ < 0 && lastDeltaZ > 0);
+
+                if (xSwitched) {
+                    if (Math.abs(absDeltaX - absLastDeltaX) > 0.05) {
+                        if (++buffer > 1.25) {
+                            fail();
+                        }
                     }
                 } else {
-                    setLastLegitLocation(data.getBukkitLocation());
+                    buffer = Math.max(buffer - 0.05, 0);
+                }
+                if (zSwitched) {
+                    if (Math.abs(absDeltaZ - absLastDeltaZ) > 0.05) {
+                        if (++buffer > 1.25) {
+                            fail();
+                        }
+                    }
+                } else {
+                    buffer = Math.max(buffer - 0.05, 0);
                 }
             }
-        } else if (packet.isSending() && packet.getPacketId() == PacketType.Server.POSITION) {
-            teleportedTicks = 0;
         }
     }
 }

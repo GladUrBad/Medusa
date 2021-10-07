@@ -2,37 +2,49 @@ package com.gladurbad.medusa.check.impl.movement.speed;
 
 import com.gladurbad.api.check.CheckInfo;
 import com.gladurbad.medusa.check.Check;
-import com.gladurbad.medusa.network.Packet;
-import com.gladurbad.medusa.playerdata.PlayerData;
-import com.gladurbad.medusa.util.MathUtil;
-import io.github.retrooper.packetevents.packettype.PacketType;
+import com.gladurbad.medusa.data.PlayerData;
+import com.gladurbad.medusa.exempt.type.ExemptType;
+import com.gladurbad.medusa.packet.Packet;
+import com.gladurbad.medusa.util.PlayerUtil;
+import org.bukkit.potion.PotionEffectType;
 
-@CheckInfo(name = "Speed", type = "C", dev = true)
-public class SpeedC extends Check {
+@CheckInfo(name = "Speed (C)", description = "Basic verbose speed check.", experimental = true)
+public final class SpeedC extends Check {
 
-    private int teleportedTicks;
-    public SpeedC(PlayerData data) {
+    public SpeedC(final PlayerData data) {
         super(data);
     }
 
     @Override
-    public void handle(Packet packet) {
-        if (packet.isPosition() && ++teleportedTicks > 20) {
-            final double acceleration = Math.abs(data.getDeltaXZ() - data.getLastDeltaXZ());
+    public void handle(final Packet packet) {
+        if (packet.isPosition()) {
+            final double deltaXZ = data.getPositionProcessor().getDeltaXZ();
 
-            final boolean invalid = acceleration > MathUtil.getBaseSpeed(data.getPlayer()) &&
-                    data.getTicksSinceVelocity() > 20 &&
-                    !data.getPlayer().isInsideVehicle() &&
-                    !data.getPlayer().isFlying();
+            final double maxSpeed = getSpeed(0.4);
 
-            if (invalid) {
-                fail();
+            final boolean exempt = isExempt(
+                    ExemptType.TELEPORT, ExemptType.JOINED, ExemptType.PISTON, ExemptType.VELOCITY,
+                    ExemptType.INSIDE_VEHICLE, ExemptType.FLYING, ExemptType.SLIME, ExemptType.UNDER_BLOCK,
+                    ExemptType.ICE
+            );
+
+            debug("dxz-ms" + (deltaXZ-maxSpeed) + " buffer=" + buffer);
+            if (deltaXZ > maxSpeed && !exempt) {
+                buffer += buffer < 15 ? 1 : 0;
+                if (buffer > 10) {
+                    fail("deltaXZ=" + deltaXZ + " max=" + maxSpeed);
+                    buffer /= 2;
+                }
             } else {
-                setLastLegitLocation(data.getBukkitLocation());
+                buffer -= buffer > 0 ? 0.25 : 0;
             }
-
-        } else if (packet.isSending() && packet.getPacketId() == PacketType.Server.POSITION) {
-            teleportedTicks = 0;
         }
+    }
+
+    private double getSpeed(double movement) {
+        if (PlayerUtil.getPotionLevel(data.getPlayer(), PotionEffectType.SPEED) > 0) {
+            movement *= 1.0D + 0.2D * (double)(PlayerUtil.getPotionLevel(data.getPlayer(), PotionEffectType.SPEED));
+        }
+        return movement;
     }
 }

@@ -1,38 +1,35 @@
 package com.gladurbad.medusa.manager;
 
-import com.gladurbad.medusa.playerdata.PlayerData;
+import com.gladurbad.medusa.data.PlayerData;
 import lombok.Getter;
 import org.bukkit.entity.Player;
 
-import java.util.HashMap;
+import java.util.Collection;
 import java.util.Map;
 import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
 
-@Getter
-public class PlayerDataManager {
+public final class PlayerDataManager {
 
-    private static final PlayerDataManager INSTANCE = new PlayerDataManager();
+    private final Map<UUID, PlayerData> playerDataMap = new ConcurrentHashMap<>();
 
-    private final Map<UUID, PlayerData> playerData = new HashMap<>();
-
-    public boolean containsPlayer(Player player) {
-        return containsPlayer(player.getUniqueId());
+    public PlayerData getPlayerData(final Player player) {
+        return playerDataMap.get(player.getUniqueId());
     }
 
-    public boolean containsPlayer(UUID playerUUID) {
-        return getInstance().getPlayerData().containsKey(playerUUID);
+    public void add(final Player player) {
+        playerDataMap.put(player.getUniqueId(), new PlayerData(player));
     }
 
-    public PlayerData getPlayerData(Player player) {
-        return getInstance().playerData.get(player.getUniqueId());
+    public boolean has(final Player player) {
+        return this.playerDataMap.containsKey(player.getUniqueId());
     }
 
-    public PlayerData getPlayerData(UUID playerUUID) {
-        return getInstance().playerData.get(playerUUID);
+    public void remove(final Player player) {
+        playerDataMap.remove(player.getUniqueId());
     }
 
-    public static PlayerDataManager getInstance() {
-        return INSTANCE;
+    public Collection<PlayerData> getAllData() {
+        return playerDataMap.values();
     }
-
 }
