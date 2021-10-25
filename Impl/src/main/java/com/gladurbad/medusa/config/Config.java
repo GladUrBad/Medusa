@@ -12,7 +12,7 @@ public final class Config {
 
     //Make this an enum, please just rewrite it.
     //Appearance stuff
-    public static List<String> THEMES = new ArrayList<>();
+    public static Set<String> THEMES = new HashSet<>();
     public static String ACCENT_ONE;
     public static String ACCENT_TWO;
 
@@ -32,7 +32,7 @@ public final class Config {
     public static void updateConfig() {
         try {
             //Appearance
-            THEMES = getStringListFromConfig("appearance.themes");
+            THEMES = getKeysFromConfig("appearance.themes");
             ACCENT_ONE = getStringFromConfig("appearance.accents.accentOne");
             ACCENT_TWO = getStringFromConfig("appearance.accents.accentTwo");
             SETBACK_COOLDOWN = getLongFromConfig("checks.movement.setback-cooldown");
@@ -120,6 +120,10 @@ public final class Config {
 
     private static List<String> getStringListFromConfig(String string) {
         return Medusa.INSTANCE.getPlugin().getConfig().getStringList(string);
+    }
+
+    private static Set<String> getKeysFromConfig(String string) {
+        return Medusa.INSTANCE.getPlugin().getConfig().getConfigurationSection(string).getKeys(false);
     }
 
     private static long getLongFromConfig(String string) {
